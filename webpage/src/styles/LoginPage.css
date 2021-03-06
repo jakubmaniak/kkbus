@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Ranga&display=swap');
+
+body {
+    overflow: hidden;
+    font-family: 'Poppins';
+    font-size: 15px;
+}
+
+.login-page {
+    display: flex;
+    overflow: hidden;   
+}
+
+.background {
+    width: 35%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.background img {
+    display: block;
+    height: 100%;
+    margin-left: -250px;
+}
+
+.container {
+    width: 65%;
+    display: flex;
+    background-color: #f0f0f0;
+}
+
+.login-panel {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding-left: 250px;
+    padding-bottom: 220px;
+}
+
+.logo {
+    font-family: 'Ranga';
+    font-size: 48px;
+    font-weight: normal;
+    margin-bottom: 20px;
+}
+
+.login-panel h2 {
+    font-weight: 500;
+    margin-bottom: 16px;
+    font-size: 20px;
+}
+
+.logo span:first-child {
+    color: #D9B430;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-panel input,
+.submit {
+    width: 360px;
+    height: 50px;
+    font-family: 'Poppins';
+    font-size: 15px;
+}
+
+input {
+    margin-bottom: 16px;
+    border: 2px solid rgba(0, 0, 0, 0.12);
+    padding-left: 18px;
+}
+
+::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.submit {
+    background-color: #D9B430;
+    color: black;
+    font-weight: 600;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.action {
+    display: flex;
+    flex-direction: column;
+    width: 358px;
+    margin-top: 20px;
+    font-size: 15px;
+}
+
+.action a {
+    margin-bottom: 4px;
+    text-decoration: none;
+    color: #D9B430;
+    font-weight: 500;
+}
