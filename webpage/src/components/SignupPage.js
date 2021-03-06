@@ -1,30 +1,35 @@
 import React from 'react';
-import background from '../static/background.jpg';
 import AuthPage from '../styles/AuthPage.css';
+import background from '../static/background.jpg';
 
 import { Link } from 'react-router-dom';
 
- function LoginPage() {
+function SignupPage() {
     return (
-        <div className="login-page">
+        <div className="signup-page">
             <div className="background">
                 <img src={background} alt="background"></img>
             </div>
             <div className="container">
-                <div className="login-panel">
+                <div className="signup-panel">
                     <h1 className="logo">
                         <span>KK</span>
                         <span>BUS</span>
                     </h1>
-                    <h2>Logowanie</h2>
+                    <h2>Rejestracja</h2>
                     <form>
-                        <input type="text" placeholder="Adres email lub login" />
+                        <input type="text" placeholder="Adres email" />
+                        <div>
+                            <input type="text" placeholder="Imię" />
+                            <input type="text" placeholder="Nazwisko" />
+                        </div>
                         <input type="password" placeholder="Hasło" />
+                        <input type="date" placeholder="Data urodzenia" />
+                        <input type="text" placeholder="Numer telefonu" />
                         <button className="submit">Zaloguj</button>
                     </form>
                     <div className="action">
-                        <Link to="/rejestracja">Chcę się zarejestrować</Link>
-                        <Link to="/">Nie pamiętam hasła</Link>
+                        <Link to="/logowanie">Mam już konto</Link>
                     </div>
                 </div> 
             </div>
@@ -32,4 +37,4 @@ import { Link } from 'react-router-dom';
     )
 }
 
-export default LoginPage;
+export default SignupPage;

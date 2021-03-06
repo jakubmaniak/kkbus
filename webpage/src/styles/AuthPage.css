@@ -6,7 +6,8 @@ body {
     font-size: 15px;
 }
 
-.login-page {
+.login-page,
+.signup-page {
     display: flex;
     overflow: hidden;   
 }
@@ -29,7 +30,8 @@ body {
     background-color: #f0f0f0;
 }
 
-.login-panel {
+.login-panel,
+.signup-panel {
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -44,7 +46,8 @@ body {
     margin-bottom: 20px;
 }
 
-.login-panel h2 {
+.login-panel h2,
+.signup-panel h2 {
     font-weight: 500;
     margin-bottom: 16px;
     font-size: 20px;
@@ -60,8 +63,9 @@ form {
 }
 
 .login-panel input,
+.signup-panel input,
 .submit {
-    width: 360px;
+    width: 400px;
     height: 50px;
     font-family: 'Poppins';
     font-size: 15px;
@@ -99,4 +103,13 @@ input {
     text-decoration: none;
     color: #D9B430;
     font-weight: 500;
+}
+
+form div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.signup-panel form div input {
+    width: 190px;
 }
