@@ -14,13 +14,15 @@ function Header() {
     return (
         <div className="header-bar">
             <header>
-                <h1 className="logo">
-                    <span>KK</span>
-                    <span>BUS</span>
-                </h1>
-                <div className="header-action">
-                    <Link to ="/rejestracja">Rejestracja</Link>
-                    <Link to ="/logowanie">Logowanie</Link>
+                <div class="header-container">
+                    <h1 className="logo">
+                        <span>KK</span>
+                        <span>BUS</span>
+                    </h1>
+                    <div className="header-action">
+                        <Link to ="/rejestracja">Rejestracja</Link>
+                        <Link to ="/logowanie">Logowanie</Link>
+                    </div>
                 </div>
             </header>
             <nav>

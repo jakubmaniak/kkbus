@@ -5,10 +5,17 @@
 }
 
 header {
+    background-color: rgb(32, 32, 26);
+    width: 100%;
+}
+
+.header-container {
+    margin: 0 auto;
     display: flex;
     justify-content: center;
     height: 64px;
-    background-color: rgb(32, 32, 26);
+    width: 100%;
+    max-width: 1252px;
     position: relative;
 }
 
@@ -36,7 +43,7 @@ header {
     display: flex;
     height: 100%;
     align-items: center;
-    right: 110px;   
+    right: 16px;  
 }
 
 a {
@@ -63,7 +70,10 @@ nav {
     display: flex;
     align-items: center;
     height: 100%;
-    margin-left: 110px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 16px;
+    max-width: 1252px;
 }
 
 .nav-action .item {
