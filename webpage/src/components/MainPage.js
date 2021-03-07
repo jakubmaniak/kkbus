@@ -52,6 +52,21 @@ export default function MainPage() {
                         <div>21:00</div>
                         <div>22:30</div>
                         <div>23:00</div>
+                        <div className="dummy"></div>
+                        <div className="dummy"></div>
+                        <div className="dummy"></div>
+                        <div className="dummy"></div>
+                        <div className="dummy"></div>
+                        <div className="dummy"></div>
+                        <div className="dummy"></div>
+                        <div className="dummy"></div>
+                        <div className="dummy"></div>
+                        <div className="dummy"></div>
+                        <div className="dummy"></div>
+                        <div className="dummy"></div>
+                        <div className="dummy"></div>
+                        <div className="dummy"></div>
+                        <div className="dummy"></div>
                     </div>
                 </div>
                 <div className="track">
