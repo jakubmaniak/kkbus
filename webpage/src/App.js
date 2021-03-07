@@ -1,12 +1,11 @@
-import background from './static/background.jpg';
 import './App.css';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import ContactPage from './components/ContactPage';
 import MainPage from './components/MainPage';
 import RemindPasswordPage from './components/RemindPasswordPage';
-
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 function App() {
   return (

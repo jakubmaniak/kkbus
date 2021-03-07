@@ -3,18 +3,15 @@ import '../styles/Header.css';
 import { Link } from 'react-router-dom';
 
 function Header() {
-    const CURRENT_PAGE = window.location.pathname;
-    
     useEffect(() => {
+        const CURRENT_PAGE = window.location.pathname;
         let items = document.querySelectorAll('.item');
+
         for(let i = 0; i < items.length; i++) {
-            if(items[i].innerHTML === 'Trasy') {
-                if(CURRENT_PAGE === '/') {
-                    items[i].classList.add('selected');
-                    console.log('/trasy');
-                }
+            if(items[i].innerHTML === 'Trasy' && CURRENT_PAGE === '/') {
+                items[i].classList.add('selected');
             }
-            if(items[i].innerHTML.toLowerCase() === CURRENT_PAGE.replace('/', '')) {
+            else if(items[i].innerHTML.toLowerCase() === CURRENT_PAGE.replace('/', '')) {
                 items[i].classList.add('selected');
             }
         }

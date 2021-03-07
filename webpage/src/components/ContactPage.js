@@ -27,7 +27,7 @@ function ContactPage() {
                         </div>
                     </div>
                     <div className="map-container">
-                        <img src={map} />
+                        <img src={map} alt="mapa" />
                     </div>
                 </div>
                 <div className="right-side">
