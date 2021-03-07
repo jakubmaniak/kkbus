@@ -1,5 +1,5 @@
 import React from 'react';
-import AuthPage from '../styles/AuthPage.css';
+import '../styles/AuthPage.css';
 import background from '../static/background.jpg';
 
 import { Link } from 'react-router-dom';

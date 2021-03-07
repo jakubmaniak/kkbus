@@ -1,0 +1,77 @@
+.header-bar {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    height: 64px;
+    background-color: rgb(32, 32, 26);
+    position: relative;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-family: 'Ranga';
+    font-size: 38px;
+    font-weight: normal;
+    margin-bottom: 20px;
+    height: 100%;
+    cursor: pointer;
+}
+
+.logo span:first-child {
+    color: #D9B430;
+}
+
+.logo span:last-child {
+    color: white;
+}
+
+.header-action {
+    position: absolute;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    right: 110px;   
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.header-action a:first-child{
+    color: white;
+    margin-right: 26px;
+}
+
+.header-action a:last-child{
+    color: #D9B430;
+}
+
+nav {
+    display: flex;
+    height: 48px;
+    background-color: rgb(48, 48, 42);
+}
+
+.nav-action {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-left: 110px;
+}
+
+.nav-action a {
+    color: white;
+    margin-right: 26px;
+}
+
+.nav-action a:last-child {
+    margin-right: 0;
+}
+

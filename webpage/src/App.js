@@ -2,6 +2,7 @@ import background from './static/background.jpg';
 import './App.css';
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
+import ContactPage from './components/ContactPage';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -16,6 +17,9 @@ function App() {
                 </Route>
                 <Route exact path="/rejestracja">
                     <SignupPage />
+                </Route>
+                <Route exact path="/kontakt">
+                    <ContactPage />
                 </Route>
             </Switch>
         </Router>
