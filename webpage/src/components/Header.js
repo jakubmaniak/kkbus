@@ -1,15 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../styles/Header.css';
 import { Link } from 'react-router-dom';
 
 function Header() {
-    function setActivePage(ev) {
+    const CURRENT_PAGE = window.location.pathname;
+    
+    useEffect(() => {
         let items = document.querySelectorAll('.item');
-        items.forEach((item) => {
-            item.classList.remove('selected');
-        });
-        ev.target.classList.add('selected');
-    }
+        for(let i = 0; i < items.length; i++) {
+            if(items[i].innerHTML === 'Trasy') {
+                if(CURRENT_PAGE === '/') {
+                    items[i].classList.add('selected');
+                    console.log('/trasy');
+                }
+            }
+            if(items[i].innerHTML.toLowerCase() === CURRENT_PAGE.replace('/', '')) {
+                items[i].classList.add('selected');
+            }
+        }
+    }, []);
 
     return (
         <div className="header-bar">
@@ -27,9 +36,9 @@ function Header() {
             </header>
             <nav>
                 <div className="nav-action">
-                    <Link to="/"className="item" onClick={(ev) => setActivePage(ev)}>Trasy</Link>
-                    <Link to="/program-lojalnosciowy"className="item" onClick={(ev) => setActivePage(ev)}>Program lojalnościowy</Link>
-                    <Link to="/kontakt" className="item" onClick={(ev) => setActivePage(ev)}>Kontakt</Link>
+                    <Link to="/"className="item">Trasy</Link>
+                    <Link to="/program-lojalnosciowy"className="item">Program lojalnościowy</Link>
+                    <Link to="/kontakt" className="item">Kontakt</Link>
                 </div>
             </nav>
         </div>
