@@ -7,9 +7,7 @@ import { Link } from 'react-router-dom';
 function SignupPage() {
     return (
         <div className="signup-page">
-            <div className="background">
-                <img src={background} alt="background"></img>
-            </div>
+            <div className="background" style={{backgroundImage: `url('${background}')`}}></div>
             <div className="container">
                 <div className="signup-panel">
                     <h1 className="logo">

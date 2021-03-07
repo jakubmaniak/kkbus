@@ -1,28 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Ranga&display=swap');
 
+html,
 body {
-    /*overflow: hidden;*/
+    height: 100%;
+}
+
+body {
     font-family: 'Poppins';
     font-size: 15px;
-    padding-bottom: 20px;
+}
+
+#root,
+.App {
+    height: 100%;
 }
 
 .login-page,
 .signup-page {
+    height: 100%;
     display: flex;
     overflow: hidden;   
 }
 
 .background {
+    flex: 35%;
     width: 35%;
     height: 100%;
-    overflow: hidden;
-}
-
-.background img {
-    display: block;
-    height: 100%;
-    margin-left: -250px;
+    background-position: 40% 0;
+    background-size: cover;
 }
 
 .container {
