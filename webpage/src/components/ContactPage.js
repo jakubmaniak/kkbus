@@ -1,24 +1,42 @@
 import React from 'react';
 import Header from './Header';
 import '../styles/ContactPage.css';
+import map from '../static/map.png';
 
 function ContactPage() {
     return (
         <div className="contact-page">
             <Header />
             <div className="main">
-                <div className="contact">
-                    <h2>Kontakt</h2>
-                    <p>ul.Władysława Łokietka 21/3</p>
-                    <p>30-010 Kraków</p>
-                    <div>
-                        <span>Telefon: </span>
-                        <span>12 01 02 300</span>
+                <div className="left-side">
+                    <div className="contact">
+                        <h2>Kontakt</h2>
+                        <div className="adress">
+                            <p>ul.Władysława Łokietka 21/3</p>
+                            <p>30-010 Kraków</p>
+                        </div>
+                        <div className="contact-info">
+                            <div>
+                                <span>Telefon: </span>
+                                <span>12 01 02 300</span>
+                            </div>
+                            <div>
+                                <span>Adres e-mail: </span>
+                                <span>kontakt@kkbus.pl</span>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <span>Adres e-mail: </span>
-                        <span>kontakt@kkbus.pl</span>
+                    <div className="map-container">
+                        <img src={map} />
                     </div>
+                </div>
+                <div className="right-side">
+                    <h2>Masz pytanie?</h2>
+                    <form>
+                        <input placeholder="Twój adres email"/>
+                        <input placeholder="Twoje pytanie"/>
+                        <button className="submit">Wyślij</button>
+                    </form>
                 </div>
             </div>
         </div>
