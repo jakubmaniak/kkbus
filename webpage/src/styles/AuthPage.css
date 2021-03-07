@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Ranga&display=swap');
 
 body {
-    overflow: hidden;
+    /*overflow: hidden;*/
     font-family: 'Poppins';
     font-size: 15px;
+    padding-bottom: 20px;
 }
 
 .login-page,
@@ -71,10 +72,21 @@ form {
     font-size: 15px;
 }
 
-input {
+input,
+textarea {
     margin-bottom: 16px;
     border: 2px solid rgba(0, 0, 0, 0.12);
     padding-left: 18px;
+    font-family: 'Poppins';
+    font-size: 15px;
+}
+
+textarea {
+    resize: none;
+    width: 100%;
+    font-family: 'Poppins';
+    font-size: 15px;
+    padding: 10px 18px;
 }
 
 ::placeholder {

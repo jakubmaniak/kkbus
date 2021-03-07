@@ -34,7 +34,7 @@ function ContactPage() {
                     <h2>Masz pytanie?</h2>
                     <form>
                         <input placeholder="Twój adres email"/>
-                        <input placeholder="Twoje pytanie"/>
+                        <textarea placeholder="Twoje pytanie"></textarea>
                         <button className="submit">Wyślij</button>
                     </form>
                 </div>

@@ -2,11 +2,20 @@ body {
     background-color: #f0f0f0;
 }
 
+.contact-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .main {
     display: flex;
     margin: 0 110px;
-    justify-content: space-between;
     margin-top: 50px;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1220px;
 }
 
 .left-side {
@@ -51,23 +60,21 @@ body {
 
 .right-side {
     display: flex;
-    align-items: center;
     flex-direction: column;
     width: 590px;
-    border: 2px solid green;
     background-color: white;
     border-radius: 4px;
+    padding: 28px;
 }
 
 .right-side h2 {
-    margin: 20px;
     font-weight: 500;
     background-color: white;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 .right-side form {
-    width: 90%;
+    width: 100%;
     display: flex;
     align-items: flex-end;
     border: 2px solid black;
@@ -96,4 +103,25 @@ body {
     width: 268px;
     background-color: rgb(71, 190, 97);
     color: white;
+}
+
+@media (min-width: 1220px) {
+    .left-side {
+        margin-right: 20px;
+    }
+
+    .right-side {
+        margin-left: 20px;
+    }
+}
+
+@media (max-width: 1219px) {
+    .main {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .right-side {
+        margin-top: 20px;
+    }
 }
