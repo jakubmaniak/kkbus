@@ -4,6 +4,7 @@ import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import ContactPage from './components/ContactPage';
 import MainPage from './components/MainPage';
+import RemindPasswordPage from './components/RemindPasswordPage';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -20,6 +21,9 @@ function App() {
                 </Route>
                 <Route exact path="/rejestracja">
                     <SignupPage />
+                </Route>
+                <Route exact path="/przypomnienie-hasla">
+                    <RemindPasswordPage />
                 </Route>
                 <Route exact path="/kontakt">
                     <ContactPage />

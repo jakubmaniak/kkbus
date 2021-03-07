@@ -16,7 +16,8 @@ body {
 }
 
 .login-page,
-.signup-page {
+.signup-page,
+.remind-password-page {
     height: 100%;
     display: flex;
     overflow: hidden;   
@@ -37,7 +38,8 @@ body {
 }
 
 .login-panel,
-.signup-panel {
+.signup-panel,
+.remind-password-panel {
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -53,7 +55,8 @@ body {
 }
 
 .login-panel h2,
-.signup-panel h2 {
+.signup-panel h2,
+.remind-password-panel h2 {
     font-weight: 500;
     margin-bottom: 16px;
     font-size: 20px;
@@ -70,6 +73,7 @@ form {
 
 .login-panel input,
 .signup-panel input,
+.remind-password-panel input,
 .submit {
     width: 400px;
     height: 50px;

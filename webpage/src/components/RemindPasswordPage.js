@@ -4,30 +4,28 @@ import '../styles/AuthPage.css';
 
 import { Link } from 'react-router-dom';
 
- function LoginPage() {
+function RemindPasswordPage() {
     return (
-        <div className="login-page">
+        <div className="remind-password-page">
             <div className="background" style={{backgroundImage: `url('${background}')`}}></div>
             <div className="container">
-                <div className="login-panel">
+                <div className="remind-password-panel">
                     <h1 className="logo">
                         <span>KK</span>
                         <span>BUS</span>
                     </h1>
-                    <h2>Logowanie</h2>
+                    <h2>Przypomnienie hasła</h2>
                     <form>
-                        <input type="text" placeholder="Adres email lub login" />
-                        <input type="password" placeholder="Hasło" />
-                        <button className="submit">Zaloguj</button>
+                        <input type="text" placeholder="Adres email" />
+                        <button className="submit">Przypomnij hasło</button>
                     </form>
                     <div className="action">
-                        <Link to="/rejestracja">Chcę się zarejestrować</Link>
-                        <Link to="/przypomnienie-hasla">Nie pamiętam hasła</Link>
+                        <Link to="/logowanie">Już pamiętam</Link>
                     </div>
                 </div> 
             </div>
         </div>
-    )
+    );
 }
 
-export default LoginPage;
+export default RemindPasswordPage;
