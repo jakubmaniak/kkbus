@@ -66,12 +66,32 @@ nav {
     margin-left: 110px;
 }
 
-.nav-action a {
+.nav-action .item {
+    display: flex;
+    align-items: center;
+    height: 100%;
     color: white;
     margin-right: 26px;
+    position: relative;
 }
 
-.nav-action a:last-child {
+.nav-action .item:last-child {
     margin-right: 0;
+}
+
+.item.selected {
+    color: #D9B430;
+}
+
+.nav-action .item.selected::after {
+        content: '';
+        display: block;
+        position: absolute;
+        height: 4px;
+        width: 100%;
+        bottom: 0;
+        left: 0;
+        border-radius: 2px 2px 0 0;
+        background-color: #D9B430;
 }
 
