@@ -88,7 +88,6 @@
 .hours {
     display: flex;
     flex-wrap: wrap;
-    border: 2px solid red;
     margin-top: 40px;
     justify-content: space-between;
 }
@@ -113,4 +112,11 @@
     height: 0;
     margin: 0;
     border: 0 solid transparent;
+}
+
+.hours .booked {
+    color: #D0D0D0;
+    background-color: rgb(208, 208, 208, 0.10);
+    border: 1px solid #D0D0D0;
+    cursor: not-allowed;
 }
