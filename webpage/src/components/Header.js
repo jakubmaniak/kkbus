@@ -25,7 +25,7 @@ function Header() {
             </header>
             <nav>
                 <div className="nav-action">
-                    <Link to="/trasy"className="item" onClick={(ev) => setActivePage(ev)}>Trasy</Link>
+                    <Link to="/"className="item" onClick={(ev) => setActivePage(ev)}>Trasy</Link>
                     <Link to="/program-lojalnosciowy"className="item" onClick={(ev) => setActivePage(ev)}>Program lojalnościowy</Link>
                     <Link to="/kontakt" className="item" onClick={(ev) => setActivePage(ev)}>Kontakt</Link>
                 </div>
