@@ -14,7 +14,7 @@ function Header() {
     return (
         <div className="header-bar">
             <header>
-                <div class="header-container">
+                <div className="header-container">
                     <h1 className="logo">
                         <span>KK</span>
                         <span>BUS</span>
