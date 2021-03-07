@@ -12,7 +12,7 @@ header {
     position: relative;
 }
 
-.logo {
+.header-bar .logo {
     display: flex;
     align-items: center;
     font-family: 'Ranga';
@@ -27,7 +27,7 @@ header {
     color: #D9B430;
 }
 
-.logo span:last-child {
+.header-bar .logo span:last-child {
     color: white;
 }
 
