@@ -3,6 +3,7 @@ import './App.css';
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import ContactPage from './components/ContactPage';
+import MainPage from './components/MainPage';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -11,7 +12,9 @@ function App() {
     <div className="App">
         <Router>
             <Switch>
-                <Route exact path="/"></Route>
+                <Route exact path="/">
+                    <MainPage />
+                </Route>
                 <Route exact path="/logowanie">
                     <LoginPage />
                 </Route>
