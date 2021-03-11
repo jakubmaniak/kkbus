@@ -4,29 +4,7 @@
     align-items: center;
 }
 
-.main {
-    display: flex;
-    margin: 0 110px;
-    margin-top: 50px;
-    justify-content: center;
-    flex-wrap: wrap;
-    width: 100%;
-    max-width: 1220px;
-}
-
-.left-side {
-    width: 590px;
-}
-
-.contact {
-    padding: 32px;
-    background-color: white;
-    font-weight: 500;
-    width: 100%;
-    border-radius: 4px;
-}
-
-.contact h2 {
+.tile h2 {
     margin-bottom: 20px;
     font-weight: 500;
 }
@@ -52,15 +30,6 @@
     display: block;
     width: 100%;
     margin-bottom: -160px;
-}
-
-.right-side {
-    display: flex;
-    flex-direction: column;
-    width: 590px;
-    background-color: white;
-    border-radius: 4px;
-    padding: 28px;
 }
 
 .right-side h2 {

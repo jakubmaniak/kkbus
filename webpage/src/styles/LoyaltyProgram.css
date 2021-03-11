@@ -1,0 +1,59 @@
+.loyalty-program-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.reward {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px;
+    padding-left: 8px;
+}
+
+.reward + .reward {
+    margin-top: 8px;
+}
+
+.reward:nth-child(2n - 1) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.reward button {
+    width: 95px;
+    height: 100%;
+    background-color: #47BE61;
+    color: white;
+    border-radius: 2px;
+}
+.right-side .signup {
+    background-color: #47BE61;
+    color: white;
+}
+
+.right-side .login {
+    color: black;
+}
+
+.right-side .login,
+.right-side .signup {
+    width: 265px;
+    height: 40px;
+    margin-top: 14px;
+    border-radius: 2px;
+}
+
+.loyalty-program-page p + p {
+    margin-top: 8px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.loyalty-program-page .right-side {
+    display: flex;
+    height: 20%;
+}

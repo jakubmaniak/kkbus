@@ -9,7 +9,7 @@ function ContactPage() {
             <Header isLogged={ false } />
             <div className="main">
                 <div className="left-side">
-                    <div className="contact">
+                    <div className="tile">
                         <h2>Kontakt</h2>
                         <div className="adress">
                             <p>ul.Władysława Łokietka 21/3</p>
