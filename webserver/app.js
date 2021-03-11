@@ -5,7 +5,7 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 
 const reqValidator = require('./req-validator');
-const { error, errors } = require('./error-codes');
+const { error, errors } = require('./errors');
 
 const config = JSON.parse(fs.readFileSync('config.json'));
 

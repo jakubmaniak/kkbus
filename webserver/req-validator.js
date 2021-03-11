@@ -1,4 +1,4 @@
-const { error, errors } = require('./error-codes');
+const { error, errors } = require('./errors');
 
 class RequestValidator {
     constructor() {
