@@ -43,16 +43,16 @@ app.post('/api/login', (req, res) => {
 
 
 
-reqValidator.addSchema('/api/register', '{username: string, password: string, repeatedPassword: string}');
+reqValidator.addSchema('/api/register', '{email: string, password: string, firstName: string, lastName: string, birthDate: string, phoneNumber: string}');
 app.post('/api/register', (req, res) => {
-    let { username, password, repeatedPassword } = req.body;
+    let { email, password, firstName, lastName, birthDate, phoneNumber } = req.body;
 
     //NOTE: username cannot contain '@'
 
-    if (users.has(username)) throw error(errors.userAlreadyExists);
-    if (password !== repeatedPassword) throw error(errors.passwordsNotSame);
+    //if (users.has(username)) throw error(errors.userAlreadyExists);
+    //if (password !== repeatedPassword) throw error(errors.passwordsNotSame);
 
-    users.set(username, password);
+    users.set(email, password);
 
     res.ok();
 });
