@@ -25,16 +25,42 @@ const error = (errorCode) => {
 
 
 const users = new Map();
-users.set('admin', 'admin');
+users.set('admin', {
+    email: 'admin@kkbus.pl',
+    login: 'admin',
+    password: 'admin',
+    firstName: 'Adam',
+    lastName: 'Minowski',
+    birthDate: '01-01-1999',
+    phoneNumber: '123456789'
+});
 
+const usersByEmail = new Map();
+usersByEmail.set('admin@kkbus.pl', users.get('admin'));
 
 
 reqValidator.addSchema('/api/login', '{login: string, password: string}');
 app.post('/api/login', (req, res) => {
     let { login, password } = req.body;
-    let username = login; //NOTE: login = username || e-mail address
 
-    if (!users.has(username) || users.get(username) !== password) {
+    if (!users.has(login) && !usersByEmail.has(login)) {
+        throw error(errors.badCredentials);
+    }
+
+    let user;
+
+    if (users.has(login)) {
+        user = users.get(login);
+    }
+    else if (usersByEmail.has(login)) {
+        user = usersByEmail.get(login);
+        login = user.login;
+    }
+    else {
+        throw error(errors.badCredentials);
+    }
+    
+    if (user.password !== password) {
         throw error(errors.badCredentials);
     }
 
@@ -48,13 +74,28 @@ app.post('/api/register', (req, res) => {
     let { email, password, firstName, lastName, birthDate, phoneNumber } = req.body;
 
     //NOTE: username cannot contain '@'
+    //NOTE: check if birthDate and phoneNumber are valid
 
-    //if (users.has(username)) throw error(errors.userAlreadyExists);
-    //if (password !== repeatedPassword) throw error(errors.passwordsNotSame);
+    let offset = 0;
+    let phoneNumberPart = parseInt(phoneNumber.slice(-4));
+    let login = firstName.toLowerCase() + lastName.toLowerCase();
+    
+    while (users.has(login + (phoneNumberPart + offset))) {
+        offset++;
+    }
 
-    users.set(email, password);
+    login += (phoneNumberPart + offset);
 
-    res.ok();
+    let user = {
+        email, login, password,
+        firstName, lastName,
+        birthDate,
+        phoneNumber
+    };
+    usersByEmail.set(email, user);
+    users.set(login, user);
+
+    res.ok({ login });
 });
 
 
