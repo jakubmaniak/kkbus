@@ -5,7 +5,7 @@ import '../styles/MainPage.css';
 export default function MainPage() {
     return (
         <div className="main-page">
-            <Header />
+            <Header isLogged={ false } />
             <div className="main">
                 <div className="track">
                     <div className="track-header">

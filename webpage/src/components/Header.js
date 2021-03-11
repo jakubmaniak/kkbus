@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import '../styles/Header.css';
 import { Link } from 'react-router-dom';
 
-function Header() {
+function Header(props) {
     useEffect(() => {
         const CURRENT_PAGE = window.location.pathname;
         let items = document.querySelectorAll('.item');
@@ -25,10 +25,17 @@ function Header() {
                         <span>KK</span>
                         <span>BUS</span>
                     </h1>
-                    <div className="header-action">
-                        <Link to ="/rejestracja">Rejestracja</Link>
-                        <Link to ="/logowanie">Logowanie</Link>
-                    </div>
+                    {props.isLogged ? 
+                        <div className="header-action">
+                            <Link to ="/profil">Profil</Link>
+                            <Link to ="/wyloguj">Wyloguj</Link>
+                        </div>
+                    :
+                        <div className="header-action">
+                            <Link to ="/rejestracja">Rejestracja</Link>
+                            <Link to ="/logowanie">Logowanie</Link>
+                        </div>
+                    }
                 </div>
             </header>
             <nav>
