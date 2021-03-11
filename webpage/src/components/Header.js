@@ -11,7 +11,11 @@ function Header(props) {
             if(items[i].innerHTML === 'Trasy' && CURRENT_PAGE === '/') {
                 items[i].classList.add('selected');
             }
-            else if(items[i].innerHTML.toLowerCase() === CURRENT_PAGE.replace('/', '')) {
+            else if(items[i].innerHTML === 'Program lojalnościowy' && CURRENT_PAGE === '/program-lojalnosciowy') {
+                items[i].classList.add('selected');
+            }
+            else if (items[i].innerHTML.toLowerCase() === CURRENT_PAGE.replace('/', '')) {
+                console.log(items[i]);
                 items[i].classList.add('selected');
             }
         }
@@ -41,7 +45,7 @@ function Header(props) {
             <nav>
                 <div className="nav-action">
                     <Link to="/"className="item">Trasy</Link>
-                    <Link to="/program-lojalnosciowy"className="item">Program lojalnościowy</Link>
+                    <Link to="/program-lojalnosciowy" className="item">Program lojalnościowy</Link>
                     <Link to="/kontakt" className="item">Kontakt</Link>
                 </div>
             </nav>
