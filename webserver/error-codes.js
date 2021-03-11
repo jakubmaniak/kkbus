@@ -3,6 +3,5 @@ module.exports = {
     badRequest: 'bad_request',
     unauthorized: 'unauthorized',
     badCredentials: 'bad_credentials',
-    userAlreadyExists: 'user_already_exists',
-    passwordsNotSame: 'passwords_not_same'
+    emailAlreadyTaken: 'email_already_taken'
 };
