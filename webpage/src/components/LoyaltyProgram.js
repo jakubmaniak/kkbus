@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Header from './Header';
 import '../styles/LoyaltyProgram.css';
 
 function LoyaltyProgram() {
     let [isLogged, setIsLogged] = useState(false);
+    let history = useHistory();
 
     useEffect(() => {
         if(document.cookie) {
@@ -41,19 +43,17 @@ function LoyaltyProgram() {
                         <p>28.01.2021 Kupiono 1 Bilet za 2000 punktów</p>
                         <p>28.01.2021 Kupiono 2 Bilety za 3500 punktów</p>
                     </div>
-                : 
+                :
                     <div className="right-side">
                         <h2>Dołącz do nas</h2>
                         <p>Załóż konto i korzystaj z nagród programu lojalnościowego.</p>
                         <div className="button-container">
-                            <button className="signup">Załóż konto</button>
-                            <button className="login">Zaloguj</button>
+                            <button className="signup" onClick={() => history.push('/rejestracja')}>Załóż konto</button>
+                            <button className="login" onClick={() => history.push('/logowanie')}>Zaloguj</button>
                         </div>
                     </div>
                 }
             </div>
-            
-            
         </div>
     );
 }
