@@ -5,7 +5,7 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 
 const reqValidator = require('./req-validator');
-const errors = require('./error-codes');
+const { error, errors } = require('./error-codes');
 
 const config = JSON.parse(fs.readFileSync('config.json'));
 
@@ -50,12 +50,6 @@ app.use((req, res, next) => {
     res.ok = (result = null) => res.json({ error: false, result });
     next();
 });
-
-const error = (errorCode) => {
-    let err = new Error(errorCode);
-    err.name = 'HandlerError';
-    return err;
-};
 
 
 const users = new Map();
@@ -166,10 +160,7 @@ app.get('/api/bookings', (req, res) => {
 app.use((err, req, res, next) => {
     let errorCode = err.message;
 
-    if (err.message == 'invalid_request') {
-        errorCode = errors.badRequest;
-    }
-    else if (err.name != 'HandlerError') {
+    if (err.name != 'HandlerError') {
         errorCode = errors.serverError;
         console.error(err);
     }

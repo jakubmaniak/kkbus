@@ -1,4 +1,4 @@
-const errors = require('./error-codes');
+const { error, errors } = require('./error-codes');
 
 class RequestValidator {
     constructor() {
@@ -20,8 +20,7 @@ class RequestValidator {
         let path = new URL(url).pathname;
 
         if (this.protectedPaths.has(path) && !req.user.loggedIn) {
-            return false;
-            //throw new Error(errors.unauthorized);
+            throw error(errors.unauthorized);
         }
         if (!this.schemas.has(path)) return true;
 
@@ -33,7 +32,7 @@ class RequestValidator {
     validate() {
         return (req, res, next) => {
             if (!this.validateRequest(req)) {
-                throw new Error('invalid_request');
+                throw error(errors.invalidRequest);
             }
             next();
         };
