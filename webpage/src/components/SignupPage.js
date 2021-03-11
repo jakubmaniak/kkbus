@@ -1,10 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/AuthPage.css';
 import background from '../static/background.jpg';
 
-import { Link } from 'react-router-dom';
+import { useValue } from '../helpers/use-value';
+import * as api from '../api';
+
+import { Link, useHistory } from 'react-router-dom';
 
 function SignupPage() {
+    let history = useHistory();
+
+    let [email, setEmail] = useState('');
+    let [firstname, setFirstName] = useState('');
+    let [lastName, setLastName] = useState('');
+    let [password, setPassword] = useState('');
+    let [birthDate, setBirthDate] = useState('');
+    let [phoneNumber, setPhoneNumber] = useState('');
+    
+    function handleSubmit(ev) {
+        ev.preventDefault();
+        api.register(email, password, firstname, lastName, birthDate, phoneNumber)
+        .then((data) => {
+            history.replace('/');
+        })
+        .catch((err) => {
+            alert(api.errorToString(err));
+        });
+    }
+
     return (
         <div className="signup-page">
             <div className="background" style={{backgroundImage: `url('${background}')`}}></div>
@@ -15,15 +38,21 @@ function SignupPage() {
                         <span>BUS</span>
                     </h1>
                     <h2>Rejestracja</h2>
-                    <form>
-                        <input type="text" placeholder="Adres email" />
+                    <form onSubmit={handleSubmit}>
+                        <input type="text" placeholder="Adres email" 
+                            value={email} onChange={useValue(setEmail)} />
                         <div>
-                            <input type="text" placeholder="Imię" />
-                            <input type="text" placeholder="Nazwisko" />
+                            <input type="text" placeholder="Imię" 
+                                value={firstname} onChange={useValue(setFirstName)} />
+                            <input type="text" placeholder="Nazwisko" 
+                                value={lastName} onChange={useValue(setLastName)} />
                         </div>
-                        <input type="password" placeholder="Hasło" />
-                        <input type="date" placeholder="Data urodzenia" />
-                        <input type="text" placeholder="Numer telefonu" />
+                        <input type="password" placeholder="Hasło" 
+                            value={password} onChange={useValue(setPassword)} />
+                        <input type="date" placeholder="Data urodzenia" 
+                            value={birthDate} onChange={useValue(setBirthDate)} />
+                        <input type="text" placeholder="Numer telefonu" 
+                            value={phoneNumber} onChange={useValue(setPhoneNumber)} />
                         <button className="submit">Zaloguj</button>
                     </form>
                     <div className="action">
