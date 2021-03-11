@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from './Header';
 import '../styles/LoyaltyProgram.css';
 
 function LoyaltyProgram() {
     let [isLogged, setIsLogged] = useState(false);
 
+    useEffect(() => {
+        if(document.cookie) {
+            setIsLogged(true);
+        }
+    }, [isLogged]);
+
     return (
         <div className="loyalty-program-page">
-            <Header isLogged={ false }/>
+            <Header />
             <div className="main">
                 <div className="left-side">
                     <div className="tile">

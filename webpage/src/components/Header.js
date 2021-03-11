@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/Header.css';
 import { Link } from 'react-router-dom';
 
-function Header(props) {
+function Header() {
+    let [isLogged, setIsLogged] = useState(false);
+
     useEffect(() => {
         const CURRENT_PAGE = window.location.pathname;
         let items = document.querySelectorAll('.item');
@@ -11,14 +13,19 @@ function Header(props) {
             if(items[i].innerHTML === 'Trasy' && CURRENT_PAGE === '/') {
                 items[i].classList.add('selected');
             }
-            else if(items[i].innerHTML === 'Program lojalnościowy' && CURRENT_PAGE === '/program-lojalnosciowy') {
+            else if(items[i].innerHTML === 'Program lojalnościowy' 
+                    && CURRENT_PAGE === '/program-lojalnosciowy') {
                 items[i].classList.add('selected');
             }
             else if (items[i].innerHTML.toLowerCase() === CURRENT_PAGE.replace('/', '')) {
-                console.log(items[i]);
                 items[i].classList.add('selected');
             }
         }
+
+        if(document.cookie) {
+            setIsLogged(true);
+        }
+
     }, []);
 
     return (
@@ -29,10 +36,10 @@ function Header(props) {
                         <span>KK</span>
                         <span>BUS</span>
                     </h1>
-                    {props.isLogged ? 
+                    {isLogged ? 
                         <div className="header-action">
                             <Link to ="/profil">Profil</Link>
-                            <Link to ="/wyloguj">Wyloguj</Link>
+                            <Link to ="/">Wyloguj</Link>
                         </div>
                     :
                         <div className="header-action">
