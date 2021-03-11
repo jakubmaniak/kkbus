@@ -33,3 +33,7 @@ async function post(path, body) {
 export async function login(login, password) {
     return post('/login', { login, password });
 }
+
+export async function register(email, password, firstName, lastName, birthDate, phoneNumber) {
+    return post('/register', { email, password, firstName, lastName, birthDate, phoneNumber });
+}
