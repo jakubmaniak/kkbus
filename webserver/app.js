@@ -73,7 +73,8 @@ reqValidator.addSchema('/api/register', '{email: string, password: string, first
 app.post('/api/register', (req, res) => {
     let { email, password, firstName, lastName, birthDate, phoneNumber } = req.body;
 
-    //NOTE: username cannot contain '@'
+    if (usersByEmail.has(email)) throw error(errors.emailAlreadyTaken);
+    
     //NOTE: check if birthDate and phoneNumber are valid
 
     let offset = 0;
