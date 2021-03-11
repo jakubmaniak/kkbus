@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
 const fs = require('fs');
+const jwt = require('jsonwebtoken');
 
 const reqValidator = require('./req-validator');
 const errors = require('./error-codes');
@@ -64,9 +65,11 @@ app.post('/api/login', (req, res) => {
         throw error(errors.badCredentials);
     }
 
-    res.ok();
-});
+    let sessionToken = jwt.sign({ login }, 'KKBus-secret-random-words-FORest-APPle-PIe', { algorithm: 'HS512', expiresIn: '31d' });
 
+    res.cookie('session', sessionToken);
+    res.ok({ sessionToken });
+});
 
 
 reqValidator.addSchema('/api/register', '{email: string, password: string, firstName: string, lastName: string, birthDate: string, phoneNumber: string}');
@@ -96,7 +99,10 @@ app.post('/api/register', (req, res) => {
     usersByEmail.set(email, user);
     users.set(login, user);
 
-    res.ok({ login });
+    let sessionToken = jwt.sign({ login }, 'KKBus-secret-random-words-FORest-APPle-PIe', { algorithm: 'HS512', expiresIn: '31d' });
+
+    res.cookie('session', sessionToken);
+    res.ok({ sessionToken, login });
 });
 
 
