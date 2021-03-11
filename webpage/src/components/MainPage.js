@@ -12,7 +12,7 @@ export default function MainPage() {
                         <div className="track-info">
                             <div className="direction">
                                 <span>Kraków</span>
-                                <span> -----{'>'} </span>
+                                <span>-----&gt;</span>
                                 <span>Katowice</span>
                             </div>
                             <div className="route">
@@ -49,7 +49,7 @@ export default function MainPage() {
                         <div>17:00</div>
                         <div>18:00</div>
                         <div>20:00</div>
-                        <div  className="booked">21:00</div>
+                        <div className="booked">21:00</div>
                         <div>22:30</div>
                         <div>23:00</div>
                         <div className="dummy"></div>
@@ -74,7 +74,7 @@ export default function MainPage() {
                         <div className="track-info">
                             <div className="direction">
                                 <span>Katowice</span>
-                                <span> -----{'>'} </span>
+                                <span>-----&gt;</span>
                                 <span>Kraków</span>
                             </div>
                             <div className="route">
