@@ -20,6 +20,7 @@ function LoginPage() {
         
         api.login(userLogin, userPassword)
         .then((data) => {
+            //data.result.sessionToken
             history.replace('/');
         })
         .catch((err) => {

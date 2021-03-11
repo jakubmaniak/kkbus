@@ -10,6 +10,9 @@ class RequestValidator {
     validateRequest(req) {
         let url = req.protocol + '://' + req.hostname + req.url;
         let path = new URL(url).pathname;
+
+        if (!this.schemas.has(path)) return true;
+
         let schema = this.schemas.get(path);
 
         return this.validateObject(req.body, schema);

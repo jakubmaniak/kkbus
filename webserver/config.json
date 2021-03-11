@@ -2,5 +2,6 @@
     "server": {
         "host": "localhost",
         "port": 3200
-    }
+    },
+    "jwtSecret": "KKBus-secret-random-words-FORest-APPle-PIe"
 }

@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const mysql = require('mysql');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
@@ -13,6 +14,32 @@ const app = express();
 app.use(express.static('public'));
 app.use(express.json());
 app.use(reqValidator.validate());
+app.use(cookieParser());
+app.use((req, res, next) => {
+    req.user = {
+        loggedIn: false
+    };
+
+    if (req.cookies.session) {
+        let payload;
+        try {
+            payload = jwt.verify(req.cookies.session, config.jwtSecret, { algorithms: ['HS512'] });
+        }
+        catch {
+            throw error(errors.badSessionToken);
+        }
+
+        if (payload && payload.login) {
+            req.user = {
+                loggedIn: true,
+                ...users.get(payload.login)
+            };
+        }
+        else throw error(errors.badSessionToken);
+    }
+
+    next();
+});
 app.use((req, res, next) => {
     res.ok = (result = null) => res.json({ error: false, result });
     next();
@@ -38,6 +65,12 @@ users.set('admin', {
 
 const usersByEmail = new Map();
 usersByEmail.set('admin@kkbus.pl', users.get('admin'));
+
+const bookings = new Map();
+bookings.set('admin', [
+    { route: { id: 1, name: 'Kraków-Katowice' }, driver: 'Robert Busica', date: '2020-07-04', time: '12:15' },
+    { route: { id: 2, name: 'Katowice-Kraków' }, driver: 'Krzysztof Kołowczyc', date: '2020-07-04', time: '18:00' }
+]);
 
 
 reqValidator.addSchema('/api/login', '{login: string, password: string}');
@@ -65,7 +98,7 @@ app.post('/api/login', (req, res) => {
         throw error(errors.badCredentials);
     }
 
-    let sessionToken = jwt.sign({ login }, 'KKBus-secret-random-words-FORest-APPle-PIe', { algorithm: 'HS512', expiresIn: '31d' });
+    let sessionToken = jwt.sign({ login }, config.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
 
     res.cookie('session', sessionToken);
     res.ok({ sessionToken });
@@ -99,12 +132,20 @@ app.post('/api/register', (req, res) => {
     usersByEmail.set(email, user);
     users.set(login, user);
 
-    let sessionToken = jwt.sign({ login }, 'KKBus-secret-random-words-FORest-APPle-PIe', { algorithm: 'HS512', expiresIn: '31d' });
+    let sessionToken = jwt.sign({ login }, config.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
 
     res.cookie('session', sessionToken);
     res.ok({ sessionToken, login });
 });
 
+
+app.get('/api/bookings', (req, res) => {
+    let { loggedIn, login } = req.user;
+
+    if (!loggedIn) throw error(errors.unauthorized);
+
+    res.ok(bookings.get(login));
+});
 
 
 app.use((err, req, res, next) => {
