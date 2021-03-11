@@ -13,7 +13,7 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(reqValidator.validate());
 app.use((req, res, next) => {
-    res.ok = (data = null) => res.json({ error: false, data });
+    res.ok = (result = null) => res.json({ error: false, result });
     next();
 });
 
@@ -29,9 +29,10 @@ users.set('admin', 'admin');
 
 
 
-reqValidator.addSchema('/api/login', '{username: string, password: string}');
+reqValidator.addSchema('/api/login', '{login: string, password: string}');
 app.post('/api/login', (req, res) => {
-    let { username, password } = req.body;
+    let { login, password } = req.body;
+    let username = login; //NOTE: login = username || e-mail address
 
     if (!users.has(username) || users.get(username) !== password) {
         throw error(errors.badCredentials);
@@ -45,6 +46,8 @@ app.post('/api/login', (req, res) => {
 reqValidator.addSchema('/api/register', '{username: string, password: string, repeatedPassword: string}');
 app.post('/api/register', (req, res) => {
     let { username, password, repeatedPassword } = req.body;
+
+    //NOTE: username cannot contain '@'
 
     if (users.has(username)) throw error(errors.userAlreadyExists);
     if (password !== repeatedPassword) throw error(errors.passwordsNotSame);
