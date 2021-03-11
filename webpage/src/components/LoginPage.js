@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { useValue } from '../helpers/use-value';
 import * as api from '../api';
@@ -10,20 +10,20 @@ import '../styles/AuthPage.css';
 
 
 function LoginPage() {
+    let history = useHistory();
+
     let [userLogin, setUserLogin] = useState('');
     let [userPassword, setUserPassword] = useState('');
 
     function handleSubmit(ev) {
         ev.preventDefault();
-
-        alert(userLogin + ':' + userPassword);
         
         api.login(userLogin, userPassword)
         .then((data) => {
-            alert('ok');
+            history.replace('/');
         })
         .catch((err) => {
-            alert('Błąd: ' + err);
+            alert('Błąd: ' + err.message);
         });
     }
 
