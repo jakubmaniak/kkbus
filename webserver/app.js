@@ -13,7 +13,6 @@ const app = express();
 
 app.use(express.static('public'));
 app.use(express.json());
-app.use(reqValidator.validate());
 app.use(cookieParser());
 app.use((req, res, next) => {
     req.user = {
@@ -40,6 +39,7 @@ app.use((req, res, next) => {
 
     next();
 });
+app.use(reqValidator.validate());
 app.use((req, res, next) => {
     res.ok = (result = null) => res.json({ error: false, result });
     next();
@@ -138,7 +138,7 @@ app.post('/api/register', (req, res) => {
     res.ok({ sessionToken, login });
 });
 
-
+reqValidator.setProtected('/api/bookings');
 app.get('/api/bookings', (req, res) => {
     let { loggedIn, login } = req.user;
 
