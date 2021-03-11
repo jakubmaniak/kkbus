@@ -11,7 +11,10 @@ function LoyaltyProgram() {
             <div className="main">
                 <div className="left-side">
                     <div className="tile">
-                        <h2>Sklep</h2>
+                        <div className="loyalty-program-container">
+                            <h2>Sklep</h2>
+                            {isLogged ? <h3>Punkty: 1156</h3> : null}
+                        </div>
                         <div className="reward">
                             <p>Zniżka 10% (500 punktów)</p>
                             {isLogged ? <button>Kup</button> : null}

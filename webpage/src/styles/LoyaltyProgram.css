@@ -4,6 +4,23 @@
     align-items: center;
 }
 
+.loyalty-program-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.loyalty-program-container h2 {
+    margin-bottom: 0;
+}
+
+.loyalty-program-container h3 {
+    color: #D9B430;
+    font-size: 15px;
+    font-weight: 500;
+}
+
 .reward {
     display: flex;
     align-items: center;
