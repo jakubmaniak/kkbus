@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/Header.css';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import * as api from '../api';
 
 function Header() {
     let [isLogged, setIsLogged] = useState(false);
+    let history = useHistory();
 
     useEffect(() => {
         const CURRENT_PAGE = window.location.pathname;
@@ -28,6 +30,14 @@ function Header() {
 
     }, []);
 
+    function signout() {
+        api.logout()
+        .then(() => {
+            setIsLogged(false);
+            history.replace('/');
+        });
+    }
+
     return (
         <div className="header-bar">
             <header>
@@ -37,12 +47,12 @@ function Header() {
                         <span>BUS</span>
                     </h1>
                     {isLogged ? 
-                        <div className="header-action">
+                        <div className="header-action-signin">
                             <Link to ="/profil">Profil</Link>
-                            <Link to ="/">Wyloguj</Link>
+                            <p onClick={signout}>Wyloguj</p>
                         </div>
                     :
-                        <div className="header-action">
+                        <div className="header-action-signout">
                             <Link to ="/rejestracja">Rejestracja</Link>
                             <Link to ="/logowanie">Logowanie</Link>
                         </div>

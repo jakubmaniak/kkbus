@@ -38,7 +38,9 @@ header {
     color: white;
 }
 
-.header-action {
+
+.header-action-signin,
+.header-action-signout {
     position: absolute;
     display: flex;
     height: 100%;
@@ -51,14 +53,26 @@ a {
     cursor: pointer;
 }
 
-.header-action a:first-child{
+.header-action-signin a {
+    color: #D9B430;
+    margin-right: 26px;
+}
+
+.header-action-signin p {
+    color: white;
+    cursor: pointer;
+}
+
+.header-action-signout a:first-child{
     color: white;
     margin-right: 26px;
 }
 
-.header-action a:last-child{
+.header-action-signout a:last-child{
     color: #D9B430;
 }
+
+
 
 nav {
     display: flex;
