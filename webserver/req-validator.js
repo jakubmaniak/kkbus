@@ -20,7 +20,8 @@ class RequestValidator {
         let path = new URL(url).pathname;
 
         if (this.protectedPaths.has(path) && !req.user.loggedIn) {
-            throw new Error(errors.unauthorized);
+            return false;
+            //throw new Error(errors.unauthorized);
         }
         if (!this.schemas.has(path)) return true;
 

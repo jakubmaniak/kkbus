@@ -10,6 +10,12 @@ const errors = require('./error-codes');
 const config = JSON.parse(fs.readFileSync('config.json'));
 
 const app = express();
+app.set('etag', false);
+
+app.use((req, res, next) => {
+    console.log(req.url);
+    next();
+});
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -136,6 +142,15 @@ app.post('/api/register', (req, res) => {
 
     res.cookie('session', sessionToken);
     res.ok({ sessionToken, login });
+});
+
+reqValidator.setProtected('/api/logout');
+app.get('/api/logout', (req, res) => {
+    if (!req.user.loggedIn) throw error(errors.unauthorized);
+
+    res.header('Cache-Control', 'no-cache');
+    res.clearCookie('session');
+    res.ok();
 });
 
 reqValidator.setProtected('/api/bookings');

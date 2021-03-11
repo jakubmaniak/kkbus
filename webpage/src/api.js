@@ -30,8 +30,26 @@ async function post(path, body) {
     return res.data.result;
 }
 
+async function get(path) {
+    let res = await axios.get(root + path)
+    .catch((err) => {
+        console.error(err);
+        throw new Error('axios_error');
+    });
+
+    if (res.data.error) {
+        throw new Error(res.data.errorCode);
+    }
+
+    return res.data.result;
+}
+
 export async function login(login, password) {
     return post('/login', { login, password });
+}
+
+export async function logout() {
+    return get('/logout');
 }
 
 export async function register(email, password, firstName, lastName, birthDate, phoneNumber) {
