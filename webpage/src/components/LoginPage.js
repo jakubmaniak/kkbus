@@ -23,7 +23,7 @@ function LoginPage() {
             history.replace('/');
         })
         .catch((err) => {
-            alert('Błąd: ' + err.message);
+            alert(api.errorToString(err));
         });
     }
 
