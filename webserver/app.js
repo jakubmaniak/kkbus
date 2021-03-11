@@ -12,11 +12,6 @@ const config = JSON.parse(fs.readFileSync('config.json'));
 const app = express();
 app.set('etag', false);
 
-app.use((req, res, next) => {
-    console.log(req.url);
-    next();
-});
-
 app.use(express.static('public'));
 app.use(express.json());
 app.use(cookieParser());
