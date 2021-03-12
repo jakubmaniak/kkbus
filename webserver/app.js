@@ -142,9 +142,9 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-reqValidator.addSchema('/api/register', '{email: string, password: string, firstName: string, lastName: string, birthDate: string, phoneNumber: string}');
+reqValidator.addSchema('/api/register', '{email: string, firstName: string, lastName: string, birthDate: string, phoneNumber: string}');
 app.post('/api/register', (req, res) => {
-    let { email, password, firstName, lastName, birthDate, phoneNumber } = req.body;
+    let { email, firstName, lastName, birthDate, phoneNumber } = req.body;
 
     if (usersByEmail.has(email)) throw error(errors.emailAlreadyTaken);
     
@@ -161,11 +161,12 @@ app.post('/api/register', (req, res) => {
     login += (phoneNumberPart + offset);
 
     let birthDateParts = birthDate.split('-');
-    let userId = users.size + birthDateParts[1].padStart(2, '0') + birthDateParts[2].padStart(2, '0');
+    let userId = users.size + birthDateParts[1].padStart(2, '0') + birthDateParts[2].slice(-2);
 
     let user = {
         id: userId,
-        email, login, password,
+        email, login,
+        password: 'haslo',
         firstName, lastName,
         birthDate,
         phoneNumber,
