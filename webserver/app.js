@@ -55,16 +55,50 @@ users.set('admin', {
     firstName: 'Adam',
     lastName: 'Minowski',
     birthDate: '01-01-1999',
-    phoneNumber: '123456789'
+    phoneNumber: '123456789',
+    role: 'owner'
+});
+users.set('trajdowiec', {
+    email: 'trajdowiec@kkbus.pl',
+    login: 'trajdowiec',
+    password: 'haslo',
+    firstName: 'Tomasz',
+    lastName: 'Rajdowiec',
+    birthDate: '01-01-1999',
+    phoneNumber: '103406709',
+    role: 'driver'
+});
+users.set('amila', {
+    email: 'amila@kkbus.pl',
+    login: 'amila',
+    password: 'haslo',
+    firstName: 'Agnieszka',
+    lastName: 'Miła',
+    birthDate: '01-01-1999',
+    phoneNumber: '103406709',
+    role: 'office'
+});
+users.set('jankowalski1234', {
+    email: 'jankowalski@gmail.com',
+    login: 'rajdowiec',
+    password: 'haslo',
+    firstName: 'Jan',
+    lastName: 'Kowalski',
+    birthDate: '01-01-1999',
+    phoneNumber: '803401234',
+    role: 'client'
 });
 
 const usersByEmail = new Map();
 usersByEmail.set('admin@kkbus.pl', users.get('admin'));
+usersByEmail.set('trajdowiec@kkbus.pl', users.get('trajdowiec'));
+usersByEmail.set('amila@kkbus.pl', users.get('amila'));
+usersByEmail.set('jankowalski@gmail.com', users.get('jankowalski1234'));
 
 const bookings = new Map();
-bookings.set('admin', [
-    { route: { id: 1, name: 'Kraków-Katowice' }, driver: 'Robert Busica', date: '2020-07-04', time: '12:15' },
-    { route: { id: 2, name: 'Katowice-Kraków' }, driver: 'Krzysztof Kołowczyc', date: '2020-07-04', time: '18:00' }
+bookings.set('jankowalski1234', [
+    { route: { id: 1, name: 'Kraków-Katowice' }, driver: 'Tomasz Rajdowiec', date: '2020-07-04', time: '12:15' },
+    { route: { id: 2, name: 'Katowice-Kraków' }, driver: 'Marek Poprawny', date: '2020-07-04', time: '18:00' }
 ]);
 
 
@@ -96,7 +130,12 @@ app.post('/api/login', (req, res) => {
     let sessionToken = jwt.sign({ login }, config.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
 
     res.cookie('session', sessionToken);
-    res.ok({ sessionToken });
+    res.ok({
+        sessionToken,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role
+    });
 });
 
 
@@ -130,7 +169,13 @@ app.post('/api/register', (req, res) => {
     let sessionToken = jwt.sign({ login }, config.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
 
     res.cookie('session', sessionToken);
-    res.ok({ sessionToken, login });
+    res.ok({
+        sessionToken,
+        login,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role
+    });
 });
 
 reqValidator.setProtected('/api/logout');
