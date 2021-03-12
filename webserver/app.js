@@ -145,10 +145,19 @@ app.post('/api/login', (req, res) => {
 reqValidator.addSchema('/api/register', '{email: string, firstName: string, lastName: string, birthDate: string, phoneNumber: string}');
 app.post('/api/register', (req, res) => {
     let { email, firstName, lastName, birthDate, phoneNumber } = req.body;
+    
+    if (/\d{1,2}-\d{1,2}-\d{4}/.test(birthDate)) {
+        let dateString = birthDate.split('-').reverse().join('-');
+        let date = new Date(dateString);
+
+        if (isNaN(date) || date.getFullYear() < 1900 || new Date() - date < 0)
+            throw error(errors.invalidRequest);
+    }
+    else throw error(errors.invalidRequest);
+
+    //NOTE: check if phoneNumber is valid
 
     if (usersByEmail.has(email)) throw error(errors.emailAlreadyTaken);
-    
-    //NOTE: check if birthDate and phoneNumber are valid
 
     let offset = 0;
     let phoneNumberPart = parseInt(phoneNumber.slice(-4));
@@ -206,8 +215,6 @@ app.get('/api/user/info', (req, res) => {
 
 reqValidator.setProtected('/api/logout');
 app.get('/api/logout', (req, res) => {
-    if (!req.user.loggedIn) throw error(errors.unauthorized);
-
     res.header('Cache-Control', 'no-cache');
     res.clearCookie('session');
     res.ok();
