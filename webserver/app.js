@@ -49,6 +49,7 @@ app.use((req, res, next) => {
 
 const users = new Map();
 users.set('admin', {
+    id: 9001,
     email: 'admin@kkbus.pl',
     login: 'admin',
     password: 'admin',
@@ -59,6 +60,7 @@ users.set('admin', {
     role: 'owner'
 });
 users.set('trajdowiec', {
+    id: 9434,
     email: 'trajdowiec@kkbus.pl',
     login: 'trajdowiec',
     password: 'haslo',
@@ -69,6 +71,7 @@ users.set('trajdowiec', {
     role: 'driver'
 });
 users.set('amila', {
+    id: 9004,
     email: 'amila@kkbus.pl',
     login: 'amila',
     password: 'haslo',
@@ -79,6 +82,7 @@ users.set('amila', {
     role: 'office'
 });
 users.set('annanowak1234', {
+    id: 30199,
     email: 'jankowalski@gmail.com',
     login: 'annanowak1234',
     password: 'haslo',
@@ -156,7 +160,11 @@ app.post('/api/register', (req, res) => {
 
     login += (phoneNumberPart + offset);
 
+    let birthDateParts = birthDate.split('-');
+    let userId = users.size + birthDateParts[1].padStart(2, '0') + birthDateParts[2].padStart(2, '0');
+
     let user = {
+        id: userId,
         email, login, password,
         firstName, lastName,
         birthDate,
@@ -179,14 +187,15 @@ app.post('/api/register', (req, res) => {
 });
 
 app.get('/api/user/info', (req, res) => {
-    let { loggedIn, login, role, firstName, lastName } = req.user;
+    let { loggedIn, login, role, id, firstName, lastName } = req.user;
 
     if (loggedIn) {
-        res.ok({ role, login, firstName, lastName });
+        res.ok({ role, id, login, firstName, lastName });
     }
     else {
         res.ok({
             role: 'guest',
+            id: -1,
             login: '',
             firstName: '',
             lastName: ''
