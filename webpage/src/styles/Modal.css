@@ -35,3 +35,8 @@
     align-items: center;
     margin-top: 16px;
 }
+
+.modal .vehicle-info span:last-child {
+    width: 100px;
+    text-align: left;
+}
