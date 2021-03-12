@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/VehicleInfo.css';
+import Modal from './Modal';
 import Vehicle from './Vehicle';
 
 function VehicleInfo() {
+    let [modalVisibility, setModalVisibility] = useState(true);
     let vehicles = [
         {
             name: 'Mercedes Sprinter 2014',
@@ -43,6 +45,16 @@ function VehicleInfo() {
 
     return (
         <div className="vehicle-info-page">
+            <Modal visible={modalVisibility}>
+                <header>Szczegóły pojazdu</header>
+                <section className="content">
+                    <p>Nazwa pojazdu: Mercedes Sprinter</p>
+                    <p>Przebieg: 1 393 881 km</p>
+                </section>
+                <section className="footer">
+                    <button onClick={() => setModalVisibility(false)}>Zamknij</button>
+                </section>
+            </Modal>
             <div className="main">
                 {vehicles.map((vehicle, index) => {
                     return (
