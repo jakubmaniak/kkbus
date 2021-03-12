@@ -5,7 +5,7 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 
 const reqValidator = require('./req-validator');
-const { error, errors } = require('./errors');
+const errors = require('./errors');
 
 const config = JSON.parse(fs.readFileSync('config.json'));
 
@@ -27,7 +27,7 @@ app.use((req, res, next) => {
             payload = jwt.verify(req.cookies.session, config.jwtSecret, { algorithms: ['HS512'] });
         }
         catch {
-            throw error(errors.badSessionToken);
+            errors.badSessionToken();
         }
 
         if (payload && payload.login) {
@@ -36,7 +36,7 @@ app.use((req, res, next) => {
                 ...users.get(payload.login)
             };
         }
-        else throw error(errors.badSessionToken);
+        else errors.badSessionToken();
     }
 
     next();
@@ -111,7 +111,7 @@ app.post('/api/login', (req, res) => {
     let { login, password } = req.body;
 
     if (!users.has(login) && !usersByEmail.has(login)) {
-        throw error(errors.badCredentials);
+        errors.badCredentials();
     }
 
     let user;
@@ -124,11 +124,11 @@ app.post('/api/login', (req, res) => {
         login = user.login;
     }
     else {
-        throw error(errors.badCredentials);
+        errors.badCredentials();
     }
     
     if (user.password !== password) {
-        throw error(errors.badCredentials);
+        errors.badCredentials();
     }
 
     let sessionToken = jwt.sign({ login }, config.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
@@ -145,10 +145,19 @@ app.post('/api/login', (req, res) => {
 reqValidator.addSchema('/api/register', '{email: string, firstName: string, lastName: string, birthDate: string, phoneNumber: string}');
 app.post('/api/register', (req, res) => {
     let { email, firstName, lastName, birthDate, phoneNumber } = req.body;
-
-    if (usersByEmail.has(email)) throw error(errors.emailAlreadyTaken);
     
-    //NOTE: check if birthDate and phoneNumber are valid
+    if (/\d{1,2}-\d{1,2}-\d{4}/.test(birthDate)) {
+        let dateString = birthDate.split('-').reverse().join('-');
+        let date = new Date(dateString);
+
+        if (isNaN(date) || date.getFullYear() < 1900 || new Date() - date < 0)
+            errors.invalidRequest();
+    }
+    else errors.invalidRequest();
+
+    //NOTE: check if phoneNumber is valid
+
+    if (usersByEmail.has(email)) errors.emailAlreadyTaken();
 
     let offset = 0;
     let phoneNumberPart = parseInt(phoneNumber.slice(-4));
@@ -206,8 +215,6 @@ app.get('/api/user/info', (req, res) => {
 
 reqValidator.setProtected('/api/logout');
 app.get('/api/logout', (req, res) => {
-    if (!req.user.loggedIn) throw error(errors.unauthorized);
-
     res.header('Cache-Control', 'no-cache');
     res.clearCookie('session');
     res.ok();
@@ -217,7 +224,7 @@ reqValidator.setProtected('/api/bookings');
 app.get('/api/bookings', (req, res) => {
     let { loggedIn, login } = req.user;
 
-    if (!loggedIn) throw error(errors.unauthorized);
+    if (!loggedIn) errors.unauthorized();
 
     res.ok(bookings.get(login));
 });

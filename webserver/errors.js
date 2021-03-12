@@ -1,17 +1,17 @@
-const error = (errorCode) => {
+const error = function(errorCode) {
     let err = new Error(errorCode);
     err.name = 'HandlerError';
-    return err;
+
+    return () => {
+        throw err;
+    };
 };
 
 module.exports = {
-    error,
-    errors: {
-        serverError: 'server_error',
-        invalidRequest: 'invalid_request',
-        unauthorized: 'unauthorized',
-        badSessionToken: 'bad_session_token',
-        badCredentials: 'bad_credentials',
-        emailAlreadyTaken: 'email_already_taken'
-    }
+    serverError:        error('server_error'),
+    invalidRequest:     error('invalid_request'),
+    unauthorized:       error('unauthorized'),
+    badSessionToken:    error('bad_session_token'),
+    badCredentials:     error('bad_credentials'),
+    emailAlreadyTaken:  error('email_already_taken')
 };

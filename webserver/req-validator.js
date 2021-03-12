@@ -1,4 +1,4 @@
-const { error, errors } = require('./errors');
+const errors = require('./errors');
 
 const rolePriorities = {
     guest: 0,
@@ -34,7 +34,7 @@ class RequestValidator {
             let requiredPriority = rolePriorities[this.roleRequirements.get(path)];
 
             if (userPriority < requiredPriority) {
-                throw error(errors.unauthorized);
+                errors.unauthorized();
             }
         }
         if (!this.schemas.has(path)) return true;
@@ -47,7 +47,7 @@ class RequestValidator {
     validate() {
         return (req, res, next) => {
             if (!this.validateRequest(req)) {
-                throw error(errors.invalidRequest);
+                errors.invalidRequest();
             }
             next();
         };
