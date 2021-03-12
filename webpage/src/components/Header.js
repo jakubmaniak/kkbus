@@ -5,6 +5,7 @@ import * as api from '../api';
 
 function Header() {
     let [isLogged, setIsLogged] = useState(false);
+    let [role, setRole] = useState('guest');
     let history = useHistory();
 
     useEffect(() => {
@@ -26,6 +27,11 @@ function Header() {
 
         if(document.cookie) {
             setIsLogged(true);
+            
+            api.getUserInfo()
+            .then((data) => {
+                setRole(data.role);
+            });
         }
 
     }, []);
@@ -34,6 +40,7 @@ function Header() {
         api.logout()
         .then(() => {
             setIsLogged(false);
+            setRole('guest');
             history.replace('/');
         });
     }
@@ -60,11 +67,30 @@ function Header() {
                 </div>
             </header>
             <nav>
-                <div className="nav-action">
-                    <Link to="/"className="item">Trasy</Link>
-                    <Link to="/program-lojalnosciowy" className="item">Program lojalnościowy</Link>
-                    <Link to="/kontakt" className="item">Kontakt</Link>
-                </div>
+                {
+                    (role === 'owner') ? 
+                        null 
+                    : (role === 'office') ? 
+                        null
+                    : (role === 'driver') ?
+                        <div className="nav-action">
+                            <Link to="/"className="item">Grafik kursów</Link>
+                            <Link to="/program-lojalnosciowy" className="item">Grafik pracy</Link>
+                            <Link to="/kontakt" className="item">Pojazdy</Link>
+                        </div>
+                    : (role === 'client') ?
+                        <div className="nav-action">
+                            <Link to="/"className="item">Trasy</Link>
+                            <Link to="/program-lojalnosciowy" className="item">Program lojalnościowy</Link>
+                            <Link to="/kontakt" className="item">Kontakt</Link>
+                        </div>
+                    : 
+                        <div className="nav-action">
+                            <Link to="/"className="item">Trasy</Link>
+                            <Link to="/program-lojalnosciowy" className="item">Program lojalnościowy</Link>
+                            <Link to="/kontakt" className="item">Kontakt</Link>
+                        </div>
+                }
             </nav>
         </div>
     );
