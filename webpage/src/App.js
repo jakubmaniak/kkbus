@@ -14,7 +14,14 @@ function App() {
   return (
     <div className="App">
         <Router>
-            <Header />
+            <Switch>
+                <Route exact path="/logowanie" />
+                <Route exact path="/rejestracja" />
+                <Route exact path="/przypomnienie-hasla" />
+                <Route>
+                    <Header />
+                </Route>
+            </Switch>
             <Switch>
                 <Route exact path="/">
                     <MainPage />

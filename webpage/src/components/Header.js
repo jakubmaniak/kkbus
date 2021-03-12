@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../styles/Header.css';
 import { Link, useHistory } from 'react-router-dom';
 import * as api from '../api';
+import HeaderItem from './HeaderItem';
 
 function Header() {
     let [isLogged, setIsLogged] = useState(false);
@@ -10,23 +11,7 @@ function Header() {
     let history = useHistory();
 
     useEffect(() => {
-        const CURRENT_PAGE = window.location.pathname;
-        let items = document.querySelectorAll('.item');
-
-        for(let i = 0; i < items.length; i++) {
-            if(items[i].innerHTML === 'Trasy' && CURRENT_PAGE === '/') {
-                items[i].classList.add('selected');
-            }
-            else if(items[i].innerHTML === 'Program lojalnościowy' 
-                    && CURRENT_PAGE === '/program-lojalnosciowy') {
-                items[i].classList.add('selected');
-            }
-            else if (items[i].innerHTML.toLowerCase() === CURRENT_PAGE.replace('/', '')) {
-                items[i].classList.add('selected');
-            }
-        }
-
-        if(document.cookie) {
+        if(document.cookie.includes('session')) {
             setIsLogged(true);
             
             api.getUserInfo()
@@ -62,8 +47,8 @@ function Header() {
                         </div>
                     :
                         <div className="header-action-signout">
-                            <Link to ="/rejestracja">Rejestracja</Link>
-                            <Link to ="/logowanie">Logowanie</Link>
+                            <Link to="/rejestracja">Rejestracja</Link>
+                            <Link to="/logowanie">Logowanie</Link>
                         </div>
                     }
                 </div>
@@ -76,21 +61,22 @@ function Header() {
                         null
                     : (role === 'driver') ?
                         <div className="nav-action">
-                            <Link to="/"className="item">Grafik kursów</Link>
-                            <Link to="/" className="item">Grafik pracy</Link>
-                            <Link to="/pojazdy" className="item">Pojazdy</Link>
+                            <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
+                            <HeaderItem path="/">Grafik kursów</HeaderItem>
+                            <HeaderItem path="#">Grafik pracy</HeaderItem>
+                            <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
                         </div>
                     : (role === 'client') ?
                         <div className="nav-action">
-                            <Link to="/"className="item">Trasy</Link>
-                            <Link to="/program-lojalnosciowy" className="item">Program lojalnościowy</Link>
-                            <Link to="/kontakt" className="item">Kontakt</Link>
+                            <HeaderItem path="/">Trasy</HeaderItem>
+                            <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
+                            <HeaderItem path="/kontakt">Kontakt</HeaderItem>
                         </div>
                     : 
                         <div className="nav-action">
-                            <Link to="/"className="item">Trasy</Link>
-                            <Link to="/program-lojalnosciowy" className="item">Program lojalnościowy</Link>
-                            <Link to="/kontakt" className="item">Kontakt</Link>
+                            <HeaderItem path="/">Trasy</HeaderItem>
+                            <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
+                            <HeaderItem path="/kontakt">Kontakt</HeaderItem>
                         </div>
                 }
             </nav>

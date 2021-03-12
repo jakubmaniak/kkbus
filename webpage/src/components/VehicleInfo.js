@@ -1,6 +1,5 @@
 import React from 'react';
 import '../styles/VehicleInfo.css';
-import Header from './Header';
 import Vehicle from './Vehicle';
 
 function VehicleInfo() {
