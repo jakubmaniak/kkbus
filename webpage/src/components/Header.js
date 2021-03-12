@@ -6,6 +6,7 @@ import * as api from '../api';
 function Header() {
     let [isLogged, setIsLogged] = useState(false);
     let [role, setRole] = useState('guest');
+    let [name, setName] = useState('');
     let history = useHistory();
 
     useEffect(() => {
@@ -31,6 +32,7 @@ function Header() {
             api.getUserInfo()
             .then((data) => {
                 setRole(data.role);
+                setName(data.firstName + ' ' + data.lastName);
             });
         }
 
@@ -55,7 +57,7 @@ function Header() {
                     </h1>
                     {isLogged ? 
                         <div className="header-action-signin">
-                            <Link to ="/profil">Profil</Link>
+                            <Link to ="/profil">{name}</Link>
                             <p onClick={signout}>Wyloguj</p>
                         </div>
                     :
