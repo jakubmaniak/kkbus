@@ -8,11 +8,13 @@ import MainPage from './components/MainPage';
 import RemindPasswordPage from './components/RemindPasswordPage';
 import LoyaltyProgram from './components/LoyaltyProgram';
 import VehicleInfo from './components/VehicleInfo';
+import Header from './components/Header';
 
 function App() {
   return (
     <div className="App">
         <Router>
+            <Header />
             <Switch>
                 <Route exact path="/">
                     <MainPage />

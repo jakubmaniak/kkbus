@@ -6,7 +6,6 @@ import map from '../static/map.png';
 function ContactPage() {
     return (
         <div className="contact-page">
-            <Header isLogged={ false } />
             <div className="main">
                 <div className="left-side">
                     <div className="tile">

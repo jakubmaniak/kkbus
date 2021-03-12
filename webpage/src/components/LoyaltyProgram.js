@@ -15,7 +15,6 @@ function LoyaltyProgram() {
 
     return (
         <div className="loyalty-program-page">
-            <Header />
             <div className="main">
                 <div className="left-side">
                     <div className="tile">
