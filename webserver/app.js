@@ -17,7 +17,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use((req, res, next) => {
     req.user = {
-        loggedIn: false
+        loggedIn: false,
+        role: 'guest'
     };
 
     if (req.cookies.session) {
@@ -45,8 +46,6 @@ app.use((req, res, next) => {
     res.ok = (result = null) => res.json({ error: false, result });
     next();
 });
-
-//TODO: role validation
 
 const users = new Map();
 users.set('admin', {
