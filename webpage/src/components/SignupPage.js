@@ -13,13 +13,12 @@ function SignupPage() {
     let [email, setEmail] = useState('');
     let [firstname, setFirstName] = useState('');
     let [lastName, setLastName] = useState('');
-    let [password, setPassword] = useState('');
     let [birthDate, setBirthDate] = useState('');
     let [phoneNumber, setPhoneNumber] = useState('');
     
     function handleSubmit(ev) {
         ev.preventDefault();
-        api.register(email, password, firstname, lastName, birthDate, phoneNumber)
+        api.register(email, firstname, lastName, birthDate, phoneNumber)
         .then((data) => {
             history.replace('/');
         })
@@ -47,8 +46,6 @@ function SignupPage() {
                             <input type="text" placeholder="Nazwisko" 
                                 value={lastName} onChange={useValue(setLastName)} />
                         </div>
-                        <input type="password" placeholder="Hasło" 
-                            value={password} onChange={useValue(setPassword)} />
                         <input type="date" placeholder="Data urodzenia" 
                             value={birthDate} onChange={useValue(setBirthDate)} />
                         <input type="text" placeholder="Numer telefonu" 
