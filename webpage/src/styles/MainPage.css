@@ -67,14 +67,6 @@
     width: 50%;
 }
 
-.price {
-    display: flex;
-    align-items: center;
-    height: 40px;
-    font-weight: 500;
-    margin-right: 20px;
-}
-
 .btn-book {
     width: 220px;
     height: 40px;
@@ -85,11 +77,18 @@
     cursor: pointer;
 }
 
+.main-page .wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+}
+
 .hours {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 40px;
     justify-content: space-between;
+    width: 75%;
 }
 
 .hours div {
@@ -120,3 +119,13 @@
     border: 1px solid #D0D0D0;
     cursor: not-allowed;
 }
+
+.prices {
+    margin-right: 26px;
+}
+
+.prices .note {
+    font-size: 12px;
+    margin-top: 4px;
+}
+
