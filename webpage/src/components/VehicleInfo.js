@@ -43,7 +43,7 @@ function VehicleInfo() {
     ];
 
     return (
-        <div className="vehivle-info-page">
+        <div className="vehicle-info-page">
             <Header />
             <div className="main">
                 {vehicles.map((vehicle, index) => {
