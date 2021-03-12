@@ -139,7 +139,6 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-
 reqValidator.addSchema('/api/register', '{email: string, password: string, firstName: string, lastName: string, birthDate: string, phoneNumber: string}');
 app.post('/api/register', (req, res) => {
     let { email, password, firstName, lastName, birthDate, phoneNumber } = req.body;
@@ -178,6 +177,22 @@ app.post('/api/register', (req, res) => {
         lastName: user.lastName,
         role: user.role
     });
+});
+
+app.get('/api/user/info', (req, res) => {
+    let { loggedIn, login, role, firstName, lastName } = req.user;
+
+    if (loggedIn) {
+        res.ok({ role, login, firstName, lastName });
+    }
+    else {
+        res.ok({
+            role: 'guest',
+            login: '',
+            firstName: '',
+            lastName: ''
+        });
+    }
 });
 
 reqValidator.setProtected('/api/logout');

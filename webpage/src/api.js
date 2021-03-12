@@ -55,3 +55,7 @@ export async function logout() {
 export async function register(email, password, firstName, lastName, birthDate, phoneNumber) {
     return post('/register', { email, password, firstName, lastName, birthDate, phoneNumber });
 }
+
+export async function getUserInfo() {
+    return get('/user/info');
+}
