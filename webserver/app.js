@@ -161,7 +161,8 @@ app.post('/api/register', (req, res) => {
         email, login, password,
         firstName, lastName,
         birthDate,
-        phoneNumber
+        phoneNumber,
+        role: 'client'
     };
     usersByEmail.set(email, user);
     users.set(login, user);
