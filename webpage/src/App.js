@@ -7,6 +7,7 @@ import ContactPage from './components/ContactPage';
 import MainPage from './components/MainPage';
 import RemindPasswordPage from './components/RemindPasswordPage';
 import LoyaltyProgram from './components/LoyaltyProgram';
+import VehicleInfo from './components/VehicleInfo';
 
 function App() {
   return (
@@ -30,6 +31,9 @@ function App() {
                 </Route>
                 <Route exact path="/program-lojalnosciowy">
                     <LoyaltyProgram />
+                </Route>
+                <Route exact path="/pojazdy">
+                    <VehicleInfo />
                 </Route>
             </Switch>
         </Router>

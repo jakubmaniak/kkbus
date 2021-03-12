@@ -75,8 +75,8 @@ function Header() {
                     : (role === 'driver') ?
                         <div className="nav-action">
                             <Link to="/"className="item">Grafik kursów</Link>
-                            <Link to="/program-lojalnosciowy" className="item">Grafik pracy</Link>
-                            <Link to="/kontakt" className="item">Pojazdy</Link>
+                            <Link to="/" className="item">Grafik pracy</Link>
+                            <Link to="/pojazdy" className="item">Pojazdy</Link>
                         </div>
                     : (role === 'client') ?
                         <div className="nav-action">
