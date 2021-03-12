@@ -9,7 +9,6 @@ import { Link, useHistory } from 'react-router-dom';
 
 function SignupPage() {
     let history = useHistory();
-
     let [email, setEmail] = useState('');
     let [firstname, setFirstName] = useState('');
     let [lastName, setLastName] = useState('');
@@ -18,6 +17,7 @@ function SignupPage() {
     
     function handleSubmit(ev) {
         ev.preventDefault();
+
         api.register(email, firstname, lastName, birthDate, phoneNumber)
         .then((data) => {
             history.replace('/');
@@ -50,7 +50,7 @@ function SignupPage() {
                             value={birthDate} onChange={useValue(setBirthDate)} />
                         <input type="text" placeholder="Numer telefonu" 
                             value={phoneNumber} onChange={useValue(setPhoneNumber)} />
-                        <button className="submit">Zaloguj</button>
+                        <button className="submit">Zarejestruj</button>
                     </form>
                     <div className="action">
                         <Link to="/logowanie">Mam już konto</Link>
