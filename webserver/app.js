@@ -46,14 +46,15 @@ app.use((req, res, next) => {
     next();
 });
 
+//TODO: role validation
 
 const users = new Map();
 users.set('admin', {
     email: 'admin@kkbus.pl',
     login: 'admin',
     password: 'admin',
-    firstName: 'Adam',
-    lastName: 'Minowski',
+    firstName: 'Jan',
+    lastName: 'Kowalski',
     birthDate: '01-01-1999',
     phoneNumber: '123456789',
     role: 'owner'
@@ -78,12 +79,12 @@ users.set('amila', {
     phoneNumber: '103406709',
     role: 'office'
 });
-users.set('jankowalski1234', {
+users.set('annanowak1234', {
     email: 'jankowalski@gmail.com',
-    login: 'rajdowiec',
+    login: 'annanowak1234',
     password: 'haslo',
-    firstName: 'Jan',
-    lastName: 'Kowalski',
+    firstName: 'Anna',
+    lastName: 'Nowak',
     birthDate: '01-01-1999',
     phoneNumber: '803401234',
     role: 'client'
@@ -96,7 +97,7 @@ usersByEmail.set('amila@kkbus.pl', users.get('amila'));
 usersByEmail.set('jankowalski@gmail.com', users.get('jankowalski1234'));
 
 const bookings = new Map();
-bookings.set('jankowalski1234', [
+bookings.set('annanowak1234', [
     { route: { id: 1, name: 'Kraków-Katowice' }, driver: 'Tomasz Rajdowiec', date: '2020-07-04', time: '12:15' },
     { route: { id: 2, name: 'Katowice-Kraków' }, driver: 'Marek Poprawny', date: '2020-07-04', time: '18:00' }
 ]);
