@@ -25,7 +25,7 @@ function WorkScheduleFilter(props) {
                         <div className="list-item hidden">Tomasz Rajdowiec</div> */}
                     </div>
                 </div>
-                <button className="list-button">v</button>
+                <button className="list-button">&gt;</button>
             </div>
         </div>
     );
