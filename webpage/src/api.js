@@ -14,6 +14,10 @@ export function errorToString(err) {
     return errorMessages.get(err.message);
 }
 
+export function errorAlert(err) {
+    alert(errorToString(err));
+}
+
 const root = '/api';
 
 async function post(path, body) {
@@ -58,4 +62,8 @@ export async function register(email, firstName, lastName, birthDate, phoneNumbe
 
 export async function getUserInfo() {
     return get('/user/info');
+}
+
+export async function getFuelUsage(vehicleId = null) {
+    return post('/vehicle/fuel-usage', { vehicleId });
 }
