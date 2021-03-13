@@ -1,8 +1,8 @@
 import React from 'react';
-import '../styles/ContactPage.css';
+import '../styles/Contact.css';
 import map from '../static/map.png';
 
-function ContactPage() {
+function Contact() {
     return (
         <div className="contact-page">
             <div className="main">
@@ -15,7 +15,7 @@ function ContactPage() {
                         </div>
                         <div className="contact-info">
                             <div>
-                                <span>Telefon: </span>
+                                <span>Telefon/fax: </span>
                                 <span>(070) 012-34-56, (070)-011-22-33</span>
                             </div>
                             <div>
@@ -41,4 +41,4 @@ function ContactPage() {
     );
 }
 
-export default ContactPage;
+export default Contact;

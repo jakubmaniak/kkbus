@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
-import ContactPage from './components/Contact';
+import Contact from './components/Contact';
 import MainPage from './components/MainPage';
 import RemindPasswordPage from './components/RemindPasswordPage';
 import LoyaltyProgram from './components/LoyaltyProgram';
@@ -38,7 +38,7 @@ function App() {
                     <RemindPasswordPage />
                 </Route>
                 <Route exact path="/kontakt">
-                    <ContactPage />
+                    <Contact />
                 </Route>
                 <Route exact path="/program-lojalnosciowy">
                     <LoyaltyProgram />
