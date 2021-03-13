@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/WorkSchedule.css';
-import WorkScheduleFilter from './WorkScheduleFilter';
+import Dropdown from './Dropdown';
 import WorkScheduleItem from './WorkScheduleItem';
 
 function WorkSchedule() {
-    let drivers = ['Tomasz Rajdowiec', 'Kazimierz Rajdowiec', 'Mirosław Szybki'];
+    let [drivers, setDrivers] = useState(['Tomasz Rajdowiec', 'Kazimierz Rajdowiec', 'Mirosław Szybki']);
+    let ranges = ['dzisiaj', 'jutro', '7 kolejnych dni', 'ten miesiąc'];
+    let courses = ['Kraków - Katowice'];
+    let directions = ['obydwa', 'A -> B', 'B -> A'];
+
+    let [results, setResults] = useState([]);
+
     let data = [
         {
             start: 'Kraków',
@@ -60,7 +66,11 @@ function WorkSchedule() {
             parking: 'Kraków, parking Czyżyny, ',
             parkingInfo: 'końcowy'
         }
-    ]
+    ];
+
+    function handleDriverChange(driver) {
+        setResults(data);
+    }
 
     return (
         <div className="work-schedule-page">
@@ -68,26 +78,36 @@ function WorkSchedule() {
                 <div className="tile">
                     <h2>Filtry</h2>
                     <div className="row-container">
-                        <WorkScheduleFilter label="Kierowca:">
-                            <div className="list-item">{drivers[0]}</div>
-                            {drivers.map((driver) => {
-                                if(driver !== drivers[0]) {
-                                    return (
-                                        <div className="list-item hidden">{driver}</div>
-                                    );
-                                }
-                            })}
-                        </WorkScheduleFilter>
-                        <WorkScheduleFilter label="Trasy:"/>
+                        <div className="filter-container">
+                            <span>Kierowca:</span>
+                            <Dropdown
+                                items={drivers}
+                                placeholder="Wybierz kierowcę"
+                                handleChange={handleDriverChange} />
+                        </div>
+                        <div className="filter-container">
+                            <span>Trasy:</span>
+                            <Dropdown
+                                items={courses} alwaysSelected />
+                        </div>
                     </div>
                     <div className="row-container">
-                        <WorkScheduleFilter label="Zakres dni:"/>
-                        <WorkScheduleFilter label="Kierunki:"/>
+                        <div className="filter-container">
+                            <span>Zakres dni:</span>
+                            <Dropdown
+                                items={ranges} alwaysSelected />
+                        </div>
+                        <div className="filter-container">
+                            <span>Kierunki:</span>
+                            <Dropdown
+                                items={directions} alwaysSelected />
+                        </div>
                     </div>
                 </div>
-                {data.map((element) => {
+                {results.map((element, i) => {
                     return (
                         <WorkScheduleItem 
+                            key={i}
                             start={element.start}
                             end={element.end}
                             day={element.day}
