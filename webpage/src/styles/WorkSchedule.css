@@ -2,6 +2,9 @@
     display: flex;
     justify-content: center;
 }
+.work-schedule-page .main {
+    justify-content: space-between;
+}
 
 .row-container {
     display: flex;
@@ -69,4 +72,41 @@
     border-radius: 2px 2px 0 0;
     font-size: 20px;
     transform: rotate(90deg);
+}
+
+.tile.work-schedule-item {
+    width: 590px;
+}
+
+.header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.date {
+    font-size: 20px;
+    color: #D9B430;
+}
+
+.vehicle-data {
+    display: flex;
+    justify-content: space-between;
+}
+
+.vehicle-data + .vehicle-data {
+    margin-top: 20px;
+}
+
+.vehicle-data span:first-child {
+    font-weight: normal;
+}
+
+.vehicle-data span.parking {
+    font-weight: 500;
+}
+
+.parking-info {
+    color: #D9B430;
 }
