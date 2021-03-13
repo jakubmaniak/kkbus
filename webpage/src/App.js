@@ -9,6 +9,7 @@ import RemindPasswordPage from './components/RemindPasswordPage';
 import LoyaltyProgram from './components/LoyaltyProgram';
 import VehicleInfo from './components/VehicleInfo';
 import Header from './components/Header';
+import WorkSchedule from './components/WorkSchedule';
 
 function App() {
   return (
@@ -43,6 +44,9 @@ function App() {
                 </Route>
                 <Route exact path="/pojazdy">
                     <VehicleInfo />
+                </Route>
+                <Route exact path="/grafik-pracy">
+                    <WorkSchedule />
                 </Route>
             </Switch>
         </Router>

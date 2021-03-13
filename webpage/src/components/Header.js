@@ -58,7 +58,7 @@ function Header() {
                     (role === 'owner') ? 
                         <div className="nav-action">
                             <HeaderItem path="/">Grafik kursów</HeaderItem>
-                            <HeaderItem path="#">Grafik pracy</HeaderItem>
+                            <HeaderItem path="/grafik-pracy">Grafik pracy</HeaderItem>
                             <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
                             <HeaderItem path="#">Raporty</HeaderItem>
                             <HeaderItem path="#">Zarządzanie klientami</HeaderItem>
@@ -68,7 +68,7 @@ function Header() {
                     : (role === 'office') ? 
                         <div className="nav-action">
                             <HeaderItem path="/">Grafik kursów</HeaderItem>
-                            <HeaderItem path="#">Grafik pracy</HeaderItem>
+                            <HeaderItem path="/grafik-pracy">Grafik pracy</HeaderItem>
                             <HeaderItem path="#">Raporty</HeaderItem>
                             <HeaderItem path="#">Zarządzanie klientami</HeaderItem>
                             <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
@@ -78,7 +78,7 @@ function Header() {
                     : (role === 'driver') ?
                         <div className="nav-action">
                             <HeaderItem path="/">Grafik kursów</HeaderItem>
-                            <HeaderItem path="#">Grafik pracy</HeaderItem>
+                            <HeaderItem path="/grafik-pracy">Grafik pracy</HeaderItem>
                             <HeaderItem path="#">Lista pasażerów</HeaderItem>
                             <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
                             <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
