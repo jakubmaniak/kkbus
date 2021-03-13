@@ -15,64 +15,13 @@
     margin-top: 20px;
 }
 
-.list-container {
+.filter-container {
     display: flex;
     align-items: center;
-    z-index: 0;
 }
 
-.list-container span {
-    width: 100px;
-}
-
-.drop-down-list {
-    display: flex;
-    margin-left: 20px;
-}
-
-.list-items-container {
-    width: 270px;
-    height: 50px;
-    position: relative;
-    border: 2px solid rgba(0, 0, 0, 0.12);
-    border-radius: 2px 0 0 2px;
-    z-index: -1;
-}
-
-.list-items {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: absolute;
-    width: 100%;
-}
-
-.list-item {
-    display: flex;
-    align-items: center;
-    height: 48px;
-    padding-left: 12px;
-    font-weight: normal;
-}
-
-.list-item.hidden {
-    display: none;
-}
-
-.list-item.shown {
-    display: flex;
-    background-color: white;
-    border-top:2px solid rgba(0, 0, 0, 0.12);
-}
-
-.list-button {
-    width: 50px;
-    height: 50px;
-    background-color: #E0E0E0;
-    border-left: none;
-    border-radius: 2px 2px 0 0;
-    font-size: 20px;
-    transform: rotate(90deg);
+.filter-container span {
+    width: 134px;
 }
 
 .tile.work-schedule-item {
