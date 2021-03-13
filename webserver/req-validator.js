@@ -110,7 +110,7 @@ class RequestValidator {
                 if (!nulled) {
                     value = parent[key];
 
-                    if (value === undefined) {
+                    if (value === undefined || (value === null && nullable)) {
                         if (nullable) {
                             parent[key] = null;
                             //console.log('nulled', path.concat(key).join('.'));
