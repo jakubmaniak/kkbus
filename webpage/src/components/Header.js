@@ -63,6 +63,7 @@ function Header() {
                             <HeaderItem path="#">Raporty</HeaderItem>
                             <HeaderItem path="#">Zarządzanie klientami</HeaderItem>
                             <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
+                            <HeaderItem path="/paliwo">Paliwo</HeaderItem>
                             <HeaderItem path="/kontakt">Kontakt</HeaderItem>
                         </div>
                     : (role === 'office') ? 
@@ -73,6 +74,7 @@ function Header() {
                             <HeaderItem path="#">Zarządzanie klientami</HeaderItem>
                             <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
                             <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
+                            <HeaderItem path="/paliwo">Paliwo</HeaderItem>
                             <HeaderItem path="/kontakt">Kontakt</HeaderItem>
                         </div>
                     : (role === 'driver') ?
@@ -82,6 +84,7 @@ function Header() {
                             <HeaderItem path="#">Lista pasażerów</HeaderItem>
                             <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
                             <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
+                            <HeaderItem path="/paliwo">Paliwo</HeaderItem>
                             <HeaderItem path="/kontakt">Kontakt</HeaderItem>
                         </div>
                     : (role === 'client') ?

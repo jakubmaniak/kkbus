@@ -222,13 +222,24 @@ app.get('/api/logout', (req, res) => {
 
 reqValidator.setProtected('/api/bookings');
 app.get('/api/bookings', (req, res) => {
-    let { loggedIn, login } = req.user;
-
-    if (!loggedIn) errors.unauthorized();
+    let { login } = req.user;
 
     res.ok(bookings.get(login));
 });
 
+
+reqValidator.setProtected('/api/vehicle/fuel-usage');
+reqValidator.addSchema('/api/vehicle/fuel-usage', '{vehicleId?: number}');
+app.post('/api/vehicle/fuel-usage', (req, res) => {
+    let { vehicleId } = req.body;
+
+    res.ok([
+        { date: '2021-03-02 15:09', cost: 203.45, amount: 40.7, mileage: 1330087 },
+        { date: '2021-03-03 15:11', cost: 183.45, amount: 36.4, mileage: 1331223 },
+        { date: '2021-03-04 15:06', cost: 203.31, amount: 40.8, mileage: 1332057 },
+        { date: '2021-03-05 15:08', cost: 203.52, amount: 40.7, mileage: 1333483 }
+    ]);
+});
 
 app.use((err, req, res, next) => {
     let errorCode = err.message;

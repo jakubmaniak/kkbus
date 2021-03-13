@@ -10,6 +10,7 @@ import LoyaltyProgram from './components/LoyaltyProgram';
 import VehicleInfo from './components/VehicleInfo';
 import Header from './components/Header';
 import WorkSchedule from './components/WorkSchedule';
+import Fuel from './components/Fuel';
 
 function App() {
   return (
@@ -44,6 +45,9 @@ function App() {
                 </Route>
                 <Route exact path="/pojazdy">
                     <VehicleInfo />
+                </Route>
+                <Route exact path="/paliwo">
+                    <Fuel />
                 </Route>
                 <Route exact path="/grafik-pracy">
                     <WorkSchedule />

@@ -1,0 +1,24 @@
+.fuel-usage-page .main {
+    justify-content: space-between;
+}
+
+svg stop[offset="0%"] {
+    stop-color: #D9B430;
+    stop-opacity: 0.5;
+}
+
+svg stop[offset="100%"] {
+    stop-color: #D9B430;
+    stop-opacity: 0;
+}
+
+svg polyline.fill {
+    stroke-width: 0;
+    fill: url(#bg)
+}
+
+svg polyline.stroke {
+    stroke: #D9B430;
+    stroke-width: 2px;
+    fill: transparent;
+}
