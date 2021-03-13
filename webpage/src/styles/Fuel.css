@@ -1,5 +1,64 @@
-.fuel-usage-page .main {
+.fuel-usage-page {
+    display: flex;
+    justify-content: center;
+}
+
+.fuel-usage-page .right-side {
+    display: flex;
+    height: fit-content;
+    margin-top: 216px;
+    padding: 0;
+}
+
+.fuel-usage-page .right-side .tile {
+    margin-bottom: 0;
+}
+
+.fuel-usage-page form {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+}
+
+.fuel-usage-page form input {
+    width: 100%;
+}
+
+.fuel-usage-history {
+    display: flex;
     justify-content: space-between;
+    font-weight: normal;
+}
+
+.fuel-usage-history > span:nth-child(1) {
+    width: 140px;
+}
+
+.fuel-usage-history > span:nth-child(2) {
+    width: 80px;
+}
+
+.fuel-usage-history > span:nth-child(3) {
+    width: 80px;
+}
+
+.fuel-usage-history > span:nth-child(4) {
+    width: 120px;
+}
+
+.fuel-usage-history + .fuel-usage-history {
+    margin-top: 9px;
+}
+
+.fuel-usage-history.header {
+    font-weight: 500;
+}
+
+.submit {
+    height: 48px;
+    width: 180px;
+    background-color: #47BE61;
+    color: white;
 }
 
 svg stop[offset="0%"] {

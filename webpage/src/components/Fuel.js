@@ -24,22 +24,24 @@ function Fuel() {
     }
 
     return (
-        <div class="fuel-usage-page page">
-            <div class="main left-aligned">
-                <div className="half tile">
-                    <span>Pojazd:</span>
-                    <input value={vehicle} onChange={handleVehicleChange} />
-                </div>
-                <div className="half tile break-row"></div>
-                <div className="half tile fuel-usage-new">
-                    <header>Tankowanie</header>
-                </div>
-                <div className="half tile fuel-usage-history">
-                    <header>Historia tankowania</header>
-                </div>
-                <div className="half tile fuel-usage-stats">
-                    <header>Zużycie paliwa</header>
-                    <div class="content">
+        <div className="fuel-usage-page">
+            <div className="main">
+                <div className="left-side">
+                    <div className="tile">
+                        <h2>Pojazd</h2>
+                        <input value={vehicle} onChange={handleVehicleChange} />
+                    </div>
+                    <div className="tile">
+                        <h2>Tankowanie</h2>
+                        <form>
+                            <input placeholder="Koszt tankowania [PLN]"/>
+                            <input placeholder="Ilośc zatankowanego paliwa [L]"/>
+                            <input placeholder="Przebieg pojazdu [KM]"/>
+                            <button className="submit">Zapisz tankowanie</button>
+                        </form>
+                    </div>
+                    <div className="tile">
+                        <h2>Zużycie paliwa</h2>
                         <svg viewBox="0 0 446 156" width="446" height="156" xmlns="http://www.w3.org/2000/svg">
                             <defs>
                                 <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -68,6 +70,59 @@ function Fuel() {
                                     )
                                 } />
                         </svg>
+                    </div>
+                </div>
+                <div className="right-side">
+                    <div className="tile">
+                        <h2>Historia tankowania</h2>
+                        <div className="fuel-usage-history header">
+                            <span>Data</span>
+                            <span>Koszt</span>
+                            <span>Ilość</span>
+                            <span>Przebieg</span>
+                        </div>
+                        <div className="fuel-usage-history">
+                            <span>02.03.2021 15:09</span>
+                            <span>203,45 zł</span>
+                            <span>40,7 L</span>
+                            <span>1 330 087 KM</span>
+                        </div>
+                        <div className="fuel-usage-history">
+                            <span>02.03.2021 15:09</span>
+                            <span>203,45 zł</span>
+                            <span>40,7 L</span>
+                            <span>1 330 087 KM</span>
+                        </div>
+                        <div className="fuel-usage-history">
+                            <span>02.03.2021 15:09</span>
+                            <span>203,45 zł</span>
+                            <span>40,7 L</span>
+                            <span>1 330 087 KM</span>
+                        </div>
+                        <div className="fuel-usage-history">
+                            <span>02.03.2021 15:09</span>
+                            <span>203,45 zł</span>
+                            <span>40,7 L</span>
+                            <span>1 330 087 KM</span>
+                        </div>
+                        <div className="fuel-usage-history">
+                            <span>02.03.2021 15:09</span>
+                            <span>203,45 zł</span>
+                            <span>40,7 L</span>
+                            <span>1 330 087 KM</span>
+                        </div>
+                        <div className="fuel-usage-history">
+                            <span>02.03.2021 15:09</span>
+                            <span>203,45 zł</span>
+                            <span>40,7 L</span>
+                            <span>1 330 087 KM</span>
+                        </div>
+                        <div className="fuel-usage-history">
+                            <span>02.03.2021 15:09</span>
+                            <span>203,45 zł</span>
+                            <span>40,7 L</span>
+                            <span>1 330 087 KM</span>
+                        </div>
                     </div>
                 </div>
             </div>
