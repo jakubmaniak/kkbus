@@ -10,13 +10,13 @@ function ContactPage() {
                     <div className="tile">
                         <h2>Kontakt</h2>
                         <div className="adress">
-                            <p>ul.Władysława Łokietka 21/3</p>
-                            <p>30-010 Kraków</p>
+                            <p>ul. Jana Pawła II 37</p>
+                            <p>31-864 Kraków</p>
                         </div>
                         <div className="contact-info">
                             <div>
                                 <span>Telefon: </span>
-                                <span>12 01 02 300</span>
+                                <span>(070) 012-34-56, (070)-011-22-33</span>
                             </div>
                             <div>
                                 <span>Adres e-mail: </span>
