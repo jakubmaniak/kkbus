@@ -24,6 +24,16 @@
     width: 100%;
 }
 
+.tile.select {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.tile.select h2 {
+    margin-bottom: 0;
+}
+
 .fuel-usage-history {
     display: flex;
     justify-content: space-between;

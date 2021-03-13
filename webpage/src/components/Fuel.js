@@ -2,12 +2,60 @@ import React, { useState } from 'react';
 
 import { useValue } from '../helpers/use-value';
 import * as api from '../api';
+import FuelHistoryItem from './FuelHistoryItem';
+import Dropdown from './Dropdown';
 
 import '../styles/Fuel.css';
 
 function Fuel() {
-    const [fuelUsage, setFuelUsage] = useState([]);
-    const [vehicle, setVehicle] = useState('');
+    let [fuelUsage, setFuelUsage] = useState([]);
+    let [vehicle, setVehicle] = useState('');
+    let [vehicles, setVehicles] = useState(['Mercedes Sprinter', 'Ford Transit']);
+
+    let fuelHistory = [
+        {
+            date: '02.03.2021 15:09',
+            price: 203.45,
+            liters: 40.7, 
+            vehicleMileage:'1 330 087'
+        },
+        {
+            date: '02.03.2021 15:09',
+            price: 203.45,
+            liters: 40.7, 
+            vehicleMileage:'1 330 087'
+        },
+        {
+            date: '02.03.2021 15:09',
+            price: 203.45,
+            liters: 40.7, 
+            vehicleMileage:'1 330 087'
+        },
+        {
+            date: '02.03.2021 15:09',
+            price: 203.45,
+            liters: 40.7, 
+            vehicleMileage:'1 330 087'
+        },
+        {
+            date: '02.03.2021 15:09',
+            price: 203.45,
+            liters: 40.7, 
+            vehicleMileage:'1 330 087'
+        },
+        {
+            date: '02.03.2021 15:09',
+            price: 203.45,
+            liters: 40.7, 
+            vehicleMileage:'1 330 087'
+        },
+        {
+            date: '02.03.2021 15:09',
+            price: 203.45,
+            liters: 40.7, 
+            vehicleMileage:'1 330 087'
+        },
+    ]
 
     function handleVehicleChange(ev) {
         let vehicleId = parseInt(ev.target.value);
@@ -27,9 +75,13 @@ function Fuel() {
         <div className="fuel-usage-page">
             <div className="main">
                 <div className="left-side">
-                    <div className="tile">
+                    <div className="tile select">
                         <h2>Pojazd</h2>
-                        <input value={vehicle} onChange={handleVehicleChange} />
+                        <Dropdown 
+                            items={vehicles}
+                            placeholder="Wybierz pojazd"
+                            handleChange={setVehicle}
+                        />
                     </div>
                     <div className="tile">
                         <h2>Tankowanie</h2>
@@ -81,48 +133,17 @@ function Fuel() {
                             <span>Ilość</span>
                             <span>Przebieg</span>
                         </div>
-                        <div className="fuel-usage-history">
-                            <span>02.03.2021 15:09</span>
-                            <span>203,45 zł</span>
-                            <span>40,7 L</span>
-                            <span>1 330 087 KM</span>
-                        </div>
-                        <div className="fuel-usage-history">
-                            <span>02.03.2021 15:09</span>
-                            <span>203,45 zł</span>
-                            <span>40,7 L</span>
-                            <span>1 330 087 KM</span>
-                        </div>
-                        <div className="fuel-usage-history">
-                            <span>02.03.2021 15:09</span>
-                            <span>203,45 zł</span>
-                            <span>40,7 L</span>
-                            <span>1 330 087 KM</span>
-                        </div>
-                        <div className="fuel-usage-history">
-                            <span>02.03.2021 15:09</span>
-                            <span>203,45 zł</span>
-                            <span>40,7 L</span>
-                            <span>1 330 087 KM</span>
-                        </div>
-                        <div className="fuel-usage-history">
-                            <span>02.03.2021 15:09</span>
-                            <span>203,45 zł</span>
-                            <span>40,7 L</span>
-                            <span>1 330 087 KM</span>
-                        </div>
-                        <div className="fuel-usage-history">
-                            <span>02.03.2021 15:09</span>
-                            <span>203,45 zł</span>
-                            <span>40,7 L</span>
-                            <span>1 330 087 KM</span>
-                        </div>
-                        <div className="fuel-usage-history">
-                            <span>02.03.2021 15:09</span>
-                            <span>203,45 zł</span>
-                            <span>40,7 L</span>
-                            <span>1 330 087 KM</span>
-                        </div>
+                        {fuelHistory.map((refueling, index) => {
+                            return (
+                                <FuelHistoryItem 
+                                    key={index}
+                                    date={refueling.date}
+                                    price={refueling.price}
+                                    liters={refueling.liters}
+                                    vehicleMileage={refueling.vehicleMileage}
+                                />      
+                            );
+                        })}
                     </div>
                 </div>
             </div>
