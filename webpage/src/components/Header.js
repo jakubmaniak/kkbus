@@ -56,25 +56,43 @@ function Header() {
             <nav>
                 {
                     (role === 'owner') ? 
-                        null 
-                    : (role === 'office') ? 
-                        null
-                    : (role === 'driver') ?
                         <div className="nav-action">
-                            <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
                             <HeaderItem path="/">Grafik kursów</HeaderItem>
                             <HeaderItem path="#">Grafik pracy</HeaderItem>
+                            <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
+                            <HeaderItem path="#">Raporty</HeaderItem>
+                            <HeaderItem path="#">Zarządzanie klientami</HeaderItem>
                             <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
+                            <HeaderItem path="/kontakt">Kontakt</HeaderItem>
+                        </div>
+                    : (role === 'office') ? 
+                        <div className="nav-action">
+                            <HeaderItem path="/">Grafik kursów</HeaderItem>
+                            <HeaderItem path="#">Grafik pracy</HeaderItem>
+                            <HeaderItem path="#">Raporty</HeaderItem>
+                            <HeaderItem path="#">Zarządzanie klientami</HeaderItem>
+                            <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
+                            <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
+                            <HeaderItem path="/kontakt">Kontakt</HeaderItem>
+                        </div>
+                    : (role === 'driver') ?
+                        <div className="nav-action">
+                            <HeaderItem path="/">Grafik kursów</HeaderItem>
+                            <HeaderItem path="#">Grafik pracy</HeaderItem>
+                            <HeaderItem path="#">Lista pasażerów</HeaderItem>
+                            <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
+                            <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
+                            <HeaderItem path="/kontakt">Kontakt</HeaderItem>
                         </div>
                     : (role === 'client') ?
                         <div className="nav-action">
-                            <HeaderItem path="/">Trasy</HeaderItem>
+                            <HeaderItem path="/">Grafik kursów</HeaderItem>
                             <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
                             <HeaderItem path="/kontakt">Kontakt</HeaderItem>
                         </div>
                     : 
                         <div className="nav-action">
-                            <HeaderItem path="/">Trasy</HeaderItem>
+                            <HeaderItem path="/">Grafik kursów</HeaderItem>
                             <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
                             <HeaderItem path="/kontakt">Kontakt</HeaderItem>
                         </div>
