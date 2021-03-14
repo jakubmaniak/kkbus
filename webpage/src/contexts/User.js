@@ -1,12 +1,12 @@
 import React from 'react';
 
-const context = {
+export const initialContext = {
     user: {
         loggedIn: false,
         role: 'guest'
     }
 };
 
-const UserContext = React.createContext(context);
+const UserContext = React.createContext(initialContext);
 
 export default UserContext;

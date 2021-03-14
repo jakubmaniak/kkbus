@@ -11,17 +11,20 @@ function Header() {
     let [name, setName] = useState('');
 
     let { user, setUser } = useContext(UserContext);
-    let { role, isLogged } = user;
+    let { role, loggedIn } = user;
 
     let history = useHistory();
 
     useEffect(() => {
         if(document.cookie.includes('session')) {
-            setUser({ ...user, isLogged: true });
-            
+            user.loggedIn = true;
+            setUser({ ...user });
+
             api.getUserInfo()
             .then((data) => {
-                setUser({ ...user, role: data.role });
+                user.role = data.role;
+                
+                setUser({ ...user });
                 setName(data.firstName + ' ' + data.lastName);
             });
         }
@@ -30,7 +33,7 @@ function Header() {
     function signout() {
         api.logout()
         .then(() => {
-            setUser({ isLogged: false, role: 'guest' });
+            setUser({ loggedIn: false, role: 'guest' });
             history.replace('/');
         });
     }
@@ -43,7 +46,7 @@ function Header() {
                         <span>KK</span>
                         <span>BUS</span>
                     </h1>
-                    {isLogged ? 
+                    {loggedIn ? 
                         <div className="header-action-signin">
                             <Link to ="/profil">{name}</Link>
                             <p onClick={signout}>Wyloguj</p>

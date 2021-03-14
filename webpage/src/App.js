@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import './App.css';
 
-import UserContext from './contexts/User';
+import UserContext, { initialContext } from './contexts/User';
 
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
@@ -17,7 +17,7 @@ import WorkSchedule from './components/WorkSchedule';
 import Fuel from './components/Fuel';
 
 function App() {
-    let [user, setUser] = useState({});
+    let [user, setUser] = useState(initialContext.user);
 
     return (
         <div className="App">
