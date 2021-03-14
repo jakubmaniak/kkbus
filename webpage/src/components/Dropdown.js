@@ -30,7 +30,11 @@ function Dropdown(props) {
     return (
         <div className={expanded ? 'dropdown expanded' : 'dropdown'}>
             <div className="dropdown-container" onClick={() => setExpanded(!expanded)}>
-                <div className="dropdown-content">{selectedItem}</div>
+                <div className="dropdown-content">{
+                    ('textProperty' in props && typeof selectedItem === 'object')
+                        ? selectedItem[props.textProperty]
+                        : selectedItem
+                }</div>
                 <button className="dropdown-button">&gt;</button>
             </div>
             { (expanded && props.items instanceof Array) ?
@@ -38,7 +42,11 @@ function Dropdown(props) {
                     {props.items.map((item, i) => <div
                         key={i}
                         className="dropdown-list-item"
-                        onClick={() => selectItem(i)}>{item}</div>
+                        onClick={() => selectItem(i)}>{
+                            ('textProperty' in props)
+                                ? item[props.textProperty]
+                                : item
+                        }</div>
                     )}
                 </div>
                 : null

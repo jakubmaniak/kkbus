@@ -6,7 +6,11 @@ import WorkScheduleItem from './WorkScheduleItem';
 
 function WorkSchedule() {
     let [loading, setLoading] = useState(false);
-    let [drivers, setDrivers] = useState(['Tomasz Rajdowiec', 'Kazimierz Rajdowiec', 'Mirosław Szybki']);
+    let [drivers, setDrivers] = useState([
+        [9001, 'Tomasz Rajdowiec'],
+        [9338, 'Kazimierz Rajdowiec'],
+        [9429, 'Mirosław Szybki']
+    ]);
     let ranges = ['dzisiaj', 'jutro', '7 kolejnych dni', 'ten miesiąc'];
     let courses = ['Kraków - Katowice'];
     let directions = ['obydwa', 'A -> B', 'B -> A'];
@@ -90,6 +94,7 @@ function WorkSchedule() {
                             <span>Kierowca:</span>
                             <Dropdown
                                 items={drivers}
+                                textProperty="1"
                                 placeholder="Wybierz kierowcę"
                                 handleChange={handleDriverChange} />
                         </div>
