@@ -10,7 +10,10 @@ import '../styles/Fuel.css';
 function Fuel() {
     let [fuelUsage, setFuelUsage] = useState([]);
     let [vehicle, setVehicle] = useState('');
-    let [vehicles, setVehicles] = useState(['Mercedes Sprinter', 'Ford Transit']);
+    let [vehicles, setVehicles] = useState([
+        { vehicleName: 'Mercedes Sprinter', vehicleId: 2 },
+        { vehicleName: 'Ford Transit', vehicleId: 5 }
+    ]);
 
     let fuelHistory = [
         {
@@ -55,10 +58,10 @@ function Fuel() {
             liters: 40.7, 
             vehicleMileage:'1 330 087'
         },
-    ]
+    ];
 
-    function handleVehicleChange(ev) {
-        let vehicleId = parseInt(ev.target.value);
+    function handleVehicleChange(item) {
+        let vehicleId = item.vehicleId;
 
         setVehicle(vehicleId || '');
         getData(vehicleId || null);
@@ -79,8 +82,9 @@ function Fuel() {
                         <h2>Pojazd</h2>
                         <Dropdown 
                             items={vehicles}
+                            textProperty="vehicleName"
                             placeholder="Wybierz pojazd"
-                            handleChange={setVehicle}
+                            handleChange={handleVehicleChange}
                         />
                     </div>
                     <div className="tile">
