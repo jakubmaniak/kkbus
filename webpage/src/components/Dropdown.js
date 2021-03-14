@@ -14,7 +14,7 @@ function Dropdown(props) {
             return;
         }
 
-        let alwaysSelected = (props.alwaysSelected == true) || (
+        let alwaysSelected = (props.alwaysSelected === true) || (
             typeof props.alwaysSelected === 'string' && props.alwaysSelected.toLowerCase() === 'true'
         );
 
@@ -25,7 +25,7 @@ function Dropdown(props) {
             setPlaceholderVisible(true);
             setSelectedItem(props.placeholder);
         }
-    }, [props.items]);
+    }, [props]);
 
     function getLength() {
         return (props.items instanceof Array) ? props.items.length : 0;

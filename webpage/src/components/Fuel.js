@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 
-import { useValue } from '../helpers/use-value';
 import * as api from '../api';
 import FuelHistoryItem from './FuelHistoryItem';
+import FuelUsageChart from './FuelUsageChart';
 import Dropdown from './Dropdown';
 
 import '../styles/Fuel.css';
-import FuelUsageChart from './FuelUsageChart';
 
 function Fuel() {
     let [fuelUsage, setFuelUsage] = useState([]);
