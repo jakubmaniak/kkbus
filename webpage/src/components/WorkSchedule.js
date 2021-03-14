@@ -71,7 +71,7 @@ function WorkSchedule() {
     }, [selectedDriver, selectedRoute, selectedDirection, selectedRange]);  
 
     return (
-        <div className="work-schedule-page">
+        <div className="work-schedule page">
             <div className="main">
                 <div className="tile">
                     <h2>Filtry</h2>

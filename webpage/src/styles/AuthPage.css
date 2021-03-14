@@ -17,6 +17,7 @@
 .container {
     width: 65%;
     display: flex;
+    align-items: center;
     background-color: #f0f0f0;
 }
 
@@ -27,7 +28,6 @@
     justify-content: center;
     flex-direction: column;
     padding-left: 250px;
-    padding-bottom: 220px;
 }
 
 .logo {
@@ -68,10 +68,13 @@ form {
     color: rgba(0, 0, 0, 0.4);
 }
 
-.submit {
+.login-panel .submit,
+.remind-password-panel .submit,
+.signup-panel .submit{
     background-color: #D9B430;
     color: black;
     font-weight: 500;
+    width: 100%;
 }
 
 .action {

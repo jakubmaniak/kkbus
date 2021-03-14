@@ -4,19 +4,6 @@
     align-items: center;
 }
 
-.track {
-    height: 260px;
-    width: 100%;
-    margin-bottom: 38px;
-    border-radius: 4px;
-    padding: 26px;
-    background-color: white;
-}
-
-.track:last-child {
-    margin-bottom: 0;
-}
-
 .track-header {
     display: flex;
 }
@@ -81,7 +68,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 40px;
+    margin-top: 34px;
 }
 
 .hours {
@@ -97,7 +84,6 @@
     justify-content: center;
     width: 70px;
     height: 36px;
-    /* margin-right: 12px; */
     margin-bottom: 8px;
     cursor: pointer;
     color: #D9B430;
@@ -122,6 +108,10 @@
 
 .prices {
     margin-right: 26px;
+}
+
+.prices p {
+    font-weight: normal;
 }
 
 .prices .note {

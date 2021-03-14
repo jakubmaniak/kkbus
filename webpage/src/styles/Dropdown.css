@@ -6,6 +6,7 @@
 .dropdown-container {
     display: flex;
     cursor: pointer;
+    width: 400px;
 }
 
 .dropdown-content {

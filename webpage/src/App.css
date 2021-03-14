@@ -42,7 +42,7 @@ textarea {
     display: flex;
     margin: 0 110px;
     margin-top: 50px;
-    justify-content: center;
+    justify-content: space-between;
     flex-wrap: wrap;
     width: 100%;
     max-width: 1220px;
@@ -50,10 +50,6 @@ textarea {
 
 .main.left-aligned {
     justify-content: flex-start;
-}
-
-.left-side {
-    width: 590px;
 }
 
 .tile {
@@ -65,13 +61,14 @@ textarea {
     margin-bottom: 40px;
 }
 
-.tile > header {
+.tile h2 {
     background-color: transparent;
     font-size: 20px;
     font-weight: 500;
+    margin-bottom: 20px;
 }
 
-.half.tile {
+.tile.half {
     width: 590px;
 }
 
@@ -81,15 +78,6 @@ textarea {
     margin: 0;
     padding: 0;
     opacity: 0;
-}
-
-.right-side {
-    display: flex;
-    flex-direction: column;
-    width: 590px;
-    background-color: white;
-    border-radius: 4px;
-    padding: 28px;
 }
 
 button {

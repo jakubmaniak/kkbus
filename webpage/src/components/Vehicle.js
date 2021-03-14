@@ -10,8 +10,8 @@ function Vehicle(props) {
     }
 
     return (
-        <div>
-            <div className="tile">
+        <div className="vehicle-item">
+            <div className="tile half">
                 <h2>{props.name}</h2>
                 <div className="vehicle-info">
                     <span>Stan pojazdu</span>
@@ -28,7 +28,9 @@ function Vehicle(props) {
                         <p>{props.returnTrack}</p>
                     </span>
                 </div>
-                <button onClick={showModal}>Szczegóły</button>
+                <div className="details">
+                    <button onClick={showModal}>Szczegóły</button>
+                </div>
             </div>
             <Modal visible={modalVisibility}>
                 <header>Szczegóły pojazdu</header>

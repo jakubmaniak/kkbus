@@ -62,7 +62,7 @@ function VehicleInfo() {
     ];
 
     return (
-        <div className="vehicle-info-page">
+        <div className="vehicle-info-page page">
             <div className="main">
                 {vehicles.map((vehicle, index) => {
                     return (

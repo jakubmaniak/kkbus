@@ -1,11 +1,3 @@
-.work-schedule-page {
-    display: flex;
-    justify-content: center;
-}
-.work-schedule-page .main {
-    justify-content: space-between;
-}
-
 .row-container {
     display: flex;
     justify-content: space-between;
@@ -24,15 +16,11 @@
     width: 134px;
 }
 
-.tile.work-schedule-item {
-    width: 590px;
-}
-
 .header-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
 }
 
 .date {

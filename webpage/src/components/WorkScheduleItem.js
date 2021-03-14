@@ -3,7 +3,7 @@ import '../styles/WorkSchedule.css';
 
 function WorkScheduleItem(props) {
     return (
-        <div className="tile work-schedule-item">
+        <div className="tile half">
             <div className="header-wrapper">
                 <div className="direction">
                     <span>{props.start}</span>

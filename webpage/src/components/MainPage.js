@@ -5,7 +5,7 @@ export default function MainPage() {
     return (
         <div className="main-page">
             <div className="main">
-                <div className="track">
+                <div className="tile">
                     <div className="track-header">
                         <div className="track-info">
                             <div className="direction">
@@ -74,7 +74,7 @@ export default function MainPage() {
                         </div>
                     </div>
                 </div>
-                <div className="track">
+                <div className="tile">
                     <div className="track-header">
                         <div className="track-info">
                             <div className="direction">

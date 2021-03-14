@@ -39,25 +39,7 @@ function Fuel() {
             price: 203.45,
             liters: 40.7, 
             vehicleMileage:'1 330 087'
-        },
-        {
-            date: '02.03.2021 15:09',
-            price: 203.45,
-            liters: 40.7, 
-            vehicleMileage:'1 330 087'
-        },
-        {
-            date: '02.03.2021 15:09',
-            price: 203.45,
-            liters: 40.7, 
-            vehicleMileage:'1 330 087'
-        },
-        {
-            date: '02.03.2021 15:09',
-            price: 203.45,
-            liters: 40.7, 
-            vehicleMileage:'1 330 087'
-        },
+        }
     ];
 
     function handleVehicleChange(item) {
@@ -75,10 +57,9 @@ function Fuel() {
     }
 
     return (
-        <div className="fuel-usage-page">
+        <div className="fuel-usage page">
             <div className="main">
-                <div className="left-side">
-                    <div className="tile select">
+                    <div className="tile half select">
                         <h2>Pojazd</h2>
                         <Dropdown 
                             items={vehicles}
@@ -87,7 +68,8 @@ function Fuel() {
                             handleChange={handleVehicleChange}
                         />
                     </div>
-                    <div className="tile">
+                    <div className="tile break-row"></div>
+                    <div className="tile half">
                         <h2>Tankowanie</h2>
                         <form>
                             <input placeholder="Koszt tankowania [PLN]"/>
@@ -96,13 +78,7 @@ function Fuel() {
                             <button className="submit">Zapisz tankowanie</button>
                         </form>
                     </div>
-                    <div className="tile">
-                        <h2>Zużycie paliwa</h2>
-                        <FuelUsageChart values={fuelUsage.map((e) => e.amount)} />
-                    </div>
-                </div>
-                <div className="right-side">
-                    <div className="tile">
+                    <div className="tile half right">
                         <h2>Historia tankowania</h2>
                         <div className="fuel-usage-history header">
                             <span>Data</span>
@@ -122,8 +98,11 @@ function Fuel() {
                             );
                         })}
                     </div>
+                    <div className="tile half">
+                        <h2>Zużycie paliwa</h2>
+                        <FuelUsageChart values={fuelUsage.map((e) => e.amount)} />
+                    </div>
                 </div>
-            </div>
         </div>
     );
 }

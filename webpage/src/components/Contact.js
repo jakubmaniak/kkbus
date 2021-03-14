@@ -4,10 +4,10 @@ import map from '../static/map.png';
 
 function Contact() {
     return (
-        <div className="contact-page">
+        <div className="contact page">
             <div className="main">
-                <div className="left-side">
-                    <div className="tile">
+                <div className="contact-container">
+                    <div className="tile half">
                         <h2>Kontakt</h2>
                         <div className="adress">
                             <p>ul. Jana Pawła II 37</p>
@@ -28,9 +28,9 @@ function Contact() {
                         <img src={map} alt="mapa" />
                     </div>
                 </div>
-                <div className="right-side">
+                <div className="tile half">
                     <h2>Masz pytanie?</h2>
-                    <form>
+                    <form className="contact-form">
                         <input placeholder="Twój adres email"/>
                         <textarea placeholder="Twoje pytanie"></textarea>
                         <button className="submit">Wyślij</button>
