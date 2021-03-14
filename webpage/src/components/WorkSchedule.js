@@ -46,7 +46,6 @@ function WorkSchedule() {
     }, []);
 
     useEffect(() => {
-        console.log({selectedDriver, selectedRoute, selectedDirection, selectedRange});
         if (!selectedDriver) return;
 
         setResults([]);

@@ -39,7 +39,7 @@ function Dropdown(props) {
         setExpanded(false);
         
         if (typeof props.handleChange === 'function')
-                props.handleChange(item);
+            props.handleChange(item);
     }
 
     return (
