@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import { useValue } from '../helpers/use-value';
 import * as api from '../api';
 import FuelHistoryItem from './FuelHistoryItem';
+import FuelUsageChart from './FuelUsageChart';
 import Dropdown from './Dropdown';
 
 import '../styles/Fuel.css';
@@ -10,7 +10,10 @@ import '../styles/Fuel.css';
 function Fuel() {
     let [fuelUsage, setFuelUsage] = useState([]);
     let [vehicle, setVehicle] = useState('');
-    let [vehicles, setVehicles] = useState(['Mercedes Sprinter', 'Ford Transit']);
+    let [vehicles, setVehicles] = useState([
+        { vehicleName: 'Mercedes Sprinter', vehicleId: 2 },
+        { vehicleName: 'Ford Transit', vehicleId: 5 }
+    ]);
 
     let fuelHistory = [
         {
@@ -55,10 +58,10 @@ function Fuel() {
             liters: 40.7, 
             vehicleMileage:'1 330 087'
         },
-    ]
+    ];
 
-    function handleVehicleChange(ev) {
-        let vehicleId = parseInt(ev.target.value);
+    function handleVehicleChange(item) {
+        let vehicleId = item.vehicleId;
 
         setVehicle(vehicleId || '');
         getData(vehicleId || null);
@@ -79,8 +82,9 @@ function Fuel() {
                         <h2>Pojazd</h2>
                         <Dropdown 
                             items={vehicles}
+                            textProperty="vehicleName"
                             placeholder="Wybierz pojazd"
-                            handleChange={setVehicle}
+                            handleChange={handleVehicleChange}
                         />
                     </div>
                     <div className="tile">
@@ -94,34 +98,7 @@ function Fuel() {
                     </div>
                     <div className="tile">
                         <h2>Zużycie paliwa</h2>
-                        <svg viewBox="0 0 446 156" width="446" height="156" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" />
-                                    <stop offset="100%"/>
-                                </linearGradient>
-                            </defs>
-                            <polyline
-                                className="fill"
-                                points={
-                                    '0,156 ' +
-                                    fuelUsage.map((entity, i, array) =>
-                                        (i * (446 / (array.length - 1))) +
-                                        ',' +
-                                        (entity.amount - 30) * 10
-                                    ) +
-                                    ' 446,156'
-                                } />
-                            <polyline
-                                className="stroke"
-                                points={
-                                    fuelUsage.map((entity, i, array) =>
-                                        (i * (446 / (array.length - 1))) +
-                                        ',' +
-                                        (entity.amount - 30) * 10
-                                    )
-                                } />
-                        </svg>
+                        <FuelUsageChart values={fuelUsage.map((e) => e.amount)} />
                     </div>
                 </div>
                 <div className="right-side">
