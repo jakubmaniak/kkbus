@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import '../styles/WorkSchedule.css';
 import Dropdown from './Dropdown';
+import Loader from './Loader';
 import WorkScheduleItem from './WorkScheduleItem';
 
 function WorkSchedule() {
+    let [loading, setLoading] = useState(false);
     let [drivers, setDrivers] = useState(['Tomasz Rajdowiec', 'Kazimierz Rajdowiec', 'Mirosław Szybki']);
     let ranges = ['dzisiaj', 'jutro', '7 kolejnych dni', 'ten miesiąc'];
     let courses = ['Kraków - Katowice'];
@@ -69,7 +71,13 @@ function WorkSchedule() {
     ];
 
     function handleDriverChange(driver) {
-        setResults(data);
+        setResults([]);
+        setLoading(true);
+
+        setTimeout(() => { //simulate loading
+            setLoading(false);
+            setResults(data);
+        }, 1000);
     }
 
     return (
@@ -104,6 +112,7 @@ function WorkSchedule() {
                         </div>
                     </div>
                 </div>
+                <Loader loading={loading} />
                 {results.map((element, i) => {
                     return (
                         <WorkScheduleItem 
