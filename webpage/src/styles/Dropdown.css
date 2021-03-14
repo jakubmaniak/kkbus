@@ -23,6 +23,10 @@
     border-radius: 2px 0 0 0;
 }
 
+.dropdown .placeholder {
+    color: #d9b430;   
+}
+
 .dropdown-button {
     width: 50px;
     height: 50px;

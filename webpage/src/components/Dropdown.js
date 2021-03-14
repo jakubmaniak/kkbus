@@ -4,22 +4,37 @@ import '../styles/Dropdown.css';
 function Dropdown(props) {
     let [selectedItem, setSelectedItem] = useState('');
     let [expanded, setExpanded] = useState(false);
+    let [placeholderVisible, setPlaceholderVisible] = useState(false);
 
     useEffect(() => {
-        if (!(props.items instanceof Array)) return;
+        if (!(props.items instanceof Array)) {
+            setPlaceholderVisible(true);
+            setSelectedItem(props.placeholder);
 
-        if (props.alwaysSelected === true ||
-            (typeof props.alwaysSelected === 'string' && props.alwaysSelected.toLowerCase() === 'true')) {
+            return;
+        }
+
+        let alwaysSelected = (props.alwaysSelected == true) || (
+            typeof props.alwaysSelected === 'string' && props.alwaysSelected.toLowerCase() === 'true'
+        );
+
+        if (alwaysSelected) {
             selectItem(0);
         }
         else if ('placeholder' in props) {
+            setPlaceholderVisible(true);
             setSelectedItem(props.placeholder);
         }
     }, [props.items]);
 
+    function getLength() {
+        return (props.items instanceof Array) ? props.items.length : 0;
+    }
+
     function selectItem(index) {
         let item = props.items[index];
 
+        setPlaceholderVisible(false);
         setSelectedItem(item);
         setExpanded(false);
         
@@ -28,9 +43,9 @@ function Dropdown(props) {
     }
 
     return (
-        <div className={expanded ? 'dropdown expanded' : 'dropdown'}>
-            <div className="dropdown-container" onClick={() => setExpanded(!expanded)}>
-                <div className="dropdown-content">{
+        <div className={(expanded && getLength()) ? 'dropdown expanded' : 'dropdown'}>
+            <div className="dropdown-container" onClick={() => setExpanded(!expanded && getLength())}>
+                <div className={placeholderVisible ? 'dropdown-content placeholder' : 'dropdown-content'}>{
                     ('textProperty' in props && typeof selectedItem === 'object')
                         ? selectedItem[props.textProperty]
                         : selectedItem
