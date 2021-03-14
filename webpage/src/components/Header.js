@@ -1,33 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import '../styles/Header.css';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+
+import '../styles/Header.css';
+
 import * as api from '../api';
 import HeaderItem from './HeaderItem';
+import UserContext from '../contexts/User';
 
 function Header() {
-    let [isLogged, setIsLogged] = useState(false);
-    let [role, setRole] = useState('guest');
     let [name, setName] = useState('');
+
+    let { user, setUser } = useContext(UserContext);
+    let { role, isLogged } = user;
+
     let history = useHistory();
 
     useEffect(() => {
         if(document.cookie.includes('session')) {
-            setIsLogged(true);
+            setUser({ ...user, isLogged: true });
             
             api.getUserInfo()
             .then((data) => {
-                setRole(data.role);
+                setUser({ ...user, role: data.role });
                 setName(data.firstName + ' ' + data.lastName);
             });
         }
-
     }, []);
 
     function signout() {
         api.logout()
         .then(() => {
-            setIsLogged(false);
-            setRole('guest');
+            setUser({ isLogged: false, role: 'guest' });
             history.replace('/');
         });
     }

@@ -1,22 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+
 import '../styles/LoyaltyProgram.css';
-import * as api from '../api';
+
+import UserContext from '../contexts/User';
 
 function LoyaltyProgram() {
-    let [role, setRole] = useState('guest');
     let history = useHistory();
 
-    useEffect(() => {
-        if(document.cookie.includes('session')) {
-
-            api.getUserInfo()
-            .then((data) => {
-                setRole(data.role);
-                console.log(data.role);
-            });
-        }
-    }, [role]);
+    let { role } = useContext(UserContext).user;
 
     return (
         <div className="loyalty-program page">
@@ -24,7 +16,7 @@ function LoyaltyProgram() {
                     <div className="tile half">
                         <div className="title">
                             <h2>Sklep</h2>
-                            {role==='client' ? <h3 className="points">Punkty: 1156</h3> : null}
+                            {role === 'client' ? <h3 className="points">Punkty: 1156</h3> : null}
                         </div>
                         <div className="reward">
                             <p>Zniżka 10% (500 punktów)</p>
