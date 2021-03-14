@@ -25,7 +25,7 @@ function Dropdown(props) {
             setPlaceholderVisible(true);
             setSelectedItem(props.placeholder);
         }
-    }, [props]);
+    }, [props.items]);
 
     function getLength() {
         return (props.items instanceof Array) ? props.items.length : 0;
@@ -39,7 +39,7 @@ function Dropdown(props) {
         setExpanded(false);
         
         if (typeof props.handleChange === 'function')
-            props.handleChange(item);
+                props.handleChange(item);
     }
 
     return (

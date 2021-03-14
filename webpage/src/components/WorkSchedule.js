@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+import * as api from '../api';
+
 import '../styles/WorkSchedule.css';
 import Dropdown from './Dropdown';
 import Loader from './Loader';
@@ -6,83 +9,66 @@ import WorkScheduleItem from './WorkScheduleItem';
 
 function WorkSchedule() {
     let [loading, setLoading] = useState(false);
-    let [drivers, setDrivers] = useState([
-        [9001, 'Tomasz Rajdowiec'],
-        [9338, 'Kazimierz Rajdowiec'],
-        [9429, 'Mirosław Szybki']
+    
+    let [selectedDriver, setSelectedDriver] = useState();
+    let [selectedRoute, setSelectedRoute] = useState();
+    let [selectedRange, setSelectedRange] = useState();
+    let [selectedDirection, setSelectedDirection] = useState();
+
+    let [drivers, setDrivers] = useState([]);
+    let [routes, setRoutes] = useState([
+        [null, 'wszystkie']
     ]);
-    let ranges = ['dzisiaj', 'jutro', '7 kolejnych dni', 'ten miesiąc'];
-    let courses = ['Kraków - Katowice'];
-    let directions = ['obydwa', 'A -> B', 'B -> A'];
+    let [ranges] = useState([
+        [0, 'dzisiaj'],
+        [1, 'jutro'],
+        [7, '7 kolejnych dni'],
+        [31, 'ten miesiąc']
+    ]);
+    let [directions] = useState([
+        [0, 'obydwa'],
+        [1, 'A -> B'],
+        [-1, 'B -> A']
+    ]);
 
     let [results, setResults] = useState([]);
 
-    let data = [
-        {
-            start: 'Kraków',
-            end: 'Katowice',
-            day: 'dzisiaj',
-            hour: '13:30',
-            vehicle: 'Mercedes Sprinter (KR 193PK)',
-            parking: 'Kraków, parking Czyżyny, ',
-            parkingInfo: 'początkowy'
-        },
-        {
-            start: 'Katowice',
-            end: 'Kraków',
-            day: 'dzisiaj',
-            hour: '15:15',
-            vehicle: 'Mercedes Sprinter (KR 193PK)',
-            parking: '-',
-            parkingInfo: ''
-        },
-        {
-            start: 'Kraków',
-            end: 'Katowice',
-            day: 'dzisiaj',
-            hour: '17:00',
-            vehicle: 'Mercedes Sprinter (KR 193PK)',
-            parking: '-',
-            parkingInfo: ''
-        },
-        {
-            start: 'Katowice',
-            end: 'Kraków',
-            day: 'dzisiaj',
-            hour: '18:45',
-            vehicle: 'Mercedes Sprinter (KR 193PK)',
-            parking: '-',
-            parkingInfo: ''
-        },
-        {
-            start: 'Kraków',
-            end: 'Katowice',
-            day: 'dzisiaj',
-            hour: '20:30',
-            vehicle: 'Mercedes Sprinter (KR 193PK)',
-            parking: '-',
-            parkingInfo: ''
-        },
-        {
-            start: 'Katowice',
-            end: 'Kraków',
-            day: 'dzisiaj',
-            hour: '22:15',
-            vehicle: 'Mercedes Sprinter (KR 193PK)',
-            parking: 'Kraków, parking Czyżyny, ',
-            parkingInfo: 'końcowy'
-        }
-    ];
+    useEffect(() => {
+        api.getDrivers()
+            .then(setDrivers)
+            .catch(api.errorAlert);
 
-    function handleDriverChange(driver) {
+        api.getRoutes()
+            .then((routes) => {
+                setRoutes([[null, 'wszystkie']].concat(routes))
+            })
+            .catch(api.errorAlert);
+    }, []);
+
+    useEffect(() => {
+        console.log({selectedDriver, selectedRoute, selectedDirection, selectedRange});
+        if (!selectedDriver) return;
+
         setResults([]);
         setLoading(true);
 
-        setTimeout(() => { //simulate loading
-            setLoading(false);
-            setResults(data);
-        }, 1000);
-    }
+        let start = Date.now();
+
+        api.getWorkSchedule(selectedDriver[0], selectedRange[0], selectedRoute[0], selectedDirection[0])
+            .then((results) => {
+                if (Date.now() - start > 500) {
+                    setResults(results);
+                    setLoading(false);
+                }
+                else {
+                    setTimeout(() => {
+                        setResults(results);
+                        setLoading(false);
+                    }, 500 - (Date.now() - start));
+                }
+            })
+            .catch(api.errorAlert);
+    }, [selectedDriver, selectedRoute, selectedDirection, selectedRange]);  
 
     return (
         <div className="work-schedule-page">
@@ -96,24 +82,33 @@ function WorkSchedule() {
                                 items={drivers}
                                 textProperty="1"
                                 placeholder="Wybierz kierowcę"
-                                handleChange={handleDriverChange} />
+                                handleChange={setSelectedDriver} />
                         </div>
                         <div className="filter-container">
                             <span>Trasy:</span>
                             <Dropdown
-                                items={courses} alwaysSelected />
+                                items={routes}
+                                textProperty="1"
+                                alwaysSelected
+                                handleChange={setSelectedRoute} />
                         </div>
                     </div>
                     <div className="row-container">
                         <div className="filter-container">
                             <span>Zakres dni:</span>
                             <Dropdown
-                                items={ranges} alwaysSelected />
+                                items={ranges}
+                                textProperty="1"
+                                alwaysSelected
+                                handleChange={setSelectedRange} />
                         </div>
                         <div className="filter-container">
                             <span>Kierunki:</span>
                             <Dropdown
-                                items={directions} alwaysSelected />
+                                items={directions}
+                                textProperty="1"
+                                alwaysSelected
+                                handleChange={setSelectedDirection} />
                         </div>
                     </div>
                 </div>

@@ -4,12 +4,14 @@ const mysql = require('mysql');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 
+const appExtension = require ('./app-extension');
 const reqValidator = require('./req-validator');
 const errors = require('./errors');
 
 const config = JSON.parse(fs.readFileSync('config.json'));
 
 const app = express();
+const appx = appExtension(app, reqValidator);
 app.set('etag', false);
 
 app.use(express.static('public'));
@@ -83,7 +85,7 @@ users.set('amila', {
 });
 users.set('annanowak1234', {
     id: 30199,
-    email: 'jankowalski@gmail.com',
+    email: 'annanowak@gmail.com',
     login: 'annanowak1234',
     password: 'haslo',
     firstName: 'Anna',
@@ -228,7 +230,7 @@ app.get('/api/bookings', (req, res) => {
 });
 
 
-reqValidator.setProtected('/api/vehicle/fuel-usage');
+reqValidator.setProtected('/api/vehicle/fuel-usage', 'driver');
 reqValidator.addSchema('/api/vehicle/fuel-usage', '{vehicleId?: number}');
 app.post('/api/vehicle/fuel-usage', (req, res) => {
     let { vehicleId } = req.body;
@@ -240,6 +242,177 @@ app.post('/api/vehicle/fuel-usage', (req, res) => {
         { date: '2021-03-05 15:08', cost: 203.52, amount: 40.7, mileage: 1333483 }
     ]);
 });
+
+
+appx.get('/api/drivers')
+.handle((req, res) => {
+    res.ok([
+        [9002, 'Tomasz Rajdowiec'],
+        [9003, 'Kazimierz Rajdowiec'],
+        [9004, 'Mirosław Szybki'],
+        [9006, 'Jan Doświadzony'],
+        [9007, 'Marek Poprawny'],
+        [9009, 'Zuzanna Konkretna']
+    ]);
+});
+
+
+appx.get('/api/routes')
+.handle((req, res) => {
+    res.ok([
+        [1, 'Kraków-Katowice'],
+        [2, 'Kraków-Warszawa']
+    ]);
+});
+
+
+appx.post('/api/work-schedule')
+.role('driver')
+.schema('{driverId: number, range: number, direction: number, routeId?: number}')
+.handle((req, res) => {
+    let { driverId, range, direction, routeId } = req.body;
+
+    let ab = [];
+    let ba = [];
+
+    if ((routeId == null || routeId == 1) && (range == 0 || range > 1)) {
+        let end = 'Kraków';
+
+        ab = ab.concat([
+            {
+                start: 'Kraków',
+                end,
+                day: 'dzisiaj',
+                hour: '13:30',
+                vehicle: 'Mercedes Sprinter (KR 193PK)',
+                parking: 'Kraków, parking Czyżyny, ',
+                parkingInfo: 'początkowy'
+            },
+            {
+                start: 'Kraków',
+                end,
+                day: 'dzisiaj',
+                hour: '17:00',
+                vehicle: 'Mercedes Sprinter (KR 193PK)',
+                parking: '-',
+                parkingInfo: ''
+            },
+            {
+                start: 'Kraków',
+                end: end,
+                day: 'dzisiaj',
+                hour: '20:30',
+                vehicle: 'Mercedes Sprinter (KR 193PK)',
+                parking: '-',
+                parkingInfo: ''
+            },
+        ]);
+    
+        ba = ba.concat([
+            {
+                start: end,
+                end: 'Kraków',
+                day: 'dzisiaj',
+                hour: '15:15',
+                vehicle: 'Mercedes Sprinter (KR 193PK)',
+                parking: '-',
+                parkingInfo: ''
+            },
+            {
+                start: end,
+                end: 'Kraków',
+                day: 'dzisiaj',
+                hour: '18:45',
+                vehicle: 'Mercedes Sprinter (KR 193PK)',
+                parking: '-',
+                parkingInfo: ''
+            },
+            {
+                start: end,
+                end: 'Kraków',
+                day: 'dzisiaj',
+                hour: '22:15',
+                vehicle: 'Mercedes Sprinter (KR 193PK)',
+                parking: 'Kraków, parking Czyżyny, ',
+                parkingInfo: 'końcowy'
+            }
+        ]);
+    }
+    if ((routeId == null || routeId == 2) && range >= 1) {
+        let end = 'Warszawa';
+
+        ab = ab.concat([
+            {
+                start: 'Kraków',
+                end,
+                day: 'jutro',
+                hour: '13:30',
+                vehicle: 'Mercedes Sprinter (KR 193PK)',
+                parking: 'Kraków, parking Czyżyny, ',
+                parkingInfo: 'początkowy'
+            },
+            {
+                start: 'Kraków',
+                end,
+                day: 'jutro',
+                hour: '17:00',
+                vehicle: 'Mercedes Sprinter (KR 193PK)',
+                parking: '-',
+                parkingInfo: ''
+            },
+            {
+                start: 'Kraków',
+                end: end,
+                day: 'jutro',
+                hour: '20:30',
+                vehicle: 'Mercedes Sprinter (KR 193PK)',
+                parking: '-',
+                parkingInfo: ''
+            },
+        ]);
+    
+        ba = ba.concat([
+            {
+                start: end,
+                end: 'Kraków',
+                day: 'jutro',
+                hour: '15:15',
+                vehicle: 'Mercedes Sprinter (KR 193PK)',
+                parking: '-',
+                parkingInfo: ''
+            },
+            {
+                start: end,
+                end: 'Kraków',
+                day: 'jutro',
+                hour: '18:45',
+                vehicle: 'Mercedes Sprinter (KR 193PK)',
+                parking: '-',
+                parkingInfo: ''
+            },
+            {
+                start: end,
+                end: 'Kraków',
+                day: 'jutro',
+                hour: '22:15',
+                vehicle: 'Mercedes Sprinter (KR 193PK)',
+                parking: 'Kraków, parking Czyżyny, ',
+                parkingInfo: 'końcowy'
+            }
+        ]);
+    }
+
+    let results = [];
+    if (direction >= 0) results = results.concat(ab);
+    if (direction <= 0) results = results.concat(ba);
+
+    res.ok(results.sort((a, b) =>
+        (a.day == b.day)
+        ? ((a.hour == b.hour) ? 0 : (a.hour > b.hour) ? 1 : -1)
+        : ((a.day > b.day) ? 1 : -1)
+    ));
+});
+
 
 app.use((err, req, res, next) => {
     let errorCode = err.message;

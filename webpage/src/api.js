@@ -67,3 +67,15 @@ export async function getUserInfo() {
 export async function getFuelUsage(vehicleId = null) {
     return post('/vehicle/fuel-usage', { vehicleId });
 }
+
+export async function getDrivers() {
+    return get('/drivers');
+}
+
+export async function getRoutes() {
+    return get('/routes');
+}
+
+export async function getWorkSchedule(driverId, range = 0, routeId = null, direction = 0) {
+    return post('/work-schedule', { driverId, range, routeId, direction } );
+}
