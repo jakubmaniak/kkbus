@@ -4,6 +4,12 @@
     align-items: center;
 }
 
+.loyalty-program-page .main {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .loyalty-program-container {
     display: flex;
     justify-content: space-between;
@@ -44,6 +50,17 @@
     color: white;
     border-radius: 2px;
 }
+
+.reward .modify {
+    display: flex;
+    height: 100%;
+}
+
+.reward .delete {
+    background-color: #D84A41;
+    margin-left: 6px;
+}
+
 .right-side .signup {
     background-color: #47BE61;
     color: white;
@@ -70,7 +87,15 @@
     justify-content: space-between;
 }
 
-.loyalty-program-page .right-side {
+.loyalty-program-page .loyalty-program-container {
     display: flex;
-    height: 20%;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.tile.half .reward {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
