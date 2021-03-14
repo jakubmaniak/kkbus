@@ -85,5 +85,11 @@ button {
     border: none;
     outline: none;
     cursor: pointer;
+    border-radius: 2px;
+}
+
+button.edit {
+    background-color: #47BE61;
+    color: white;
 }
 
