@@ -6,6 +6,7 @@ import FuelHistoryItem from './FuelHistoryItem';
 import Dropdown from './Dropdown';
 
 import '../styles/Fuel.css';
+import FuelUsageChart from './FuelUsageChart';
 
 function Fuel() {
     let [fuelUsage, setFuelUsage] = useState([]);
@@ -98,34 +99,7 @@ function Fuel() {
                     </div>
                     <div className="tile">
                         <h2>Zużycie paliwa</h2>
-                        <svg viewBox="0 0 446 156" width="446" height="156" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" />
-                                    <stop offset="100%"/>
-                                </linearGradient>
-                            </defs>
-                            <polyline
-                                className="fill"
-                                points={
-                                    '0,156 ' +
-                                    fuelUsage.map((entity, i, array) =>
-                                        (i * (446 / (array.length - 1))) +
-                                        ',' +
-                                        (entity.amount - 30) * 10
-                                    ) +
-                                    ' 446,156'
-                                } />
-                            <polyline
-                                className="stroke"
-                                points={
-                                    fuelUsage.map((entity, i, array) =>
-                                        (i * (446 / (array.length - 1))) +
-                                        ',' +
-                                        (entity.amount - 30) * 10
-                                    )
-                                } />
-                        </svg>
+                        <FuelUsageChart values={fuelUsage.map((e) => e.amount)} />
                     </div>
                 </div>
                 <div className="right-side">
