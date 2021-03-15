@@ -5,7 +5,7 @@
 }
 
 .header-wrapper .edit {
-    width: 95px;
+    width: 120px;
     height: 40px;
 }
 
@@ -59,6 +59,11 @@
     height: 250px;
     margin-bottom: 20px;
     font-family: 'Poppins';
+}
+
+.contact-form .submit {
+    width: 250px;
+    height: 40px;
 }
 
 @media (min-width: 1220px) {
