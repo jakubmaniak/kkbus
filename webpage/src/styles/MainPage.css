@@ -6,6 +6,9 @@
 
 .tile.half.tile-container {
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .tile.half.tile-container > .tile {
