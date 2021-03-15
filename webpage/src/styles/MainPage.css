@@ -4,8 +4,22 @@
     align-items: center;
 }
 
+.tile.half.tile-container {
+    padding: 0;
+}
+
+.tile.half.tile-container > .tile {
+    margin: 0;
+}
+
+.tile.half.tile-container > .tile:last-child {
+    background-color: rgba(217, 180, 48, 0.05);
+    padding: 0;
+}
+
 .track-header {
     display: flex;
+    align-items: baseline;
 }
 
 .track-info {
@@ -38,13 +52,14 @@
 .route span {
     margin-right: 8px;
     width: 40px;
-    font-size: 14px;
+    font-size: 13px;
     color: #A0A0A0;
 }
 
-.route span:first-child {
+.route p:first-child {
     color: #D9B430;
-    margin-right: 16px;
+    font-weight: 500;
+    font-size: 13px;
 }
 
 .book {
@@ -108,5 +123,49 @@
 
 .price-list {
     display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content:flex-end;
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    width: 50%;
+    align-items: center;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.header span {
+    width: 50%;
+    text-align: center;
+}
+
+.bus-stop-price {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.bus-stop-price + .bus-stop-price {
+    margin-top: 15px;
+}
+
+.bus-stop-price .bus-stop {
+    width: 50%;
+    color: rgb(217, 180, 48);
+    font-weight: 500;
+}
+
+.bus-stop-price .price {
+    width: 25%;
+    text-align: center;
+}
+
+.note {
+    width: 100%;
+    margin-top: 20px;
+    font-size: 12px;
 }
 
