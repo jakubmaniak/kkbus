@@ -40,3 +40,27 @@
     width: 100px;
     text-align: left;
 }
+
+.modal .edit-contact input {
+    width: 400px;;
+}
+
+.modal .edit-contact .footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modal .edit-contact button:last-child {
+    background-color: #47BE61;
+    color: white;
+    margin-left: 6px;
+}
+
+.modal .edit-contact button:first-child {
+    background-color: #D0D0D0;
+}
+
+.modal .edit-contact button {
+    width: 120px;
+    height: 36px;
+}

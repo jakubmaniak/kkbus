@@ -1,11 +1,18 @@
-import React, {useContext} from 'react';
+import React, { useContext, useState } from 'react';
 import '../styles/Contact.css';
 import map from '../static/map.png';
 
 import UserContext from '../contexts/User';
+import Modal from './Modal';
+import '../styles/Modal.css';
 
 function Contact() {
     let { role } = useContext(UserContext).user;
+    let [modalVisibility, setModalVisibility] = useState(false);
+
+    function showModal() {
+        setModalVisibility(true);
+    }
 
     return (
         <div className="contact page">
@@ -15,7 +22,7 @@ function Contact() {
                         <div className="header-wrapper">
                             <h2>Kontakt</h2>
                             {role === 'owner' ? 
-                                <button className="edit">Edytuj</button> 
+                                <button className="edit" onClick={showModal}>Edytuj</button> 
                             : null}
                         </div>
                         <div className="adress">
@@ -46,6 +53,24 @@ function Contact() {
                     </form>
                 </div>
             </div>
+            {role === 'owner' ? 
+               <Modal visible={modalVisibility}>
+                    <header>Edycja danych kontaktowych</header>
+                    <section className="content">
+                        <form className="edit-contact">
+                            <input placeholder="Adres"/>
+                            <input placeholder="Kod pocztowy"/>
+                            <input placeholder="Miasto"/>
+                            <input placeholder="Telefon/fax"/>
+                            <input placeholder="Adres e-mail"/>
+                            <section className="footer">
+                                <button onClick={() => setModalVisibility(false)}>Anuluj</button>
+                                <button onClick={() => setModalVisibility(false)}>Zapisz</button>
+                            </section>  
+                        </form>
+                    </section>
+                </Modal>
+            : null}
         </div>
     );
 }
