@@ -5,7 +5,7 @@ export default function MainPage() {
     return (
         <div className="main-page">
             <div className="main">
-                <div className="tile">
+                <div className="tile half">
                     <div className="track-header">
                         <div className="track-info">
                             <div className="direction">
@@ -13,22 +13,11 @@ export default function MainPage() {
                                 <span>-----&gt;</span>
                                 <span>Katowice</span>
                             </div>
-                            <div className="route">
-                                <span>4 przystanki </span>
-                                <span>Balice</span>
-                                <span>-</span>
-                                <span>Chrzanów</span>
-                                <span>-</span>
-                                <span>Jaworzno</span>
-                                <span>-</span>
-                                <span>Mysłowice</span>
-                            </div>
                         </div>
                         <div className="book">
                             <button className="btn-book">Rezerwuj</button>
                         </div>
                     </div>
-                    <div className="wrapper">
                         <div className="hours">
                             <div>5:15</div>
                             <div>6:00</div>
@@ -66,15 +55,11 @@ export default function MainPage() {
                             <div className="dummy"></div>
                             <div className="dummy"></div>
                         </div>
-                        <div className="prices">
-                            <p>Normalny: 15zł</p>
-                            <p>Ulgowy*: 10.5zł</p>
-                            <p>Dzieci do lat 5: bezpłatnie</p>
-                            <p className="note">*studenci i uczniowie</p>
+                        <div className="price-list">
+
                         </div>
-                    </div>
                 </div>
-                <div className="tile">
+                <div className="tile half">
                     <div className="track-header">
                         <div className="track-info">
                             <div className="direction">
@@ -82,20 +67,19 @@ export default function MainPage() {
                                 <span>-----&gt;</span>
                                 <span>Kraków</span>
                             </div>
-                            <div className="route">
+                            {/* <div className="route">
                                 <span>3 przystanki </span>
                                 <span>Balice</span>
                                 <span>-</span>
                                 <span>Chrzanów</span>
                                 <span>-</span>
                                 <span>Mysłowice</span>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="book">
                             <button className="btn-book">Rezerwuj</button>
                         </div>
                     </div>
-                    <div className="wrapper">
                         <div className="hours">
                             <div>5:15</div>
                             <div>6:00</div>
@@ -133,13 +117,6 @@ export default function MainPage() {
                             <div className="dummy"></div>
                             <div className="dummy"></div>
                         </div>
-                        <div className="prices">
-                            <p>Normalny: 12zł</p>
-                            <p>Ulgowy*: 8.4zł</p>
-                            <p>Dzieci do lat 5: bezpłatnie</p>
-                            <p className="note">*studenci i uczniowie</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

@@ -74,7 +74,8 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    width: 75%;
+    width: 100%;
+    margin-top: 34px;
 }
 
 .hours div {
@@ -105,16 +106,7 @@
     cursor: not-allowed;
 }
 
-.prices {
-    margin-right: 26px;
-}
-
-.prices p {
-    font-weight: normal;
-}
-
-.prices .note {
-    font-size: 12px;
-    margin-top: 4px;
+.price-list {
+    display: flex;
 }
 
