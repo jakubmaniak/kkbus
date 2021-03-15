@@ -86,10 +86,23 @@ button {
     outline: none;
     cursor: pointer;
     border-radius: 2px;
+    height: 40px;
+}
+
+form button.submit {
+    height: 40px;
+    margin-top: 12px;
+    background-color: #47BE61;
+    color: white;
 }
 
 button.edit {
     background-color: #47BE61;
+    color: white;
+}
+
+button.delete {
+    background-color: #D84A41;
     color: white;
 }
 

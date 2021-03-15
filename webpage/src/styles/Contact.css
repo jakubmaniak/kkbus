@@ -6,7 +6,6 @@
 
 .header-wrapper .edit {
     width: 120px;
-    height: 40px;
 }
 
 .header-wrapper h2 {
@@ -63,7 +62,6 @@
 
 .contact-form .submit {
     width: 250px;
-    height: 40px;
 }
 
 @media (min-width: 1220px) {

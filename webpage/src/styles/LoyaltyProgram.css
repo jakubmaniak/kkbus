@@ -42,14 +42,12 @@
 }
 
 .reward .delete {
-    background-color: #D84A41;
     margin-left: 6px;
 }
 
 .button-container .login,
 .button-container .signup {
     width: 265px;
-    height: 40px;
     margin-top: 14px;
     border-radius: 2px;
 }

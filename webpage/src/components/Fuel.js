@@ -71,7 +71,7 @@ function Fuel() {
                     <div className="tile break-row"></div>
                     <div className="tile half">
                         <h2>Tankowanie</h2>
-                        <form>
+                        <form className="fuel-form">
                             <input placeholder="Koszt tankowania [PLN]"/>
                             <input placeholder="Ilośc zatankowanego paliwa [L]"/>
                             <input placeholder="Przebieg pojazdu [KM]"/>

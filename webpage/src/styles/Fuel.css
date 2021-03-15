@@ -42,11 +42,8 @@
     font-weight: 500;
 }
 
-.submit {
-    height: 48px;
+.fuel-form .submit {
     width: 180px;
-    background-color: #47BE61;
-    color: white;
 }
 
 svg stop[offset="0%"] {
