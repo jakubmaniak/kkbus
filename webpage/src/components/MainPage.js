@@ -9,7 +9,8 @@ export default function MainPage() {
             {
                 startingStop: 'Katowice',
                 finalStop: 'Kraków',
-                busStops: ['Katowice', 'Chrznów', 'Kraków']
+                busStops: ['Katowice', 'Chrznów', 'Kraków'],
+                hours: ['5:15','6:00','6:30','7:00','8:00','9:00','11:00','12:00','12:30','13:30','14:00','14:30','16:00','17:00','18:00','20:00','22:30','23:00']
             }
         ]
     );
@@ -19,9 +20,10 @@ export default function MainPage() {
     return (
         <div className="main-page">
             <div className="main">
-                {tracks.map((track) => {
+                {tracks.map((track, i) => {
                     return (
                         <Track
+                            key={i}
                             startingStop={track.startingStop}
                             finalStop={track.finalStop}
                             children={track.busStops.map((busStop, i) => {
@@ -32,6 +34,11 @@ export default function MainPage() {
                                     </span>
                                 )
                             })}
+                            hours={track.hours.map((hour => {
+                                return (
+                                    <div key={i}>{hour}</div>
+                                )
+                            }))}
                         />
                     )
                 })}

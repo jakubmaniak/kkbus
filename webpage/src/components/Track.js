@@ -20,7 +20,9 @@ function Track(props) {
                             <button className="btn-book">Rezerwuj</button>
                         </div>
                     </div>
-                    <TrackHours />
+                    <div className="hours">
+                        {props.hours}
+                    </div>
                 </div>
                 <div className="tile tile-container inside">
                     <div className="tile-price">
