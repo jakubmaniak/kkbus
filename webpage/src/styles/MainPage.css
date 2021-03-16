@@ -13,11 +13,27 @@
 
 .tile.half.tile-container > .tile {
     margin: 0;
+    border-radius: 0;
+}
+
+.tile.tile-container.inside  {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    background-color: rgba(217, 180, 48, 0.05);
+}
+
+.tile.half.tile-container > .tile:first-child {
+    background-color: white;
 }
 
 .tile.half.tile-container > .tile:last-child {
-    background-color: rgba(217, 180, 48, 0.05);
     padding: 0;
+}
+
+.tile-price {
+    padding: 20px;
 }
 
 .track-header {
@@ -26,7 +42,7 @@
 }
 
 .track-info {
-    width: 50%;
+    width: 80%;
 }
 
 .direction span {
@@ -50,6 +66,7 @@
 
 .route {
     margin-top: 4px;
+    height: 46px;
 }
 
 .route span {
@@ -73,7 +90,7 @@
 }
 
 .btn-book {
-    width: 220px;
+    width: 142px;
     background-color: #47BE61;
     color: white;
     border: none;
@@ -128,7 +145,6 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    justify-content:flex-end;
     padding: 20px;
 }
 
@@ -147,7 +163,6 @@
 
 .bus-stop-price {
     display: flex;
-    justify-content: space-between;
     width: 100%;
 }
 
@@ -170,5 +185,6 @@
     width: 100%;
     margin-top: 20px;
     font-size: 12px;
+    padding-left: 20px;
 }
 
