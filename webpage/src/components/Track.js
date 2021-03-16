@@ -13,6 +13,50 @@ function Track(props) {
         setModalVisibility(true);
     }
 
+    function clientModal() {
+        return (
+            <Modal visible={modalVisibility}>
+                <header>Rezerwacja</header>
+                <section className="content">
+                    <form className="book-track">
+                        <Dropdown placeholder="Godzina"/>
+                        <input placeholder="Liczba osób objętych biletem normalnym"/>
+                        <input placeholder="Liczba osób objętych biletem ulgowym"/>
+                        <input placeholder="Liczba dzieci do lat 5"/>
+                        <Dropdown placeholder="Przystanek początkowy"/>
+                        <Dropdown placeholder="Przystanek końcowy"/>
+                    </form>
+                </section>
+                <section className="footer">
+                    <button onClick={() => setModalVisibility(false)}>Anuluj</button>
+                    <button onClick={() => setModalVisibility(false)}>Zapisz</button>
+                </section>
+            </Modal>
+        );
+        
+    }
+
+    function ownerModal() {
+        return (
+            <Modal visible={modalVisibility}>
+                <header>Edycja informacji o trasie</header>
+                <section className="content">
+                    <form className="edit-track">
+                        <input placeholder="Punkt startowy"/>
+                        <input placeholder="Punkt docelowy"/>
+                        <textarea placeholder="Godziny odjazdu (odzielone przecinkami)"/>
+                        <textarea placeholder="Przystanki (cena, przystanek, cena, przystanek..cena)"/>
+                    </form>
+                </section>
+                <section className="footer">
+                    <button onClick={() => setModalVisibility(false)}>Anuluj</button>
+                    <button onClick={() => setModalVisibility(false)}>Zapisz</button>
+                    </section>
+            </Modal>
+        );
+        
+    }
+
     return (
         <div className="tile half tile-container">
             <div className="tile">
@@ -24,8 +68,13 @@ function Track(props) {
                         />
                         {props.busStops}
                     </div>
+
                     <div className="book">
+                    {role === 'owner' ? 
+                        <button className="btn-book" onClick={showModal}>Edytuj</button>
+                    : role === 'client' ?
                         <button className="btn-book" onClick={showModal}>Rezerwuj</button>
+                    : null}
                     </div>
                 </div>
                 <div className="hours">
@@ -50,23 +99,9 @@ function Track(props) {
                     </div>
              </div>
              {role === 'client' ? 
-                <Modal visible={modalVisibility}>
-                    <header>Edycja danych kontaktowych</header>
-                    <section className="content">
-                        <form className="book-track">
-                            <Dropdown placeholder="Godzina"/>
-                            <input placeholder="Liczba osób objętych biletem normalnym"/>
-                            <input placeholder="Liczba osób objętych biletem ulgowym"/>
-                            <input placeholder="Liczba dzieci do lat 5"/>
-                            <Dropdown placeholder="Przystanek początkowy"/>
-                            <Dropdown placeholder="Przystanek końcowy"/>
-                            <section className="footer">
-                                <button onClick={() => setModalVisibility(false)}>Anuluj</button>
-                                <button onClick={() => setModalVisibility(false)}>Zapisz</button>
-                            </section>  
-                        </form>
-                    </section>
-                </Modal>
+                clientModal()
+                : role === 'owner' ? 
+                ownerModal()
                 : null}
         </div>
     );
