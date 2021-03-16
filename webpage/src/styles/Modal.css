@@ -33,5 +33,48 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin-top: 16px;
+    margin-top: 4px;
+}
+
+.modal .vehicle-info span:last-child {
+    width: 100px;
+    text-align: left;
+}
+
+.modal input,
+.modal .dropdown {
+    width: 400px;
+    height: 42px;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.modal button {
+    width: 120px;
+    height: 36px;
+    background-color: #D0D0D0;
+    color: #000000;
+}
+
+.modal button:last-child {
+    background-color: #47BE61;
+    color: white;
+    margin-left: 6px;
+}
+
+.modal .dropdown {
+    height: 42px;
+}
+
+.modal .dropdown .placeholder {
+    color: #b0b0b0;
+    font-weight: 400;
+}
+
+.modal button.dropdown-button {
+    margin-top: 1px;
+    height: 40px;
+    width: 40px;
+    background-color: #f0f0f0;
+    color: #000000;
 }

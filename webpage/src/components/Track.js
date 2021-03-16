@@ -33,7 +33,6 @@ function Track(props) {
                 </section>
             </Modal>
         );
-        
     }
 
     function ownerModal() {
@@ -54,7 +53,6 @@ function Track(props) {
                     </section>
             </Modal>
         );
-        
     }
 
     return (

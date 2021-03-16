@@ -63,12 +63,12 @@ function Contact() {
                             <input placeholder="Miasto"/>
                             <input placeholder="Telefon/fax"/>
                             <input placeholder="Adres e-mail"/>
-                            <section className="footer">
-                                <button onClick={() => setModalVisibility(false)}>Anuluj</button>
-                                <button onClick={() => setModalVisibility(false)}>Zapisz</button>
-                            </section>  
                         </form>
                     </section>
+                    <section className="footer">
+                        <button onClick={() => setModalVisibility(false)}>Anuluj</button>
+                        <button onClick={() => setModalVisibility(false)}>Zapisz</button>
+                    </section>  
                 </Modal>
             : null}
         </div>
