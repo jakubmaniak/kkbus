@@ -4,10 +4,13 @@ import '../styles/MainPage.css';
 import UserContext from '../contexts/User';
 import Modal from './Modal';
 import Dropdown from './Dropdown';
+import { useHistory } from 'react-router-dom';
 
 function Track(props) {
     let { role } = useContext(UserContext).user;
     let [modalVisibility, setModalVisibility] = useState(false);
+
+    let history = useHistory();
 
     function showModal() {
         setModalVisibility(true);
@@ -44,7 +47,7 @@ function Track(props) {
                         <input placeholder="Punkt startowy"/>
                         <input placeholder="Punkt docelowy"/>
                         <textarea placeholder="Godziny odjazdu (odzielone przecinkami)"/>
-                        <textarea placeholder="Przystanki (cena, przystanek, cena, przystanek..cena)"/>
+                        <textarea placeholder="Przystanki (cena, przystanek, cena, przystanek...)"/>
                     </form>
                 </section>
                 <section className="footer">
@@ -68,10 +71,12 @@ function Track(props) {
                     </div>
 
                     <div className="book">
-                    {role === 'owner' ? 
+                    {(role === 'owner') ? 
                         <button className="btn-book" onClick={showModal}>Edytuj</button>
-                    : role === 'client' ?
+                    : (role === 'client') ?
                         <button className="btn-book" onClick={showModal}>Rezerwuj</button>
+                    : (role === 'guest') ?
+                        <button className="btn-book" onClick={() => history.push('/logowanie')}>Rezerwuj</button>
                     : null}
                     </div>
                 </div>

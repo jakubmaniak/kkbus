@@ -198,3 +198,13 @@
     width: 400px;
 }
 
+.edit-track input {
+    width: 420px;
+}
+
+.edit-track textarea {
+    width: 420px;
+    height: 96px;
+}
+
+

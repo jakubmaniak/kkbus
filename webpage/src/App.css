@@ -109,3 +109,22 @@ button.delete {
     color: white;
 }
 
+.modal section.footer {
+    display: flex;
+}
+
+.modal section.footer button {
+    width: 120px;
+    height: 36px;
+}
+
+.modal section.footer button:first-child {
+    margin-right: 8px;
+    background-color: #D0D0D0;
+}
+
+.modal section.footer button:last-child {
+    margin-right: 8px;
+    color: white;
+}
+
