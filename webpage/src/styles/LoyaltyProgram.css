@@ -17,9 +17,41 @@
 .reward {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     height: 40px;
-    padding-left: 8px;
+}
+
+.reward-header {
+    display: flex;
+    font-weight: 500;
+    background-color: burlywood;
+}
+
+.reward-header span {
+    border: 2px solid red;
+}
+
+.reward.owner span {
+    border: 2px solid brown;
+}
+
+.reward.owner span:first-child,
+.reward-header span:first-child {
+    width: 380px;
+}
+
+.reward.owner span:nth-child(2),
+.reward-header span:nth-child(2) {
+    width: 180px;
+}
+
+.reward.owner span:nth-child(3),
+.reward-header span:nth-child(3) {
+    width: 180px;
+}
+
+.reward.owner span:nth-child(4),
+.reward-header span:nth-child(4) {
+    width: 180px;
 }
 
 .reward + .reward {

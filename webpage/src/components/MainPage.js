@@ -127,7 +127,7 @@ export default function MainPage() {
                             finalStop={track.finalStop}
                             busStops={track.busStops.map((busStop, i) => {
                                 return (
-                                    <span key={i}>
+                                    <span className="route" key={i}>
                                         <span>{busStop}</span>
                                         {i < track.busStops.length - 1 ? <span> - </span> : null}
                                     </span>

@@ -36,6 +36,14 @@
     padding: 20px;
 }
 
+.tile-price:first-child {
+    padding-bottom: 0;
+}
+
+.tile-price:last-child {
+    padding-top: 0;
+}
+
 .track-header {
     display: flex;
     align-items: baseline;
