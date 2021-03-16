@@ -1,16 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/MainPage.css';
 import Track from './Track';
 // import BusStopPrice from './BusStopPrice';
 
 export default function MainPage() {
+    let [tracks, setTracks] = useState(
+        [
+            {
+                startingStop: 'Katowice',
+                finalStop: 'Kraków',
+                busStops: ['Katowice', 'Chrznów', 'Kraków']
+            }
+        ]
+    );
+
+
+
     return (
         <div className="main-page">
             <div className="main">
-                <Track/>
-                <Track/>
-                <Track/>
-                <Track/>
+                {tracks.map((track) => {
+                    return (
+                        <Track
+                            startingStop={track.startingStop}
+                            finalStop={track.finalStop}
+                            children={track.busStops.map((busStop, i) => {
+                                return (
+                                    <span key={i}>
+                                        <span>{busStop}</span>
+                                        {i < track.busStops.length - 1 ? <span> - </span> : null}
+                                    </span>
+                                )
+                            })}
+                        />
+                    )
+                })}
                     {/* <div className="tile half tile-container">
                         <div className="tile">
                             <div className="track-header">
