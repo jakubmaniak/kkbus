@@ -52,7 +52,8 @@ function LoyaltyProgram() {
     function owner() {
         return (
             <div className="main">
-                <div className='tile'>
+                <div className="tile">
+                    <h2>Nagrody</h2>
                     <div className="reward-header">
                         <span>Nazwa</span>
                         <span>Wymagane punkty</span>
