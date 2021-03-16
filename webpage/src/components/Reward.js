@@ -1,6 +1,5 @@
 import React from 'react';
 import '../styles/LoyaltyProgram.css';
-import DropdownMultiple from './DropdownMultiple';
 
 function Reward(props) {
 

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/MainPage.css';
 import Track from './Track';
-// import BusStopPrice from './BusStopPrice';
 
 export default function MainPage() {
     let [tracks, setTracks] = useState(
@@ -148,7 +147,7 @@ export default function MainPage() {
                                 );
                             })}
                         />
-                    )
+                    );
                 })}
             </div>
         </div>
