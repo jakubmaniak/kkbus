@@ -12,7 +12,7 @@
     align-items: center;
 }
 
-.filter-container span {
+.filter-container > span {
     width: 134px;
 }
 

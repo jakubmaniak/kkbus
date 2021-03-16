@@ -21,3 +21,7 @@ code {
 button, input, textarea {
   outline: none;
 }
+
+ul, ol {
+  list-style-type: none;
+}
