@@ -11,7 +11,7 @@ function LoyaltyProgram() {
 
     let { role } = useContext(UserContext).user;
 
-    function guest() {
+    function clientGuestTile() {
         return (
             <div className="main">
                 <div className='tile half'>
@@ -35,21 +35,28 @@ function LoyaltyProgram() {
                         rewardPoints='3500 punktów'
                     />
                 </div>
-                {(role === 'guest') ? 
-                    <div className="tile half">
-                        <h2>Dołącz do nas</h2>
-                        <p>Załóż konto i korzystaj z nagród programu lojalnościowego.</p>
-                        <div className="button-container">
-                            <button className="signup" onClick={() => history.push('/rejestracja')}>Załóż konto</button>
-                            <button className="login" onClick={() => history.push('/logowanie')}>Zaloguj</button>
+                {
+                    (role === 'guest') ? 
+                        <div className="tile half">
+                            <h2>Dołącz do nas</h2>
+                            <p>Załóż konto i korzystaj z nagród programu lojalnościowego.</p>
+                            <div className="button-container">
+                                <button className="signup" onClick={() => history.push('/rejestracja')}>Załóż konto</button>
+                                <button className="login" onClick={() => history.push('/logowanie')}>Zaloguj</button>
+                            </div>
                         </div>
-                    </div>
-                    : null}
+                    : 
+                        <div className="tile half">
+                            <h2>Historia zakupów</h2>
+                            <p>28.01.2021 Kupiono 1 Bilet za 2000 punktów</p>
+                            <p>28.01.2021 Kupiono 2 Bilet za 3500 punktów</p>
+                        </div>
+                }
             </div>
         );
     }
 
-    function owner() {
+    function ownerTile() {
         return (
             <div className="main">
                 <div className="tile">
@@ -116,7 +123,7 @@ function LoyaltyProgram() {
 
     return (
         <div className="loyalty-program page">
-            {(role === 'owner') ? owner() : guest()}
+            {(role === 'owner') ? ownerTile() : clientGuestTile()}
         </div>
     );
 }

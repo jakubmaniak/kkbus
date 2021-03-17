@@ -46,6 +46,7 @@ function Header() {
                 <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
                 <HeaderItem path="#">Raporty</HeaderItem>
                 <HeaderItem path="#">Zarządzanie klientami</HeaderItem>
+                <HeaderItem path="/raport-z-kursu">Raport z kursu</HeaderItem>
                 <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
                 <HeaderItem path="/paliwo">Paliwo</HeaderItem>
                 <HeaderItem path="/kontakt">Kontakt</HeaderItem>
