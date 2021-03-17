@@ -46,3 +46,30 @@
 .vehicle-item .vehicle-info span:first-child {
     font-weight: 500;
 }
+
+.vehicle-item .details {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 14px;
+}
+
+.vehicle-item .vehicle-edit-button button + button{
+    margin-left: 6px;
+}
+
+.vehicle-item .vehicle-edit-button .delete {
+    background-color: #C73535;
+    width: 74px;
+}
+
+.vehicle-edit {
+    display: flex;
+}
+
+.modal .vehicle-edit > div {
+    width: 100%;
+}
+
+.modal .vehicle-edit > div input {
+    width: 194px;
+}

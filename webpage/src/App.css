@@ -124,7 +124,6 @@ button.delete {
 }
 
 .modal section.footer button:last-child {
-    margin-right: 8px;
     color: white;
 }
 
