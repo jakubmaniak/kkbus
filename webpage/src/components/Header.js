@@ -38,6 +38,61 @@ function Header() {
         });
     }
 
+    function ownerNav() {
+        return (
+            <div className="nav-action">
+                <HeaderItem path="/">Grafik kursów</HeaderItem>
+                <HeaderItem path="/grafik-pracy">Grafik pracy</HeaderItem>
+                <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
+                <HeaderItem path="#">Raporty</HeaderItem>
+                <HeaderItem path="#">Zarządzanie klientami</HeaderItem>
+                <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
+                <HeaderItem path="/paliwo">Paliwo</HeaderItem>
+                <HeaderItem path="/kontakt">Kontakt</HeaderItem>
+            </div>
+        );
+    }
+
+    function clientGuestNav() {
+        return (
+                <div className="nav-action">
+                    <HeaderItem path="/">Grafik kursów</HeaderItem>
+                    <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
+                    <HeaderItem path="/kontakt">Kontakt</HeaderItem>
+                </div>
+        );
+    }
+
+    function officeNav() {
+        return (
+            <div className="nav-action">
+                <HeaderItem path="/">Grafik kursów</HeaderItem>
+                <HeaderItem path="/grafik-pracy">Grafik pracy</HeaderItem>
+                <HeaderItem path="#">Raporty</HeaderItem>
+                <HeaderItem path="#">Zarządzanie klientami</HeaderItem>
+                <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
+                <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
+                <HeaderItem path="/paliwo">Paliwo</HeaderItem>
+                <HeaderItem path="/kontakt">Kontakt</HeaderItem>
+            </div>
+        );
+    }
+
+    function driverNav() {
+        return (
+            <div className="nav-action">
+                <HeaderItem path="/">Grafik kursów</HeaderItem>
+                <HeaderItem path="/grafik-pracy">Grafik pracy</HeaderItem>
+                <HeaderItem path="#">Lista pasażerów</HeaderItem>
+                <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
+                <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
+                <HeaderItem path="/raport-z-kursu">Raport z kursu</HeaderItem>
+                <HeaderItem path="/paliwo">Paliwo</HeaderItem>
+                <HeaderItem path="/kontakt">Kontakt</HeaderItem>
+            </div>
+        );
+    }
+
     return (
         <div className="header-bar">
             <header>
@@ -62,49 +117,13 @@ function Header() {
             <nav>
                 {
                     (role === 'owner') ? 
-                        <div className="nav-action">
-                            <HeaderItem path="/">Grafik kursów</HeaderItem>
-                            <HeaderItem path="/grafik-pracy">Grafik pracy</HeaderItem>
-                            <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
-                            <HeaderItem path="#">Raporty</HeaderItem>
-                            <HeaderItem path="#">Zarządzanie klientami</HeaderItem>
-                            <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
-                            <HeaderItem path="/paliwo">Paliwo</HeaderItem>
-                            <HeaderItem path="/kontakt">Kontakt</HeaderItem>
-                        </div>
+                        ownerNav()
                     : (role === 'office') ? 
-                        <div className="nav-action">
-                            <HeaderItem path="/">Grafik kursów</HeaderItem>
-                            <HeaderItem path="/grafik-pracy">Grafik pracy</HeaderItem>
-                            <HeaderItem path="#">Raporty</HeaderItem>
-                            <HeaderItem path="#">Zarządzanie klientami</HeaderItem>
-                            <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
-                            <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
-                            <HeaderItem path="/paliwo">Paliwo</HeaderItem>
-                            <HeaderItem path="/kontakt">Kontakt</HeaderItem>
-                        </div>
+                        officeNav()
                     : (role === 'driver') ?
-                        <div className="nav-action">
-                            <HeaderItem path="/">Grafik kursów</HeaderItem>
-                            <HeaderItem path="/grafik-pracy">Grafik pracy</HeaderItem>
-                            <HeaderItem path="#">Lista pasażerów</HeaderItem>
-                            <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
-                            <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
-                            <HeaderItem path="/paliwo">Paliwo</HeaderItem>
-                            <HeaderItem path="/kontakt">Kontakt</HeaderItem>
-                        </div>
-                    : (role === 'client') ?
-                        <div className="nav-action">
-                            <HeaderItem path="/">Grafik kursów</HeaderItem>
-                            <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
-                            <HeaderItem path="/kontakt">Kontakt</HeaderItem>
-                        </div>
+                        driverNav()
                     : 
-                        <div className="nav-action">
-                            <HeaderItem path="/">Grafik kursów</HeaderItem>
-                            <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
-                            <HeaderItem path="/kontakt">Kontakt</HeaderItem>
-                        </div>
+                       clientGuestNav()
                 }
             </nav>
         </div>

@@ -1,0 +1,22 @@
+.report {
+    display: flex;
+    align-items: flex-end;
+}
+
+.report input {
+    width: 534px;
+}
+
+.report .dropdown-container {
+    width: 534px;
+}
+
+.report .dropdown {
+    margin-bottom: 12px;
+}
+
+.report .submit {
+    color: white;
+    width: 180px;
+    height: 48px;
+}
