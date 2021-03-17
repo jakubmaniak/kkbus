@@ -30,7 +30,7 @@ function DropdownMultiple(props) {
             return;
         }
 
-        setPlaceholderVisible(selectedItems.size == 0);
+        setPlaceholderVisible(selectedItems.size === 0);
     }, [selectedItems]);
 
 

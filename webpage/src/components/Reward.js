@@ -4,7 +4,7 @@ import '../styles/LoyaltyProgram.css';
 function Reward(props) {
 
     function header() {
-        if (props.role == 'guest' || props.role == 'client') {
+        if (props.role === 'guest' || props.role === 'client') {
             return <span>{props.rewardName} ({props.rewardPoints})</span>;
         }
         
