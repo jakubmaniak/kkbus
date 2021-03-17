@@ -30,9 +30,15 @@ function Track(props) {
                         <Dropdown placeholder="Przystanek końcowy"/>
                     </form>
                 </section>
-                <section className="footer">
-                    <button onClick={() => setModalVisibility(false)}>Anuluj</button>
-                    <button onClick={() => setModalVisibility(false)}>Zapisz</button>
+                <section className="footer reserve">
+                    <div>
+                        <p>Koszt rezerwacji: 200zł</p>
+                    </div>
+                    <div>
+                        <button onClick={() => setModalVisibility(false)}>Anuluj</button>
+                        <button onClick={() => setModalVisibility(false)}>Zapisz</button>
+                    </div>
+                    
                 </section>
             </Modal>
         );

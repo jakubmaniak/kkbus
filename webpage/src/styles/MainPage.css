@@ -207,4 +207,24 @@
     height: 96px;
 }
 
+.footer.reserve {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer.reserve div p {
+    margin-bottom: 8px;
+    margin-top: 15px;
+}
+
+.footer.reserve > div {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.footer.reserve > div button:last-child {
+    margin-right: 0;
+}
+
 
