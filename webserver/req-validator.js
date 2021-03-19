@@ -1,42 +1,18 @@
 const errors = require('./errors');
 
-const rolePriorities = {
-    guest: 0,
-    client: 1,
-    driver: 2,
-    office: 3,
-    owner: 4
-};
-
 class RequestValidator {
     constructor() {
         this.schemas = new Map();
-        this.roleRequirements = new Map();
     }
     
     addSchema(path, schema) {
         this.schemas.set(path, schema.replace(/\s/g, ''));
     }
 
-    setProtected(path, role = 'client') {
-        role = role.toLowerCase();
-
-        if (role === 'guest') this.roleRequirements.delete(role);
-        else this.roleRequirements.set(path, role);
-    }
-
     validateRequest(req) {
         let url = req.protocol + '://' + req.hostname + req.url;
         let path = new URL(url).pathname;
 
-        if (this.roleRequirements.has(path)) {
-            let userPriority = rolePriorities[req.user.role];
-            let requiredPriority = rolePriorities[this.roleRequirements.get(path)];
-
-            if (userPriority < requiredPriority) {
-                errors.unauthorized();
-            }
-        }
         if (!this.schemas.has(path)) return true;
 
         let schema = this.schemas.get(path);
