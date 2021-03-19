@@ -1,0 +1,54 @@
+.client-find .dropdown-container,
+.client-create .dropdown-container {
+    width: 100%;
+}
+
+.client-find .submit,
+.client-create .submit {
+    width: 100%;
+    height: 48px;
+}
+
+.client.page .main {
+    align-items: flex-start;
+}
+
+.client.page .tile.half.tile-container {
+    background-color: rgb(240, 240, 240);
+}
+
+.client.page .tile.half.tile-container > .tile.client {
+    padding: 28px;
+    margin-top: 40px;
+}
+
+.client.page .tile.half.tile-container > .tile:last-child {
+    padding: 28px;
+}
+
+.client.page .tile.half.tile-container > .tile {
+    border-radius: 4px;
+}
+
+.client-data {
+    display: flex;
+    justify-content: space-between;
+}
+
+.client-data span:first-child {
+    width: 270px;
+}
+
+.client-data span {
+    margin-bottom: 8px;
+    height: 40px;
+}
+
+.client-data:last-child span:last-child {
+    display: flex;
+    align-items: center;
+}
+
+.client-data:last-child {
+    margin-bottom: 0;
+}

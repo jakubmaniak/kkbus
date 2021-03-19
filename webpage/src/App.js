@@ -16,6 +16,7 @@ import VehicleInfo from './components/VehicleInfo';
 import WorkSchedule from './components/WorkSchedule';
 import Fuel from './components/Fuel';
 import TrackReport from './components/TrackReport';
+import Clients from './components/Clients';
 
 function App() {
     let [user, setUser] = useState(initialContext.user);
@@ -62,6 +63,9 @@ function App() {
                         </Route>
                         <Route exact path="/raport-z-kursu">
                             <TrackReport />
+                        </Route>
+                        <Route exact path="/konta-i-rezerwacje-klientow">
+                            <Clients />
                         </Route>
                     </Switch>
                 </Router>
