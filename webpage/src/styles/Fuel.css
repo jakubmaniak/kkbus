@@ -18,6 +18,10 @@
     font-weight: normal;
 }
 
+.fuel-usage-history span {
+    text-align: center;
+}
+
 .fuel-usage-history > span:nth-child(1) {
     width: 140px;
 }
@@ -40,6 +44,7 @@
 
 .fuel-usage-history.header {
     font-weight: 500;
+    width: auto;
 }
 
 .fuel-form .submit {
