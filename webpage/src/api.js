@@ -20,6 +20,39 @@ export function errorAlert(err) {
 
 const root = '/api';
 
+export async function login(login, password) {
+    return post('/user/login', { login, password });
+}
+
+export async function logout() {
+    return get('/user/logout');
+}
+
+export async function register(email, firstName, lastName, birthDate, phoneNumber) {
+    return post('/user/register', { email, firstName, lastName, birthDate, phoneNumber });
+}
+
+export async function getUserInfo() {
+    return get('/user/info');
+}
+
+export async function getFuelUsage(vehicleId = null) {
+    return post('/vehicle/fuel-usage', { vehicleId });
+}
+
+export async function getDrivers() {
+    return get('/drivers');
+}
+
+export async function getRoutes() {
+    return get('/routes');
+}
+
+export async function getWorkSchedule(driverId, range = 0, routeId = null, direction = 0) {
+    return post('/work-schedule', { driverId, range, routeId, direction } );
+}
+
+
 async function post(path, body) {
     let res = await axios.post(root + path, body)
     .catch((err) => {
@@ -46,36 +79,4 @@ async function get(path) {
     }
 
     return res.data.result;
-}
-
-export async function login(login, password) {
-    return post('/login', { login, password });
-}
-
-export async function logout() {
-    return get('/logout');
-}
-
-export async function register(email, firstName, lastName, birthDate, phoneNumber) {
-    return post('/register', { email, firstName, lastName, birthDate, phoneNumber });
-}
-
-export async function getUserInfo() {
-    return get('/user/info');
-}
-
-export async function getFuelUsage(vehicleId = null) {
-    return post('/vehicle/fuel-usage', { vehicleId });
-}
-
-export async function getDrivers() {
-    return get('/drivers');
-}
-
-export async function getRoutes() {
-    return get('/routes');
-}
-
-export async function getWorkSchedule(driverId, range = 0, routeId = null, direction = 0) {
-    return post('/work-schedule', { driverId, range, routeId, direction } );
 }
