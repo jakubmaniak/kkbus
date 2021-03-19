@@ -10,8 +10,7 @@ class RequestValidator {
     }
 
     validateRequest(req) {
-        let url = req.protocol + '://' + req.hostname + req.url;
-        let path = new URL(url).pathname;
+        let path = req._parsedUrl.pathname;
 
         if (!this.schemas.has(path)) return true;
 
