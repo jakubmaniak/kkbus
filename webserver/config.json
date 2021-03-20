@@ -3,5 +3,12 @@
         "host": "localhost",
         "port": 3200
     },
-    "jwtSecret": "KKBus-secret-random-words-FORest-APPle-PIe"
+    "jwtSecret": "KKBus-secret-random-words-FORest-APPle-PIe",
+    "mysql": {
+        "host": "remotemysql.com",
+        "port": 3306,
+        "database": "VdWUtFNeZC",
+        "username": "VdWUtFNeZC",
+        "password": "WttWP8Klp9"
+    }
 }
