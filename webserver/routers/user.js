@@ -1,8 +1,10 @@
-const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
-const errors = require('../errors');
+
+const config = require('../helpers/config');
+const { invalidRequest, emailAlreadyTaken, badCredentials } = require('../errors');
+const bodySchema = require('../middlewares/body-schema');
 const role = require('../middlewares/roles')(
     [0, 'guest'],
     [1, 'client'],
@@ -11,8 +13,6 @@ const role = require('../middlewares/roles')(
     [4, 'owner']
 );
 
-
-const config = JSON.parse(fs.readFileSync('config.json'));
 
 const users = new Map();
 users.set('admin', {
@@ -68,11 +68,13 @@ usersByEmail.set('amila@kkbus.pl', users.get('amila'));
 usersByEmail.set('jankowalski@gmail.com', users.get('jankowalski1234'));
 
 
-router.post('/user/login', (req, res) => {
+router.post('/user/login', [
+    bodySchema('{login: string, password: string}')
+], (req, res) => {
     let { login, password } = req.body;
 
     if (!users.has(login) && !usersByEmail.has(login)) {
-        errors.badCredentials();
+        throw badCredentials;
     }
 
     let user;
@@ -84,12 +86,10 @@ router.post('/user/login', (req, res) => {
         user = usersByEmail.get(login);
         login = user.login;
     }
-    else {
-        errors.badCredentials();
-    }
+    else throw badCredentials;
     
     if (user.password !== password) {
-        errors.badCredentials();
+        throw badCredentials;
     }
 
     let sessionToken = jwt.sign({ login }, config.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
@@ -104,7 +104,9 @@ router.post('/user/login', (req, res) => {
 });
 
 
-router.post('/user/register', (req, res) => {
+router.post('/user/register', [
+    bodySchema('{email: string, firstName: string, lastName: string, birthDate: string, phoneNumber: string}')
+], (req, res) => {
     let { email, firstName, lastName, birthDate, phoneNumber } = req.body;
     
     if (/\d{1,2}-\d{1,2}-\d{4}/.test(birthDate)) {
@@ -112,13 +114,13 @@ router.post('/user/register', (req, res) => {
         let date = new Date(dateString);
 
         if (isNaN(date) || date.getFullYear() < 1900 || new Date() - date < 0)
-            errors.invalidRequest();
+            throw invalidRequest;
     }
-    else errors.invalidRequest();
+    else if (/^[ -+\/0-9]+$/.test(phoneNumber)) { }
+    else throw invalidRequest;
+    
 
-    //NOTE: check if phoneNumber is valid
-
-    if (usersByEmail.has(email)) errors.emailAlreadyTaken();
+    if (usersByEmail.has(email)) throw emailAlreadyTaken;
 
     let offset = 0;
     let phoneNumberPart = parseInt(phoneNumber.slice(-4));

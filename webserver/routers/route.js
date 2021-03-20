@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const errors = require('../errors');
 const role = require('../middlewares/roles')(
     [0, 'guest'],
     [1, 'client'],

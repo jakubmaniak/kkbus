@@ -1,4 +1,4 @@
-const errors = require('../errors');
+const { unauthorized } = require('../errors');
 
 module.exports = (...roleProrities) => (requiredRole) => (req, res, next) => {
     let userRole = req.user.role;
@@ -6,7 +6,7 @@ module.exports = (...roleProrities) => (requiredRole) => (req, res, next) => {
     let userPriority = roleProrities.find((pair) => pair[1] === userRole)[0];
 
     if (userPriority < requiredPriority) {
-        errors.unauthorized();
+        throw unauthorized;
     }
 
     next();

@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const errors = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const role = require('../middlewares/roles')(
     [0, 'guest'],
@@ -12,8 +11,8 @@ const role = require('../middlewares/roles')(
 
 
 router.post('/work-schedule', [
-    role('client')//,
-    //bodySchema('{driverId: number, range: number, direction: number, routeId?: number}')
+    role('client'),
+    bodySchema('{driverId: number, range: number, direction: number, routeId?: number}')
 ], (req, res) => {
     let { driverId, range, direction, routeId } = req.body;
 
