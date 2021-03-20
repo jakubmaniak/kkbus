@@ -47,6 +47,11 @@
     width: auto;
 }
 
+.fuel-usage-history-items {
+    height: 212px;
+    overflow-y: auto;
+}
+
 .fuel-form .submit {
     width: 180px;
 }

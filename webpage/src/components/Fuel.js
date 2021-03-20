@@ -41,6 +41,7 @@ function Fuel() {
             vehicleMileage:'1 330 087'
         }
     ];
+    fuelHistory = fuelHistory.concat(fuelHistory).concat(fuelHistory);
 
     function handleVehicleChange(item) {
         let vehicleId = item.vehicleId;
@@ -86,6 +87,7 @@ function Fuel() {
                             <span>Ilość</span>
                             <span>Przebieg</span>
                         </div>
+                        <div class="fuel-usage-history-items">
                         {fuelHistory.map((refueling, index) => {
                             return (
                                 <FuelHistoryItem 
@@ -97,6 +99,7 @@ function Fuel() {
                                 />      
                             );
                         })}
+                        </div>
                     </div>
                     <div className="tile half">
                         <h2>Zużycie paliwa</h2>
