@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import '../styles/LoyaltyProgram.css';
@@ -9,52 +9,22 @@ import Reward from './Reward';
 
 function LoyaltyProgram() {
     let history = useHistory();
-    let [rewards, setRewards] = useState([
-        {
-            id: 1,
-            name: 'Zniżka 10%',
-            requiredPoints: 5000,
-            amount: 0,
-            limit: 0
-        },
-        {
-            id: 2,
-            name: 'Zniżka 20%',
-            requiredPoints: 8000,
-            amount: 0,
-            limit: 0
-        },
-        {
-            id: 3,
-            name: 'Zniżka 40%',
-            requiredPoints: 12000,
-            amount: 0,
-            limit: 0
-        },
-        {
-            id: 4,
-            name: 'Mała maskotka firmy',
-            requiredPoints: 12000,
-            amount: 500,
-            limit: 3
-        },
-        {
-            id: 5,
-            name: 'Duża maskotak firmy',
-            requiredPoints: 20000,
-            amount: 100,
-            limit: 1
-        },
-    ]);
+    let [rewards, setRewards] = useState([]);
 
     let { role } = useContext(UserContext).user;
 
-    function updateReward() {
-        //api.updateReward()
-    }
+    useEffect(() => {
+        api.getAllRewards()
+        .then((results) => {
+            setRewards(results);
+        });
+    }, []);
 
-    function deleteReward() {
-
+    function updateRewards() {
+        api.getAllRewards()
+        .then((results) => {
+            setRewards(results);
+        });
     }
 
     function clientGuestTile() {
@@ -71,6 +41,7 @@ function LoyaltyProgram() {
                                 role={role}
                                 name={reward.name}
                                 requiredPoints={reward.requiredPoints}
+                                rewardId={i + 1}
                             />
                         );
                     })}
@@ -116,6 +87,8 @@ function LoyaltyProgram() {
                                 requiredPoints={reward.requiredPoints}
                                 amount={reward.amount}
                                 limit={reward.limit}
+                                rewardId={i + 1}
+                                updateRewards={updateRewards}
                             />
                         );
                     })}
