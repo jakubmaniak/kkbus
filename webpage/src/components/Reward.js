@@ -5,11 +5,11 @@ function Reward(props) {
 
     function header() {
         if (props.role === 'guest' || props.role === 'client') {
-            return <span>{props.rewardName} ({props.rewardPoints})</span>;
+            return <span>{props.name} ({props.requiredPoints})</span>;
         }
         
         return (<>
-            <span>{props.rewardName}</span><span>{props.rewardPoints}</span>
+            <span>{props.name}</span><span>{props.requiredPoints}</span>
         </>);
     }
 
@@ -20,7 +20,19 @@ function Reward(props) {
                 <button>Kup</button> 
             : null
             }
-            {props.children}
+            {props.role === 'owner' ?
+                <>
+                    <span>{props.amount}</span> 
+                    <span>{props.limit}</span> 
+                    <div className="modify">
+                        <button className="edit">Edytuj</button>
+                        <button className="delete">Usuń</button>
+                    </div>
+                </>
+                : null    
+            }
+            
+
         </div>
     )
 }
