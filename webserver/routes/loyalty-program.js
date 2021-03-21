@@ -32,11 +32,11 @@ router.get('/loyalty-program', (req, res) => {
         points = userPoints.get(login);
     }
 
-    res.ok({ points, rewards });
+    res.ok({ points, rewards: [...rewards.values()] });
 });
 
 router.get('/loyalty-program/rewards', (req, res) => {
-    res.ok(rewards);
+    res.ok([...rewards.values()]);
 });
 
 router.get('/loyalty-program/reward/:id', [role('client')], (req, res) => {
