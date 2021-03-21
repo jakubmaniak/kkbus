@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
 
-const config = require('../helpers/config');
+const env = require('../helpers/env');
 const { invalidRequest, emailAlreadyTaken, badCredentials } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const role = require('../middlewares/roles')(
@@ -92,7 +92,7 @@ router.post('/user/login', [
         throw badCredentials;
     }
 
-    let sessionToken = jwt.sign({ login }, config.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
+    let sessionToken = jwt.sign({ login }, env.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
 
     res.cookie('session', sessionToken);
     res.ok({
@@ -147,7 +147,7 @@ router.post('/user/register', [
     usersByEmail.set(email, user);
     users.set(login, user);
 
-    let sessionToken = jwt.sign({ login }, config.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
+    let sessionToken = jwt.sign({ login }, env.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
 
     res.cookie('session', sessionToken);
     res.ok({

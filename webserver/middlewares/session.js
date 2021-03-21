@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const config = require('../helpers/config');
+const env = require('../helpers/env');
 const { badSessionToken } = require("../errors");
 
 const users = new Map();
@@ -68,7 +68,7 @@ module.exports = () => (req, res, next) => {
         else {
             let payload;
             try {
-                payload = jwt.verify(sessionToken, config.jwtSecret, { algorithms: ['HS512'] });
+                payload = jwt.verify(sessionToken, env.jwtSecret, { algorithms: ['HS512'] });
             }
             catch (err) {
                 if (err.name === 'JsonWebTokenError') {

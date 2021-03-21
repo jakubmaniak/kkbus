@@ -1,7 +1,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 
-const config = require('./helpers/config');
+const env = require('./helpers/env');
 const { serverError } = require('./errors');
 const session = require('./middlewares/session');
 
@@ -38,6 +38,6 @@ app.use((err, req, res, next) => {
     res.json({ error: true, errorCode });
 });
 
-app.listen(config.server.port, config.server.host, () => {
-    console.log(`Listening on ${config.server.host}:${config.server.port}...`);
+app.listen(env.server.port, env.server.host, () => {
+    console.log(`Listening on ${env.server.host}:${env.server.port}...`);
 });
