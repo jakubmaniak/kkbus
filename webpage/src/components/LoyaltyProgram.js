@@ -98,7 +98,8 @@ function LoyaltyProgram() {
 
     function ownerTile() {
         return (
-            <div className="main">
+            <div className="main owner">
+                <button className="add-reward">Dodaj nagrodę</button>
                 <div className="tile">
                     <h2>Nagrody</h2>
                     <div className="reward-header">
