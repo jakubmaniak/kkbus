@@ -11,6 +11,7 @@ const error = function(errorCode) {
 module.exports = {
     serverError:        error('server_error'),
     invalidRequest:     error('invalid_request'),
+    notFound:           error('not_found'),
     unauthorized:       error('unauthorized'),
     badSessionToken:    error('bad_session_token'),
     badCredentials:     error('bad_credentials'),
