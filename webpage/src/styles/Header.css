@@ -7,7 +7,7 @@
 header {
     background-color: rgb(32, 32, 26);
     width: 100%;
-    z-index: 99999;
+    z-index: 99998;
 }
 
 .header-container {
@@ -79,7 +79,7 @@ nav {
     display: flex;
     height: 48px;
     background-color: rgb(48, 48, 42);
-    z-index: 99998;
+    z-index: 99997;
 }
 
 nav.side {
