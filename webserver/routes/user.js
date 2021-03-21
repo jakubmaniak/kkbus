@@ -5,6 +5,7 @@ const router = express.Router();
 const env = require('../helpers/env');
 const { invalidRequest, emailAlreadyTaken, badCredentials } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
+const sessionMiddleware = require('../middlewares/session');
 const roles = new Map([
     [0, 'guest'],
     [1, 'client'],
@@ -77,7 +78,8 @@ router.post('/user/register', [
         role: 1
     };
     await userController.addUser(user);
-
+    await sessionMiddleware.sync();
+    
     let sessionToken = jwt.sign({ login }, env.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
 
     res.cookie('session', sessionToken);

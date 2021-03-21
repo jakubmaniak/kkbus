@@ -16,16 +16,19 @@ const roles = new Map([
 let users = new Map();
 const sessionTokenCache = new Map();
 
-userController.findAllUsers().then((results) => {
-    users = new Map(
-        results.map((user) => [user.login, {
-            ...user,
-            role: roles.get(user.role),
-            password: null
-        }])
-    );
-});
+const sync = () => {
+    return userController.findAllUsers().then((results) => {
+        users = new Map(
+            results.map((user) => [user.login, {
+                ...user,
+                role: roles.get(user.role),
+                password: null
+            }])
+        );
+    });
+};
 
+sync();
 
 module.exports = () => (req, res, next) => {
     let sessionToken = req.cookies.session;
@@ -73,3 +76,5 @@ module.exports = () => (req, res, next) => {
 
     next();
 };
+
+module.exports.sync = sync;
