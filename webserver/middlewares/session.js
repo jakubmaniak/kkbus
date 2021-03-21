@@ -13,24 +13,46 @@ const roles = new Map([
     [4, 'owner']
 ]);
 
-let users = new Map();
-const sessionTokenCache = new Map();
 
-const sync = () => {
-    return userController.findAllUsers().then((results) => {
-        users = new Map(
-            results.map((user) => [user.login, {
-                ...user,
-                role: roles.get(user.role),
-                password: null
-            }])
-        );
-    });
+let cache = new Map();
+
+cache.expireDates = new Map();
+cache.refresh = (key) => {
+    if (cache.expireDates.has(key)) {
+        //console.log('Refreshed (' + cache.get(key).login + ') ' + key.substr(0, 16) + '...');
+    }
+    else {
+        console.log('Added (' + cache.get(key).login + ') ' + key.substr(0, 16) + '... to session cache');
+    }
+
+    cache.expireDates.set(key, Date.now() + 60000);
+};
+cache._set = cache.set;
+cache.set = (key, value) => {
+    cache._set(key, value);
+    cache.refresh(key);
 };
 
-sync();
+setInterval(() => {
+    let now = Date.now();
+    let deletionList = [];
 
-module.exports = () => (req, res, next) => {
+    cache.expireDates.forEach((expireDate, key) => {
+        if (now >= expireDate) {
+            console.log('Removed (' + cache.get(key).login + ') ' + key.substr(0, 16) + '... from session cache');
+
+            cache.delete(key);
+            deletionList.push(key);
+        }    
+    });
+
+    if (deletionList.length > 0) {
+        deletionList.forEach((key) => cache.expireDates.delete(key));
+    }
+}, 10000);
+
+
+module.exports = () => async (req, res, next) => {
     let sessionToken = req.cookies.session;
 
     req.user = {
@@ -39,10 +61,11 @@ module.exports = () => (req, res, next) => {
     };
 
     if (sessionToken) {
-        let login;
+        let user;
 
-        if (sessionTokenCache.has(sessionToken)) {
-            login = sessionTokenCache.get(sessionToken);
+        if (cache.has(sessionToken)) {
+            user = cache.get(sessionToken);
+            cache.refresh(sessionToken);
         }
         else {
             let payload;
@@ -60,21 +83,25 @@ module.exports = () => (req, res, next) => {
             }
 
             if (payload && payload.login) {
-                login = payload.login;
-                sessionTokenCache.set(sessionToken, login);
+                user = await userController.findUserByLogin(payload.login);
+
+                if (!user) throw badSessionToken;
+
+                user.role = roles.get(user.role);
+                delete user.password;
+
+                cache.set(sessionToken, user);
             }
+            else throw badSessionToken;
         }
 
-        if (login) {
-            req.user = {
-                loggedIn: true,
-                ...users.get(login)
-            };
-        }
-        else throw badSessionToken;
+        req.user = {
+            loggedIn: true,
+            ...user
+        };
     }
 
     next();
 };
 
-module.exports.sync = sync;
+module.exports.cache = cache;

@@ -78,8 +78,7 @@ router.post('/user/register', [
         role: 1
     };
     await userController.addUser(user);
-    await sessionMiddleware.sync();
-    
+
     let sessionToken = jwt.sign({ login }, env.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
 
     res.cookie('session', sessionToken);
