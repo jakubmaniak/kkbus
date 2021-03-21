@@ -1,50 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import * as api from '../api';
 import FuelHistoryItem from './FuelHistoryItem';
 import FuelUsageChart from './FuelUsageChart';
 import Dropdown from './Dropdown';
+import { ModalLoader } from './Loader';
 
 import '../styles/Fuel.css';
 
 function Fuel() {
+    let [loading, setLoading] = useState(true);
+    let loadingInitTime = Date.now();
+
     let [fuelUsage, setFuelUsage] = useState([]);
     let [vehicle, setVehicle] = useState('');
-    let [vehicles, setVehicles] = useState([
-        { vehicleName: 'Mercedes Sprinter', vehicleId: 2 },
-        { vehicleName: 'Ford Transit', vehicleId: 5 }
-    ]);
+    let [vehicles, setVehicles] = useState([]);
 
-    let fuelHistory = [
-        {
-            date: '02.03.2021 15:09',
-            price: 203.45,
-            liters: 40.7, 
-            vehicleMileage:'1 330 087'
-        },
-        {
-            date: '02.03.2021 15:09',
-            price: 203.45,
-            liters: 40.7, 
-            vehicleMileage:'1 330 087'
-        },
-        {
-            date: '02.03.2021 15:09',
-            price: 203.45,
-            liters: 40.7, 
-            vehicleMileage:'1 330 087'
-        },
-        {
-            date: '02.03.2021 15:09',
-            price: 203.45,
-            liters: 40.7, 
-            vehicleMileage:'1 330 087'
-        }
-    ];
-    fuelHistory = fuelHistory.concat(fuelHistory).concat(fuelHistory);
+    useEffect(() => {
+        api.getAllVehicles().then((vehicles) => {
+            setVehicles(vehicles);
+            setTimeout(() => {
+                setLoading(false);
+            }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
+        });
+    }, []);
 
     function handleVehicleChange(item) {
-        let vehicleId = item.vehicleId;
+        let vehicleId = item.id;
 
         setVehicle(vehicleId || '');
         getData(vehicleId || null);
@@ -59,12 +41,13 @@ function Fuel() {
 
     return (
         <div className="fuel-usage page">
+            <ModalLoader loading={loading} />
             <div className="main">
                     <div className="tile half select">
                         <h2>Pojazd</h2>
                         <Dropdown 
                             items={vehicles}
-                            textProperty="vehicleName"
+                            textProperty="name"
                             placeholder="Wybierz pojazd"
                             handleChange={handleVehicleChange}
                         />
@@ -88,14 +71,14 @@ function Fuel() {
                             <span>Przebieg</span>
                         </div>
                         <div class="fuel-usage-history-items">
-                        {fuelHistory.map((refueling, index) => {
+                        {fuelUsage.map((refueling, index) => {
                             return (
                                 <FuelHistoryItem 
                                     key={index}
                                     date={refueling.date}
-                                    price={refueling.price}
-                                    liters={refueling.liters}
-                                    vehicleMileage={refueling.vehicleMileage}
+                                    price={refueling.cost}
+                                    liters={refueling.amount}
+                                    vehicleMileage={refueling.mileage}
                                 />      
                             );
                         })}

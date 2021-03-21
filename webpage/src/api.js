@@ -36,8 +36,12 @@ export async function getUserInfo() {
     return sendGet('/user/info');
 }
 
-export async function getFuelUsage(vehicleId = null) {
-    return sendPost('/vehicle/fuel-usage', { vehicleId });
+export async function getAllVehicles() {
+    return sendGet('/vehicles');
+}
+
+export async function getFuelUsage(vehicleId) {
+    return sendGet(`/vehicle/${vehicleId}/fuel-usage`);
 }
 
 export async function getDrivers() {
