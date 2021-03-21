@@ -60,7 +60,7 @@ router.get('/loyalty-program/reward/:id', [role('client')], (req, res) => {
 });
 
 router.post('/loyalty-program/reward', [
-    role('office'),
+    role('owner'),
     bodySchema('{name: string, requiredPoints: number, amount: number, limit: number}')
 ], (req, res) => {
     let { name, requiredPoints, amount, limit } = req.body;
@@ -77,7 +77,7 @@ router.post('/loyalty-program/reward', [
 });
 
 router.put('/loyalty-program/reward/:id', [
-    role('office'),
+    role('owner'),
     bodySchema('{name: string, requiredPoints: number, amount: number, limit: number}')
 ], (req, res) => {
     let id = parseInt(req.params.id);
@@ -101,7 +101,7 @@ router.put('/loyalty-program/reward/:id', [
     res.ok(updatedReward);
 });
 
-router.delete('/loyalty-program/reward/:id', [role('office')], (req, res) => {
+router.delete('/loyalty-program/reward/:id', [role('owner')], (req, res) => {
     let id = parseInt(req.params.id);
     if (isNaN(id)) throw invalidRequest;
 
