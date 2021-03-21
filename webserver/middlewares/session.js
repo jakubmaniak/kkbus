@@ -2,54 +2,30 @@ const jwt = require('jsonwebtoken');
 
 const env = require('../helpers/env');
 const { badSessionToken } = require("../errors");
+const userController = require('../controllers/user');
 
-const users = new Map();
-users.set('admin', {
-    id: 9001,
-    email: 'admin@kkbus.pl',
-    login: 'admin',
-    password: 'admin',
-    firstName: 'Jan',
-    lastName: 'Kowalski',
-    birthDate: '01-01-1999',
-    phoneNumber: '123456789',
-    role: 'owner'
-});
-users.set('trajdowiec', {
-    id: 9434,
-    email: 'trajdowiec@kkbus.pl',
-    login: 'trajdowiec',
-    password: 'haslo',
-    firstName: 'Tomasz',
-    lastName: 'Rajdowiec',
-    birthDate: '01-01-1999',
-    phoneNumber: '103406709',
-    role: 'driver'
-});
-users.set('amila', {
-    id: 9004,
-    email: 'amila@kkbus.pl',
-    login: 'amila',
-    password: 'haslo',
-    firstName: 'Agnieszka',
-    lastName: 'Miła',
-    birthDate: '01-01-1999',
-    phoneNumber: '103406709',
-    role: 'office'
-});
-users.set('annanowak1234', {
-    id: 30199,
-    email: 'annanowak@gmail.com',
-    login: 'annanowak1234',
-    password: 'haslo',
-    firstName: 'Anna',
-    lastName: 'Nowak',
-    birthDate: '01-01-1999',
-    phoneNumber: '803401234',
-    role: 'client'
-});
 
+const roles = new Map([
+    [0, 'guest'],
+    [1, 'client'],
+    [2, 'driver'],
+    [3, 'office'],
+    [4, 'owner']
+]);
+
+let users = new Map();
 const sessionTokenCache = new Map();
+
+userController.findAllUsers().then((results) => {
+    users = new Map(
+        results.map((user) => [user.login, {
+            ...user,
+            role: roles.get(user.role),
+            password: null
+        }])
+    );
+});
+
 
 module.exports = () => (req, res, next) => {
     let sessionToken = req.cookies.session;
