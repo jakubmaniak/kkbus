@@ -22,6 +22,11 @@ module.exports.findUserByLoginOrEmail = (login, email) => {
         .then(getFirst);
 };
 
+module.exports.findUserByLogin = (login) => {
+    return db.query('SELECT * FROM users WHERE login=? LIMIT 1', [login])
+        .then(getFirst);
+};
+
 module.exports.findUserByEmail = (email) => {
     return db.query('SELECT * FROM users WHERE email=? LIMIT 1', [email])
         .then(getFirst);
