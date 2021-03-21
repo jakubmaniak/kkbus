@@ -38,7 +38,6 @@ function Track(props) {
                         <button onClick={() => setModalVisibility(false)}>Anuluj</button>
                         <button onClick={() => setModalVisibility(false)}>Zapisz</button>
                     </div>
-                    
                 </section>
             </Modal>
         );

@@ -3,6 +3,16 @@
     align-items: flex-start;
 }
 
+.loyalty-program .main.owner {
+    justify-content: flex-end;
+}
+
+.add-reward {
+    width: 150px;
+    height: 36px;
+    margin-bottom: 40px;
+}
+
 .loyalty-program .title {
     display: flex;
     align-items: center;
@@ -35,10 +45,22 @@
     text-align: center;
 }
 
+.reward-header {
+    margin-bottom: 7px;
+}
+
+.reward header {
+    text-align: start;
+}
+
 .reward span:first-child,
 .reward-header span:first-child {
     width: 380px;
     text-align: left;
+}
+
+.reward-header span:first-child  {
+    padding-left: 8px;
 }
 
 .reward span:nth-child(n + 2),
