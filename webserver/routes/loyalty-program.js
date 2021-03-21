@@ -61,12 +61,9 @@ router.get('/loyalty-program/reward/:id', [role('client')], (req, res) => {
 
 router.post('/loyalty-program/reward', [
     role('office'),
-    bodySchema('{name: string, requiredPoints: number, amount?: number, limit?: number}')
+    bodySchema('{name: string, requiredPoints: number, amount: number, limit: number}')
 ], (req, res) => {
     let { name, requiredPoints, amount, limit } = req.body;
-
-    amount = amount || 0;
-    limit = limit || 0;
 
     let id = rewards.size + 1;
 

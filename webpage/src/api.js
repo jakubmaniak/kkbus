@@ -21,39 +21,77 @@ export function errorAlert(err) {
 const root = '/api';
 
 export async function login(login, password) {
-    return post('/user/login', { login, password });
+    return sendPost('/user/login', { login, password });
 }
 
 export async function logout() {
-    return get('/user/logout');
+    return sendGet('/user/logout');
 }
 
 export async function register(email, firstName, lastName, birthDate, phoneNumber) {
-    return post('/user/register', { email, firstName, lastName, birthDate, phoneNumber });
+    return sendPost('/user/register', { email, firstName, lastName, birthDate, phoneNumber });
 }
 
 export async function getUserInfo() {
-    return get('/user/info');
+    return sendGet('/user/info');
 }
 
 export async function getFuelUsage(vehicleId = null) {
-    return post('/vehicle/fuel-usage', { vehicleId });
+    return sendPost('/vehicle/fuel-usage', { vehicleId });
 }
 
 export async function getDrivers() {
-    return get('/drivers');
+    return sendGet('/drivers');
 }
 
 export async function getRoutes() {
-    return get('/routes');
+    return sendGet('/routes');
 }
 
 export async function getWorkSchedule(driverId, range = 0, routeId = null, direction = 0) {
-    return post('/work-schedule', { driverId, range, routeId, direction } );
+    return sendPost('/work-schedule', { driverId, range, routeId, direction } );
+}
+
+export async function getLoyaltyProgram() {
+    return sendGet('/loyalty-program');
+}
+
+export async function getAllRewards() {
+    return sendGet('/loyalty-program/rewards');
+}
+
+export async function buyReward(rewardId) {
+    return sendGet('/loyalty-program/reward/' + rewardId);
+}
+
+export async function addReward(name, requiredPoints, amount = 0, limit = 0) {
+    return sendPost('/loyalty-program/reward', { name, requiredPoints, amount, limit });
+}
+
+export async function updateReward(rewardId, name, requiredPoints, amount = 0, limit = 0) {
+    return sendPut('/loyalty-program/reward/' + rewardId, { name, requiredPoints, amount, limit });
+}
+
+export async function deleteReward(rewardId) {
+    return sendDelete('/loyalty-program/reward/' + rewardId);
 }
 
 
-async function post(path, body) {
+async function sendGet(path) {
+    let res = await axios.get(root + path)
+    .catch((err) => {
+        console.error(err);
+        throw new Error('axios_error');
+    });
+
+    if (res.data.error) {
+        throw new Error(res.data.errorCode);
+    }
+
+    return res.data.result;
+}
+
+async function sendPost(path, body) {
     let res = await axios.post(root + path, body)
     .catch((err) => {
         console.error(err);
@@ -67,8 +105,22 @@ async function post(path, body) {
     return res.data.result;
 }
 
-async function get(path) {
-    let res = await axios.get(root + path)
+async function sendPut(path, body) {
+    let res = await axios.put(root + path, body)
+    .catch((err) => {
+        console.error(err);
+        throw new Error('axios_error');
+    });
+
+    if (res.data.error) {
+        throw new Error(res.data.errorCode);
+    }
+
+    return res.data.result;
+}
+
+async function sendDelete(path) {
+    let res = await axios.delete(root + path)
     .catch((err) => {
         console.error(err);
         throw new Error('axios_error');
