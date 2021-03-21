@@ -20,12 +20,12 @@ app.use((req, res, next) => {
 });
 
 
-app.use('/api', require('./routers/user'));
-app.use('/api', require('./routers/booking'));
-app.use('/api', require('./routers/driver'));
-app.use('/api', require('./routers/route'));
-app.use('/api', require('./routers/vehicle'));
-app.use('/api', require('./routers/work-schedule'));
+app.use('/api', require('./routes/user'));
+app.use('/api', require('./routes/booking'));
+app.use('/api', require('./routes/driver'));
+app.use('/api', require('./routes/route'));
+app.use('/api', require('./routes/vehicle'));
+app.use('/api', require('./routes/work-schedule'));
 
 app.use((err, req, res, next) => {
     let errorCode = err.message;
