@@ -105,7 +105,7 @@ router.get('/user/info', (req, res) => {
     }
     else {
         res.ok({
-            role: 0,
+            role: 'guest',
             id: -1,
             login: '',
             firstName: '',
