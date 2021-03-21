@@ -5,10 +5,11 @@ interface Env {
     };
     jwtSecret: string;
     mysql: {
+        connectionLimit: number,
         host: string,
         port: number,
         database: string,
-        username: string,
+        user: string,
         password: string
     };
 }

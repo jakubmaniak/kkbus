@@ -11,6 +11,7 @@ module.exports = {
     jwtSecret: env.jwtSecret || 'kkbus_jwt_secret',
     mysql: {
         ...env.mysql,
+        connectionLimit: env.mysql.connectionLimit || 5,
         port: env.mysql.port || 3306
     }
 };
