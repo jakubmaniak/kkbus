@@ -74,7 +74,7 @@ function WorkSchedule() {
             <div className="main">
                 <div className="tile">
                     <h2>Filtry</h2>
-                    <div className="row-container">
+                    <div className="row-filter-container">
                         <div className="filter-container">
                             <span>Kierowca:</span>
                             <Dropdown
@@ -92,7 +92,7 @@ function WorkSchedule() {
                                 handleChange={setSelectedRoute} />
                         </div>
                     </div>
-                    <div className="row-container">
+                    <div className="row-filter-container">
                         <div className="filter-container">
                             <span>Zakres dni:</span>
                             <Dropdown

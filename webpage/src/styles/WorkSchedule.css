@@ -1,21 +1,3 @@
-.row-container {
-    display: flex;
-    justify-content: space-between;
-}
-
-.row-container + .row-container {
-    margin-top: 20px;
-}
-
-.filter-container {
-    display: flex;
-    align-items: center;
-}
-
-.filter-container > span {
-    width: 134px;
-}
-
 .header-wrapper {
     display: flex;
     justify-content: space-between;

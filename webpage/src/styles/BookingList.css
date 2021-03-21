@@ -1,0 +1,37 @@
+.booking-list-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 562px;
+    height: 60px;
+}
+
+.booking-item-row:first-child span:first-child {
+    color: #D9B430;
+}
+
+.booking-item-row:first-child span {
+    font-weight: 500;
+}
+
+.booking-list-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.booking-list .print,
+.booking-list .find {
+    width: 180px;
+    height: 48px;
+}
+
+.booking-list .find  {
+    margin-top: 12px;
+}

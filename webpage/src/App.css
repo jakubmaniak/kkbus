@@ -90,6 +90,7 @@ button {
     cursor: pointer;
     border-radius: 2px;
     height: 40px;
+    color: white;
 }
 
 form button.submit {
@@ -125,5 +126,23 @@ button.delete {
 
 .modal section.footer button:last-child {
     color: white;
+}
+
+.row-filter-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.row-filter-container + .row-filter-container {
+    margin-top: 20px;
+}
+
+.filter-container {
+    display: flex;
+    align-items: center;
+}
+
+.filter-container > span {
+    width: 134px;
 }
 

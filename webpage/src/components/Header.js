@@ -49,6 +49,7 @@ function Header() {
                 <HeaderItem path="/raport-z-kursu">Raport z kursu</HeaderItem>
                 <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
                 <HeaderItem path="/paliwo">Paliwo</HeaderItem>
+                <HeaderItem path="/lista-rezerwacji">Lista rezerwacji</HeaderItem>
                 <HeaderItem path="/kontakt">Kontakt</HeaderItem>
             </div>
         );
@@ -89,6 +90,7 @@ function Header() {
                 <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
                 <HeaderItem path="/raport-z-kursu">Raport z kursu</HeaderItem>
                 <HeaderItem path="/paliwo">Paliwo</HeaderItem>
+                <HeaderItem path="/lista-rezerwacji">Lista rezerwacji</HeaderItem>
                 <HeaderItem path="/kontakt">Kontakt</HeaderItem>
             </div>
         );
