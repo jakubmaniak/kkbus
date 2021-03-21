@@ -26,12 +26,7 @@
     width: 100%;
 }
 
-.booking-list .print,
-.booking-list .find {
+.booking-list .print {
     width: 180px;
     height: 48px;
-}
-
-.booking-list .find  {
-    margin-top: 12px;
 }

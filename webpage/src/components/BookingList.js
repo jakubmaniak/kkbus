@@ -62,9 +62,6 @@ function BookingList() {
                             <Dropdown placeholder="aktualna"/>
                         </div>
                     </div>
-                    <div className="button-container">
-                        <button className="find">Szukaj</button>
-                    </div>
                 </div>
                 <div className="tile">
                     <h2>Lista rezeracji</h2>
