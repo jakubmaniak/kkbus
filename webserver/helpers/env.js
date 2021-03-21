@@ -1,6 +1,7 @@
 const fs = require('fs');
 const env = JSON.parse(fs.readFileSync('env.json'));
 
+/** @type {import('./types/env')} */
 module.exports = {
     ...env,
     server: {
