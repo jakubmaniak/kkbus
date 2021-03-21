@@ -7,6 +7,7 @@
 header {
     background-color: rgb(32, 32, 26);
     width: 100%;
+    z-index: 99999;
 }
 
 .header-container {
@@ -78,6 +79,14 @@ nav {
     display: flex;
     height: 48px;
     background-color: rgb(48, 48, 42);
+    z-index: 99998;
+}
+
+nav.side {
+    position: fixed;
+    height: 100%;
+    width: 260px;
+    padding-top: 64px;
 }
 
 .nav-action {
@@ -90,6 +99,12 @@ nav {
     max-width: 1252px;
 }
 
+nav.side .nav-action {
+    padding-right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 .nav-action .item {
     display: flex;
     align-items: center;
@@ -97,6 +112,12 @@ nav {
     color: white;
     margin-right: 26px;
     position: relative;
+}
+
+nav.side .nav-action .item {
+    min-height: 40px;
+    height: auto;
+    margin-top: 4px;
 }
 
 .nav-action .item:last-child {
@@ -108,14 +129,20 @@ nav {
 }
 
 .nav-action .item.selected::after {
-        content: '';
-        display: block;
-        position: absolute;
-        height: 4px;
-        width: 100%;
-        bottom: 0;
-        left: 0;
-        border-radius: 2px 2px 0 0;
-        background-color: #D9B430;
+    content: '';
+    display: block;
+    position: absolute;
+    height: 4px;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    border-radius: 2px 2px 0 0;
+    background-color: #D9B430;
 }
 
+nav.side .nav-action .item.selected::after {
+    width: 4px;
+    height: 100%;
+    left: -16px;
+    border-radius: 0 2px 2px 0;
+}
