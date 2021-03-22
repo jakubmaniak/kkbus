@@ -3,13 +3,20 @@ import { useHistory } from 'react-router-dom';
 
 import '../styles/LoyaltyProgram.css';
 import * as api from '../api';
+import { useValue } from '../helpers/use-value';
 
 import UserContext from '../contexts/User';
 import Reward from './Reward';
+import Modal from './Modal';
 
 function LoyaltyProgram() {
     let history = useHistory();
     let [rewards, setRewards] = useState([]);
+    let [modalVisibility, setModalVisibility] = useState(false);
+    let [name, setName] = useState('');
+    let [requiredPoints, setRequiredPoints] = useState('');
+    let [amount, setAmount] = useState('');
+    let [limit, setLimit] = useState('');
 
     let { role } = useContext(UserContext).user;
 
@@ -25,6 +32,59 @@ function LoyaltyProgram() {
         .then((results) => {
             setRewards(results);
         });
+    }
+
+    function addReward() {
+        let currentRequirePoints = parseInt(requiredPoints);
+        let currentAmount = parseInt(amount * 1);
+        let currentLimit = parseInt(limit * 1);
+        
+        let isDataCorrect;
+
+        console.log(Number.isInteger(name));
+
+        if((name !== '' && (Number.isInteger(name))) && ((requiredPoints !== '') && (Number.isInteger(currentRequirePoints)))) {
+            if(amount === '' && limit === '') {
+                api.addReward(name, currentRequirePoints, currentAmount, currentLimit);
+                isDataCorrect = true;
+                console.log('halgo');  
+            }
+            else if(amount !== '' || limit !== '') {
+                if((Number.isInteger(currentAmount))  && (Number.isInteger(currentLimit))) {
+                    api.addReward(name, currentRequirePoints, currentAmount, currentLimit);
+                    isDataCorrect = true;  
+                }               
+            }
+            else {
+                api.addReward(name, currentRequirePoints, currentAmount, currentLimit);
+                isDataCorrect = true;
+            }
+            
+            if(isDataCorrect) {
+                setRewards(rewards => [...rewards, 
+                    {
+                        id: rewards.length, 
+                        name: name, 
+                        requiredPoints: currentRequirePoints, 
+                        amount: currentAmount, 
+                        limit: currentLimit
+                    }
+                ]);
+            }
+            //updateRewards();
+            setModalVisibility(false);
+        }
+        else {
+            alert('Wypełnij poprawnie dane');
+        }
+    }
+
+    function showModal() {
+        setName('');
+        setRequiredPoints('');
+        setAmount('');
+        setLimit('');
+        setModalVisibility(true);
     }
 
     function clientGuestTile() {
@@ -67,10 +127,10 @@ function LoyaltyProgram() {
         );
     }
 
-    function ownerTile() {
+    function OwnerTile() {
         return (
             <div className="main owner">
-                <button className="add-reward">Dodaj nagrodę</button>
+                <button className="add-reward" onClick={showModal}>Dodaj nagrodę</button>
                 <div className="tile">
                     <h2>Nagrody</h2>
                     <div className="reward-header">
@@ -93,13 +153,30 @@ function LoyaltyProgram() {
                         );
                     })}
                 </div>
+                <Modal visible={modalVisibility}>
+                    <header>Dodawanie nagrody</header>
+                    <section className="content">
+                        <form>
+                            <input placeholder="Nazwa" onChange={useValue(setName)}/>
+                            <input placeholder="Wymagene punkty" onChange={useValue(setRequiredPoints)}/>
+                            <input placeholder="Stan magazynu (puste = nieograniczony)" onChange={useValue(setAmount)}/>
+                            <input placeholder="Limit na 1 osobę (puste = bez limitu)" onChange={useValue(setLimit)}/>
+                        </form>
+                    </section>
+                    <section className="footer">
+                        <div>
+                            <button onClick={() => setModalVisibility(false)}>Anuluj</button>
+                            <button onClick={addReward}>Zapisz</button>
+                        </div>
+                    </section>
+                </Modal>
             </div>
         );
     }
 
     return (
         <div className="loyalty-program page">
-            {(role === 'owner') ? ownerTile() : clientGuestTile()}
+            {(role === 'owner') ? OwnerTile() : clientGuestTile()}
         </div>
     );
 }
