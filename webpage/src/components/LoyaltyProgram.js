@@ -147,7 +147,7 @@ function LoyaltyProgram() {
                         <span>Stan magazynu</span>
                         <span>Limit na 1 osobę</span>
                     </div>
-                    {rewards.map((reward, i) => {
+                    {rewards.map((reward) => {
                         return (
                             <Reward key={reward.id}
                                 role={role}
@@ -155,7 +155,7 @@ function LoyaltyProgram() {
                                 requiredPoints={reward.requiredPoints}
                                 amount={reward.amount}
                                 limit={reward.limit}
-                                rewardId={i + 1}
+                                rewardId={reward.id}
                                 updateRewards={updateRewards}
                                 deleteReward={() =>deleteReward(reward.id)}
                             />
