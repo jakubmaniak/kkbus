@@ -115,7 +115,7 @@ router.get('/vehicle/:id', [role('driver')], (req, res) => {
     let wantedId = parseInt(req.params.id);
     if (isNaN(wantedId)) throw invalidRequest;
 
-    let vehicleIndex = vehicles.findIndex(({id}) => id === wantedId);
+    let vehicleIndex = vehicles.findIndex(({id}) => id == wantedId);
     if (vehicleIndex < 0) throw notFound;
 
     res.ok(vehicles[vehicleIndex]);
@@ -140,7 +140,7 @@ router.post('/vehicle', [
     let { brand, model, year, plate, mileage, seats, state, parking, ab, ba, driver } = req.body;
     
     for (let prop in { state, parking, ab, ba, driver }) {
-        if (req.body[prop] !== undefined && req.body[prop] !== null) continue;
+        if (req.body[prop] != undefined && req.body[prop] != null) continue;
         
         switch (prop) {
             case 'state': state = 'Aktywny'; break;
@@ -186,13 +186,13 @@ router.put('/vehicle/:id', [
     let wantedId = parseInt(req.params.id);
     if (isNaN(wantedId)) throw invalidRequest;
 
-    let vehicleIndex = vehicles.findIndex(({id}) => id === wantedId);
+    let vehicleIndex = vehicles.findIndex(({id}) => id == wantedId);
     if (vehicleIndex < 0) throw notFound;
 
     let { brand, model, year, plate, mileage, seats, state, parking, ab, ba, driver } = req.body;
     
     for (let prop in { state, parking, ab, ba, driver }) {
-        if (req.body[prop] !== undefined && req.body[prop] !== null) continue;
+        if (req.body[prop] != undefined && req.body[prop] != null) continue;
         
         switch (prop) {
             case 'state': state = 'Aktywny'; break;
@@ -223,7 +223,7 @@ router.delete('/vehicle/:id', [role('owner')], (req, res) => {
     let wantedId = parseInt(req.params.id);
     if (isNaN(wantedId)) throw invalidRequest;
 
-    let vehicleIndex = vehicles.findIndex(({id}) => id === wantedId);
+    let vehicleIndex = vehicles.findIndex(({id}) => id == wantedId);
     if (vehicleIndex < 0) throw notFound;
 
     vehicles.splice(vehicleIndex, 1);
