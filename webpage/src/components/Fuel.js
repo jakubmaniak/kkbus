@@ -47,7 +47,7 @@ function Fuel() {
                         <h2>Pojazd</h2>
                         <Dropdown 
                             items={vehicles}
-                            textProperty="name"
+                            textFormatter={({ brand, model, year }) => brand + ' ' + model + ' ' + year}
                             placeholder="Wybierz pojazd"
                             handleChange={handleVehicleChange}
                         />
@@ -70,7 +70,7 @@ function Fuel() {
                             <span>Ilość</span>
                             <span>Przebieg</span>
                         </div>
-                        <div class="fuel-usage-history-items">
+                        <div className="fuel-usage-history-items">
                         {fuelUsage.map((refueling, index) => {
                             return (
                                 <FuelHistoryItem 
