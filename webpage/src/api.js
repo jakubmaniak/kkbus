@@ -36,6 +36,22 @@ export async function getUserInfo() {
     return sendGet('/user/info');
 }
 
+export async function getAllRoutes() {
+    return sendGet('/routes');
+}
+
+export async function addRoute(a, b, stops = [], prices = []) {
+    return sendPost('/route', { a, b, stops, prices });
+}
+
+export async function updateRoute(routeId, a, b, stops, prices) {
+    return sendPut('/route/' + routeId, { a, b, stops, prices });
+}
+
+export async function deleteRoute(routeId) {
+    return sendDelete('/route/' + routeId);
+}
+
 export async function getAllVehicles() {
     return sendGet('/vehicles');
 }
