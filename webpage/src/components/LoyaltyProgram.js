@@ -71,7 +71,6 @@ function LoyaltyProgram() {
     function deleteReward(rewardId) {
         let reward = rewards.find(({id}) => id === rewardId);
         let index = rewards.indexOf(reward);     
-
         api.deleteReward(rewardId);
 
         rewards.splice(index, 1);

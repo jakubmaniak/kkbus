@@ -22,7 +22,6 @@ function VehicleInfo() {
 
     useEffect(() => {
         updateVehicle();
-        console.log(vehicles);
     }, []);
 
     function updateVehicle() {
@@ -55,7 +54,7 @@ function VehicleInfo() {
                             model,
                             year: parseInt(year),
                             plate,
-                            mileage,
+                            mileage: parseInt(mileage),
                             seats: parseInt(seats),
                             state: null,
                             parking: null,
