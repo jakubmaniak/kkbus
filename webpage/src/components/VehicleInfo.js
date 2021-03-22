@@ -105,7 +105,7 @@ function VehicleInfo() {
                 })}
             </div>
             <Modal visible={modalAddVehicleVisibility}>
-                <header>Edycja danych pojazdu</header>
+                <header>Dodawanie pojazdu</header>
                 <section className="content">
                     <form className="vehicle-edit">
                         <div className="input-container"> 
