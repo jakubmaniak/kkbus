@@ -36,20 +36,7 @@ else {
 process.stdin.on('data', (data) => {
     let command = data.toString().toLowerCase().trim();
 
-    if (command === 'q' || command === 'quit' || command === 'exit') {
-        let tryExit = () => {
-            if (webpage.killed && webserver.killed) {
-                process.exit(0);
-            }
-        }
-
-        webpage.on('exit', tryExit);
-        webserver.on('exit', tryExit);
-        
-        webpage.kill();
-        webserver.kill();
-    }
-    else if (command === 'p' || command == 'wp' || command === 'page') {
+    if (command === 'p' || command == 'wp' || command === 'page') {
         pageIO();
     }
     else if (command === 's' || command == 'ws' || command === 'server') {
