@@ -40,6 +40,22 @@ export async function getAllVehicles() {
     return sendGet('/vehicles');
 }
 
+export async function getVehicle(vehicleId) {
+    return sendGet('/vehicle/' + vehicleId);
+}
+
+export async function addVehicle(name, plate, mileage, seats, state = null, parking = null, ab = null, ba = null, driver = null) {
+    return sendPost('/vehicle', { name, plate, mileage, seats, state, parking, ab, ba, driver });
+}
+
+export async function updateVehicle(vehicleId, name, plate, mileage, seats, state = null, parking = null, ab = null, ba = null, driver = null) {
+    return sendPut('/vehicle/' + vehicleId, { name, plate, mileage, seats, state, parking, ab, ba, driver });
+}
+
+export async function deleteVehicle(vehicleId) {
+    return sendDelete('/vehicle/' + vehicleId);
+}
+
 export async function getFuelUsage(vehicleId) {
     return sendGet(`/vehicle/${vehicleId}/fuel-usage`);
 }
