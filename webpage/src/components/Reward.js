@@ -5,7 +5,8 @@ import { useValue } from '../helpers/use-value';
 import * as api from '../api';
 
 function Reward(props) {
-    let [modalVisibility, setModalVisibility] = useState(false);
+    let [modalEditRewardVisibility, setModalEditRewardVisibility] = useState(false);
+    let [modalDeleteRewardVisibility, setModalDeleteRewardVisibility] = useState(false);
     let [name, setName] = useState(props.name);
     let [requiredPoints, setRequiredPoints] = useState(props.requiredPoints);
     let [amount, setAmount] = useState(props.amount);
@@ -24,7 +25,7 @@ function Reward(props) {
     }
 
     function editReward(rewardId) {
-        setModalVisibility(false);
+        setModalEditRewardVisibility(false);
 
         if(name !== props.name || parseInt(requiredPoints) !== props.requiredPoints || parseInt(amount) !== props.amount || parseInt(limit) !== props.limit) {
             let currentName = name !== props.name ? name : props.name;
@@ -39,10 +40,6 @@ function Reward(props) {
         }
     }
 
-    function deleteReward() {
-        props.deleteReward();
-    }
-
     return (
         <div className="reward">
             {header()}
@@ -55,13 +52,13 @@ function Reward(props) {
                     <span>{props.amount}</span> 
                     <span>{props.limit}</span> 
                     <div className="modify">
-                        <button className="edit" onClick={() => setModalVisibility(true)}>Edytuj</button>
-                        <button className="delete" onClick={deleteReward}>Usuń</button>
+                        <button className="edit" onClick={() => setModalEditRewardVisibility(true)}>Edytuj</button>
+                        <button className="delete" onClick={() => setModalDeleteRewardVisibility(true)}>Usuń</button>
                     </div>
                 </>
                 : null    
             }
-            <Modal visible={modalVisibility}>
+            <Modal visible={modalEditRewardVisibility}>
                 <header>Edycja nagrody</header>
                 <section className="content">
                     <form>
@@ -73,11 +70,23 @@ function Reward(props) {
                 </section>
                 <section className="footer">
                     <div>
-                        <button onClick={() => setModalVisibility(false)}>Anuluj</button>
+                        <button onClick={() => setModalEditRewardVisibility(false)}>Anuluj</button>
                         <button onClick={() => editReward(props.rewardId)}>Zapisz</button>
                     </div>
                 </section>
             </Modal>
+            <Modal visible={modalDeleteRewardVisibility}>
+                    <header>Usuwanie nagrody</header>
+                    <section className="content">
+                        <p>Czy na pewno chcesz usunąć nagrodę?</p>
+                    </section>
+                    <section className="footer">
+                        <div>
+                            <button onClick={() => setModalDeleteRewardVisibility(false)}>Anuluj</button>
+                            <button className="delete" onClick={() => props.deleteReward()}>Tak, usuń</button>
+                        </div>
+                    </section>
+                </Modal>
         </div>
     )
 }

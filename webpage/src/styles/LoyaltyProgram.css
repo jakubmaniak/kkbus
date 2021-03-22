@@ -146,3 +146,20 @@
 .loyalty-program .tile.half p + p {
     margin-top: 8px;
 }
+
+.loyalty-program .modal {
+    width: 456px;
+}
+
+.loyalty-program .modal .footer button {
+    height: 36px;
+}
+
+.loyalty-program .modal .footer button.delete {
+    background-color: #C73535;
+}
+
+.loyalty-program .modal .content p {
+    margin-bottom: 25px;
+    text-align: left;
+}
