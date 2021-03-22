@@ -27,17 +27,25 @@ function Reward(props) {
     function editReward(rewardId) {
         setModalEditRewardVisibility(false);
 
-        if(name !== props.name || parseInt(requiredPoints) !== props.requiredPoints || parseInt(amount) !== props.amount || parseInt(limit) !== props.limit) {
-            let currentName = name !== props.name ? name : props.name;
-            let currentRequirePoints = requiredPoints !== props.requiredPoints ? parseInt(requiredPoints) : props.requiredPoints;
-            let currentAmout = amount !== props.amount ? parseInt(amount) : props.amount;
-            let currentLimit = limit !== props.limit ? parseInt(limit) : props.limit;
-            
-            api.updateReward(rewardId, currentName, currentRequirePoints, currentAmout, currentLimit)
-            .then(() => {
-                props.updateRewards();
-            });
+        if(!isNaN(parseInt(requiredPoints)) && !isNaN(parseInt(amount)) && !isNaN(parseInt(limit))) {
+            if(name !== props.name || parseInt(requiredPoints) !== props.requiredPoints || parseInt(amount) !== props.amount || parseInt(limit) !== props.limit) {
+                let currentName = name !== props.name ? name : props.name;
+                let currentRequirePoints = requiredPoints !== props.requiredPoints ? parseInt(requiredPoints) : props.requiredPoints;
+                let currentAmout = amount !== props.amount ? parseInt(amount) : props.amount;
+                let currentLimit = limit !== props.limit ? parseInt(limit) : props.limit;
+                
+                api.updateReward(rewardId, currentName, currentRequirePoints, currentAmout, currentLimit)
+                .then(() => {
+                    props.updateRewards();
+                });
+            }
+            else {
+                alert('Nieprawidłowy typ danych');
+            }
         }
+       else {
+           alert('Wypełnij wszystkie pola');
+       }     
     }
 
     return (
