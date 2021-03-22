@@ -56,6 +56,21 @@
     width: 180px;
 }
 
+.fuel-usage-chart {
+    position: relative;
+}
+
+.fuel-usage-chart .chart-label {
+    position: absolute;
+    font-weight: 500;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+svg {
+    margin-left: 44px;
+}
+
 svg stop[offset="0%"] {
     stop-color: #D9B430;
     stop-opacity: 0.5;
