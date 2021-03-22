@@ -9,8 +9,6 @@ function Dropdown(props) {
     useEffect(() => {
         if (!(props.items instanceof Array)) {
             setPlaceholderVisible(true);
-            setSelectedItem(props.placeholder);
-
             return;
         }
 
@@ -23,7 +21,6 @@ function Dropdown(props) {
         }
         else if ('placeholder' in props) {
             setPlaceholderVisible(true);
-            setSelectedItem(props.placeholder);
         }
     }, [props.items]);
 
@@ -42,13 +39,25 @@ function Dropdown(props) {
             props.handleChange(item);
     }
 
+    function getItemText(item) {
+        if ('textFormatter' in props) {
+            return props.textFormatter(item);
+        }
+        if ('textProperty' in props && typeof selectedItem === 'object') {
+            return item[props.textProperty];
+        }
+        if (typeof item !== 'object' && typeof item !== 'function') {
+            return item;
+        }
+        
+        return null;
+    }
+
     return (
         <div className={(expanded && getLength()) ? 'dropdown expanded' : 'dropdown'}>
             <div className="dropdown-container" onClick={() => setExpanded(!expanded && getLength())}>
                 <div className={placeholderVisible ? 'dropdown-content placeholder' : 'dropdown-content'}>{
-                    ('textProperty' in props && typeof selectedItem === 'object')
-                        ? selectedItem[props.textProperty]
-                        : selectedItem
+                    placeholderVisible ? props.placeholder : getItemText(selectedItem)
                 }</div>
                 <button className="dropdown-button">&gt;</button>
             </div>
@@ -57,11 +66,7 @@ function Dropdown(props) {
                     {props.items.map((item, i) => <div
                         key={i}
                         className="dropdown-list-item"
-                        onClick={() => selectItem(i)}>{
-                            ('textProperty' in props)
-                                ? item[props.textProperty]
-                                : item
-                        }</div>
+                        onClick={() => selectItem(i)}>{getItemText(item)}</div>
                     )}
                 </div>
                 : null
