@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import * as api from '../api';
+import { routeFormatter } from '../helpers/text-formatters';
 
 import '../styles/WorkSchedule.css';
 import Dropdown from './Dropdown';
@@ -86,10 +87,7 @@ function WorkSchedule() {
                             <span>Trasy:</span>
                             <Dropdown
                                 items={routes}
-                                textFormatter={(item) => (typeof item === 'string')
-                                    ? item
-                                    : `${item.a} - ${item.b}`
-                                }
+                                textFormatter={routeFormatter}
                                 alwaysSelected
                                 handleChange={setSelectedRoute} />
                         </div>
