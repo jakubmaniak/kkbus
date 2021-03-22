@@ -44,12 +44,12 @@ export async function getVehicle(vehicleId) {
     return sendGet('/vehicle/' + vehicleId);
 }
 
-export async function addVehicle(name, plate, mileage, seats, state = null, parking = null, ab = null, ba = null, driver = null) {
-    return sendPost('/vehicle', { name, plate, mileage, seats, state, parking, ab, ba, driver });
+export async function addVehicle(brand, model, year, plate, mileage, seats, state = null, parking = null, ab = null, ba = null, driver = null) {
+    return sendPost('/vehicle', { brand, model, year, plate, mileage, seats, state, parking, ab, ba, driver });
 }
 
-export async function updateVehicle(vehicleId, name, plate, mileage, seats, state = null, parking = null, ab = null, ba = null, driver = null) {
-    return sendPut('/vehicle/' + vehicleId, { name, plate, mileage, seats, state, parking, ab, ba, driver });
+export async function updateVehicle(vehicleId, brand, model, year, plate, mileage, seats, state = null, parking = null, ab = null, ba = null, driver = null) {
+    return sendPut('/vehicle/' + vehicleId, { brand, model, year, plate, mileage, seats, state, parking, ab, ba, driver });
 }
 
 export async function deleteVehicle(vehicleId) {
