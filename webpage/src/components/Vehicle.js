@@ -24,17 +24,31 @@ function Vehicle(props) {
     function editVehicle(vehicleId) {
         setModalEditVehicleVisibility(false);
 
-        //dopisac parking, ab, ba
-        if(brand !== props.brand || model !== props.model || parseInt(year) !== props.year || parseInt(mileage) !== props.mileage || parseInt(seats) !== seats) {
-            let currentYear = year !== props.year ? parseInt(year) : props.year;
-            let currentMileage = mileage !== props.mileage ? parseInt(mileage) : props.mileage;
-            let currentSeats = seats !== props.seats ? parseInt(seats) : props.seats;
-            
-            api.updateVehicle(vehicleId, brand, model, currentYear, plate, currentMileage, currentSeats)
-            .then(() => 
-                props.updateVehicle()
-            );
-        } 
+        //!!!dopisac parking, ab, ba!!!
+
+        //sprzwdzanie czy nie ma pustych pol
+        if(brand !== '' && model !== '' && year !== '' && mileage !== '' && plate !== '' && seats !== '') {
+            //sprawdzenie czy pola liczbowe sa liczbami
+            if(!isNaN(parseInt(year)) && !isNaN(parseInt(seats)) && !isNaN(parseInt(mileage))) {
+                if(brand !== props.brand || model !== props.model || parseInt(year) !== props.year 
+                    || parseInt(mileage) !== props.mileage || parseInt(seats) !== seats) {
+                    let currentYear = year !== props.year ? parseInt(year) : props.year;
+                    let currentMileage = mileage !== props.mileage ? parseInt(mileage) : props.mileage;
+                    let currentSeats = seats !== props.seats ? parseInt(seats) : props.seats;
+                    
+                    api.updateVehicle(vehicleId, brand, model, currentYear, plate, currentMileage, currentSeats)
+                    .then(() => 
+                        props.updateVehicle()
+                    );
+                } 
+            }
+            else {
+                alert('Nieprawidłowy typ danych');
+            }
+        }
+        else {
+            alert('Wypełnij wzsystkie pola!');
+        }        
     }
 
 
