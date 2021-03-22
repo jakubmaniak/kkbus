@@ -84,17 +84,17 @@ function Reward(props) {
                 </section>
             </Modal>
             <Modal visible={modalDeleteRewardVisibility}>
-                    <header>Usuwanie nagrody</header>
-                    <section className="content">
-                        <p>Czy na pewno chcesz usunąć nagrodę?</p>
-                    </section>
-                    <section className="footer">
-                        <div>
-                            <button onClick={() => setModalDeleteRewardVisibility(false)}>Anuluj</button>
-                            <button className="delete" onClick={() => props.deleteReward()}>Tak, usuń</button>
-                        </div>
-                    </section>
-                </Modal>
+                <header>Usuwanie nagrody</header>
+                <section className="content">
+                    <p>Czy na pewno chcesz usunąć nagrodę?</p>
+                </section>
+                <section className="footer">
+                    <div>
+                        <button onClick={() => setModalDeleteRewardVisibility(false)}>Anuluj</button>
+                        <button className="delete" onClick={() => props.deleteReward()}>Tak, usuń</button>
+                    </div>
+                </section>
+            </Modal>
         </div>
     )
 }

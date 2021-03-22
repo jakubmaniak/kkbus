@@ -11,6 +11,7 @@ function Vehicle(props) {
     let { role } = useContext(UserContext).user;
     let [modalDetailsVisibility, setModalDetailsVisibility] = useState(false);
     let [modalEditVehicleVisibility, setModalEditVehicleVisibility] = useState(false);
+    let [modalDeleteVehicleVisibility, setModalDeleteVehicleVisibility] = useState(false);
     let [modalChangeDriverVisibility, setModalChangeDriverVisibility] = useState(false);
     
     let [brand, setBrand] = useState(props.brand);
@@ -122,7 +123,7 @@ function Vehicle(props) {
                         <div className="vehicle-edit-button">
                             <button onClick={() => {setModalEditVehicleVisibility(true)}}>Edytuj dane</button>
                             <button onClick={() => {setModalChangeDriverVisibility(true)}}>Zmień kierowcę</button>
-                            <button className="delete" onClick={() => props.deleteVehicle(props.vehicleId)}>Usuń</button>
+                            <button className="delete" onClick={() => setModalDeleteVehicleVisibility(true)}>Usuń</button>
                         </div>   
                     : role === 'office' ?
                     <div className="vehicle-edit-button">
@@ -157,6 +158,18 @@ function Vehicle(props) {
                 </section>
                 <section className="footer">
                     <button onClick={() => setModalDetailsVisibility(false)}>Zamknij</button>
+                </section>
+            </Modal>
+            <Modal visible={modalDeleteVehicleVisibility}>
+                <header>Usuwanie Pojazdu</header>
+                <section className="content">
+                    <p>Czy na pewno chcesz usunąć pojazd?</p>
+                </section>
+                <section className="footer">
+                    <div>
+                        <button onClick={() => setModalDeleteVehicleVisibility(false)}>Anuluj</button>
+                        <button className="delete" onClick={() => props.deleteVehicle()}>Tak, usuń</button>
+                    </div>
                 </section>
             </Modal>
             {role === 'owner' ? editDataModal() : null}

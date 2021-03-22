@@ -86,3 +86,7 @@
 .modal .vehicle-edit > div input {
     width: 194px;
 }
+
+.vehicle-info-page .modal .footer button.delete {
+    background-color: #C73535;
+}
