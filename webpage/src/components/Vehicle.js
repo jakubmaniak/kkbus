@@ -59,7 +59,7 @@ function Vehicle(props) {
     return (
         <div className="vehicle-item">
             <div className="tile half">
-                <h2>{props.name}</h2>
+                <h2>{props.brand} {props.model} {props.year}</h2>
                 <div className="vehicle-info">
                     <span>Stan pojazdu</span>
                     <span>{props.state}</span>
