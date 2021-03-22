@@ -164,7 +164,6 @@ function LoyaltyProgram() {
                         </div>
                     </section>
                 </Modal>
-                
             </div>
         );
     }

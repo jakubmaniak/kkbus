@@ -5,6 +5,18 @@
     flex-wrap: wrap;
 }
 
+.vehicle-info-page .main .button-add-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.vehicle-info-page .main .button-add-container button {
+    width: 138px;
+    height: 34px;
+}
+
 .vehicle-info-page .tile {
     margin-bottom: 30px;
     background-color: white;
