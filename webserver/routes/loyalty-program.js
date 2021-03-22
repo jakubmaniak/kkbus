@@ -108,6 +108,8 @@ router.delete('/loyalty-program/reward/:id', [role('owner')], (req, res) => {
     if (!rewards.has(id)) throw notFound;
 
     rewards.delete(id);
+
+    res.ok();
 });
 
 module.exports = router;
