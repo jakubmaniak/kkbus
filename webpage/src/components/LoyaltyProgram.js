@@ -35,43 +35,48 @@ function LoyaltyProgram() {
     }
 
     function addReward() {
-        let currentRequirePoints = parseInt(requiredPoints);
-        let currentAmount = parseInt(amount * 1);
-        let currentLimit = parseInt(limit * 1);
+        let currentRequiredPoints = parseInt(requiredPoints);
+        let currentAmount = parseInt(amount);
+        let currentLimit = parseInt(limit);
         
-        let isDataCorrect;
+        let isDataCorrect = true;
 
-        if((name !== '' && (!Number.isInteger(name))) && ((requiredPoints !== '') && (Number.isInteger(currentRequirePoints)))) {
-            if(amount === '' && limit === '') {
-                api.addReward(name, currentRequirePoints, currentAmount, currentLimit);
-                isDataCorrect = true;
-            }
-            else if(amount !== '' || limit !== '') {
-                if((Number.isInteger(currentAmount))  && (Number.isInteger(currentLimit))) {
-                    api.addReward(name, currentRequirePoints, currentAmount, currentLimit);
-                    isDataCorrect = true;  
-                }               
-            }
-            else {
-                api.addReward(name, currentRequirePoints, currentAmount, currentLimit);
-                isDataCorrect = true;
-            }
+        if (isNaN(currentRequiredPoints)) {
+            isDataCorrect = false;
         }
-        else {
-            alert('Wypełnij poprawnie dane');
+
+        if (amount === '') {
+            currentAmount = 0;
+        }
+        else if (isNaN(currentAmount)) {
+            isDataCorrect = false;
+        }
+
+        if (limit === '') {
+            currentLimit = 0;
+        }
+        else if (isNaN(currentLimit)) {
+            isDataCorrect = false;
         }
 
         if(isDataCorrect) {
-            setRewards(rewards => [...rewards, 
-                {
-                    id: rewards.length, 
-                    name: name, 
-                    requiredPoints: currentRequirePoints, 
-                    amount: currentAmount, 
-                    limit: currentLimit
-                }
-            ]);
-            setModalAddRewardVisibility(false);
+            api.addReward(name, currentRequiredPoints, currentAmount, currentLimit)
+            .then((id) => {
+                setRewards([
+                    ...rewards,
+                    {
+                        id,
+                        name,
+                        requiredPoints: currentRequiredPoints,
+                        amount: currentAmount,
+                        limit: currentLimit
+                    }
+                ]);
+                setModalAddRewardVisibility(false);
+            });
+        }
+        else {
+            alert('Wypełnij poprawnie dane');
         }
     }
 
