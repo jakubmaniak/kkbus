@@ -41,9 +41,7 @@ function LoyaltyProgram() {
         
         let isDataCorrect;
 
-        console.log(Number.isInteger(name));
-
-        if((name !== '' && (Number.isInteger(name))) && ((requiredPoints !== '') && (Number.isInteger(currentRequirePoints)))) {
+        if((name !== '' && (!Number.isInteger(name))) && ((requiredPoints !== '') && (Number.isInteger(currentRequirePoints)))) {
             if(amount === '' && limit === '') {
                 api.addReward(name, currentRequirePoints, currentAmount, currentLimit);
                 isDataCorrect = true;
@@ -58,23 +56,22 @@ function LoyaltyProgram() {
                 api.addReward(name, currentRequirePoints, currentAmount, currentLimit);
                 isDataCorrect = true;
             }
-            
-            if(isDataCorrect) {
-                setRewards(rewards => [...rewards, 
-                    {
-                        id: rewards.length, 
-                        name: name, 
-                        requiredPoints: currentRequirePoints, 
-                        amount: currentAmount, 
-                        limit: currentLimit
-                    }
-                ]);
-            }
-            //updateRewards();
-            setModalVisibility(false);
         }
         else {
             alert('Wypełnij poprawnie dane');
+        }
+
+        if(isDataCorrect) {
+            setRewards(rewards => [...rewards, 
+                {
+                    id: rewards.length, 
+                    name: name, 
+                    requiredPoints: currentRequirePoints, 
+                    amount: currentAmount, 
+                    limit: currentLimit
+                }
+            ]);
+            setModalVisibility(false);
         }
     }
 
