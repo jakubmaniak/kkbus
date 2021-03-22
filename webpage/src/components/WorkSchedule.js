@@ -16,9 +16,7 @@ function WorkSchedule() {
     let [selectedDirection, setSelectedDirection] = useState();
 
     let [drivers, setDrivers] = useState([]);
-    let [routes, setRoutes] = useState([
-        [null, 'wszystkie']
-    ]);
+    let [routes, setRoutes] = useState(['wszystkie']);
     let [ranges] = useState([
         [0, 'dzisiaj'],
         [1, 'jutro'],
@@ -39,9 +37,7 @@ function WorkSchedule() {
             .catch(api.errorAlert);
 
         api.getRoutes()
-            .then((routes) => {
-                setRoutes([[null, 'wszystkie']].concat(routes))
-            })
+            .then((routes) => setRoutes(['wszystkie'].concat(routes)))
             .catch(api.errorAlert);
     }, []);
 
@@ -53,7 +49,10 @@ function WorkSchedule() {
 
         let start = Date.now();
 
-        api.getWorkSchedule(selectedDriver[0], selectedRange[0], selectedRoute[0], selectedDirection[0])
+        let routeId = null;
+        if (typeof selectedRoute === 'object') routeId = selectedRoute.id;
+
+        api.getWorkSchedule(selectedDriver[0], selectedRange[0], routeId, selectedDirection[0])
             .then((results) => {
                 if (Date.now() - start > 500) {
                     setResults(results);
@@ -87,7 +86,10 @@ function WorkSchedule() {
                             <span>Trasy:</span>
                             <Dropdown
                                 items={routes}
-                                textProperty="1"
+                                textFormatter={(item) => (typeof item === 'string')
+                                    ? item
+                                    : `${item.a} - ${item.b}`
+                                }
                                 alwaysSelected
                                 handleChange={setSelectedRoute} />
                         </div>
