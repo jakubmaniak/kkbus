@@ -47,7 +47,7 @@ function Vehicle(props) {
             }
         }
         else {
-            alert('Wypełnij wzsystkie pola!');
+            alert('Wypełnij wszystkie pola!');
         }        
     }
 

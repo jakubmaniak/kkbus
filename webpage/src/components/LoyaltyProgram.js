@@ -40,7 +40,7 @@ function LoyaltyProgram() {
         let currentLimit = limit === '' ? 0 : parseInt(limit);
 
         if (isNaN(currentRequiredPoints) || isNaN(currentLimit) || isNaN(currentAmount)) {
-            alert('Wypełnij poprawnie dane');
+            alert('Nieprawidłowy typ danych');
             return;
         }
         
