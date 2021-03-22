@@ -68,7 +68,10 @@ function translate(schema) {
             }
 
             if (!nullable) parent.required.push(key);
-            else parent.properties[key].type = [type, 'null'];
+            else {
+                let type = parent.properties[key].type;
+                parent.properties[key].type = [type, 'null'];
+            }
         }
     };
 
