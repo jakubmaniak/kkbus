@@ -9,7 +9,10 @@ function VehicleInfo() {
     let [vehicles, setVehicles] = useState([]);
 
     useEffect(() => {
-        api.getAllVehicles().then(setVehicles);
+        api.getAllVehicles()
+        .then(setVehicles);
+
+        console.log(vehicles);
     }, []);
 
     return (
@@ -18,16 +21,18 @@ function VehicleInfo() {
                 {vehicles.map((vehicle, index) => {
                     return (
                         <Vehicle key={index}
-                            vehicleRegistration={vehicle.registration}
-                            name={vehicle.name} 
+                            plate={vehicle.plate}
+                            model={vehicle.model}
+                            brand={vehicle.brand}
+                            year={vehicle.year}
                             state={vehicle.state}
                             parking={vehicle.parking}
                             seats={vehicle.seats} 
-                            oneWayTrack={vehicle.oneWayTrack}
-                            returnTrack={vehicle.returnTrack}
+                            oneWayTrack={vehicle.ab}
+                            returnTrack={vehicle.ba}
                             vehicleMileage={vehicle.mileage}
-                            avgCombustion={vehicle.avgCombustion}
-                            currentDriver={vehicle.currentDriver}
+                            combustion={vehicle.combustion}
+                            // currentDriver={vehicle.currentDriver}
                         />
                     );
                 })}

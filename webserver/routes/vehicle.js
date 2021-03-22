@@ -15,7 +15,9 @@ const role = require('../middlewares/roles')(
 let vehicles = [
     {
         id: 1,
-        name: 'Mercedes Sprinter 2014',
+        brand: 'Mercedes',
+        model: 'Sprinter',
+        year: 2014,
         plate: 'KR 111 AB',
         state: 'Aktywny',
         parking: 'Parking nr 1',
@@ -28,7 +30,9 @@ let vehicles = [
     },
     {
         id: 2,
-        name: 'Ford Transit 2016',
+        brand: 'Ford',
+        model: 'Transit',
+        year: 2016,
         plate: 'KR 124 AO',
         state: 'Aktywny',
         parking: 'Parking nr 1',
@@ -41,7 +45,9 @@ let vehicles = [
     },
     {
         id: 3,
-        name: 'Iveco Daily 2014',
+        brand: 'Iveco',
+        model: 'Daily',
+        year: 2016,
         plate: 'KR 875 CF',
         state: 'Aktywny',
         parking: 'Parking nr 2',
@@ -54,7 +60,9 @@ let vehicles = [
     },
     {
         id: 4,
-        name: 'Fiat Ducato 2014',
+        brand: 'Fiat',
+        model: 'Ducato',
+        year: 2014,
         plate: 'KR 222 KM',
         state: 'Aktywny',
         parking: 'Parking nr 2',
@@ -67,7 +75,9 @@ let vehicles = [
     },
     {
         id: 5,
-        name: 'Scania Touring 2015',
+        brand: 'Scania',
+        model: 'Touring',
+        year: 2015,
         plate: 'KR 990 JB',
         state: 'Aktywny',
         parking: 'Parking nr 2',
@@ -114,7 +124,9 @@ router.get('/vehicle/:id', [role('driver')], (req, res) => {
 router.post('/vehicle', [
     role('owner'),
     bodySchema(`{
-        name: string,
+        brand: string,
+        model: string,
+        year: number,
         plate: string,
         mileage: number,
         seats: number,
@@ -125,7 +137,7 @@ router.post('/vehicle', [
     }`)
 ], (req, res) => {
     let id = Math.max(...vehicles.map(({id}) => id)) + 1;
-    let { name, plate, mileage, seats, state, parking, ab, ba, driver } = req.body;
+    let { brand, model, year, plate, mileage, seats, state, parking, ab, ba, driver } = req.body;
     
     for (let prop in { state, parking, ab, ba, driver }) {
         if (req.body[prop] !== undefined && req.body[prop] !== null) continue;
@@ -141,7 +153,8 @@ router.post('/vehicle', [
 
     vehicles.push({
         id,
-        name,
+        brand, model,
+        year,
         plate,
         mileage,
         seats,
@@ -158,7 +171,9 @@ router.post('/vehicle', [
 router.put('/vehicle/:id', [
     role('owner'),
     bodySchema(`{
-        name: string,
+        brand: string,
+        model: string,
+        year: number,
         plate: string,
         mileage: number,
         seats: number,
@@ -174,7 +189,7 @@ router.put('/vehicle/:id', [
     let vehicleIndex = vehicles.findIndex(({id}) => id === wantedId);
     if (vehicleIndex < 0) throw notFound;
 
-    let { name, plate, mileage, seats, state, parking, ab, ba, driver } = req.body;
+    let { brand, model, year, plate, mileage, seats, state, parking, ab, ba, driver } = req.body;
     
     for (let prop in { state, parking, ab, ba, driver }) {
         if (req.body[prop] !== undefined && req.body[prop] !== null) continue;
@@ -190,7 +205,8 @@ router.put('/vehicle/:id', [
 
     vehicles[vehicleIndex] = {
         ...vehicles[vehicleIndex],
-        name,
+        brand, model,
+        year,
         plate,
         mileage,
         seats,
