@@ -47,7 +47,6 @@ function LoyaltyProgram() {
             if(amount === '' && limit === '') {
                 api.addReward(name, currentRequirePoints, currentAmount, currentLimit);
                 isDataCorrect = true;
-                console.log('halgo');  
             }
             else if(amount !== '' || limit !== '') {
                 if((Number.isInteger(currentAmount))  && (Number.isInteger(currentLimit))) {
@@ -85,6 +84,18 @@ function LoyaltyProgram() {
         setAmount('');
         setLimit('');
         setModalVisibility(true);
+    }
+
+    function deleteReward(rewardId) {
+        let reward = rewards.find(({id}) => id === rewardId);
+        let index = rewards.indexOf(reward);     
+
+        api.deleteReward(rewardId);
+
+        rewards.splice(index, 1);
+        setRewards(rewards);
+        
+        updateRewards();
     }
 
     function clientGuestTile() {
@@ -149,6 +160,7 @@ function LoyaltyProgram() {
                                 limit={reward.limit}
                                 rewardId={i + 1}
                                 updateRewards={updateRewards}
+                                deleteReward={() =>deleteReward(reward.id)}
                             />
                         );
                     })}

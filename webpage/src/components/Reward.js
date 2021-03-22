@@ -39,6 +39,10 @@ function Reward(props) {
         }
     }
 
+    function deleteReward() {
+        props.deleteReward();
+    }
+
     return (
         <div className="reward">
             {header()}
@@ -52,7 +56,7 @@ function Reward(props) {
                     <span>{props.limit}</span> 
                     <div className="modify">
                         <button className="edit" onClick={() => setModalVisibility(true)}>Edytuj</button>
-                        <button className="delete">Usuń</button>
+                        <button className="delete" onClick={deleteReward}>Usuń</button>
                     </div>
                 </>
                 : null    
