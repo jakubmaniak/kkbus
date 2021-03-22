@@ -1,9 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+import * as api from '../api';
+
 import Dropdown from './Dropdown';
 import BookingListItem from './BookingListItem';
 import '../styles/BookingList.css';
+import { routeFormatter } from '../helpers/text-formatters';
 
 function BookingList() {
+    let [routes, setRoutes] = useState([]);
+    let [directions] = useState([
+        [0, 'obydwa'],
+        [1, 'A -> B'],
+        [-1, 'B -> A']
+    ]);
+    let [dates] = useState(['aktualna']);
+    let [hours] = useState(['aktualna']);
     let [bookinglist, setBookingList] = useState([
         {
             bookingNumber: 233706,
@@ -37,6 +49,12 @@ function BookingList() {
         }
     ]);
 
+    useEffect(() => {
+        api.getRoutes()
+            .then((routes) => setRoutes(routes))
+            .catch(api.errorAlert);
+    }, []);
+
     return (
         <div className="booking-list page">
             <div className="main">
@@ -45,21 +63,27 @@ function BookingList() {
                     <div className="row-filter-container">
                         <div className="filter-container">
                             <span>Trasa</span>
-                            <Dropdown placeholder="Kraków - Katowice"/>
+                            <Dropdown
+                                items={routes}
+                                textFormatter={routeFormatter}
+                                placeholder="Wybierz trasę" />
                         </div>
                         <div className="filter-container">
                             <span>Kierunek</span>
-                            <Dropdown placeholder="Kraków -> Katowice"/>
+                            <Dropdown 
+                                items={directions}
+                                textProperty="1"
+                                alwaysSelected />
                         </div>
                     </div>
                     <div className="row-filter-container">
                         <div className="filter-container">
                             <span>Data</span>
-                            <Dropdown placeholder="dzisiaj"/>
+                            <Dropdown items={dates} alwaysSelected />
                         </div>
                         <div className="filter-container">
                             <span>Godzina</span>
-                            <Dropdown placeholder="aktualna"/>
+                            <Dropdown items={hours} alwaysSelected />
                         </div>
                     </div>
                 </div>
