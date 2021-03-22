@@ -44,6 +44,7 @@
 .vehicle-info.route-info span:first-child {
     display: flex;
     align-items: center;
+    height: 46px;
 }
 
 .vehicle-info-page button {

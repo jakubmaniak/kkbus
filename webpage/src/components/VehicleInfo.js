@@ -80,7 +80,7 @@ function VehicleInfo() {
         <div className="vehicle-info-page page">
             <div className="main">
                 <div className="button-add-container">
-                    <button onClick={() => setModalAddVehicleVisibility(true)}>Dodaj przystanek</button>
+                    <button onClick={() => setModalAddVehicleVisibility(true)}>Dodaj pojazd</button>
                 </div>
                 {vehicles.map((vehicle) => {
                     return (
@@ -120,6 +120,7 @@ function VehicleInfo() {
                             <input placeholder="Rejestracja" onChange={fromValue(setPlate)}/>
                             <input placeholder="Ilość miejsc" onChange={fromValue(setSeats)}/>
                         </div>
+                        <Dropdown placeholder="Aktualny stan pojazdu"/>
                         <Dropdown placeholder="Miejsce stałego parkowania"/>
                         <DropdownMultiple placeholder="Dostępne trasy dla pojazdów"/>
                     </form>

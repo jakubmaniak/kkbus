@@ -69,6 +69,7 @@ function Vehicle(props) {
                             <input placeholder="Rejestracja" defaultValue={props.plate} onChange={fromValue(setPlate)}/>
                             <input placeholder="Ilość miejsc" defaultValue={props.seats} onChange={fromValue(setSeats)}/>
                         </div>
+                        <Dropdown placeholder="Aktualny stan pojazdu"/>
                         <Dropdown placeholder="Miejsce stałego parkowania"/>
                         <DropdownMultiple placeholder="Dostępne trasy dla pojazdów"/>
                     </form>
