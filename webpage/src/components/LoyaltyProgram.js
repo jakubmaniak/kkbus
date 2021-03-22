@@ -12,7 +12,7 @@ import Modal from './Modal';
 function LoyaltyProgram() {
     let history = useHistory();
     let [rewards, setRewards] = useState([]);
-    let [modalVisibility, setModalVisibility] = useState(false);
+    let [modalAddRewardVisibility, setModalAddRewardVisibility] = useState(false);
     let [name, setName] = useState('');
     let [requiredPoints, setRequiredPoints] = useState('');
     let [amount, setAmount] = useState('');
@@ -71,7 +71,7 @@ function LoyaltyProgram() {
                     limit: currentLimit
                 }
             ]);
-            setModalVisibility(false);
+            setModalAddRewardVisibility(false);
         }
     }
 
@@ -80,7 +80,7 @@ function LoyaltyProgram() {
         setRequiredPoints('');
         setAmount('');
         setLimit('');
-        setModalVisibility(true);
+        setModalAddRewardVisibility(true);
     }
 
     function deleteReward(rewardId) {
@@ -105,7 +105,7 @@ function LoyaltyProgram() {
                     </div>
                     {rewards.map((reward, i) => {
                         return (
-                            <Reward key={i}
+                            <Reward key={reward.id}
                                 role={role}
                                 name={reward.name}
                                 requiredPoints={reward.requiredPoints}
@@ -149,7 +149,7 @@ function LoyaltyProgram() {
                     </div>
                     {rewards.map((reward, i) => {
                         return (
-                            <Reward key={i}
+                            <Reward key={reward.id}
                                 role={role}
                                 name={reward.name}
                                 requiredPoints={reward.requiredPoints}
@@ -162,7 +162,7 @@ function LoyaltyProgram() {
                         );
                     })}
                 </div>
-                <Modal visible={modalVisibility}>
+                <Modal visible={modalAddRewardVisibility}>
                     <header>Dodawanie nagrody</header>
                     <section className="content">
                         <form>
@@ -174,11 +174,12 @@ function LoyaltyProgram() {
                     </section>
                     <section className="footer">
                         <div>
-                            <button onClick={() => setModalVisibility(false)}>Anuluj</button>
+                            <button onClick={() => setModalAddRewardVisibility(false)}>Anuluj</button>
                             <button onClick={addReward}>Zapisz</button>
                         </div>
                     </section>
                 </Modal>
+                
             </div>
         );
     }
