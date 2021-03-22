@@ -9,18 +9,21 @@ function VehicleInfo() {
     let [vehicles, setVehicles] = useState([]);
 
     useEffect(() => {
+        updateVehicle();
+    }, []);
+
+    function updateVehicle() {
         api.getAllVehicles()
         .then(setVehicles);
-
-        console.log(vehicles);
-    }, []);
+    }
 
     return (
         <div className="vehicle-info-page page">
             <div className="main">
-                {vehicles.map((vehicle, index) => {
+                {vehicles.map((vehicle) => {
                     return (
-                        <Vehicle key={index}
+                        <Vehicle key={vehicle.id}
+                            vehicleId={vehicle.id}
                             plate={vehicle.plate}
                             model={vehicle.model}
                             brand={vehicle.brand}
@@ -30,8 +33,9 @@ function VehicleInfo() {
                             seats={vehicle.seats} 
                             oneWayTrack={vehicle.ab}
                             returnTrack={vehicle.ba}
-                            vehicleMileage={vehicle.mileage}
+                            mileage={vehicle.mileage}
                             combustion={vehicle.combustion}
+                            updateVehicle={updateVehicle}
                             // currentDriver={vehicle.currentDriver}
                         />
                     );
