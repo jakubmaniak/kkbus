@@ -51,7 +51,6 @@ function Vehicle(props) {
         }        
     }
 
-
     function editDataModal() {
         return (
             <Modal visible={modalEditVehicleVisibility}>
@@ -122,7 +121,7 @@ function Vehicle(props) {
                         <div className="vehicle-edit-button">
                             <button onClick={() => {setModalEditVehicleVisibility(true)}}>Edytuj dane</button>
                             <button onClick={() => {setModalChangeDriverVisibility(true)}}>Zmień kierowcę</button>
-                            <button className="delete">Usuń</button>
+                            <button className="delete" onClick={() => props.deleteVehicle(props.vehicleId)}>Usuń</button>
                         </div>   
                     : role === 'office' ?
                     <div className="vehicle-edit-button">

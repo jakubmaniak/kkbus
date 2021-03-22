@@ -17,6 +17,18 @@ function VehicleInfo() {
         .then(setVehicles);
     }
 
+    function deleteVehicle(vehicleId) {
+        let vehicle = vehicles.find(({id}) => id === vehicleId);
+        let index = vehicles.indexOf(vehicle);  
+
+        api.deleteVehicle(vehicleId);
+
+        vehicles.splice(index, 1);
+        setVehicles(vehicles);
+        
+        updateVehicle();
+    }
+
     return (
         <div className="vehicle-info-page page">
             <div className="main">
@@ -36,6 +48,7 @@ function VehicleInfo() {
                             mileage={vehicle.mileage}
                             combustion={vehicle.combustion}
                             updateVehicle={updateVehicle}
+                            deleteVehicle={() => deleteVehicle(vehicle.id)}
                             // currentDriver={vehicle.currentDriver}
                         />
                     );

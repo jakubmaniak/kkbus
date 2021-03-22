@@ -226,7 +226,7 @@ router.delete('/vehicle/:id', [role('owner')], (req, res) => {
     let vehicleIndex = vehicles.findIndex(({id}) => id === wantedId);
     if (vehicleIndex < 0) throw notFound;
 
-    vehicles.splice(vehicleIndex);
+    vehicles.splice(vehicleIndex, 1);
 
     res.ok();
 });
