@@ -3,6 +3,7 @@ import '../styles/Dropdown.css';
 
 function Dropdown(props) {
     let [selectedItem, setSelectedItem] = useState('');
+    let [selectedIndex, setSelectedIndex] = useState(0);
     let [expanded, setExpanded] = useState(false);
     let [placeholderVisible, setPlaceholderVisible] = useState(false);
 
@@ -33,15 +34,16 @@ function Dropdown(props) {
 
         setPlaceholderVisible(false);
         setSelectedItem(item);
+        setSelectedIndex(index);
         setExpanded(false);
         
         if (typeof props.handleChange === 'function')
             props.handleChange(item);
     }
 
-    function getItemText(item) {
+    function getItemText(item, index) {
         if ('textFormatter' in props) {
-            return props.textFormatter(item);
+            return props.textFormatter(item, index);
         }
         if ('textProperty' in props && typeof selectedItem === 'object') {
             return item[props.textProperty];
@@ -57,7 +59,9 @@ function Dropdown(props) {
         <div className={(expanded && getLength()) ? 'dropdown expanded' : 'dropdown'}>
             <div className="dropdown-container" onClick={() => setExpanded(!expanded && getLength())}>
                 <div className={placeholderVisible ? 'dropdown-content placeholder' : 'dropdown-content'}>{
-                    placeholderVisible ? props.placeholder : getItemText(selectedItem)
+                    placeholderVisible
+                        ? props.placeholder
+                        : getItemText(selectedItem, selectedIndex)
                 }</div>
                 <button className="dropdown-button">&gt;</button>
             </div>
@@ -66,7 +70,7 @@ function Dropdown(props) {
                     {props.items.map((item, i) => <div
                         key={i}
                         className="dropdown-list-item"
-                        onClick={() => selectItem(i)}>{getItemText(item)}</div>
+                        onClick={() => selectItem(i)}>{getItemText(item, i)}</div>
                     )}
                 </div>
                 : null
