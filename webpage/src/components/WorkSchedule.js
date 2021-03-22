@@ -54,7 +54,7 @@ function WorkSchedule() {
 
         api.getWorkSchedule(selectedDriver[0], selectedRange[0], routeId, selectedDirection[0])
             .then((results) => {
-                if (Date.now() - start > 500) {
+                if (Date.now() - start > 250) {
                     setResults(results);
                     setLoading(false);
                 }

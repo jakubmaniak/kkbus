@@ -45,7 +45,7 @@ function Dropdown(props) {
         if ('textFormatter' in props) {
             return props.textFormatter(item, index);
         }
-        if ('textProperty' in props && typeof selectedItem === 'object') {
+        if ('textProperty' in props && typeof item === 'object') {
             return item[props.textProperty];
         }
         if (typeof item !== 'object' && typeof item !== 'function') {
