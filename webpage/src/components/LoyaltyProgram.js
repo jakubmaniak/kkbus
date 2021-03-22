@@ -36,48 +36,28 @@ function LoyaltyProgram() {
 
     function addReward() {
         let currentRequiredPoints = parseInt(requiredPoints);
-        let currentAmount = parseInt(amount);
-        let currentLimit = parseInt(limit);
-        
-        let isDataCorrect = true;
+        let currentAmount = amount === '' ? 0 : parseInt(amount);
+        let currentLimit = limit === '' ? 0 : parseInt(limit);
 
-        if (isNaN(currentRequiredPoints)) {
-            isDataCorrect = false;
-        }
-
-        if (amount === '') {
-            currentAmount = 0;
-        }
-        else if (isNaN(currentAmount)) {
-            isDataCorrect = false;
-        }
-
-        if (limit === '') {
-            currentLimit = 0;
-        }
-        else if (isNaN(currentLimit)) {
-            isDataCorrect = false;
-        }
-
-        if(isDataCorrect) {
-            api.addReward(name, currentRequiredPoints, currentAmount, currentLimit)
-            .then((id) => {
-                setRewards([
-                    ...rewards,
-                    {
-                        id,
-                        name,
-                        requiredPoints: currentRequiredPoints,
-                        amount: currentAmount,
-                        limit: currentLimit
-                    }
-                ]);
-                setModalAddRewardVisibility(false);
-            });
-        }
-        else {
+        if (isNaN(currentRequiredPoints) || isNaN(currentLimit) || isNaN(currentAmount)) {
             alert('Wypełnij poprawnie dane');
+            return;
         }
+        
+        api.addReward(name, currentRequiredPoints, currentAmount, currentLimit)
+        .then((id) => {
+            setRewards([
+                ...rewards,
+                {
+                    id,
+                    name,
+                    requiredPoints: currentRequiredPoints,
+                    amount: currentAmount,
+                    limit: currentLimit
+                }
+            ]);
+            setModalAddRewardVisibility(false);
+        });
     }
 
     function showModal() {
