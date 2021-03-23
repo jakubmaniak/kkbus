@@ -1,7 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import '../styles/Header.css';
+import menuIcon from '../static/menu.svg';
+import menuActiveIcon from '../static/menu_active.svg';
 
 import * as api from '../api';
 import HeaderItem from './HeaderItem';
@@ -9,6 +11,7 @@ import UserContext from '../contexts/User';
 
 function Header() {
     let [name, setName] = useState('');
+    let [menuExpanded, setMenuExpanded] = useState(true);
 
     let { user, setUser } = useContext(UserContext);
     let { role, loggedIn } = user;
@@ -28,6 +31,13 @@ function Header() {
                 setName(data.firstName + ' ' + data.lastName);
             });
         }
+
+        if (menuExpanded && window.innerWidth <= 1780) {
+            setMenuExpanded(false);
+        }
+        else if (menuExpanded && window.innerWidth > 1780) {
+            setMenuExpanded(true);
+        }
     }, []);
 
     function signout() {
@@ -40,7 +50,7 @@ function Header() {
 
     function ownerNav() {
         return (
-            <nav className="side">
+            <nav className={ menuExpanded ? 'side' : 'side collapsed' }>
                 <div className="nav-action">
                     <HeaderItem path="/">Grafik kursów</HeaderItem>
                     <HeaderItem path="/grafik-pracy">Grafik pracy</HeaderItem>
@@ -59,7 +69,7 @@ function Header() {
 
     function officeNav() {
         return (
-            <nav className="side">
+            <nav className={ menuExpanded ? 'side' : 'side collapsed' }>
                 <div className="nav-action">
                     <HeaderItem path="/">Grafik kursów</HeaderItem>
                     <HeaderItem path="/grafik-pracy">Grafik pracy</HeaderItem>
@@ -104,10 +114,28 @@ function Header() {
         );
     }
 
+    function toggleMenu() {
+        setMenuExpanded(!menuExpanded);
+    }
+
+    window.addEventListener('resize', () => {
+        if (menuExpanded && window.innerWidth <= 1780) {
+            setMenuExpanded(false);
+        }
+        else if (menuExpanded && window.innerWidth > 1780) {
+            setMenuExpanded(true);
+        }
+    });
 
     return (
         <div className="header-bar">
             <header>
+                {
+                    (role === 'owner' || role === 'office') &&
+                    <button className={'menu-button' + (menuExpanded ? ' active' : '')}
+                        style={{backgroundImage: `url(${menuExpanded ? menuActiveIcon : menuIcon})` }}
+                        onClick={toggleMenu}></button>
+                }
                 <div className="header-container">
                     <h1 className="logo">
                         <span>KK</span>
