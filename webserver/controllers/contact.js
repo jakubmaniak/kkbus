@@ -1,5 +1,5 @@
 let db = require('../configs/db');
-let { getFirst } = require('../helpers/query-utils');
+let { getFirst, deleteProps } = require('../helpers/query-utils');
 
 db.query(`CREATE TABLE IF NOT EXISTS contact (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -24,6 +24,7 @@ db.query(`CREATE TABLE IF NOT EXISTS contact (
 
 module.exports.findContact = () => {
     return db.query('SELECT * FROM contact LIMIT 1')
+        .then(deleteProps('id'))
         .then(getFirst);
 };
 
