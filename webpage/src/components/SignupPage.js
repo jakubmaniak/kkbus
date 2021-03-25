@@ -40,7 +40,7 @@ function SignupPage() {
                     <form onSubmit={handleSubmit}>
                         <input type="text" placeholder="Adres email" 
                             value={email} onChange={useValue(setEmail)} />
-                        <div>
+                        <div className="row">
                             <input type="text" placeholder="Imię" 
                                 value={firstname} onChange={useValue(setFirstName)} />
                             <input type="text" placeholder="Nazwisko" 

@@ -92,7 +92,7 @@ form {
     font-weight: 500;
 }
 
-form div {
+form .row {
     display: flex;
     justify-content: space-between;
 }
