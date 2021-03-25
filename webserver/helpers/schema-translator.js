@@ -67,11 +67,8 @@ function translate(schema) {
                 parent.properties[key] = { type };
             }
 
-            if (!nullable) parent.required.push(key);
-            else {
-                let type = parent.properties[key].type;
-                parent.properties[key].type = [type, 'null'];
-            }
+            if (nullable) parent.properties[key].nullable = true;
+            else parent.required.push(key);
         }
     };
 

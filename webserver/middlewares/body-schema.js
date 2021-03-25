@@ -14,16 +14,13 @@ module.exports = (schema) => {
 
         if (valid) {
             req.body = nullize(req.body, schemaObject);
-        }
-    
-        /*console.dir(schemaObject, { depth: 8 });
-        console.log({ valid });*/
-
-        if (valid) {
             next();
         }
         else {
             throw invalidRequest;
         }
+    
+        /*console.dir(schemaObject, { depth: 8 });
+        console.log({ valid });*/
     };
 };
