@@ -19,8 +19,11 @@ function Clients() {
     let [clients, setClients] = useState([]);
 
     function handleQueryChange(ev) {
-        let searchQuery = ev.target.value;
-        setSearchQuery(searchQuery);
+        setSearchQuery(ev.target.value);
+    }
+
+    function handleSearchSubmit(ev) {
+        ev.preventDefault();
 
         api.getClients(selectedSearchParam[0], searchQuery)
             .then(setClients)
@@ -33,7 +36,7 @@ function Clients() {
                 <div className="tile half tile-container">
                     <div className="tile">
                         <h2>Szukaj klientów</h2>
-                        <form className="client-find">
+                        <form className="client-find" onSubmitCapture={handleSearchSubmit}>
                             <input placeholder="Szukana fraza" value={searchQuery}
                                 onChange={handleQueryChange} />
                             <Dropdown
@@ -44,9 +47,11 @@ function Clients() {
                             <button className="submit">Szukaj</button>
                         </form>
                     </div>
-                    { clients.map((client) => {
+                    {(clients.length == 0) ? <p className="no-results" style={{marginTop: '20px'}}>Brak wyników</p> : null}
+                    { clients.map((client, i) => {
                         return (
                             <Client
+                                key={i}
                                 name={client.firstName}
                                 surname={client.lastName}
                                 login={client.login}
