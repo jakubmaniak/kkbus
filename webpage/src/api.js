@@ -135,6 +135,15 @@ export async function deleteReward(rewardId) {
 }
 
 
+export async function getContact() {
+    return sendGet('/contact');
+}
+
+export async function updateContact(address, zipCode, email, phoneNumber, faxNumber = null) {
+    return sendPut('/contact', { address, zipCode, email, phoneNumber, faxNumber });
+}
+
+
 async function sendGet(path) {
     let res = await axios.get(root + path)
     .catch((err) => {
