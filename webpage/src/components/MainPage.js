@@ -5,94 +5,51 @@ import * as api from '../api';
 
 export default function MainPage() {
     let [tracks, setTracks] = useState([]);
-    let [a, setA] = useState([]);
 
+    
     useEffect(() => {
         api.getAllRoutes()
-        .then((results) => {
-            setTracks(results);
+        .then((routes) => {
+            setTracks(
+                routes
+                .map(({id, a, b}) => [
+                    { ...a, id: id + 'a', routeId: id, arrivalLocation: b.departureLocation },
+                    { ...b, id: id + 'b', routeId: id, arrivalLocation: a.departureLocation }
+                ])
+                .flat()
+            );
         });
     }, []);
-
-
-    function stopsPrice(stops) {
-        let arr=[];
-
-        for(let i = 0; i < stops.length - 1; i++) {
-            for(let j = 0; j < stops.length - 1; j++) {
-                if(stops[j] !== stops[i + 1] && stops[j] < stops[i + 1]) {
-                    console.log(stops[j], stops[i + 1]);
-                    arr.push((stops[j] - stops[i + 1]));
-                }
-            }
-        }
-
-        setA(arr);
-    }
+    
 
     return (
         <div className="main-page">
             <div className="main">
-                {tracks.map((track, i) => {
-                    return (
-                        <div key={i}>
+                {tracks.map((track, i) => (
                         <Track
-                            key={track.id + 'a'}
-                            startingStop={track.a.departureLocation}
-                            finalStop={track.b.departureLocation}
-                            busStops={track.a.stops.map((stop, i) => {
-                                return (
-                                    <span className="route" key={i}>
-                                        <span>{stop}</span>
-                                        {i < track.a.stops.length - 1 ? <span> - </span> : null}
-                                    </span>
-                                );
-                            })}
-                            hours={track.a.hours.map((hour, i) => {
-                                return (
-                                    <div key={i}>{hour}</div>
-                                );
-                            })}
-                            prices={track.a.prices.map((price, i) => {
-                                    return (
-                                        <div className="bus-stop-price" key={i}>
-                                            <span className="bus-stop"> - </span>
-                                            <span className="price">{price}zł</span>
-                                            <span className="price">{price - price * 0.3}zł</span>
-                                        </div>
-                                    );
-                            })}
+                            key={track.id}
+                            startingStop={track.departureLocation}
+                            finalStop={track.departureLocation}
+                            busStops={track.stops.map((stop, i) => (
+                                <span className="route" key={i}>
+                                    <span>{stop}</span>
+                                    {i < track.stops.length - 1 ? <span> - </span> : null}
+                                </span>
+                            ))}
+                            hours={track.hours.map((hour, i) => (
+                                <div key={i}>{hour}</div>
+                            ))}
+                            prices={[...track.stops.keys()].map((v, i, a) => a.slice(i + 1, a.length).map(w => [v, w]))
+                                .flat()
+                                .map(([i, j]) => (     
+                                    <div className="bus-stop-price" key={i + ' ' + j}>
+                                        <span className="bus-stop">{track.stops[i] + '-' + track.stops[j]}</span>
+                                        <span className="price">{track.prices.slice(i, j).reduce((a, b) => a + b)} zł</span>
+                                        <span className="price">{track.prices.slice(i, j).reduce((a, b) => Math.floor((a + b) * 0.7))}zł</span>
+                                    </div>
+                                ))} 
                         />
-                        <Track
-                            key={track.id + 'b'}
-                            startingStop={track.b.departureLocation}
-                            finalStop={track.a.departureLocation}
-                            busStops={track.b.stops.map((stop, i) => {
-                                return (
-                                    <span className="route" key={i}>
-                                        <span>{stop}</span>
-                                        {i < track.b.stops.length - 1 ? <span> - </span> : null}
-                                    </span>
-                                );
-                            })}
-                            hours={track.b.hours.map((hour, i) => {
-                                return (
-                                    <div key={i}>{hour}</div>
-                                );
-                            })}
-                            prices={track.b.prices.map((price, i) => {
-                                    return (
-                                        <div className="bus-stop-price" key={i}>
-                                            <span className="bus-stop"> - </span>
-                                            <span className="price">{price}zł</span>
-                                            <span className="price">{price - price * 0.3}zł</span>
-                                        </div>
-                                    );
-                            })}
-                        />
-                        </div>
-                    );
-                })}
+                ))}
             </div>
         </div>
     )
