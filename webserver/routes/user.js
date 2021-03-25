@@ -19,12 +19,12 @@ const userController = require('../controllers/user');
 
 router.post('/user/login', [
     bodySchema('{login: string, password: string}')
-], async (req, res) => {
+], async (req, res, next) => {
     //NOTE: login = login / e-mail
     let { login, password } = req.body;
 
     let user = await userController.findUserByCredentials(login, login, password);
-    if (!user) throw badCredentials;
+    if (!user) return next(badCredentials);
     
     //NOTE: true login
     login = user.login;
@@ -51,13 +51,13 @@ router.post('/user/register', [
         let date = new Date(dateString);
 
         if (isNaN(date) || date.getFullYear() < 1900 || new Date() - date < 0)
-            throw invalidRequest;
+            return next(invalidRequest);
     }
     else if (/^[ -+\/0-9]+$/.test(phoneNumber)) { }
-    else throw invalidRequest;
+    else return next(invalidRequest);
     
 
-    if (await userController.findUserByEmail(email)) throw emailAlreadyTaken;
+    if (await userController.findUserByEmail(email)) return next(emailAlreadyTaken);
 
     let offset = 0;
     let phoneNumberPart = parseInt(phoneNumber.slice(-4));

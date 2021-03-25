@@ -65,8 +65,9 @@ function Track(props) {
 
     return (
         <>
-            { role === 'client' && clientModal()
-            ||role === 'owner'  && ownerModal()
+            { role === 'client' ? clientModal()
+            : role === 'owner'  ? ownerModal()
+            : null
             }
             <div className="tile half tile-container">
                 <div className="tile">
