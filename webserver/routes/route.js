@@ -30,8 +30,8 @@ router.post('/route', [
 ], (req, res) => {
     let { a, b, stops, prices } = req.body;
 
-    if (stops == undefined || stops == null) stops = [];
-    if (prices == undefined || prices == null) prices = [];
+    if (stops == null) stops = [];
+    if (prices == null) prices = [];
 
     let id = Math.max(...routes.keys()) + 1;
 
@@ -66,8 +66,8 @@ router.put('/route/:id', [
 
     let { a, b, stops, prices } = req.body;
 
-    if (stops == undefined || stops == null) stops = [];
-    if (prices == undefined || prices == null) prices = [];
+    if (stops == null) stops = [];
+    if (prices == null) prices = [];
 
     routes.set(routeId, {
         id: routeId,

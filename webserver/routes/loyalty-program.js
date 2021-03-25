@@ -61,7 +61,7 @@ router.get('/loyalty-program/reward/:id', [role('client')], (req, res) => {
 
 router.post('/loyalty-program/reward', [
     role('owner'),
-    bodySchema('{name: string, requiredPoints: number, amount: number, limit: number}')
+    bodySchema('{name: string, requiredPoints: number, amount?: number, limit?: number}')
 ], (req, res) => {
     let { name, requiredPoints, amount, limit } = req.body;
 
@@ -81,19 +81,18 @@ router.put('/loyalty-program/reward/:id', [
     bodySchema('{name: string, requiredPoints: number, amount: number, limit: number}')
 ], (req, res) => {
     let id = parseInt(req.params.id);
+    
     if (isNaN(id)) throw invalidRequest;
-
     if (!rewards.has(id)) throw notFound;
 
     let { name, requiredPoints, amount, limit } = req.body;
-    let reward = rewards.get(id);
 
     let updatedReward = {
         id,
-        name: (name !== undefined ? name : reward.name),
-        requiredPoints: (requiredPoints !== undefined ? requiredPoints : reward.requiredPoints),
-        amount: (amount !== undefined ? amount : reward.amount),
-        limit: (limit !== undefined ? limit : reward.limit)
+        name,
+        requiredPoints,
+        amount,
+        limit
     };
 
     rewards.set(id, updatedReward);

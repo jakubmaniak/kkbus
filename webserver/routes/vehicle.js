@@ -138,18 +138,6 @@ router.post('/vehicle', [
 ], (req, res) => {
     let id = Math.max(...vehicles.map(({id}) => id)) + 1;
     let { brand, model, year, plate, mileage, seats, state, parking, ab, ba, driver } = req.body;
-    
-    for (let prop in { state, parking, ab, ba, driver }) {
-        if (req.body[prop] != undefined && req.body[prop] != null) continue;
-        
-        switch (prop) {
-            case 'state': state = 'Aktywny'; break;
-            case 'parking': parking = null; break;
-            case 'ab': ab = null; break;
-            case 'ba': ba = null; break;
-            case 'driver': driver = null; break;
-        }
-    }
 
     vehicles.push({
         id,
@@ -190,18 +178,6 @@ router.put('/vehicle/:id', [
     if (vehicleIndex < 0) throw notFound;
 
     let { brand, model, year, plate, mileage, seats, state, parking, ab, ba, driver } = req.body;
-    
-    for (let prop in { state, parking, ab, ba, driver }) {
-        if (req.body[prop] != undefined && req.body[prop] != null) continue;
-        
-        switch (prop) {
-            case 'state': state = 'Aktywny'; break;
-            case 'parking': parking = null; break;
-            case 'ab': ab = null; break;
-            case 'ba': ba = null; break;
-            case 'driver': driver = null; break;
-        }
-    }
 
     vehicles[vehicleIndex] = {
         ...vehicles[vehicleIndex],

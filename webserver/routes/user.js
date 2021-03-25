@@ -5,7 +5,6 @@ const router = express.Router();
 const env = require('../helpers/env');
 const { invalidRequest, emailAlreadyTaken, badCredentials } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
-const sessionMiddleware = require('../middlewares/session');
 const roles = new Map([
     [0, 'guest'],
     [1, 'client'],
