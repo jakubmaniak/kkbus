@@ -68,13 +68,13 @@ router.post('/route', [
             departureLocation: string,
             hours?: string[],
             stops?: string[],
-            prices?: string[]
+            prices?: number[]
         },
         b: {
             departureLocation: string,
             hours?: string[],
             stops?: string[],
-            prices?: string[]
+            prices?: number[]
         }
     }`)
 ], (req, res) => {
@@ -113,13 +113,13 @@ router.put('/route/:id', [
             departureLocation: string,
             hours?: string[],
             stops?: string[],
-            prices?: string[]
+            prices?: number[]
         },
         b: {
             departureLocation: string,
             hours?: string[],
             stops?: string[],
-            prices?: string[]
+            prices?: number[]
         }
     }`)
 ], (req, res) => {
