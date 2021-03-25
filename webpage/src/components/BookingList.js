@@ -50,7 +50,7 @@ function BookingList() {
     ]);
 
     useEffect(() => {
-        api.getRoutes()
+        api.getAllRoutes()
             .then((routes) => setRoutes(routes))
             .catch(api.errorAlert);
     }, []);

@@ -80,10 +80,6 @@ export async function getDrivers() {
     return sendGet('/drivers');
 }
 
-export async function getRoutes() {
-    return sendGet('/routes');
-}
-
 export async function getWorkSchedule(driverId, range = 0, routeId = null, direction = 0) {
     return sendPost('/work-schedule', { driverId, range, routeId, direction } );
 }

@@ -8,12 +8,34 @@ import '../styles/TrackReport.css';
 
 function TrackReport() {
     let [routes, setRoutes] = useState([]);
+    let [stops, setStops] = useState([]);
 
     useEffect(() => {
-        api.getRoutes()
-            .then((routes) => setRoutes(routes))
+        api.getAllRoutes()
+            .then((routes) => {
+                let r = [];
+                for (let route of routes) {
+                    r.push({
+                        routeId: route.id,
+                        direction: 'a',
+                        name: route.a.departureLocation + ' - ' + route.b.departureLocation,
+                        stops: route.a.stops
+                    });
+                    r.push({
+                        routeId: route.id,
+                        direction: 'b',
+                        name: route.b.departureLocation + ' - ' + route.a.departureLocation,
+                        stops: route.b.stops
+                    });
+                }
+                setRoutes(r);
+            })
             .catch(api.errorAlert);
     }, []);
+
+    function handleRouteChange(route) {
+        setStops(route.stops);
+    }
 
     return (
         <div className="track-report page">
@@ -23,9 +45,12 @@ function TrackReport() {
                     <form className="report">
                         <Dropdown
                             items={routes}
-                            textFormatter={routeFormatter}
-                            placeholder="Wybierz trasę" />
-                        <Dropdown placeholder="Przystanek" />
+                            textProperty="name"
+                            placeholder="Wybierz trasę"
+                            handleChange={handleRouteChange} />
+                        <Dropdown
+                            items={stops}
+                            placeholder="Wybierz przystanek" />
                         <input placeholder="Liczba osób" />
                         <button className="submit">Zapis raport</button>
                     </form>

@@ -37,7 +37,7 @@ function WorkSchedule() {
             .then(setDrivers)
             .catch(api.errorAlert);
 
-        api.getRoutes()
+        api.getAllRoutes()
             .then((routes) => setRoutes(['wszystkie'].concat(routes)))
             .catch(api.errorAlert);
     }, []);
