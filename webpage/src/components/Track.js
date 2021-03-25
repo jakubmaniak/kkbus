@@ -64,54 +64,54 @@ function Track(props) {
     }
 
     return (
-        <div className="tile half tile-container">
-            <div className="tile">
-                <div className="track-header">
-                    <div className="track-info">
-                        <TrackDirection 
-                            startingStop={props.startingStop}
-                            finalStop={props.finalStop}
-                        />
-                        {props.busStops}
-                    </div>
+        <>
+            { role === 'client' && clientModal()
+            ||role === 'owner'  && ownerModal()
+            }
+            <div className="tile half tile-container">
+                <div className="tile">
+                    <div className="track-header">
+                        <div className="track-info">
+                            <TrackDirection 
+                                startingStop={props.startingStop}
+                                finalStop={props.finalStop}
+                            />
+                            {props.busStops}
+                        </div>
 
-                    <div className="book">
-                    {(role === 'owner') ? 
-                        <button className="btn-book" onClick={showModal}>Edytuj</button>
-                    : (role === 'client') ?
-                        <button className="btn-book" onClick={showModal}>Rezerwuj</button>
-                    : (role === 'guest') ?
-                        <button className="btn-book" onClick={() => history.push('/logowanie')}>Rezerwuj</button>
-                    : null}
+                        <div className="book">
+                        {(role === 'owner') ? 
+                            <button className="btn-book" onClick={showModal}>Edytuj</button>
+                        : (role === 'client') ?
+                            <button className="btn-book" onClick={showModal}>Rezerwuj</button>
+                        : (role === 'guest') ?
+                            <button className="btn-book" onClick={() => history.push('/logowanie')}>Rezerwuj</button>
+                        : null}
+                        </div>
+                    </div>
+                    <div className="hours">
+                        {props.hours}
                     </div>
                 </div>
-                <div className="hours">
-                    {props.hours}
+                <div className="tile tile-container inside">
+                    <div className="tile-price">
+                        <div className="price-list">
+                            <div className="header">
+                                <span>Normalny</span>
+                                <span>Ulgowy*</span>
+                            </div>
+                                {props.prices}
+                        </div>
+                    </div>
+                        <div className="tile-price">
+                            <div className="note">
+                                <p>*uczniowie i studenci</p>
+                                <p>dzieci do lat 5: przejazd bezpłatny</p>
+                            </div>
+                        </div>
                 </div>
             </div>
-            <div className="tile tile-container inside">
-                <div className="tile-price">
-                    <div className="price-list">
-                        <div className="header">
-                            <span>Normalny</span>
-                            <span>Ulgowy*</span>
-                        </div>
-                            {props.prices}
-                    </div>
-                </div>
-                    <div className="tile-price">
-                        <div className="note">
-                            <p>*uczniowie i studenci</p>
-                            <p>dzieci do lat 5: przejazd bezpłatny</p>
-                        </div>
-                    </div>
-             </div>
-             {role === 'client' ? 
-                clientModal()
-                : role === 'owner' ? 
-                ownerModal()
-                : null}
-        </div>
+        </>
     );
 }
 
