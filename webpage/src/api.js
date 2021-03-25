@@ -36,6 +36,7 @@ export async function getUserInfo() {
     return sendGet('/user/info');
 }
 
+
 export async function getAllRoutes() {
     return sendGet('/routes');
 }
@@ -68,6 +69,7 @@ export async function deleteRoute(routeId) {
     return sendDelete('/route/' + routeId);
 }
 
+
 export async function getAllVehicles() {
     return sendGet('/vehicles');
 }
@@ -92,13 +94,16 @@ export async function getFuelUsage(vehicleId) {
     return sendGet(`/vehicle/${vehicleId}/fuel-usage`);
 }
 
+
 export async function getDrivers() {
     return sendGet('/drivers');
 }
 
+
 export async function getWorkSchedule(driverId, range = 0, routeId = null, direction = 0) {
     return sendPost('/work-schedule', { driverId, range, routeId, direction } );
 }
+
 
 export async function getLoyaltyProgram() {
     return sendGet('/loyalty-program');

@@ -7,28 +7,28 @@ import Dropdown from './Dropdown';
 import '../styles/TrackReport.css';
 
 function TrackReport() {
-    let [routes, setRoutes] = useState([]);
+    let [courses, setCourses] = useState([]);
     let [stops, setStops] = useState([]);
 
     useEffect(() => {
         api.getAllRoutes()
             .then((routes) => {
-                let r = [];
+                courses = [];
                 for (let route of routes) {
-                    r.push({
+                    courses.push({
                         routeId: route.id,
                         direction: 'a',
                         name: route.a.departureLocation + ' - ' + route.b.departureLocation,
                         stops: route.a.stops
                     });
-                    r.push({
+                    courses.push({
                         routeId: route.id,
                         direction: 'b',
                         name: route.b.departureLocation + ' - ' + route.a.departureLocation,
                         stops: route.b.stops
                     });
                 }
-                setRoutes(r);
+                setCourses(courses);
             })
             .catch(api.errorAlert);
     }, []);
@@ -44,7 +44,7 @@ function TrackReport() {
                     <h2>Raport z kursu</h2>
                     <form className="report">
                         <Dropdown
-                            items={routes}
+                            items={courses}
                             textProperty="name"
                             placeholder="Wybierz trasę"
                             handleChange={handleRouteChange} />
