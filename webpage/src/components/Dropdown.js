@@ -63,7 +63,7 @@ function Dropdown(props) {
                         ? props.placeholder
                         : getItemText(selectedItem, selectedIndex)
                 }</div>
-                <button className="dropdown-button">&gt;</button>
+                <button type="button" className="dropdown-button">&gt;</button>
             </div>
             { (expanded && props.items instanceof Array) ?
                 <div className="dropdown-list">
