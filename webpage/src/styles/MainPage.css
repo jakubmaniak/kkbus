@@ -165,11 +165,13 @@
 .header span {
     width: 50%;
     text-align: center;
+    font-size:  14px;
 }
 
 .bus-stop-price {
     display: flex;
     width: 100%;
+    font-size:  14px;
 }
 
 .bus-stop-price + .bus-stop-price {
