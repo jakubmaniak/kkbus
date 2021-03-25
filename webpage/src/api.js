@@ -95,6 +95,11 @@ export async function getFuelUsage(vehicleId) {
 }
 
 
+export async function getClients(param, query) {
+    return sendGet(`/clients?${param}=${query}`);
+}
+
+
 export async function getDrivers() {
     return sendGet('/drivers');
 }
