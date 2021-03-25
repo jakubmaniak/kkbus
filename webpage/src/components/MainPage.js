@@ -29,7 +29,7 @@ export default function MainPage() {
                         <Track
                             key={track.id}
                             startingStop={track.departureLocation}
-                            finalStop={track.departureLocation}
+                            finalStop={track.arrivalLocation}
                             busStops={track.stops.map((stop, i) => (
                                 <span className="route" key={i}>
                                     <span>{stop}</span>
@@ -47,7 +47,9 @@ export default function MainPage() {
                                         <span className="price">{track.prices.slice(i, j).reduce((a, b) => a + b)} zł</span>
                                         <span className="price">{track.prices.slice(i, j).reduce((a, b) => Math.floor((a + b) * 0.7))}zł</span>
                                     </div>
-                                ))} 
+                                ))}
+                            allStops={track.stops.reduce((a, b, i) => a.concat([b]), []).slice(1).join(', ')}
+                            stopsPrices={track.stops.reduce((a, b, i) => a.concat([track.prices[i - 1], b]), []).slice(1).join(', ')}
                         />
                 ))}
             </div>

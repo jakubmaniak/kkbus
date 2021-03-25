@@ -5,10 +5,16 @@ import UserContext from '../contexts/User';
 import Modal from './Modal';
 import Dropdown from './Dropdown';
 import { useHistory } from 'react-router-dom';
+import { useValue as valueFormer } from '../helpers/use-value';
+import * as api from '../api';
 
 function Track(props) {
     let { role } = useContext(UserContext).user;
     let [modalVisibility, setModalVisibility] = useState(false);
+    let [startPoint, setStartPoint] = useState(props.startingStop);
+    let [endPoint, setEndPoint] = useState(props.finalStop);
+    let [hours, setHours] = useState([]);
+    let [stops, setStops] = useState([]);
 
     let history = useHistory();
 
@@ -49,16 +55,21 @@ function Track(props) {
                 <header>Edycja informacji o trasie</header>
                 <section className="content">
                     <form className="edit-track">
-                        <input placeholder="Punkt startowy"/>
-                        <input placeholder="Punkt docelowy"/>
-                        <textarea placeholder="Godziny odjazdu (odzielone przecinkami)"/>
-                        <textarea placeholder="Przystanki (cena, przystanek, cena, przystanek...)"/>
+                        <input placeholder="Punkt startowy" defaultValue={props.startingStop} onChange={valueFormer(setStartPoint)}/>
+                        <input placeholder="Punkt docelowy" defaultValue={props.finalStop} onChange={valueFormer(setEndPoint)}/>
+                        <textarea placeholder="Godziny odjazdu (odzielone przecinkami)" 
+                            defaultValue={props.allStops}
+                            //onChange={}
+                        />
+                        <textarea placeholder="Przystanki (cena, przystanek, cena, przystanek...)"
+                            defaultValue={props.stopsPrices}
+                        />
                     </form>
                 </section>
                 <section className="footer">
                     <button onClick={() => setModalVisibility(false)}>Anuluj</button>
-                    <button onClick={() => setModalVisibility(false)}>Zapisz</button>
-                    </section>
+                    <button onClick={() => console.log(startPoint, endPoint)}>Zapisz</button>
+                </section>
             </Modal>
         );
     }
