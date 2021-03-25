@@ -31,14 +31,13 @@ function Header() {
                 setName(data.firstName + ' ' + data.lastName);
             });
         }
+        
+        handlePageResize();
+        window.addEventListener('resize', handlePageResize);
 
-        if (menuExpanded && window.innerWidth <= 1780) {
-            setMenuExpanded(false);
-        }
-        else if (menuExpanded && window.innerWidth > 1780) {
-            setMenuExpanded(true);
-        }
+        return () => window.removeEventListener('resize', handlePageResize);
     }, []);
+
 
     function signout() {
         api.logout()
@@ -48,10 +47,31 @@ function Header() {
         });
     }
 
+    function handlePageResize() {
+        if (menuExpanded && window.innerWidth <= 1780) {
+            menuExpanded = false;
+            setMenuExpanded(menuExpanded);
+        }
+        else if (!menuExpanded && window.innerWidth > 1780) {
+            menuExpanded = true;
+            setMenuExpanded(menuExpanded);
+        }
+    }
+
+    function handleMenuClick(ev) {
+        if (window.innerWidth <= 1780) {
+            setMenuExpanded(false);
+        }
+    }
+
+    function toggleMenu() {
+        setMenuExpanded(!menuExpanded);
+    }
+
     function ownerNav() {
         return (
             <nav className={ menuExpanded ? 'side' : 'side collapsed' }>
-                <div className="nav-action">
+                <div className="nav-action" onClick={handleMenuClick}>
                     <HeaderItem path="/">Grafik kursów</HeaderItem>
                     <HeaderItem path="/grafik-pracy">Grafik pracy</HeaderItem>
                     <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
@@ -70,7 +90,7 @@ function Header() {
     function officeNav() {
         return (
             <nav className={ menuExpanded ? 'side' : 'side collapsed' }>
-                <div className="nav-action">
+                <div className="nav-action" onClick={handleMenuClick}>
                     <HeaderItem path="/">Grafik kursów</HeaderItem>
                     <HeaderItem path="/grafik-pracy">Grafik pracy</HeaderItem>
                     <HeaderItem path="#">Raporty</HeaderItem>
@@ -113,19 +133,6 @@ function Header() {
             </nav>
         );
     }
-
-    function toggleMenu() {
-        setMenuExpanded(!menuExpanded);
-    }
-
-    window.addEventListener('resize', () => {
-        if (menuExpanded && window.innerWidth <= 1780) {
-            setMenuExpanded(false);
-        }
-        else if (menuExpanded && window.innerWidth > 1780) {
-            setMenuExpanded(true);
-        }
-    });
 
     return (
         <div className="header-bar">
