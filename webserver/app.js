@@ -21,6 +21,7 @@ app.use((req, res, next) => {
 
 
 app.use('/api', require('./routes/user'));
+app.use('/api', require('./routes/client'));
 app.use('/api', require('./routes/booking'));
 app.use('/api', require('./routes/driver'));
 app.use('/api', require('./routes/route'));

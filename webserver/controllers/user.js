@@ -1,5 +1,5 @@
 let db = require('../configs/db');
-let { getFirst } = require('../helpers/query-utils');
+let { getFirst, deleteProps } = require('../helpers/query-utils');
 
 module.exports.addUser = (user) => {
     return db.query('INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?)', [
@@ -15,6 +15,34 @@ module.exports.addUser = (user) => {
 
 module.exports.findAllUsers = () => {
     return db.query('SELECT * FROM users');
+};
+
+module.exports.findManyUsers = (by, query, role = null) => {
+    let base = 'SELECT * FROM users WHERE ';
+    let conditions, values;
+
+    if (by == 'id' || by == 'phoneNumber') {
+        conditions = '??=?';
+        values = [by, query];
+    }
+    else if (by == 'email' || by == 'login') {
+        conditions = '?? LIKE ?';
+        values = [by, '%' + query + '%'];
+    }
+    else if (by == 'name') {
+        conditions = `(CONCAT(firstName, ' ', lastName) LIKE ? OR CONCAT(lastName, ' ', firstName) LIKE ?)`;
+        values = ['%' + query + '%', '%' + query + '%'];
+    }
+    else return null;
+
+
+    if (role != null) {
+        values.unshift(role);
+        base += `role=? AND `;
+    }
+    
+    return db.query(base + conditions, values)
+        .then(deleteProps('password'));
 };
 
 module.exports.findUserByLoginOrEmail = (login, email) => {
