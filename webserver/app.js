@@ -28,6 +28,7 @@ app.use('/api', require('./routes/route'));
 app.use('/api', require('./routes/vehicle'));
 app.use('/api', require('./routes/work-schedule'));
 app.use('/api', require('./routes/loyalty-program'));
+app.use('/api', require('./routes/contact'));
 
 
 app.use((err, req, res, next) => {
