@@ -40,6 +40,10 @@ export async function getAllRoutes() {
     return sendGet('/routes');
 }
 
+export async function getRoute(routeId) {
+    return sendGet('/route/' + routeId);
+}
+
 /*a = {
     departureLocation: "...",
     prices: [-.--],
