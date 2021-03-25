@@ -179,6 +179,8 @@ router.put('/vehicle/:id', [
 
     let { brand, model, year, plate, mileage, seats, state, parking, ab, ba, driver } = req.body;
 
+    if (state == null) state = 'Aktywny';
+
     vehicles[vehicleIndex] = {
         ...vehicles[vehicleIndex],
         brand, model,
