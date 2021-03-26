@@ -42,7 +42,7 @@ function RoutesPage() {
     }
 
     function addRoute() {
-        if(departureLocation !== '' && arrivalLocation !== '' && stops !== '' && hours !== '' ** prices !== '') {
+        if(departureLocation !== '' && arrivalLocation !== '' && stops !== '' && hours !== '' && prices !== '') {
             setModalVisibility(false);
             api.addRoute(departureLocation, arrivalLocation, stops, hours, prices, null)
             .then(() => refreshRoutes());
