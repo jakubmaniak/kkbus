@@ -15,33 +15,39 @@ const role = require('../middlewares/roles')(
 const routes = new Map([
     [1, {
         id: 1,
-        a: {
-            departureLocation: 'Kraków',
-            prices: [4.00, 4.00, 4.00],
-            stops: ['Kraków Dworzec Główny', 'Chrzanów', 'Jaworzno', 'Katowice'],
-            hours: ['5:15', '6:00', '6:30', '7:00', '8:00', '9:00', '11:00', '12:00', '12:30', '13:30', '14:00', '14:30', '16:00', '17:00', '18:00', '20:00', '22:30', '23:00']
-        },
-        b: {
-            departureLocation: 'Katowice',
-            prices: [6.00, 6.00],
-            stops: ['Katowice', 'Chrzanów', 'Kraków Dworzec Główny'],
-            hours: ['5:15', '6:00', '6:30', '7:00', '8:00', '9:00', '11:00', '12:00', '12:30', '13:30', '14:00', '14:30', '16:00', '17:00', '18:00', '20:00', '22:30', '23:00']
-        }
+        oppositeId: 2,
+        departureLocation: 'Kraków',
+        arrivalLocation: 'Katowice',
+        prices: [4.00, 4.00, 4.00],
+        stops: ['Kraków Dworzec Główny', 'Chrzanów', 'Jaworzno', 'Katowice'],
+        hours: ['5:15', '6:00', '6:30', '7:00', '8:00', '9:00', '11:00', '12:00', '12:30', '13:30', '14:00', '14:30', '16:00', '17:00', '18:00', '20:00', '22:30', '23:00']
     }],
     [2, {
         id: 2,
-        a: {
-            departureLocation: 'Kraków',
-            prices: [4.00, 5.00, 5.00],
-            stops: ['Kraków Dworzec Główny', 'Kielce', 'Radom', 'Warszawa Centralna'],
-            hours: ['5:15', '6:00', '6:30', '7:00', '8:00', '9:00', '11:00', '12:00', '12:30', '13:30', '14:00', '14:30', '16:00', '17:00', '18:00', '20:00', '22:30', '23:00']
-        },
-        b: {
-            departureLocation: 'Warszawa',
-            prices: [5.00, 5.00, 4.00],
-            stops: ['Warszawa Centralna', 'Radom', 'Kielce', 'Kraków Dworzec Główny'],
-            hours: ['5:15', '6:00', '6:30', '7:00', '8:00', '9:00', '11:00', '12:00', '12:30', '13:30', '14:00', '14:30', '16:00', '17:00', '18:00', '20:00', '22:30', '23:00']
-        }
+        oppositeId: 1,
+        departureLocation: 'Katowice',
+        arrivalLocation: 'Kraków',
+        prices: [6.00, 6.00],
+        stops: ['Katowice', 'Chrzanów', 'Kraków Dworzec Główny'],
+        hours: ['5:15', '6:00', '6:30', '7:00', '8:00', '9:00', '11:00', '12:00', '12:30', '13:30', '14:00', '14:30', '16:00', '17:00', '18:00', '20:00', '22:30', '23:00']
+    }],
+    [3, {
+        id: 3,
+        oppositeId: 4,
+        departureLocation: 'Kraków',
+        arrivalLocation: 'Warszawa',
+        prices: [4.00, 5.00, 5.00],
+        stops: ['Kraków Dworzec Główny', 'Kielce', 'Radom', 'Warszawa Centralna'],
+        hours: ['5:15', '6:00', '6:30', '7:00', '8:00', '9:00', '11:00', '12:00', '12:30', '13:30', '14:00', '14:30', '16:00', '17:00', '18:00', '20:00', '22:30', '23:00']
+    }],
+    [4, {
+        id: 4,
+        oppositeId: 3,
+        departureLocation: 'Warszawa',
+        arrivalLocation: 'Kraków',
+        prices: [5.00, 5.00, 4.00],
+        stops: ['Warszawa Centralna', 'Radom', 'Kielce', 'Kraków Dworzec Główny'],
+        hours: ['5:15', '6:00', '6:30', '7:00', '8:00', '9:00', '11:00', '12:00', '12:30', '13:30', '14:00', '14:30', '16:00', '17:00', '18:00', '20:00', '22:30', '23:00']
     }]
 ]);
 
@@ -55,42 +61,47 @@ router.get('/routes', (req, res) => {
 router.get('/route/:id', (req, res) => {
     let routeId = parseInt(req.params.id);
 
+    let includeOpposite = ('includeOpposite' in req.query);
+
     if (isNaN(routeId)) throw invalidRequest;
     if (!routes.has(routeId)) throw notFound;
 
-    res.ok({ id: routeId, ...routes.get(routeId) });
+    if (includeOpposite) {
+        let route = routes.get(routeId);
+        let oppositeId = route.oppositeId;
+        
+        if (oppositeId != null && routes.has(oppositeId)) {
+            let oppositeRoute = routes.get(oppositeId);
+            res.ok([route, oppositeRoute]);
+        }
+        else {
+            res.ok([route, null]);
+        }
+    }
+    else {
+        res.ok(routes.get(routeId));
+    }
 });
 
 router.post('/route', [
     role('office'),
     bodySchema(`{
-        a: {
-            departureLocation: string,
-            hours?: string[],
-            stops?: string[],
-            prices?: number[]
-        },
-        b: {
-            departureLocation: string,
-            hours?: string[],
-            stops?: string[],
-            prices?: number[]
-        }
+        oppositeId?: number,
+        departureLocation: string,
+        arrivalLocation: string,
+        hours?: string[],
+        stops?: string[],
+        prices?: number[]
     }`)
 ], (req, res) => {
-    let { a, b } = req.body;
+    let { oppositeId, departureLocation, arrivalLocation, hours, stops, prices } = req.body;
 
-    if (a.hours == null) a.hours = [];
-    if (a.stops == null) a.stops = [];
-    if (a.prices == null) a.prices = [];
-
-    if (b.hours == null) b.hours = [];
-    if (b.stops == null) b.stops = [];
-    if (b.prices == null) b.prices = [];
+    if (hours == null) hours = [];
+    if (stops == null) stops = [];
+    if (prices == null) prices = [];
 
     let id = Math.max(...routes.keys()) + 1;
-
-    routes.set(id, { id, a, b });
+    routes.set(id, { id, oppositeId, departureLocation, arrivalLocation, hours, stops, prices });
 
     res.ok({ id });
 });
@@ -109,18 +120,12 @@ router.delete('/route/:id', [role('office')], (req, res) => {
 router.put('/route/:id', [
     role('office'),
     bodySchema(`{
-        a: {
-            departureLocation: string,
-            hours?: string[],
-            stops?: string[],
-            prices?: number[]
-        },
-        b: {
-            departureLocation: string,
-            hours?: string[],
-            stops?: string[],
-            prices?: number[]
-        }
+        oppositeId?: number,
+        departureLocation: string,
+        arrivalLocation: string,
+        hours?: string[],
+        stops?: string[],
+        prices?: number[]
     }`)
 ], (req, res) => {
     let routeId = parseInt(req.params.id);
@@ -128,17 +133,13 @@ router.put('/route/:id', [
     if (isNaN(routeId)) throw invalidRequest;
     if (!routes.has(routeId)) throw notFound;
 
-    let { a, b } = req.body;
+    let { oppositeId, departureLocation, arrivalLocation, hours, stops, prices } = req.body;
 
-    if (a.hours == null) a.hours = [];
-    if (a.stops == null) a.stops = [];
-    if (a.prices == null) a.prices = [];
+    if (hours == null) hours = [];
+    if (stops == null) stops = [];
+    if (prices == null) prices = [];
 
-    if (b.hours == null) b.hours = [];
-    if (b.stops == null) b.stops = [];
-    if (b.prices == null) b.prices = [];
-
-    routes.set(routeId, { id: routeId, a, b });
+    routes.set(routeId, { id: routeId, oppositeId, departureLocation, arrivalLocation, hours, stops, prices });
     
     res.ok();
 });
