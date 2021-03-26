@@ -25,12 +25,20 @@ module.exports.addRoute = (route) => {
 
 module.exports.findAllRoutes = () => {
     return db.query('SELECT * FROM routes')
-        .then(splitProps('hours', 'stops', 'prices'));
+        .then(splitProps('hours', 'stops', 'prices'))
+        .then((routes) => routes.map((route) => {
+            route.prices = route.prices.map(parseFloat);
+            return route;
+        }));
 };
 
 module.exports.findRoute = (routeId) => {
     return db.query('SELECT * FROM routes WHERE id=? LIMIT 1', [routeId])
         .then(splitProps('hours', 'stops', 'prices'))
+        .then((routes) => routes.map((route) => {
+            route.prices = route.prices.map(parseFloat);
+            return route;
+        }))
         .then(getFirst);
 };
 
