@@ -34,9 +34,8 @@ function Route(props) {
 
     function updateRoute() {
         setModalVisibility(false);
-        console.log(props.routeId, departureLocation, arrivalLocation, stops, hours, prices, null);
-        api.updateRoute(props.routeId, departureLocation, arrivalLocation, stops, hours, prices, null);
-        props.refreshRoutes();
+        api.updateRoute(props.routeId, departureLocation, arrivalLocation, stops, hours, prices, null)
+        .then(() => props.refreshRoutes());
     }
 
     function convertHoursIntoArray(ev) {

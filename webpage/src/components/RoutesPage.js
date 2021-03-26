@@ -37,15 +37,15 @@ function RoutesPage() {
     }
 
     function deleteRoute(routeId) {
-        api.deleteRoute(routeId);
-        refreshRoutes();
+        api.deleteRoute(routeId)
+        .then(() => refreshRoutes());
     }
 
     function addRoute() {
         if(departureLocation !== '' && arrivalLocation !== '' && stops !== '' && hours !== '' ** prices !== '') {
             setModalVisibility(false);
-            api.addRoute(departureLocation, arrivalLocation, stops, hours, prices, null);
-            refreshRoutes();
+            api.addRoute(departureLocation, arrivalLocation, stops, hours, prices, null)
+            .then(() => refreshRoutes());
         }
         else {
             alert('Wypełnij wszystkie pola!');
