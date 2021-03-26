@@ -8,8 +8,12 @@ import { fromValue } from '../helpers/from-value';
 import UserContext from '../contexts/User';
 import Reward from './Reward';
 import Modal from './Modal';
+import { ModalLoader } from './Loader';
 
 function LoyaltyProgram() {
+    let [loading, setLoading] = useState(true);
+    let loadingInitTime = Date.now();
+
     let history = useHistory();
     let [rewards, setRewards] = useState([]);
     let [modalAddRewardVisibility, setModalAddRewardVisibility] = useState(false);
@@ -24,6 +28,9 @@ function LoyaltyProgram() {
         api.getAllRewards()
         .then((results) => {
             setRewards(results);
+            setTimeout(() => {
+                setLoading(false);
+            }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
         });
     }, []);
 
@@ -169,6 +176,7 @@ function LoyaltyProgram() {
 
     return (
         <div className="loyalty-program page">
+             <ModalLoader loading={loading} />
             {(role === 'owner') ? OwnerTile() : clientGuestTile()}
         </div>
     );

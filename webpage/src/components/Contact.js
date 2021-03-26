@@ -7,8 +7,12 @@ import Modal from './Modal';
 import '../styles/Modal.css';
 import * as api from '../api';
 import { fromValue } from '../helpers/from-value';
+import { ModalLoader } from './Loader';
 
 function Contact() {
+    let [loading, setLoading] = useState(true);
+    let loadingInitTime = Date.now();
+
     let { role } = useContext(UserContext).user;
     let [modalVisibility, setModalVisibility] = useState(false);
     let [address, setAddress] = useState('');
@@ -26,6 +30,9 @@ function Contact() {
             setPhoneNumber(res.phoneNumber);
             setFaxNumber(res.faxNumber);
             setEmail(res.email);
+            setTimeout(() => {
+                setLoading(false);
+            }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
         });
     }, []);
 
@@ -36,6 +43,7 @@ function Contact() {
 
     return (
         <div className="contact page">
+            <ModalLoader loading={loading} />
             <div className="main">
                 <div className="contact-container">
                     <div className="tile half">

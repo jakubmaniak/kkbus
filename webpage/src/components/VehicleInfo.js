@@ -8,8 +8,12 @@ import '../styles/VehicleInfo.css';
 import Modal from './Modal';
 import DropdownMultiple from './DropdownMultiple';
 import Dropdown from './Dropdown';
+import { ModalLoader } from './Loader';
 
-function VehicleInfo() {    
+function VehicleInfo() {
+    let [loading, setLoading] = useState(true);
+    let loadingInitTime = Date.now();
+    
     let [vehicles, setVehicles] = useState([]);
     let [modalAddVehicleVisibility, setModalAddVehicleVisibility] = useState(false);
 
@@ -26,7 +30,12 @@ function VehicleInfo() {
 
     function updateVehicle() {
         api.getAllVehicles()
-        .then(setVehicles);
+        .then((results) => {
+            setVehicles(results);
+            setTimeout(() => {
+                setLoading(false);
+            }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
+        });
     }
 
     function deleteVehicle(vehicleId) {
@@ -77,6 +86,7 @@ function VehicleInfo() {
 
     return (
         <div className="vehicle-info-page page">
+            <ModalLoader loading={loading} />
             <div className="main">
                 <div className="button-add-container">
                     <button onClick={() => setModalAddVehicleVisibility(true)}>Dodaj pojazd</button>

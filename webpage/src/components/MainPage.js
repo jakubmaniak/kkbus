@@ -3,9 +3,13 @@ import '../styles/MainPage.css';
 import Track from './Track';
 import * as api from '../api';
 import UserContext from '../contexts/User';
+import { ModalLoader } from './Loader';
 
 
 function MainPage() {
+    let [loading, setLoading] = useState(true);
+    let loadingInitTime = Date.now();
+
     let [tracks, setTracks] = useState([]);
     let { role } = useContext(UserContext).user;
     
@@ -20,11 +24,15 @@ function MainPage() {
                 ])
                 .flat()
             );
+            setTimeout(() => {
+                setLoading(false);
+            }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
         });
     }, []);
 
     return (
         <div className="main-page">
+            <ModalLoader loading={loading} />
             <div className="main">
                 {role === 'owner' ? 
                     <div className="button-add-container">
