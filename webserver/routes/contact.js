@@ -13,7 +13,7 @@ const role = require('../middlewares/roles')(
 const contactController = require('../controllers/contact');
 
 
-let contact = {
+let cachedContact = {
     address: null,
     zipCode: null,
     phoneNumber: null,
@@ -22,11 +22,11 @@ let contact = {
 };
 
 contactController.findContact()
-.then((result) => contact = result);
+.then((contact) => cachedContact = contact);
 
 
 router.get('/contact', (req, res) => {
-    res.ok(contact);
+    res.ok(cachedContact);
 });
 
 router.put('/contact', [
@@ -35,7 +35,7 @@ router.put('/contact', [
 ], async (req, res, next) => {
     let { address, zipCode, phoneNumber, faxNumber, email } = req.body;
 
-    contact = {
+    let contact = {
         address,
         zipCode,
         phoneNumber,
@@ -45,11 +45,13 @@ router.put('/contact', [
 
     try {
         await contactController.updateContact(contact);
-        res.ok(contact);
     }
     catch {
-        next(serverError);
+        return next(serverError);
     }
+    
+    cachedContact = contact;
+    res.ok(contact);
 });
 
 
