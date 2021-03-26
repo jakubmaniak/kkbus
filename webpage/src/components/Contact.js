@@ -16,8 +16,8 @@ function Contact() {
     let [faxNumber, setFaxNumber] = useState('');
     let [email, setEmail] = useState('');
 
-    function showModal() {
-        setModalVisibility(true);
+
+    useEffect(() => {
         api.getContact()
         .then((res) => {
             setAddress(res.address);
@@ -26,6 +26,10 @@ function Contact() {
             setFaxNumber(res.faxNumber);
             setEmail(res.email);
         });
+    });
+
+    function showModal() {
+        setModalVisibility(true);
     }
 
     return (
@@ -40,17 +44,17 @@ function Contact() {
                             : null}
                         </div>
                         <div className="adress">
-                            <p>ul. Jana Pawła II 37</p>
-                            <p>31-864 Kraków</p>
+                            <p>{address}</p>
+                            <p>{zipCode}</p>
                         </div>
                         <div className="contact-info">
                             <div>
                                 <span>Telefon/fax: </span>
-                                <span>(070) 012-34-56, (070)-011-22-33</span>
+                                <span>{phoneNumber}, {faxNumber}</span>
                             </div>
                             <div>
                                 <span>Adres e-mail: </span>
-                                <span>kontakt@kkbus.pl</span>
+                                <span>{email}</span>
                             </div>
                         </div>
                     </div>
