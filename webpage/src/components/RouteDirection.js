@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/MainPage.css';
 
-function TrackDirection(props) {
+function RouteDirection(props) {
     return (
         <div className="direction">
             <span>{props.departureLocation}</span>
@@ -11,4 +11,4 @@ function TrackDirection(props) {
     )
 }
 
-export default TrackDirection;
+export default RouteDirection;

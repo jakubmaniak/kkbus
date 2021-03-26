@@ -102,8 +102,8 @@ function VehicleInfo() {
                             state={vehicle.state}
                             parking={vehicle.parking}
                             seats={vehicle.seats} 
-                            oneWayTrack={vehicle.ab}
-                            returnTrack={vehicle.ba}
+                            oneWayRoute={vehicle.ab}
+                            returnRoute={vehicle.ba}
                             mileage={vehicle.mileage}
                             combustion={vehicle.combustion}
                             updateVehicle={updateVehicle}

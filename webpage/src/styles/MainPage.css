@@ -48,16 +48,16 @@
     padding-top: 0;
 }
 
-.track-header {
+.route-header {
     display: flex;
     align-items: baseline;
 }
 
-.track .button-container {
+.route .button-container {
     height: 36px;
 }
 
-.track-info {
+.route-info {
     width: 80%;
 }
 
@@ -209,15 +209,15 @@
     padding-left: 20px;
 }
 
-.book-track input {
+.book-route input {
     width: 400px;
 }
 
-.edit-track input {
+.edit-route input {
     width: 420px;
 }
 
-.edit-track textarea {
+.edit-route textarea {
     width: 420px;
     height: 96px;
 }

@@ -1,14 +1,17 @@
 import React, { useContext, useState, useEffect } from 'react';
-import TrackDirection from './TrackDirection';
-import '../styles/MainPage.css';
-import UserContext from '../contexts/User';
-import Modal from './Modal';
-import Dropdown from './Dropdown';
 import { useHistory } from 'react-router-dom';
+
 import { fromValue } from '../helpers/from-value';
 import * as api from '../api';
+import UserContext from '../contexts/User';
+import RouteDirection from './RouteDirection';
+import Modal from './Modal';
+import Dropdown from './Dropdown';
 
-function Track(props) {
+import '../styles/MainPage.css';
+
+
+function Route(props) {
     let { role } = useContext(UserContext).user;
     let [modalVisibility, setModalVisibility] = useState(false);
     let [departureLocation, setDepartureLocation] = useState(props.departureLocation);
@@ -54,7 +57,7 @@ function Track(props) {
             <Modal visible={modalVisibility}>
                 <header>Rezerwacja</header>
                 <section className="content">
-                    <form className="book-track">
+                    <form className="book-route">
                         <Dropdown placeholder="Godzina"/>
                         <input placeholder="Liczba osób objętych biletem normalnym"/>
                         <input placeholder="Liczba osób objętych biletem ulgowym"/>
@@ -81,7 +84,7 @@ function Track(props) {
             <Modal visible={modalVisibility}>
                 <header>Edycja informacji o trasie</header>
                 <section className="content">
-                    <form className="edit-track">
+                    <form className="edit-route">
                         <input placeholder="Punkt startowy" defaultValue={props.departureLocation} onChange={fromValue(setDepartureLocation)}/>
                         <input placeholder="Punkt docelowy" defaultValue={props.arrivalLocation} onChange={fromValue(setArrivalLocation)}/>
                         <textarea placeholder="Godziny odjazdu (odzielone przecinkami)" 
@@ -110,9 +113,9 @@ function Track(props) {
             }
             <div className="tile half tile-container">
                 <div className="tile">
-                    <div className="track-header">
-                        <div className="track-info">
-                            <TrackDirection 
+                    <div className="route-header">
+                        <div className="route-info">
+                            <RouteDirection 
                                 departureLocation={props.departureLocation}
                                 arrivalLocation={props.arrivalLocation}
                             />
@@ -158,4 +161,4 @@ function Track(props) {
     );
 }
 
-export default Track;
+export default Route;

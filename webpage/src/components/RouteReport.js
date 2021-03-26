@@ -4,11 +4,11 @@ import * as api from '../api';
 import { routeFormatter } from '../helpers/text-formatters';
 
 import Dropdown from './Dropdown';
-import '../styles/TrackReport.css';
+import '../styles/RouteReport.css';
 import UserContext from '../contexts/User';
 
 
-function TrackReport() {
+function RouteReport() {
     let [routes, setRoutes] = useState([]);
     let [stops, setStops] = useState([]);
     let { role } = useContext(UserContext).user;
@@ -23,7 +23,7 @@ function TrackReport() {
     }
 
     return (
-        <div className="track-report page">
+        <div className="route-report page">
             <div className="main">
                 <div className="tile half">
                     <h2>
@@ -48,4 +48,4 @@ function TrackReport() {
     );
 }
 
-export default TrackReport;
+export default RouteReport;

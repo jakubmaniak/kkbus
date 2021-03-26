@@ -113,8 +113,8 @@ function Vehicle(props) {
                 <div className="vehicle-info route-info">
                     <span>Dostępność tras</span>
                     <span>
-                        <p>{props.oneWayTrack}</p> 
-                        <p>{props.returnTrack}</p>
+                        <p>{props.oneWayRoute}</p> 
+                        <p>{props.returnRoute}</p>
                     </span>
                 </div>
                 <div className="details">

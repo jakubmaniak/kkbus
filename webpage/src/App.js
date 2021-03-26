@@ -15,7 +15,7 @@ import LoyaltyProgram from './components/LoyaltyProgram';
 import VehicleInfo from './components/VehicleInfo';
 import WorkSchedule from './components/WorkSchedule';
 import Fuel from './components/Fuel';
-import TrackReport from './components/TrackReport';
+import RouteReport from './components/RouteReport';
 import Clients from './components/Clients';
 import BookingList from './components/BookingList';
 
@@ -63,7 +63,7 @@ function App() {
                             <WorkSchedule />
                         </Route>
                         <Route exact path="/raport-z-kursu">
-                            <TrackReport />
+                            <RouteReport />
                         </Route>
                         <Route exact path="/konta-i-rezerwacje-klientow">
                             <Clients />
