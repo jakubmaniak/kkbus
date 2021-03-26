@@ -16,17 +16,8 @@ function MainPage() {
     useEffect(() => {
         api.getAllRoutes()
         .then((routes) => {
-            setTracks(
-                routes
-                .map(({id, a, b}) => [
-                    { ...a, id: id + 'a', routeId: id, arrivalLocation: b.departureLocation },
-                    { ...b, id: id + 'b', routeId: id, arrivalLocation: a.departureLocation }
-                ])
-                .flat()
-            );
-            setTimeout(() => {
-                setLoading(false);
-            }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
+            setTracks(routes);
+            setLoading(false);
         });
     }, []);
 
@@ -39,7 +30,7 @@ function MainPage() {
                         <button>Dodaj trasę</button>
                     </div>    
                 : null}
-                {tracks.map((track, i) => (
+                {tracks.map((track) => (
                         <Track
                             key={track.id}
                             startingStop={track.departureLocation}

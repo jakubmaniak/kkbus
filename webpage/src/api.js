@@ -45,24 +45,12 @@ export async function getRoute(routeId) {
     return sendGet('/route/' + routeId);
 }
 
-/*a = {
-    departureLocation: "...",
-    prices: [-.--],
-    stops: ["..."],
-    hours: ["--:--"]
-}
-b = {
-    departureLocation: "...",
-    prices: [-.--],
-    stops: ["..."],
-    hours: ["--:--"]
-}*/
-export async function addRoute(a, b) {
-    return sendPost('/route', { a, b });
+export async function addRoute(departureLocation, arrivalLocation, stops = null, hours = null, prices = null, oppositeId = null) {
+    return sendPost('/route', { departureLocation, arrivalLocation, stops, hours, prices, oppositeId });
 }
 
-export async function updateRoute(routeId, a, b) {
-    return sendPut('/route/' + routeId, { a, b });
+export async function updateRoute(routeId, departureLocation, arrivalLocation, stops = null, hours = null, prices = null, oppositeId = null) {
+    return sendPut('/route/' + routeId, { departureLocation, arrivalLocation, stops, hours, prices, oppositeId });
 }
 
 export async function deleteRoute(routeId) {
@@ -105,8 +93,8 @@ export async function getDrivers() {
 }
 
 
-export async function getWorkSchedule(driverId, range = 0, routeId = null, direction = 0) {
-    return sendPost('/work-schedule', { driverId, range, routeId, direction } );
+export async function getWorkSchedule(driverId, range = 0, routeId = null) {
+    return sendPost('/work-schedule', { driverId, range, routeId } );
 }
 
 

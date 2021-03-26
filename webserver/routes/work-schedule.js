@@ -12,9 +12,9 @@ const role = require('../middlewares/roles')(
 
 router.post('/work-schedule', [
     role('client'),
-    bodySchema('{driverId: number, range: number, direction: number, routeId?: number}')
+    bodySchema('{driverId: number, range: number, routeId?: number}')
 ], (req, res) => {
-    let { driverId, range, direction, routeId } = req.body;
+    let { driverId, range, routeId } = req.body;
 
     let ab = [];
     let ba = [];
@@ -146,9 +146,7 @@ router.post('/work-schedule', [
         ]);
     }
 
-    let results = [];
-    if (direction >= 0) results = results.concat(ab);
-    if (direction <= 0) results = results.concat(ba);
+    let results = [...ab, ...ba];
 
     res.ok(results.sort((a, b) =>
         (a.day == b.day)
