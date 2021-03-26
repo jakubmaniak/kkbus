@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import '../styles/MainPage.css';
 import Track from './Track';
 import * as api from '../api';
+import UserContext from '../contexts/User';
 
-export default function MainPage() {
+
+function MainPage() {
     let [tracks, setTracks] = useState([]);
-
+    let { role } = useContext(UserContext).user;
     
     useEffect(() => {
         api.getAllRoutes()
@@ -24,6 +26,11 @@ export default function MainPage() {
     return (
         <div className="main-page">
             <div className="main">
+                {role === 'owner' ? 
+                    <div className="button-add-container">
+                        <button>Dodaj trasę</button>
+                    </div>    
+                : null}
                 {tracks.map((track, i) => (
                         <Track
                             key={track.id}
@@ -54,5 +61,7 @@ export default function MainPage() {
                 ))}
             </div>
         </div>
-    )
+    );
 }
+
+export default MainPage;

@@ -93,7 +93,10 @@ function Track(props) {
 
                         <div className="book">
                         {(role === 'owner') ? 
-                            <button className="btn-book" onClick={showModal}>Edytuj</button>
+                            <div className="button-container">
+                                <button className="btn-book" onClick={showModal}>Edytuj</button>
+                                <button className="delete" onClick={showModal}>Usuń</button>
+                            </div> 
                         : (role === 'client') ?
                             <button className="btn-book" onClick={showModal}>Rezerwuj</button>
                         : (role === 'guest') ?

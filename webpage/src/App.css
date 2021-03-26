@@ -150,3 +150,14 @@ p.no-results {
     flex-basis: 100%;
     text-align: center;
 }
+
+.button-add-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.button-add-container button {
+    height: 36px;
+}

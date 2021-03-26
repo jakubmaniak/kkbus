@@ -4,6 +4,10 @@
     align-items: center;
 }
 
+.main-page .button-add-container button {
+    width: 124px;
+}
+
 .tile.half.tile-container {
     padding: 0;
     display: flex;
@@ -47,6 +51,10 @@
 .track-header {
     display: flex;
     align-items: baseline;
+}
+
+.track .button-container {
+    height: 36px;
 }
 
 .track-info {
@@ -98,12 +106,17 @@
 }
 
 .btn-book {
-    width: 142px;
+    width: 80px;
     background-color: #47BE61;
     color: white;
     border: none;
     border-radius: 2px;
     cursor: pointer;
+    margin-right: 6px;
+}
+
+.button-container .delete {
+    width: 72px;
 }
 
 .main-page .wrapper {

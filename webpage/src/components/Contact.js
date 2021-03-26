@@ -32,7 +32,6 @@ function Contact() {
     function updateContact() {
         setModalVisibility(false);      
         api.updateContact(address, zipCode, email, phoneNumber, faxNumber);
-       
     }
 
     return (
