@@ -6,9 +6,9 @@ import FuelUsageChart from './FuelUsageChart';
 import Dropdown from './Dropdown';
 import { ModalLoader } from './Loader';
 
-import '../styles/Fuel.css';
+import '../styles/FuelPage.css';
 
-function Fuel() {
+function FuelPage() {
     let [loading, setLoading] = useState(true);
     let loadingInitTime = Date.now();
 
@@ -93,4 +93,4 @@ function Fuel() {
     );
 }
 
-export default Fuel;
+export default FuelPage;

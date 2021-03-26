@@ -1,15 +1,15 @@
 import React, { useContext, useState, useEffect } from 'react';
-import '../styles/Contact.css';
-import map from '../static/map.png';
 
-import UserContext from '../contexts/User';
-import Modal from './Modal';
-import '../styles/Modal.css';
 import * as api from '../api';
 import { fromValue } from '../helpers/from-value';
+import UserContext from '../contexts/User';
+import Modal from './Modal';
 import { ModalLoader } from './Loader';
 
-function Contact() {
+import '../styles/ContactPage.css';
+import map from '../static/map.png';
+
+function ContactPage() {
     let [loading, setLoading] = useState(true);
     let loadingInitTime = Date.now();
 
@@ -103,4 +103,4 @@ function Contact() {
     );
 }
 
-export default Contact;
+export default ContactPage;

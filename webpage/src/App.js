@@ -8,13 +8,13 @@ import UserContext, { initialContext } from './contexts/User';
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import Header from './components/Header';
-import Contact from './components/Contact';
+import ContactPage from './components/ContactPage';
 import RoutesPage from './components/RoutesPage';
 import RemindPasswordPage from './components/RemindPasswordPage';
 import LoyaltyProgram from './components/LoyaltyProgram';
 import VehicleInfo from './components/VehicleInfo';
 import WorkSchedule from './components/WorkSchedule';
-import Fuel from './components/Fuel';
+import FuelPage from './components/FuelPage';
 import RouteReport from './components/RouteReport';
 import Clients from './components/Clients';
 import BookingList from './components/BookingList';
@@ -48,7 +48,7 @@ function App() {
                             <RemindPasswordPage />
                         </Route>
                         <Route exact path="/kontakt">
-                            <Contact />
+                            <ContactPage />
                         </Route>
                         <Route exact path="/program-lojalnosciowy">
                             <LoyaltyProgram />
@@ -57,7 +57,7 @@ function App() {
                             <VehicleInfo />
                         </Route>
                         <Route exact path="/paliwo">
-                            <Fuel />
+                            <FuelPage />
                         </Route>
                         <Route exact path="/grafik-pracy">
                             <WorkSchedule />

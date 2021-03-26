@@ -1,5 +1,4 @@
 import React from 'react';
-import '../styles/Fuel.css';
 
 function FuelHistoryItem(props) {
     return (
