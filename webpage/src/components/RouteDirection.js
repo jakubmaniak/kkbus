@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/MainPage.css';
+import '../styles/RoutesPage.css';
 
 function RouteDirection(props) {
     return (

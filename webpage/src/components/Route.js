@@ -8,7 +8,7 @@ import RouteDirection from './RouteDirection';
 import Modal from './Modal';
 import Dropdown from './Dropdown';
 
-import '../styles/MainPage.css';
+import '../styles/RoutesPage.css';
 
 
 function Route(props) {

@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
-import '../styles/MainPage.css';
+import '../styles/RoutesPage.css';
 import Route from './Route';
 import * as api from '../api';
 import UserContext from '../contexts/User';
 import { ModalLoader } from './Loader';
 
 
-function MainPage() {
+function RoutesPage() {
     let [loading, setLoading] = useState(true);
     let loadingInitTime = Date.now();
 
@@ -73,4 +73,4 @@ function MainPage() {
     );
 }
 
-export default MainPage;
+export default RoutesPage;

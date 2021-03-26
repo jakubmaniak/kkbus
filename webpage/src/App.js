@@ -9,7 +9,7 @@ import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import Header from './components/Header';
 import Contact from './components/Contact';
-import MainPage from './components/MainPage';
+import RoutesPage from './components/RoutesPage';
 import RemindPasswordPage from './components/RemindPasswordPage';
 import LoyaltyProgram from './components/LoyaltyProgram';
 import VehicleInfo from './components/VehicleInfo';
@@ -36,7 +36,7 @@ function App() {
                     </Switch>
                     <Switch>
                         <Route exact path="/">
-                            <MainPage />
+                            <RoutesPage />
                         </Route>
                         <Route exact path="/logowanie">
                             <LoginPage />
