@@ -45,24 +45,12 @@ export async function getRoute(routeId) {
     return sendGet('/route/' + routeId);
 }
 
-/*a = {
-    departureLocation: "...",
-    prices: [-.--],
-    stops: ["..."],
-    hours: ["--:--"]
-}
-b = {
-    departureLocation: "...",
-    prices: [-.--],
-    stops: ["..."],
-    hours: ["--:--"]
-}*/
-export async function addRoute(a, b) {
-    return sendPost('/route', { a, b });
+export async function addRoute(departureLocation, arrivalLocation, stops = null, hours = null, prices = null, oppositeId = null) {
+    return sendPost('/route', { departureLocation, arrivalLocation, stops, hours, prices, oppositeId });
 }
 
-export async function updateRoute(routeId, a, b) {
-    return sendPut('/route/' + routeId, { a, b });
+export async function updateRoute(routeId, departureLocation, arrivalLocation, stops = null, hours = null, prices = null, oppositeId = null) {
+    return sendPut('/route/' + routeId, { departureLocation, arrivalLocation, stops, hours, prices, oppositeId });
 }
 
 export async function deleteRoute(routeId) {
