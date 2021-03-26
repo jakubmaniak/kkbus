@@ -14,7 +14,6 @@ function WorkSchedule() {
     let [selectedDriver, setSelectedDriver] = useState();
     let [selectedRoute, setSelectedRoute] = useState();
     let [selectedRange, setSelectedRange] = useState();
-    let [selectedDirection, setSelectedDirection] = useState();
 
     let [drivers, setDrivers] = useState([]);
     let [routes, setRoutes] = useState(['wszystkie']);
@@ -23,11 +22,6 @@ function WorkSchedule() {
         [1, 'jutro'],
         [7, '7 kolejnych dni'],
         [31, 'ten miesiąc']
-    ]);
-    let [directions] = useState([
-        [0, 'obydwa'],
-        [1, 'A -> B'],
-        [-1, 'B -> A']
     ]);
 
     let [results, setResults] = useState([]);
@@ -53,7 +47,7 @@ function WorkSchedule() {
         let routeId = null;
         if (typeof selectedRoute === 'object') routeId = selectedRoute.id;
 
-        api.getWorkSchedule(selectedDriver[0], selectedRange[0], routeId, selectedDirection[0])
+        api.getWorkSchedule(selectedDriver[0], selectedRange[0], routeId)
             .then((results) => {
                 if (Date.now() - start > 250) {
                     setResults(results);
@@ -67,7 +61,7 @@ function WorkSchedule() {
                 }
             })
             .catch(api.errorAlert);
-    }, [selectedDriver, selectedRoute, selectedDirection, selectedRange]);  
+    }, [selectedDriver, selectedRoute, selectedRange]);  
 
     return (
         <div className="work-schedule page">
@@ -100,14 +94,6 @@ function WorkSchedule() {
                                 textProperty="1"
                                 alwaysSelected
                                 handleChange={setSelectedRange} />
-                        </div>
-                        <div className="filter-container">
-                            <span>Kierunki:</span>
-                            <Dropdown
-                                items={directions}
-                                textProperty="1"
-                                alwaysSelected
-                                handleChange={setSelectedDirection} />
                         </div>
                     </div>
                 </div>

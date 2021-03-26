@@ -9,11 +9,6 @@ import { routeFormatter } from '../helpers/text-formatters';
 
 function BookingList() {
     let [routes, setRoutes] = useState([]);
-    let [directions] = useState([
-        [0, 'obydwa'],
-        [1, 'A -> B'],
-        [-1, 'B -> A']
-    ]);
     let [dates] = useState(['aktualna']);
     let [hours] = useState(['aktualna']);
     let [bookinglist, setBookingList] = useState([
@@ -67,13 +62,6 @@ function BookingList() {
                                 items={routes}
                                 textFormatter={routeFormatter}
                                 placeholder="Wybierz trasę" />
-                        </div>
-                        <div className="filter-container">
-                            <span>Kierunek</span>
-                            <Dropdown 
-                                items={directions}
-                                textProperty="1"
-                                alwaysSelected />
                         </div>
                     </div>
                     <div className="row-filter-container">
