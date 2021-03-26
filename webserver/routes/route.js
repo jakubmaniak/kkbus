@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { invalidRequest, notFound } = require('../errors');
+const { invalidRequest, notFound, serverError } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const role = require('../middlewares/roles')(
     [0, 'guest'],
@@ -10,6 +10,8 @@ const role = require('../middlewares/roles')(
     [3, 'office'],
     [4, 'owner']
 );
+
+const routeController = require('../controllers/route');
 
 
 const routes = new Map([
@@ -52,35 +54,41 @@ const routes = new Map([
 ]);
 
 
-router.get('/routes', (req, res) => {
-    res.ok(
+router.get('/routes', async (req, res, next) => {
+    res.ok(await routeController.findAllRoutes());
+    /*res.ok(
         [...routes].map(([id, route]) => ({ id, ...route }))
-    );
+    );*/
 });
 
-router.get('/route/:id', (req, res) => {
+router.get('/route/:id', async (req, res, next) => {
     let routeId = parseInt(req.params.id);
 
-    let includeOpposite = ('includeOpposite' in req.query);
+    // let includeOpposite = ('includeOpposite' in req.query);
 
-    if (isNaN(routeId)) throw invalidRequest;
-    if (!routes.has(routeId)) throw notFound;
+    if (isNaN(routeId)) return next(invalidRequest);
 
-    if (includeOpposite) {
-        let route = routes.get(routeId);
-        let oppositeId = route.oppositeId;
+    // if (includeOpposite) {
+    //     let route = routes.get(routeId);
+    //     let oppositeId = route.oppositeId;
         
-        if (oppositeId != null && routes.has(oppositeId)) {
-            let oppositeRoute = routes.get(oppositeId);
-            res.ok([route, oppositeRoute]);
-        }
-        else {
-            res.ok([route, null]);
-        }
+    //     if (oppositeId != null && routes.has(oppositeId)) {
+    //         let oppositeRoute = routes.get(oppositeId);
+    //         res.ok([route, oppositeRoute]);
+    //     }
+    //     else {
+    //         res.ok([route, null]);
+    //     }
+    // }
+    // else {
+    try {
+        res.ok(await routeController.findRoute(routeId));
     }
-    else {
-        res.ok(routes.get(routeId));
+    catch (err) {
+        next(err);
     }
+    //  res.ok(routes.get(routeId));
+    // }
 });
 
 router.post('/route', [
@@ -93,28 +101,41 @@ router.post('/route', [
         stops?: string[],
         prices?: number[]
     }`)
-], (req, res) => {
+], async (req, res) => {
     let { oppositeId, departureLocation, arrivalLocation, hours, stops, prices } = req.body;
 
     if (hours == null) hours = [];
     if (stops == null) stops = [];
     if (prices == null) prices = [];
 
-    let id = Math.max(...routes.keys()) + 1;
-    routes.set(id, { id, oppositeId, departureLocation, arrivalLocation, hours, stops, prices });
+    hours = hours.map((hour) => hour.trim());
+    stops = stops.map((stop) => stop.trim());
 
-    res.ok({ id });
+    let route = { oppositeId, departureLocation, arrivalLocation, hours, stops, prices };
+
+    try {
+        let result = await routeController.addRoute(route);
+        res.ok({ id: result.insertId, ...route });
+    }
+    catch {
+        next(serverError);
+    }
 });
 
-router.delete('/route/:id', [role('office')], (req, res) => {
+router.delete('/route/:id', [role('office')], async (req, res, next) => {
     let routeId = parseInt(req.params.id);
 
-    if (isNaN(routeId)) throw invalidRequest;
-    if (!routes.has(routeId)) throw notFound;
+    if (isNaN(routeId)) return next(invalidRequest);
 
-    routes.delete(routeId);
+    //routes.delete(routeId);
 
-    res.ok();
+    try {
+        await routeController.deleteRoute(routeId);
+        res.ok();
+    }
+    catch {
+        next(serverError);
+    }
 });
 
 router.put('/route/:id', [
@@ -127,11 +148,10 @@ router.put('/route/:id', [
         stops?: string[],
         prices?: number[]
     }`)
-], (req, res) => {
+], async (req, res, next) => {
     let routeId = parseInt(req.params.id);
 
-    if (isNaN(routeId)) throw invalidRequest;
-    if (!routes.has(routeId)) throw notFound;
+    if (isNaN(routeId)) return next(invalidRequest);
 
     let { oppositeId, departureLocation, arrivalLocation, hours, stops, prices } = req.body;
 
@@ -139,9 +159,19 @@ router.put('/route/:id', [
     if (stops == null) stops = [];
     if (prices == null) prices = [];
 
-    routes.set(routeId, { id: routeId, oppositeId, departureLocation, arrivalLocation, hours, stops, prices });
-    
-    res.ok();
+    hours = hours.map((hour) => hour.trim());
+    stops = stops.map((stop) => stop.trim());
+
+    let updatedRoute = { id: routeId, oppositeId, departureLocation, arrivalLocation, hours, stops, prices };
+
+    //routes.set(routeId, updatedRoute);
+    try {
+        await routeController.updateRoute(routeId, updatedRoute);
+        res.ok(updatedRoute);
+    }
+    catch {
+        next(serverError);
+    }
 });
 
 module.exports = router;

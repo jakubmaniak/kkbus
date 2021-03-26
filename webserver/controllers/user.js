@@ -3,7 +3,7 @@ let { getFirst, deleteProps } = require('../helpers/query-utils');
 
 module.exports.addUser = (user) => {
     return db.query('INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?)', [
-        user.id || null,
+        null,
         user.email,
         user.login, user.password,
         user.role,
