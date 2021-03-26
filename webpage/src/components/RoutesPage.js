@@ -31,7 +31,7 @@ function RoutesPage() {
     }
 
     return (
-        <div className="main-page">
+        <div className="routes-page">
             <ModalLoader loading={loading} />
             <div className="main">
                 {role === 'owner' ? 

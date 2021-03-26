@@ -1,10 +1,10 @@
-.main-page {
+.routes-page {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.main-page .button-add-container button {
+.routes-page .button-add-container button {
     width: 124px;
 }
 
@@ -119,7 +119,7 @@
     width: 72px;
 }
 
-.main-page .wrapper {
+.routes-page .wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
