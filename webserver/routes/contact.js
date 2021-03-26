@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+const { serverError } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const role = require('../middlewares/roles')(
     [0, 'guest'],
@@ -31,7 +32,7 @@ router.get('/contact', (req, res) => {
 router.put('/contact', [
     role('owner'),
     bodySchema('{address: string, zipCode: string, phoneNumber: string, faxNumber?: string, email: string}')
-], async (req, res) => {
+], async (req, res, next) => {
     let { address, zipCode, phoneNumber, faxNumber, email } = req.body;
 
     contact = {
@@ -42,8 +43,13 @@ router.put('/contact', [
         email
     };
 
-    await contactController.updateContact(contact);
-    res.ok();
+    try {
+        await contactController.updateContact(contact);
+        res.ok(contact);
+    }
+    catch {
+        next(serverError);
+    }
 });
 
 

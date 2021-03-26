@@ -21,15 +21,17 @@ function ContactPage() {
     let [faxNumber, setFaxNumber] = useState('');
     let [email, setEmail] = useState('');
 
+    let [contactCopy, setContactCopy] = useState({ });
 
     useEffect(() => {
-        api.getContact()
-        .then((res) => {
-            setAddress(res.address);
-            setZipCode(res.zipCode);
-            setPhoneNumber(res.phoneNumber);
-            setFaxNumber(res.faxNumber);
-            setEmail(res.email);
+        api.getContact().then((contact) => {
+            setContactCopy(contact);
+
+            setAddress(contact.address);
+            setZipCode(contact.zipCode);
+            setPhoneNumber(contact.phoneNumber);
+            setFaxNumber(contact.faxNumber);
+            setEmail(contact.email);
             setTimeout(() => {
                 setLoading(false);
             }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
@@ -37,8 +39,20 @@ function ContactPage() {
     }, []);
 
     function updateContact() {
-        setModalVisibility(false);      
-        api.updateContact(address, zipCode, email, phoneNumber, faxNumber);
+        setModalVisibility(false);
+        api.updateContact(address, zipCode, email, phoneNumber, faxNumber)
+            .then(setContactCopy);
+    }
+
+    function cancelUpdate() {
+        let contact = contactCopy;
+        setAddress(contact.address);
+        setZipCode(contact.zipCode);
+        setPhoneNumber(contact.phoneNumber);
+        setFaxNumber(contact.faxNumber);
+        setEmail(contact.email);
+
+        setModalVisibility(false);
     }
 
     return (
@@ -94,7 +108,7 @@ function ContactPage() {
                         </form>
                     </section>
                     <section className="footer">
-                        <button onClick={() => setModalVisibility(false)}>Anuluj</button>
+                        <button onClick={cancelUpdate}>Anuluj</button>
                         <button onClick={updateContact}>Zapisz</button>
                     </section>  
                 </Modal>
