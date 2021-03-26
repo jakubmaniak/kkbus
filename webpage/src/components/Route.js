@@ -34,8 +34,6 @@ function Route(props) {
 
     function updateRoute() {
         setModalVisibility(false);
-        
-
         api.updateRoute(props.routeId, departureLocation, arrivalLocation, stops, hours, prices, null);
         props.updateRoutes();
     }
@@ -93,7 +91,7 @@ function Route(props) {
                         />
                         <textarea placeholder="Przystanki (cena, przystanek, cena, przystanek...)"
                             defaultValue={props.stopsPrices}
-                            onChange={(ev) => convertStopsPrices(ev)}
+                            onChange={convertStopsPrices}
                         />
                     </form>
                 </section>
@@ -121,12 +119,11 @@ function Route(props) {
                             />
                             {props.stops}
                         </div>
-
                         <div className="book">
                         {(role === 'owner') ? 
                             <div className="button-container">
                                 <button className="btn-book" onClick={showModal}>Edytuj</button>
-                                <button className="delete" onClick={showModal}>Usuń</button>
+                                <button className="delete" onClick={props.deleteRoute}>Usuń</button>
                             </div> 
                         : (role === 'client') ?
                             <button className="btn-book" onClick={showModal}>Rezerwuj</button>
