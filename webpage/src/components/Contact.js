@@ -27,10 +27,12 @@ function Contact() {
             setFaxNumber(res.faxNumber);
             setEmail(res.email);
         });
-    });
+    }, []);
 
-    function showModal() {
-        setModalVisibility(true);
+    function updateContact() {
+        setModalVisibility(false);      
+        api.updateContact(address, zipCode, email, phoneNumber, faxNumber);
+       
     }
 
     return (
@@ -41,7 +43,7 @@ function Contact() {
                         <div className="header-wrapper">
                             <h2>Kontakt</h2>
                             {role === 'owner' ? 
-                                <button className="edit" onClick={showModal}>Edytuj</button> 
+                                <button className="edit" onClick={() => setModalVisibility(true)}>Edytuj</button> 
                             : null}
                         </div>
                         <div className="adress">
@@ -78,15 +80,15 @@ function Contact() {
                     <section className="content">
                         <form className="edit-contact">
                             <input placeholder="Adres" defaultValue={address} onChange={fromValue(setAddress)}/>
-                            <input placeholder="Kod pocztowy" defaultValue={zipCode}/>
-                            <input placeholder="Telefon/fax" defaultValue={phoneNumber}/>
-                            <input placeholder="Fax" defaultValue={faxNumber}/>
-                            <input placeholder="Adres e-mail" defaultValue={email}/>
+                            <input placeholder="Kod pocztowy" defaultValue={zipCode} onChange={fromValue(setZipCode)}/>
+                            <input placeholder="Telefon/fax" defaultValue={phoneNumber} onChange={fromValue(setPhoneNumber)}/>
+                            <input placeholder="Fax" defaultValue={faxNumber} onChange={fromValue(setFaxNumber)}/>
+                            <input placeholder="Adres e-mail" defaultValue={email} onChange={fromValue(setEmail)}/>
                         </form>
                     </section>
                     <section className="footer">
                         <button onClick={() => setModalVisibility(false)}>Anuluj</button>
-                        <button onClick={() => setModalVisibility(false)}>Zapisz</button>
+                        <button onClick={updateContact}>Zapisz</button>
                     </section>  
                 </Modal>
             : null}
