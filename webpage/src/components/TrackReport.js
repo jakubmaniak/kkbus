@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 
 import * as api from '../api';
 import { routeFormatter } from '../helpers/text-formatters';
 
 import Dropdown from './Dropdown';
 import '../styles/TrackReport.css';
+import UserContext from '../contexts/User';
+
 
 function TrackReport() {
     let [courses, setCourses] = useState([]);
     let [stops, setStops] = useState([]);
+    let { role } = useContext(UserContext).user;
 
     useEffect(() => {
         api.getAllRoutes()
@@ -41,7 +44,10 @@ function TrackReport() {
         <div className="track-report page">
             <div className="main">
                 <div className="tile half">
-                    <h2>Raport z kursu</h2>
+                    <h2>
+                        Raport z kursu
+                        {role === 'owner' ? <span style={{fontSize:"20px", color: "rgb(217 180 48)"}}> (dla kierowców)</span> : null}
+                    </h2>
                     <form className="report">
                         <Dropdown
                             items={courses}
