@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/MainPage.css';
-import Track from './Track';
+
 import * as api from '../api';
+import Track from './Track';
+
+import '../styles/MainPage.css';
 
 export default function MainPage() {
     let [tracks, setTracks] = useState([]);
@@ -9,22 +11,13 @@ export default function MainPage() {
     
     useEffect(() => {
         api.getAllRoutes()
-        .then((routes) => {
-            setTracks(
-                routes
-                .map(({id, a, b}) => [
-                    { ...a, id: id + 'a', routeId: id, arrivalLocation: b.departureLocation },
-                    { ...b, id: id + 'b', routeId: id, arrivalLocation: a.departureLocation }
-                ])
-                .flat()
-            );
-        });
+        .then(setTracks);
     }, []);
 
     return (
         <div className="main-page">
             <div className="main">
-                {tracks.map((track, i) => (
+                {tracks.map((track) => (
                         <Track
                             key={track.id}
                             startingStop={track.departureLocation}
