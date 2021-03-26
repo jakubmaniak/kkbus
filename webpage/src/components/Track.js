@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import TrackDirection from './TrackDirection';
 import '../styles/MainPage.css';
 import UserContext from '../contexts/User';
@@ -11,15 +11,42 @@ import * as api from '../api';
 function Track(props) {
     let { role } = useContext(UserContext).user;
     let [modalVisibility, setModalVisibility] = useState(false);
-    let [startPoint, setStartPoint] = useState(props.startingStop);
-    let [endPoint, setEndPoint] = useState(props.finalStop);
-    let [hours, setHours] = useState([]);
+    let [departureLocation, setDepartureLocation] = useState(props.departureLocation);
+    let [arrivalLocation, setArrivalLocation] = useState(props.arrivalLocation);
+    let [hours, setHours] = useState(props.hours);
+    let [prices, setPrices] = useState([]);
     let [stops, setStops] = useState([]);
 
     let history = useHistory();
 
+    useEffect(() => { 
+        setPrices(props.stopsPrices.split(',').map((e) => e.trim()).filter((e, i) => i % 2 == 1).map(parseFloat));
+        setStops(props.stopsPrices.split(',').map((e) => e.trim()).filter((e, i) => i % 2 == 0));
+    }, []);
+
+
     function showModal() {
         setModalVisibility(true);
+    }
+
+    function updateRoute() {
+        setModalVisibility(false);
+        
+
+        api.updateRoute(props.routeId, departureLocation, arrivalLocation, stops, hours, prices, null);
+        props.updateRoutes();
+    }
+
+    function convertHoursIntoArray(ev) {
+        let string = ev.target.value;
+        let array = string.split(',').map((element) => element.trim());
+        setHours(array);
+    }
+
+    function convertStopsPrices(ev) {
+        let parts = ev.target.value.split(',').map((e) => e.trim());
+        setStops(parts.filter((e, i) => i % 2 == 0));
+        setPrices(parts.filter((e, i) => i % 2 == 1).map(parseFloat));   
     }
 
     function clientModal() {
@@ -55,20 +82,21 @@ function Track(props) {
                 <header>Edycja informacji o trasie</header>
                 <section className="content">
                     <form className="edit-track">
-                        <input placeholder="Punkt startowy" defaultValue={props.startingStop} onChange={fromValue(setStartPoint)}/>
-                        <input placeholder="Punkt docelowy" defaultValue={props.finalStop} onChange={fromValue(setEndPoint)}/>
+                        <input placeholder="Punkt startowy" defaultValue={props.departureLocation} onChange={fromValue(setDepartureLocation)}/>
+                        <input placeholder="Punkt docelowy" defaultValue={props.arrivalLocation} onChange={fromValue(setArrivalLocation)}/>
                         <textarea placeholder="Godziny odjazdu (odzielone przecinkami)" 
-                            defaultValue={props.allHours}
-                            //onChange={}
+                            defaultValue={props.allHours.join(', ')}
+                            onChange={convertHoursIntoArray}
                         />
                         <textarea placeholder="Przystanki (cena, przystanek, cena, przystanek...)"
                             defaultValue={props.stopsPrices}
+                            onChange={(ev) => convertStopsPrices(ev)}
                         />
                     </form>
                 </section>
                 <section className="footer">
                     <button onClick={() => setModalVisibility(false)}>Anuluj</button>
-                    <button onClick={() => console.log(startPoint, endPoint)}>Zapisz</button>
+                    <button onClick={updateRoute}>Zapisz</button>
                 </section>
             </Modal>
         );
@@ -85,10 +113,10 @@ function Track(props) {
                     <div className="track-header">
                         <div className="track-info">
                             <TrackDirection 
-                                startingStop={props.startingStop}
-                                finalStop={props.finalStop}
+                                departureLocation={props.departureLocation}
+                                arrivalLocation={props.arrivalLocation}
                             />
-                            {props.busStops}
+                            {props.stops}
                         </div>
 
                         <div className="book">

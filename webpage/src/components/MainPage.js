@@ -17,9 +17,18 @@ function MainPage() {
         api.getAllRoutes()
         .then((routes) => {
             setTracks(routes);
-            setLoading(false);
+            setTimeout(() => {
+                setLoading(false);
+            }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
         });
     }, []);
+
+    function updateRoutes() {
+        api.getAllRoutes()
+        .then((routes) => {
+            setTracks(routes);
+        });
+    }
 
     return (
         <div className="main-page">
@@ -33,9 +42,9 @@ function MainPage() {
                 {tracks.map((track) => (
                         <Track
                             key={track.id}
-                            startingStop={track.departureLocation}
-                            finalStop={track.arrivalLocation}
-                            busStops={track.stops.map((stop, i) => (
+                            departureLocation={track.departureLocation}
+                            arrivalLocation={track.arrivalLocation}
+                            stops={track.stops.map((stop, i) => (
                                 <span className="route" key={i}>
                                     <span>{stop}</span>
                                     {i < track.stops.length - 1 ? <span> - </span> : null}
@@ -54,8 +63,9 @@ function MainPage() {
                                     </div>
                                 ))}
                             routeId={track.id}
-                            allHours={track.hours.reduce((a, b) => a.concat([b]), []).slice(1).join(', ')}
+                            allHours={track.hours}
                             stopsPrices={track.stops.reduce((a, b, i) => a.concat([track.prices[i - 1], b]), []).slice(1).join(', ')}
+                            updateRoutes={updateRoutes}
                         />
                 ))}
             </div>

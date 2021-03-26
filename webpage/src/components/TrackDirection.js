@@ -4,9 +4,9 @@ import '../styles/MainPage.css';
 function TrackDirection(props) {
     return (
         <div className="direction">
-            <span>{props.startingStop}</span>
+            <span>{props.departureLocation}</span>
             <span>-----&gt;</span>
-            <span>{props.finalStop}</span>
+            <span>{props.arrivalLocation}</span>
         </div>
     )
 }
