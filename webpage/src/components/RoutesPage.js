@@ -31,21 +31,21 @@ function RoutesPage() {
         });
     }, []);
 
-    function updateRoutes() {
+    function refreshRoutes() {
         api.getAllRoutes()
         .then(setRoutes);
     }
 
     function deleteRoute(routeId) {
         api.deleteRoute(routeId);
-        updateRoutes();
+        refreshRoutes();
     }
 
     function addRoute() {
         if(departureLocation !== '' && arrivalLocation !== '' && stops !== '' && hours !== '' ** prices !== '') {
             setModalVisibility(false);
             api.addRoute(departureLocation, arrivalLocation, stops, hours, prices, null);
-            updateRoutes();
+            refreshRoutes();
         }
         else {
             alert('Wypełnij wszystkie pola!');
@@ -99,8 +99,8 @@ function RoutesPage() {
                             routeId={route.id}
                             allHours={route.hours}
                             stopsPrices={route.stops.reduce((a, b, i) => a.concat([route.prices[i - 1], b]), []).slice(1).join(', ')}
-                            updateRoutes={updateRoutes}
-                            deleteRoute={deleteRoute}
+                            refreshRoutes={refreshRoutes}
+                            deleteRoute={() => deleteRoute(route.id)}
                         />
                 ))}
                 <Modal visible={modalVisibility}>
