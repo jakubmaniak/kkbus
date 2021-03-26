@@ -25,9 +25,7 @@ function RoutesPage() {
 
     function updateRoutes() {
         api.getAllRoutes()
-        .then((routes) => {
-            setRoutes(routes);
-        });
+        .then(setRoutes);
     }
 
     return (
