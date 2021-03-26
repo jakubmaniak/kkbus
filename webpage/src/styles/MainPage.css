@@ -171,7 +171,7 @@
 .bus-stop-price {
     display: flex;
     width: 100%;
-    font-size:  14px;
+    font-size: 14px;
 }
 
 .bus-stop-price + .bus-stop-price {

@@ -20,7 +20,6 @@ export default function MainPage() {
             );
         });
     }, []);
-    
 
     return (
         <div className="main-page">
@@ -48,7 +47,8 @@ export default function MainPage() {
                                         <span className="price">{track.prices.slice(i, j).reduce((a, b) => Math.floor((a + b) * 0.7))}zł</span>
                                     </div>
                                 ))}
-                            allStops={track.stops.reduce((a, b, i) => a.concat([b]), []).slice(1).join(', ')}
+                            routeId={track.id}
+                            allHours={track.hours.reduce((a, b) => a.concat([b]), []).slice(1).join(', ')}
                             stopsPrices={track.stops.reduce((a, b, i) => a.concat([track.prices[i - 1], b]), []).slice(1).join(', ')}
                         />
                 ))}
