@@ -16,7 +16,7 @@ function Route(props) {
     let [modalVisibility, setModalVisibility] = useState(false);
     let [departureLocation, setDepartureLocation] = useState(props.departureLocation);
     let [arrivalLocation, setArrivalLocation] = useState(props.arrivalLocation);
-    let [hours, setHours] = useState(props.hours);
+    let [hours, setHours] = useState(props.allHours);
     let [prices, setPrices] = useState([]);
     let [stops, setStops] = useState([]);
 
