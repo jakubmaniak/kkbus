@@ -88,7 +88,7 @@ function BookingList() {
                     </div>
                 </div>
                 <div className="tile">
-                    <h2>Lista rezeracji</h2>
+                    <h2>Lista rezerwacji</h2>
                     <div className="booking-list-container">
                         {bookinglist.map((bookingItem) => {
                             return (
