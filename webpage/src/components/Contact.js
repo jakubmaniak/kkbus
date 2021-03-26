@@ -1,17 +1,31 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import '../styles/Contact.css';
 import map from '../static/map.png';
 
 import UserContext from '../contexts/User';
 import Modal from './Modal';
 import '../styles/Modal.css';
+import * as api from '../api';
 
 function Contact() {
     let { role } = useContext(UserContext).user;
     let [modalVisibility, setModalVisibility] = useState(false);
+    let [address, setAddress] = useState('');
+    let [zipCode, setZipCode] = useState('');
+    let [phoneNumber, setPhoneNumber] = useState('');
+    let [faxNumber, setFaxNumber] = useState('');
+    let [email, setEmail] = useState('');
 
     function showModal() {
         setModalVisibility(true);
+        api.getContact()
+        .then((res) => {
+            setAddress(res.address);
+            setZipCode(res.zipCode);
+            setPhoneNumber(res.phoneNumber);
+            setFaxNumber(res.faxNumber);
+            setEmail(res.email);
+        });
     }
 
     return (
@@ -58,11 +72,11 @@ function Contact() {
                     <header>Edycja danych kontaktowych</header>
                     <section className="content">
                         <form className="edit-contact">
-                            <input placeholder="Adres"/>
-                            <input placeholder="Kod pocztowy"/>
-                            <input placeholder="Miasto"/>
-                            <input placeholder="Telefon/fax"/>
-                            <input placeholder="Adres e-mail"/>
+                            <input placeholder="Adres" defaultValue={address}/>
+                            <input placeholder="Kod pocztowy" defaultValue={zipCode}/>
+                            <input placeholder="Telefon/fax" defaultValue={phoneNumber}/>
+                            <input placeholder="Fax" defaultValue={faxNumber}/>
+                            <input placeholder="Adres e-mail" defaultValue={email}/>
                         </form>
                     </section>
                     <section className="footer">
