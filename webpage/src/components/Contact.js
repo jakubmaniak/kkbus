@@ -6,6 +6,7 @@ import UserContext from '../contexts/User';
 import Modal from './Modal';
 import '../styles/Modal.css';
 import * as api from '../api';
+import { fromValue } from '../helpers/from-value';
 
 function Contact() {
     let { role } = useContext(UserContext).user;
@@ -76,7 +77,7 @@ function Contact() {
                     <header>Edycja danych kontaktowych</header>
                     <section className="content">
                         <form className="edit-contact">
-                            <input placeholder="Adres" defaultValue={address}/>
+                            <input placeholder="Adres" defaultValue={address} onChange={fromValue(setAddress)}/>
                             <input placeholder="Kod pocztowy" defaultValue={zipCode}/>
                             <input placeholder="Telefon/fax" defaultValue={phoneNumber}/>
                             <input placeholder="Fax" defaultValue={faxNumber}/>

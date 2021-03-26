@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/LoyaltyProgram.css';
 import Modal from './Modal';
-import { useValue } from '../helpers/use-value';
+import { fromValue } from '../helpers/from-value';
 import * as api from '../api';
 
 function Reward(props) {
@@ -70,10 +70,10 @@ function Reward(props) {
                 <header>Edycja nagrody</header>
                 <section className="content">
                     <form>
-                        <input placeholder="Nazwa" defaultValue={props.name} onChange={useValue(setName)}/>
-                        <input placeholder="Wymagene punkty" defaultValue={props.requiredPoints} onChange={useValue(setRequiredPoints)}/>
-                        <input placeholder="Stan magazynu (puste = nieograniczony)" defaultValue={props.amount} onChange={useValue(setAmount)}/>
-                        <input placeholder="Limit na 1 osobę (puste = bez limitu)" defaultValue={props.limit} onChange={useValue(setLimit)}/>
+                        <input placeholder="Nazwa" defaultValue={props.name} onChange={fromValue(setName)}/>
+                        <input placeholder="Wymagene punkty" defaultValue={props.requiredPoints} onChange={fromValue(setRequiredPoints)}/>
+                        <input placeholder="Stan magazynu (puste = nieograniczony)" defaultValue={props.amount} onChange={fromValue(setAmount)}/>
+                        <input placeholder="Limit na 1 osobę (puste = bez limitu)" defaultValue={props.limit} onChange={fromValue(setLimit)}/>
                     </form>
                 </section>
                 <section className="footer">

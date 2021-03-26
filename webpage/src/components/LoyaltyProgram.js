@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 import '../styles/LoyaltyProgram.css';
 import * as api from '../api';
-import { useValue } from '../helpers/use-value';
+import { fromValue } from '../helpers/from-value';
 
 import UserContext from '../contexts/User';
 import Reward from './Reward';
@@ -150,10 +150,10 @@ function LoyaltyProgram() {
                     <header>Dodawanie nagrody</header>
                     <section className="content">
                         <form>
-                            <input placeholder="Nazwa" onChange={useValue(setName)}/>
-                            <input placeholder="Wymagene punkty" onChange={useValue(setRequiredPoints)}/>
-                            <input placeholder="Stan magazynu (puste = nieograniczony)" onChange={useValue(setAmount)}/>
-                            <input placeholder="Limit na 1 osobę (puste = bez limitu)" onChange={useValue(setLimit)}/>
+                            <input placeholder="Nazwa" onChange={fromValue(setName)}/>
+                            <input placeholder="Wymagene punkty" onChange={fromValue(setRequiredPoints)}/>
+                            <input placeholder="Stan magazynu (puste = nieograniczony)" onChange={fromValue(setAmount)}/>
+                            <input placeholder="Limit na 1 osobę (puste = bez limitu)" onChange={fromValue(setLimit)}/>
                         </form>
                     </section>
                     <section className="footer">

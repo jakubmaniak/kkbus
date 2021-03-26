@@ -4,7 +4,7 @@ import Modal from './Modal';
 import UserContext from '../contexts/User';
 import Dropdown from './Dropdown';
 import DropdownMultiple from './DropdownMultiple';
-import { useValue as fromValue} from '../helpers/use-value';
+import { fromValue} from '../helpers/from-value';
 import * as api from '../api';
 
 function Vehicle(props) {

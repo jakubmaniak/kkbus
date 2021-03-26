@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../styles/AuthPage.css';
 import background from '../static/background.jpg';
 
-import { useValue } from '../helpers/use-value';
+import { fromValue } from '../helpers/from-value';
 import * as api from '../api';
 
 import { Link, useHistory } from 'react-router-dom';
@@ -39,17 +39,17 @@ function SignupPage() {
                     <h2>Rejestracja</h2>
                     <form onSubmit={handleSubmit}>
                         <input type="text" placeholder="Adres email" 
-                            value={email} onChange={useValue(setEmail)} />
+                            value={email} onChange={fromValue(setEmail)} />
                         <div className="row">
                             <input type="text" placeholder="Imię" 
-                                value={firstname} onChange={useValue(setFirstName)} />
+                                value={firstname} onChange={fromValue(setFirstName)} />
                             <input type="text" placeholder="Nazwisko" 
-                                value={lastName} onChange={useValue(setLastName)} />
+                                value={lastName} onChange={fromValue(setLastName)} />
                         </div>
                         <input type="date" placeholder="Data urodzenia" 
-                            value={birthDate} onChange={useValue(setBirthDate)} />
+                            value={birthDate} onChange={fromValue(setBirthDate)} />
                         <input type="text" placeholder="Numer telefonu" 
-                            value={phoneNumber} onChange={useValue(setPhoneNumber)} />
+                            value={phoneNumber} onChange={fromValue(setPhoneNumber)} />
                         <button className="submit">Zarejestruj</button>
                     </form>
                     <div className="action">

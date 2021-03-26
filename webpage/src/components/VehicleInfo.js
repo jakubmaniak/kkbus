@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import * as api from '../api';
 import Vehicle from './Vehicle';
-import { useValue as fromValue} from '../helpers/use-value';
+import { fromValue } from '../helpers/from-value';
 
 import '../styles/VehicleInfo.css';
 import Modal from './Modal';

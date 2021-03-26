@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import { useValue } from '../helpers/use-value';
+import { fromValue } from '../helpers/from-value';
 import * as api from '../api';
 
 import background from '../static/background.jpg';
@@ -40,9 +40,9 @@ function LoginPage() {
                     <h2>Logowanie</h2>
                     <form onSubmit={handleSubmit}>
                         <input type="text" placeholder="Adres email lub login"
-                            value={userLogin} onChange={useValue(setUserLogin)} />
+                            value={userLogin} onChange={fromValue(setUserLogin)} />
                         <input type="password" placeholder="Hasło"
-                            value={userPassword} onChange={useValue(setUserPassword)} />
+                            value={userPassword} onChange={fromValue(setUserPassword)} />
                         <button className="submit">Zaloguj</button>
                     </form>
                     <div className="action">

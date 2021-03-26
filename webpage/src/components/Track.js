@@ -5,7 +5,7 @@ import UserContext from '../contexts/User';
 import Modal from './Modal';
 import Dropdown from './Dropdown';
 import { useHistory } from 'react-router-dom';
-import { useValue as valueFormer } from '../helpers/use-value';
+import { fromValue } from '../helpers/from-value';
 import * as api from '../api';
 
 function Track(props) {
@@ -55,8 +55,8 @@ function Track(props) {
                 <header>Edycja informacji o trasie</header>
                 <section className="content">
                     <form className="edit-track">
-                        <input placeholder="Punkt startowy" defaultValue={props.startingStop} onChange={valueFormer(setStartPoint)}/>
-                        <input placeholder="Punkt docelowy" defaultValue={props.finalStop} onChange={valueFormer(setEndPoint)}/>
+                        <input placeholder="Punkt startowy" defaultValue={props.startingStop} onChange={fromValue(setStartPoint)}/>
+                        <input placeholder="Punkt docelowy" defaultValue={props.finalStop} onChange={fromValue(setEndPoint)}/>
                         <textarea placeholder="Godziny odjazdu (odzielone przecinkami)" 
                             defaultValue={props.allHours}
                             //onChange={}
