@@ -58,7 +58,7 @@ function Track(props) {
                         <input placeholder="Punkt startowy" defaultValue={props.startingStop} onChange={valueFormer(setStartPoint)}/>
                         <input placeholder="Punkt docelowy" defaultValue={props.finalStop} onChange={valueFormer(setEndPoint)}/>
                         <textarea placeholder="Godziny odjazdu (odzielone przecinkami)" 
-                            defaultValue={props.allStops}
+                            defaultValue={props.allHours}
                             //onChange={}
                         />
                         <textarea placeholder="Przystanki (cena, przystanek, cena, przystanek...)"
