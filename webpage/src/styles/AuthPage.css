@@ -1,6 +1,7 @@
 .login-page,
 .signup-page,
-.remind-password-page {
+.remind-password-page,
+.post-sign-up-page,
     height: 100%;
     display: flex;
     overflow: hidden;   
@@ -23,7 +24,8 @@
 
 .login-panel,
 .signup-panel,
-.remind-password-panel {
+.remind-password-panel,
+.post-sign-up,
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -70,7 +72,8 @@ form {
 
 .login-panel .submit,
 .remind-password-panel .submit,
-.signup-panel .submit{
+.signup-panel .submit,
+.post-sign-up .submit,
     background-color: #D9B430;
     color: black;
     font-weight: 500;
@@ -99,4 +102,12 @@ form .row {
 
 .signup-panel form div input {
     width: 190px;
+}
+
+.post-sign-up-page p,
+    font-size: 18px;
+    font-weight: 500;
+    width: 400px;
+}
+
 }

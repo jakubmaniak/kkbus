@@ -18,6 +18,7 @@ import FuelPage from './components/FuelPage';
 import RouteReport from './components/RouteReport';
 import Clients from './components/Clients';
 import BookingList from './components/BookingList';
+import PostSignup from './components/PostSignup';
 
 function App() {
     let [user, setUser] = useState(initialContext.user);
@@ -30,6 +31,7 @@ function App() {
                         <Route exact path="/logowanie" />
                         <Route exact path="/rejestracja" />
                         <Route exact path="/przypomnienie-hasla" />
+                        <Route exact path="/aktywuj-konto" />
                         <Route>
                             <Header />
                         </Route>
@@ -46,6 +48,9 @@ function App() {
                         </Route>
                         <Route exact path="/przypomnienie-hasla">
                             <RemindPasswordPage />
+                        </Route>
+                        <Route exact path="/aktywuj-konto">
+                            <PostSignup />
                         </Route>
                         <Route exact path="/kontakt">
                             <ContactPage />

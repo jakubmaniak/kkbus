@@ -6,6 +6,7 @@ import { fromValue } from '../helpers/from-value';
 import * as api from '../api';
 
 import { Link, useHistory } from 'react-router-dom';
+import PostSignup from './PostSignup';
 
 function SignupPage() {
     let history = useHistory();
@@ -50,7 +51,7 @@ function SignupPage() {
                             value={birthDate} onChange={fromValue(setBirthDate)} />
                         <input type="text" placeholder="Numer telefonu" 
                             value={phoneNumber} onChange={fromValue(setPhoneNumber)} />
-                        <button className="submit">Zarejestruj</button>
+                        <button className="submit" onClick={history.push('/aktywuj-konto')}>Zarejestruj</button>
                     </form>
                     <div className="action">
                         <Link to="/logowanie">Mam już konto</Link>
