@@ -19,6 +19,7 @@ import RouteReport from './components/RouteReport';
 import Clients from './components/Clients';
 import BookingList from './components/BookingList';
 import PostSignup from './components/PostSignup';
+import PostActivation from './components/PostActivation';
 
 function App() {
     let [user, setUser] = useState(initialContext.user);
@@ -32,6 +33,7 @@ function App() {
                         <Route exact path="/rejestracja" />
                         <Route exact path="/przypomnienie-hasla" />
                         <Route exact path="/aktywuj-konto" />
+                        <Route exact path="/aktywowano-konto" />
                         <Route>
                             <Header />
                         </Route>
@@ -51,6 +53,9 @@ function App() {
                         </Route>
                         <Route exact path="/aktywuj-konto">
                             <PostSignup />
+                        </Route>
+                        <Route exact path="/aktywowano-konto">
+                            <PostActivation />
                         </Route>
                         <Route exact path="/kontakt">
                             <ContactPage />

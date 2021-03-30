@@ -2,6 +2,7 @@
 .signup-page,
 .remind-password-page,
 .post-sign-up-page,
+.post-activation-page {
     height: 100%;
     display: flex;
     overflow: hidden;   
@@ -26,6 +27,7 @@
 .signup-panel,
 .remind-password-panel,
 .post-sign-up,
+.post-activation {
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -74,6 +76,7 @@ form {
 .remind-password-panel .submit,
 .signup-panel .submit,
 .post-sign-up .submit,
+.post-activation-page .submit {
     background-color: #D9B430;
     color: black;
     font-weight: 500;
@@ -105,9 +108,16 @@ form .row {
 }
 
 .post-sign-up-page p,
+.post-activation-page p {
     font-size: 18px;
     font-weight: 500;
     width: 400px;
 }
 
+.post-sign-up-page .container p {
+    margin-bottom: 38px;
+}
+
+.post-activation-page p + p{
+    margin-bottom: 38px;
 }
