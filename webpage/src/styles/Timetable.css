@@ -1,0 +1,19 @@
+.filters {
+    display: flex;
+    justify-content: space-between;
+}
+
+.filter-container {
+    display: flex;
+}
+
+.tile.dark {
+    display: flex;
+    justify-content: space-between;
+    background-color: #30302A;
+    color: white;
+}
+
+.tile.dark span:first-child {
+    width: 240px;
+}
