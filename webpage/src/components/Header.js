@@ -74,6 +74,7 @@ function Header() {
                 <div className="nav-action" onClick={handleMenuClick}>
                     <HeaderItem path="/">Grafik kursów</HeaderItem>
                     <HeaderItem path="/grafik-pracy">Grafik pracy</HeaderItem>
+                    <HeaderItem path="/dyspozycyjnosc">Dyspozycyjność</HeaderItem>
                     <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
                     <HeaderItem path="#">Raporty</HeaderItem>
                     <HeaderItem path="/konta-i-rezerwacje-klientow">Konta i rezerwacje klientów</HeaderItem>
@@ -93,6 +94,7 @@ function Header() {
                 <div className="nav-action" onClick={handleMenuClick}>
                     <HeaderItem path="/">Grafik kursów</HeaderItem>
                     <HeaderItem path="/grafik-pracy">Grafik pracy</HeaderItem>
+                    <HeaderItem path="/dyspozycyjnosc">Dyspozycyjność</HeaderItem>
                     <HeaderItem path="#">Raporty</HeaderItem>
                     <HeaderItem path="/konta-i-rezerwacje-klientow">Konta i rezerwacje klientów</HeaderItem>
                     <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
@@ -110,6 +112,7 @@ function Header() {
                 <div className="nav-action">
                     <HeaderItem path="/">Grafik kursów</HeaderItem>
                     <HeaderItem path="/grafik-pracy">Grafik pracy</HeaderItem>
+                    <HeaderItem path="/dyspozycyjnosc">Dyspozycyjność</HeaderItem>
                     <HeaderItem path="#">Lista pasażerów</HeaderItem>
                     <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
                     <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>

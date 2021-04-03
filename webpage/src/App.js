@@ -20,6 +20,7 @@ import Clients from './components/Clients';
 import BookingList from './components/BookingList';
 import PostSignup from './components/PostSignup';
 import PostActivation from './components/PostActivation';
+import Timetable from './components/Timetable';
 
 function App() {
     let [user, setUser] = useState(initialContext.user);
@@ -80,6 +81,9 @@ function App() {
                         </Route>
                         <Route exact path="/lista-rezerwacji">
                             <BookingList />
+                        </Route>
+                        <Route exact path="/dyspozycyjnosc">
+                            <Timetable />
                         </Route>
                     </Switch>
                 </Router>
