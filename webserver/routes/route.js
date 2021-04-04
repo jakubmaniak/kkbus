@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { invalidRequest, notFound, serverError } = require('../errors');
+const { invalidRequest, serverError } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const role = require('../middlewares/roles')(
     [0, 'guest'],
@@ -66,7 +66,7 @@ router.get('/route/:id', async (req, res, next) => {
 
     // let includeOpposite = ('includeOpposite' in req.query);
 
-    if (isNaN(routeId)) return next(invalidRequest);
+    if (isNaN(routeId)) return next(invalidRequest());
 
     // if (includeOpposite) {
     //     let route = routes.get(routeId);
@@ -118,14 +118,14 @@ router.post('/route', [
         res.ok({ id: result.insertId, ...route });
     }
     catch {
-        next(serverError);
+        next(serverError());
     }
 });
 
 router.delete('/route/:id', [role('office')], async (req, res, next) => {
     let routeId = parseInt(req.params.id);
 
-    if (isNaN(routeId)) return next(invalidRequest);
+    if (isNaN(routeId)) return next(invalidRequest());
 
     //routes.delete(routeId);
 
@@ -134,7 +134,7 @@ router.delete('/route/:id', [role('office')], async (req, res, next) => {
         res.ok();
     }
     catch {
-        next(serverError);
+        next(serverError());
     }
 });
 
@@ -151,7 +151,7 @@ router.put('/route/:id', [
 ], async (req, res, next) => {
     let routeId = parseInt(req.params.id);
 
-    if (isNaN(routeId)) return next(invalidRequest);
+    if (isNaN(routeId)) return next(invalidRequest());
 
     let { oppositeId, departureLocation, arrivalLocation, hours, stops, prices } = req.body;
 
@@ -170,7 +170,7 @@ router.put('/route/:id', [
         res.ok(updatedRoute);
     }
     catch {
-        next(serverError);
+        next(serverError());
     }
 });
 

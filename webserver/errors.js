@@ -1,11 +1,9 @@
 const error = function(errorCode) {
-    let err = new Error(errorCode);
-    err.name = 'HandlerError';
-
-    return err;
-    /*return () => {
-        throw err;
-    };*/
+    return () => {
+        let err = new Error(errorCode);
+        err.name = 'HandlerError';
+        return err;
+    };
 };
 
 module.exports = {

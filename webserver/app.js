@@ -35,7 +35,7 @@ app.use((err, req, res, next) => {
     let errorCode = err.message;
 
     if (err.name != 'HandlerError') {
-        errorCode = serverError.message;
+        errorCode = serverError().message;
         console.error(err);
     }
 

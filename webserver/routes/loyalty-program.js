@@ -41,17 +41,17 @@ router.get('/loyalty-program/rewards', (req, res) => {
 
 router.get('/loyalty-program/reward/:id', [role('client')], (req, res) => {
     let id = parseInt(req.params.id);
-    if (isNaN(id)) throw invalidRequest;
+    if (isNaN(id)) throw invalidRequest();
 
     let { login } = req.user;
 
-    if (!rewards.has(id)) throw notFound;
-    if (!userPoints.has(login)) throw invalidRequest;
+    if (!rewards.has(id)) throw notFound();
+    if (!userPoints.has(login)) throw invalidRequest();
     
     let reward = rewards.get(id);
     let points = userPoints.get(login);
     
-    if (points < reward.requiredPoints) throw invalidRequest;
+    if (points < reward.requiredPoints) throw invalidRequest();
 
     points -= reward.requiredPoints;
     userPoints.set(login, points);
@@ -82,8 +82,8 @@ router.put('/loyalty-program/reward/:id', [
 ], (req, res) => {
     let id = parseInt(req.params.id);
     
-    if (isNaN(id)) throw invalidRequest;
-    if (!rewards.has(id)) throw notFound;
+    if (isNaN(id)) throw invalidRequest();
+    if (!rewards.has(id)) throw notFound();
 
     let { name, requiredPoints, amount, limit } = req.body;
 
@@ -102,9 +102,9 @@ router.put('/loyalty-program/reward/:id', [
 
 router.delete('/loyalty-program/reward/:id', [role('owner')], (req, res) => {
     let id = parseInt(req.params.id);
-    if (isNaN(id)) throw invalidRequest;
+    if (isNaN(id)) throw invalidRequest();
 
-    if (!rewards.has(id)) throw notFound;
+    if (!rewards.has(id)) throw notFound();
 
     rewards.delete(id);
 

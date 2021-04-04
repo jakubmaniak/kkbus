@@ -113,10 +113,10 @@ router.get('/vehicles', [role('driver')], (req, res) => {
 
 router.get('/vehicle/:id', [role('driver')], (req, res) => {
     let wantedId = parseInt(req.params.id);
-    if (isNaN(wantedId)) throw invalidRequest;
+    if (isNaN(wantedId)) throw invalidRequest();
 
     let vehicleIndex = vehicles.findIndex(({id}) => id == wantedId);
-    if (vehicleIndex < 0) throw notFound;
+    if (vehicleIndex < 0) throw notFound();
 
     res.ok(vehicles[vehicleIndex]);
 });
@@ -172,10 +172,10 @@ router.put('/vehicle/:id', [
     }`)
 ], (req, res) => {
     let wantedId = parseInt(req.params.id);
-    if (isNaN(wantedId)) throw invalidRequest;
+    if (isNaN(wantedId)) throw invalidRequest();
 
     let vehicleIndex = vehicles.findIndex(({id}) => id == wantedId);
-    if (vehicleIndex < 0) throw notFound;
+    if (vehicleIndex < 0) throw notFound();
 
     let { brand, model, year, plate, mileage, seats, state, parking, ab, ba, driver } = req.body;
 
@@ -199,10 +199,10 @@ router.put('/vehicle/:id', [
 
 router.delete('/vehicle/:id', [role('owner')], (req, res) => {
     let wantedId = parseInt(req.params.id);
-    if (isNaN(wantedId)) throw invalidRequest;
+    if (isNaN(wantedId)) throw invalidRequest();
 
     let vehicleIndex = vehicles.findIndex(({id}) => id == wantedId);
-    if (vehicleIndex < 0) throw notFound;
+    if (vehicleIndex < 0) throw notFound();
 
     vehicles.splice(vehicleIndex, 1);
 
@@ -211,7 +211,7 @@ router.delete('/vehicle/:id', [role('owner')], (req, res) => {
 
 router.get('/vehicle/:id/fuel-usage', [role('driver')], (req, res) => {
     let vehicleId = parseInt(req.params.id);
-    if (isNaN(vehicleId)) throw invalidRequest;
+    if (isNaN(vehicleId)) throw invalidRequest();
 
     res.ok(fuelHistory.get(vehicleId) || []);
 });

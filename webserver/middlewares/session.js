@@ -74,7 +74,7 @@ module.exports = () => async (req, res, next) => {
             }
             catch (err) {
                 if (err.name === 'JsonWebTokenError') {
-                    throw badSessionToken;
+                    throw badSessionToken();
                 }
                 else {
                     console.error(err);
@@ -85,14 +85,14 @@ module.exports = () => async (req, res, next) => {
             if (payload && payload.login) {
                 user = await userController.findUserByLogin(payload.login);
 
-                if (!user) throw badSessionToken;
+                if (!user) throw badSessionToken();
 
                 user.role = roles.get(user.role);
                 delete user.password;
 
                 cache.set(sessionToken, user);
             }
-            else throw badSessionToken;
+            else throw badSessionToken();
         }
 
         req.user = {

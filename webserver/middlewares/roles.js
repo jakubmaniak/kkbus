@@ -6,7 +6,7 @@ module.exports = (...roleProrities) => (requiredRole) => (req, res, next) => {
     let userPriority = roleProrities.find((pair) => pair[1] === userRole)[0];
 
     if (userPriority < requiredPriority) {
-        throw unauthorized;
+        throw unauthorized();
     }
 
     next();

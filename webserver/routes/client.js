@@ -25,14 +25,14 @@ router.get('/clients', [role('office')], async (req, res, next) => {
     }
 
     if (!availableParams.includes(param)) {
-        return next(invalidRequest);
+        return next(invalidRequest());
     }
     if (param == 'phone') param = 'phoneNumber';
     
 
     let clients = await userController.findManyUsers(param, query, 1);
 
-    if (clients == null) return next(invalidRequest);
+    if (clients == null) return next(invalidRequest());
     res.ok(clients);
 });
 

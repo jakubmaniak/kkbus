@@ -17,7 +17,7 @@ module.exports = (schema) => {
             next();
         }
         else {
-            throw invalidRequest;
+            throw invalidRequest();
         }
     
         /*console.dir(schemaObject, { depth: 8 });

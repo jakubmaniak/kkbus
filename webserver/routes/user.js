@@ -23,7 +23,7 @@ router.post('/user/login', [
     let { login, password } = req.body;
 
     let user = await userController.findUserByCredentials(login, login, password);
-    if (!user) return next(badCredentials);
+    if (!user) return next(badCredentials());
     
     //NOTE: true login
     login = user.login;
@@ -50,13 +50,13 @@ router.post('/user/register', [
         let date = new Date(dateString);
 
         if (isNaN(date) || date.getFullYear() < 1900 || new Date() - date < 0)
-            return next(invalidRequest);
+            return next(invalidRequest());
     }
     else if (/^[ -+\/0-9]+$/.test(phoneNumber)) { }
-    else return next(invalidRequest);
+    else return next(invalidRequest());
     
 
-    if (await userController.findUserByEmail(email)) return next(emailAlreadyTaken);
+    if (await userController.findUserByEmail(email)) return next(emailAlreadyTaken());
 
     let offset = 0;
     let phoneNumberPart = parseInt(phoneNumber.slice(-4));

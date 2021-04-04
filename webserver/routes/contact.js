@@ -47,7 +47,7 @@ router.put('/contact', [
         await contactController.updateContact(contact);
     }
     catch {
-        return next(serverError);
+        return next(serverError());
     }
     
     cachedContact = contact;
