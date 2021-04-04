@@ -98,6 +98,23 @@ export async function getWorkSchedule(driverId, range = 0, routeId = null) {
 }
 
 
+export async function getTimetable() {
+    return sendGet('/timetable');
+}
+
+export async function addTimetableItem(userId, startDate, days, ranges, available, label = null) {
+    return sendPost('/timetable/' + userId, { startDate, days, ranges, available, label });
+}
+
+export async function updateTimetableItem(itemId, startDate, days, ranges, available, label = null) {
+    return sendPut('/timetable/' + itemId, { startDate, days, ranges, available, label });
+}
+
+export async function deleteTimetableItem(itemId) {
+    return sendDelete('/timetable/' + itemId);
+}
+
+
 export async function getLoyaltyProgram() {
     return sendGet('/loyalty-program');
 }
