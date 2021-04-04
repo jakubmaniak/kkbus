@@ -1,115 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Dropdown from './Dropdown';
 import '../styles/Timetable.css';
 import TimetableFilterDays from './TimetableFilterDays';
 import TimetableItem from './TimetableItem';
+import * as api from '../api';
 
 
 function Timetable() {
+    let [timetable, setTimetable] = useState([]); 
 
-    let filterResults = [
-        {
-            name: 'Kazimierz Rajdowiec',
-            role: 'kierowca',
-            items: [
-                {
-                    available: true,
-                    startDate: '2021-04-03',
-                    days: 1,
-                    ranges: ['10:00 - 20:00']
-                },
-                {
-                    available: true,
-                    startDate: '2021-04-04',
-                    days: 1,
-                    ranges: ['10:00 - 14:00', '18:00 - 22:00']
-                },
-                {
-                    available: true,
-                    startDate: '2021-04-05',
-                    days: 3,
-                    ranges: ['12:00 - 20:00']
-                },
-                {
-                    available: false,
-                    startDate: '2021-04-08',
-                    days: 2,
-                    ranges: ['12:00 - 16:00']
-                }
-            ]
-        },
-        {
-            name: 'Tomasz Rajdowiec',
-            role: 'kierowca',
-            items: [
-                {
-                    available: true,
-                    startDate: '2021-04-03',
-                    days: 2,
-                    ranges: ['12:00 - 20:00']
-                },
-                {
-                    available: false,
-                    startDate: '2021-04-05',
-                    days: 2,
-                    ranges: ['12:00 - 16:00']
-                },
-                {
-                    available: true,
-                    startDate: '2021-04-07',
-                    days: 3,
-                    ranges: ['12:00 - 20:00']
-                }
-            ]
-        },
-        {
-            name: 'Mirosław Szybki',
-            role: 'kierowca',
-            items: [
-                {
-                    available: true,
-                    startDate: '2021-04-03',
-                    days: 2,
-                    ranges: ['10:00 - 20:00']
-                },
-                {
-                    available: null,
-                    startDate: '2021-04-05',
-                    days: 5,
-                    ranges: []
-                }
-            ]
-        },
-        {
-            name: 'Jan Doświadczony',
-            role: 'kierowca',
-            items: [
-                {
-                    available: null,
-                    startDate: '2021-04-03',
-                    days: 1,
-                    ranges: []
-                },
-                {
-                    available: true,
-                    startDate: '2021-04-04',
-                    days: 4,
-                    ranges: ['16:00 - 24:00']
-                },
-                {
-                    available: null,
-                    startDate: '2021-04-08',
-                    days: 2,
-                    ranges: []
-                },
-            ]
-        }
-    ];
-
+    useEffect(() => {
+        api.getTimetable().then(setTimetable);
+    }, []);
 
     let d = new Date('2021-04-03'); //data pozyskana z filtru
     let filterDays = [];
-    let filtersDaysToCompare = [];
 
     function setFilterDays() {
         for(let i = 0; i < 7; i++) {
@@ -118,7 +23,6 @@ function Timetable() {
             let month = (d.getMonth() + 1).toString().padStart(2, '0');
             let displayText = `${weekDay}, ${monthDay}.${month}`; 
             filterDays[i] = displayText;
-            filtersDaysToCompare[i] = d.getFullYear() + '-' + month + '-' + monthDay;
         }
 
         return filterDays;
@@ -172,7 +76,7 @@ function Timetable() {
                     })}
                />
                <div className="timetable-item-container">
-                {filterResults.map((filterResult, i) => {
+                {timetable.map((filterResult, i) => {
                     return (
                             <TimetableItem key={i}
                                 name={filterResult.name}
