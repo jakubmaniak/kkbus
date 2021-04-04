@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const env = require('../helpers/env');
-const { badSessionToken } = require("../errors");
+const { badSessionToken, serverError } = require("../errors");
 const userController = require('../controllers/user');
 
 
@@ -74,25 +74,31 @@ module.exports = () => async (req, res, next) => {
             }
             catch (err) {
                 if (err.name === 'JsonWebTokenError') {
-                    throw badSessionToken();
+                    return next(badSessionToken());
                 }
                 else {
                     console.error(err);
-                    throw serverError;
+                    return next(serverError);
                 }
             }
 
             if (payload && payload.login) {
-                user = await userController.findUserByLogin(payload.login);
+                try {
+                    user = await userController.findUserByLogin(payload.login);
+                }
+                catch (err) {
+                    res.clearCookie('session');
+                    return next(err);
+                }
 
-                if (!user) throw badSessionToken();
+                if (!user) return next(badSessionToken());
 
                 user.role = roles.get(user.role);
                 delete user.password;
 
                 cache.set(sessionToken, user);
             }
-            else throw badSessionToken();
+            else return next(badSessionToken());
         }
 
         req.user = {
