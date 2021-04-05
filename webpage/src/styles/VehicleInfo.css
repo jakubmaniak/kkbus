@@ -78,6 +78,11 @@
     width: 194px;
 }
 
+.modal .vehicle-edit .input-container {
+    display: flex;
+    justify-content: space-between;
+}
+
 .vehicle-info-page .modal .footer button.delete {
     background-color: #C73535;
 }
