@@ -37,7 +37,18 @@ function Vehicle(props) {
                     let currentMileage = mileage !== props.mileage ? parseInt(mileage) : props.mileage;
                     let currentSeats = seats !== props.seats ? parseInt(seats) : props.seats;
                     
-                    api.updateVehicle(vehicleId, brand, model, currentYear, currentSeats, plate, currentMileage)
+                    api.updateVehicle(
+                        vehicleId,
+                        brand,
+                        model, 
+                        currentYear, 
+                        currentSeats, 
+                        plate, 
+                        currentMileage,
+                        null,
+                        null,
+                        null  
+                        )
                     .then(() => 
                         props.updateVehicle()
                     );
@@ -110,11 +121,11 @@ function Vehicle(props) {
                     <span>Miejsce stałego parkowania</span>
                     <span>{props.parking}</span>
                 </div>
-                <div className="vehicle-info route-info">
+                <div className="vehicle-info route-info-container">
                     <span>Dostępność tras</span>
                     <span>
-                        <p>{props.oneWayRoute}</p> 
-                        <p>{props.returnRoute}</p>
+                        <p>{props.departureLocation} - </p> 
+                        <p>{props.arrivalLocation}</p>
                     </span>
                 </div>
                 <div className="details">

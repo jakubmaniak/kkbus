@@ -32,6 +32,7 @@ function VehicleInfo() {
         api.getAllVehicles()
         .then((results) => {
             setVehicles(results);
+            console.log(results);
             setTimeout(() => {
                 setLoading(false);
             }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
@@ -58,18 +59,18 @@ function VehicleInfo() {
                     setVehicles([
                         ...vehicles,
                         {
-                            id,
                             brand,
                             model,
                             year: parseInt(year),
+                            seats: parseInt(seats),
                             plate,
                             mileage: parseInt(mileage),
-                            seats: parseInt(seats),
                             state: null,
                             parking: null,
-                            ab : null, 
-                            ba: null,
-                            driver: null
+                            routeId: null,
+                            //arrivalLocation: null,
+                            //departureLocation : null, 
+                            //driver: null
                         }
                     ]);
                     setModalAddVehicleVisibility(false);
@@ -102,8 +103,8 @@ function VehicleInfo() {
                             state={vehicle.state}
                             parking={vehicle.parking}
                             seats={vehicle.seats} 
-                            oneWayRoute={vehicle.ab}
-                            returnRoute={vehicle.ba}
+                            arrivalLocation={vehicle.arrivalLocation}
+                            departureLocation={vehicle.departureLocation}
                             mileage={vehicle.mileage}
                             combustion={vehicle.combustion}
                             updateVehicle={updateVehicle}
