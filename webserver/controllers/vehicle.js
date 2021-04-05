@@ -69,5 +69,5 @@ module.exports.updateVehicle = (vehicleId, vehicle) => {
 };
 
 module.exports.deleteVehicle = (vehicleId) => {
-    return db.query(`DELETE FROM vehicles WHERE id=?`, [vehicleId]);
+    return db.query('DELETE FROM vehicles WHERE id=?', [vehicleId]);
 };
