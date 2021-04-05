@@ -15,6 +15,8 @@ function Timetable() {
 
     let d = new Date('2021-04-03'); //data pozyskana z filtru
     let filterDays = [];
+    let availableTileWidth = 115;
+    let availableTileMargin = 15;
 
     function setFilterDays() {
         for(let i = 0; i < 7; i++) {
@@ -29,7 +31,7 @@ function Timetable() {
     }
 
    function compareDate(filterResult) {
-    let week = [null, null, null, null, null, null, null]; 
+    let weekAvailable = [null, null, null, null, null, null, null]; 
     
     filterResult.items.map((item, i) => {
         let comparer = item.startDate.slice(5).split('-').reverse().join('.');
@@ -39,16 +41,21 @@ function Timetable() {
 
         filterDays.map((filterDay, i) => {
             if(filterDay.includes(comparer)) {
-                week[i] = {
+                weekAvailable[i] = {
                     range, 
-                    width: 115 * days + 15 * (days - 1),
+                    width: availableTileWidth * days + availableTileMargin * (days - 1),
                     available
                 };
+
+                if(days > 1) {
+                    for(let j = 1; j < days; j++) {
+                        weekAvailable[i + j] = 'occupied';
+                    }
+                }
             }
         });
-       
     }); 
-    return week;
+    return weekAvailable;
    }
 
 
@@ -82,17 +89,21 @@ function Timetable() {
                                 name={filterResult.name}
                                 role={filterResult.role}
                                 children={compareDate(filterResult).map((item) => {
-                                    if(item != null) {
+                                    if(item !== null && item !== 'occupied') {
                                         return (
-                                            <div className={item.available ? 'available' : item.available === null ? 'add' : 'unavailable'} style={{width: item.width + "px"}}>
-                                                <span>{item.available ? 'Dostępność' : item.available === null ? '+ Dodaj' : 'Niedyspozycja'}</span>
-                                                {item.range.map((range, j) => {
-                                                    return (
-                                                        <span key={j}>{range}</span>
-                                                    );
-                                                })}
-                                                    
+                                            <div className={item.available ? 'available' : 'unavailable'} style={{width: item.width + "px"}}>
+                                                <span>{item.available ? 'Dostępność' : 'Niedyspozycja'}</span>
+                                                    {item.range.map((range, j) => {
+                                                        return (
+                                                            <span key={j}>{range}</span>
+                                                        );
+                                                    })}
                                             </div>                                            
+                                        );
+                                    }
+                                    else if(item === null) {
+                                        return (
+                                            <span style={{width: availableTileWidth + 'px'}}></span>
                                         );
                                     }
                                 })}
