@@ -88,10 +88,10 @@ function Timetable() {
                             <TimetableItem key={i}
                                 name={filterResult.name}
                                 role={filterResult.role}
-                                children={compareDate(filterResult).map((item) => {
+                                children={compareDate(filterResult).map((item, i) => {
                                     if(item !== null && item !== 'occupied') {
                                         return (
-                                            <div className={item.available ? 'available' : 'unavailable'} style={{width: item.width + "px"}}>
+                                            <div className={item.available ? 'available' : 'unavailable'} key={i} style={{width: item.width + "px"}}>
                                                 <span>{item.available ? 'Dostępność' : 'Niedyspozycja'}</span>
                                                     {item.range.map((range, j) => {
                                                         return (
