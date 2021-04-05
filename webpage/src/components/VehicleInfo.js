@@ -53,7 +53,7 @@ function VehicleInfo() {
     function addVehicle() {
         if(brand !== '' && model !== '' && year !== '' && plate !== '' && mileage !== '' && seats !== '') {
             if(!isNaN(parseInt(year)) && !isNaN(parseInt(seats)) && !isNaN(parseInt(mileage))) {
-                api.addVehicle(brand, model, parseInt(year), plate, parseInt(mileage), parseInt(seats))
+                api.addVehicle(brand, model, parseInt(year), parseInt(seats), plate, parseInt(mileage))
                 .then((id) => {
                     setVehicles([
                         ...vehicles,

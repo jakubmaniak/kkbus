@@ -37,7 +37,7 @@ function Vehicle(props) {
                     let currentMileage = mileage !== props.mileage ? parseInt(mileage) : props.mileage;
                     let currentSeats = seats !== props.seats ? parseInt(seats) : props.seats;
                     
-                    api.updateVehicle(vehicleId, brand, model, currentYear, plate, currentMileage, currentSeats)
+                    api.updateVehicle(vehicleId, brand, model, currentYear, currentSeats, plate, currentMileage)
                     .then(() => 
                         props.updateVehicle()
                     );
