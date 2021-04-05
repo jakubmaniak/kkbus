@@ -10,7 +10,11 @@ function Timetable() {
     let [timetable, setTimetable] = useState([]); 
 
     useEffect(() => {
-        api.getTimetable().then(setTimetable);
+        api.getTimetable()
+        .then(setTimetable)
+        .catch((err) => {
+            throw err;
+        });
     }, []);
 
     let d = new Date('2021-04-03'); //data pozyskana z filtru
@@ -33,13 +37,13 @@ function Timetable() {
    function compareDate(filterResult) {
     let weekAvailable = [null, null, null, null, null, null, null]; 
     
-    filterResult.items.map((item, i) => {
+    filterResult.items.forEach((item) => {
         let comparer = item.startDate.slice(5).split('-').reverse().join('.');
         let days = item.days;
         let range = item.ranges;
         let available = item.available;
 
-        filterDays.map((filterDay, i) => {
+        filterDays.forEach((filterDay, i) => {
             if(filterDay.includes(comparer)) {
                 weekAvailable[i] = {
                     range, 
