@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { invalidRequest, notFound } = require('../errors');
+const { invalidRequest } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const role = require('../middlewares/roles')(
     [0, 'guest'],
@@ -11,84 +11,7 @@ const role = require('../middlewares/roles')(
     [4, 'owner']
 );
 
-
-let vehicles = [
-    {
-        id: 1,
-        brand: 'Mercedes',
-        model: 'Sprinter',
-        year: 2014,
-        plate: 'KR 111 AB',
-        state: 'Aktywny',
-        parking: 'Parking nr 1',
-        ab: 'Kraków - Katowice',
-        ba: 'Katowice - Kraków',
-        seats: 22,
-        mileage: 10000000,
-        combustion: 8.9,
-        driver: 'Tomasz Rajdowiec'
-    },
-    {
-        id: 2,
-        brand: 'Ford',
-        model: 'Transit',
-        year: 2016,
-        plate: 'KR 124 AO',
-        state: 'Aktywny',
-        parking: 'Parking nr 1',
-        ab: 'Kraków - Katowice',
-        ba: 'Katowice - Kraków',
-        seats: 18,
-        mileage: 900000,
-        combustion: 9,
-        driver: 'Kazimierz Rajdowiec'
-    },
-    {
-        id: 3,
-        brand: 'Iveco',
-        model: 'Daily',
-        year: 2016,
-        plate: 'KR 875 CF',
-        state: 'Aktywny',
-        parking: 'Parking nr 2',
-        ab: 'Kraków - Katowice',
-        ba: 'Katowice - Kraków',
-        seats: 22,
-        mileage: 9.5,
-        combustion: 80500300,
-        driver: 'Mirosław Szybki'
-    },
-    {
-        id: 4,
-        brand: 'Fiat',
-        model: 'Ducato',
-        year: 2014,
-        plate: 'KR 222 KM',
-        state: 'Aktywny',
-        parking: 'Parking nr 2',
-        ab: 'Kraków - Katowice',
-        ba: 'Katowice - Kraków',
-        seats: 15,
-        mileage: 9.4,
-        combustion: 10540003,
-        driver: 'Jan Doświadczony'
-    },
-    {
-        id: 5,
-        brand: 'Scania',
-        model: 'Touring',
-        year: 2015,
-        plate: 'KR 990 JB',
-        state: 'Aktywny',
-        parking: 'Parking nr 2',
-        ab: 'Kraków - Katowice',
-        ba: 'Katowice - Kraków',
-        seats: 55,
-        mileage: 7.9,
-        combustion: 9023305,
-        driver: 'Marek Poprawny'
-    }
-];
+const vehicleController = require('../controllers/vehicle');
 
 let fuelHistory = new Map([
     [1, [
@@ -107,104 +30,118 @@ let fuelHistory = new Map([
     ]]
 ]);
 
-router.get('/vehicles', [role('driver')], (req, res) => {
+router.get('/vehicles', [role('driver')], async (req, res, next) => {
+    let vehicles = (await vehicleController.findAllVehicles()).map((vehicle) => ({
+        ...vehicle,
+        combustion: 0,
+        driver: null
+    }));
     res.ok(vehicles);
 });
 
-router.get('/vehicle/:id', [role('driver')], (req, res) => {
+router.get('/vehicle/:id', [role('driver')], async (req, res, next) => {
     let wantedId = parseInt(req.params.id);
-    if (isNaN(wantedId)) throw invalidRequest();
+    if (isNaN(wantedId)) return next(invalidRequest());
 
-    let vehicleIndex = vehicles.findIndex(({id}) => id == wantedId);
-    if (vehicleIndex < 0) throw notFound();
+    let vehicle;
+    try {
+        vehicle = await vehicleController.findVehicle(wantedId);
+    }
+    catch (err) {
+        return next(err);
+    }
+    
+    vehicle = { ...vehicle, combustion: 0, driver: null };
 
-    res.ok(vehicles[vehicleIndex]);
+    res.ok(vehicle);
 });
 
 router.post('/vehicle', [
     role('owner'),
     bodySchema(`{
+        state?: string,
         brand: string,
         model: string,
         year: number,
-        plate: string,
-        mileage: number,
-        seats: number,
-        state?: string,
+        plate?: string,
         parking?: string,
-        ab?: string, ba?: string,
-        driver?: string
+        routeId?: number,
+        seats: number,
+        mileage?: number
     }`)
-], (req, res) => {
-    let id = Math.max(...vehicles.map(({id}) => id)) + 1;
-    let { brand, model, year, plate, mileage, seats, state, parking, ab, ba, driver } = req.body;
+], async (req, res, next) => {
+    let { state, brand, model, year, plate, parking, routeId, seats, mileage } = req.body;
 
-    vehicles.push({
-        id,
-        brand, model,
+    if (mileage == null) mileage = 0;
+
+    let result = await vehicleController.addVehicle({
+        state,
+        brand,
+        model,
         year,
         plate,
-        mileage,
-        seats,
-        state,
         parking,
-        ab, ba,
-        driver,
-        combustion: 0
+        routeId,
+        seats,
+        mileage
     });
 
-    res.ok({ id });
+    res.ok({ id: result.insertId });
 });
 
 router.put('/vehicle/:id', [
     role('owner'),
     bodySchema(`{
+        state?: string,
         brand: string,
         model: string,
         year: number,
-        plate: string,
-        mileage: number,
-        seats: number,
-        state?: string,
+        plate?: string,
         parking?: string,
-        ab?: string, ba?: string,
-        driver?: string
+        routeId?: number,
+        seats: number,
+        mileage?: number
     }`)
-], (req, res) => {
+], async (req, res, next) => {
     let wantedId = parseInt(req.params.id);
-    if (isNaN(wantedId)) throw invalidRequest();
+    if (isNaN(wantedId)) return next(invalidRequest());
 
-    let vehicleIndex = vehicles.findIndex(({id}) => id == wantedId);
-    if (vehicleIndex < 0) throw notFound();
+    let { state, brand, model, year, plate, parking, routeId, seats, mileage } = req.body;
 
-    let { brand, model, year, plate, mileage, seats, state, parking, ab, ba, driver } = req.body;
+    if (mileage == null) mileage = 0;
 
-    if (state == null) state = 'Aktywny';
-
-    vehicles[vehicleIndex] = {
-        ...vehicles[vehicleIndex],
-        brand, model,
+    let updatedVehicle = {
+        state,
+        brand,
+        model,
         year,
         plate,
-        mileage,
-        seats,
-        state,
         parking,
-        ab, ba,
-        driver
+        routeId,
+        seats,
+        mileage
     };
 
-    res.ok();
+    try {
+        await vehicleController.updateVehicle(wantedId, updatedVehicle);
+    }
+    catch (err) {
+        return next(err);
+    }
+
+    res.ok({ id: wantedId, ...updatedVehicle, combustion: 0, driver: null });
 });
 
-router.delete('/vehicle/:id', [role('owner')], (req, res) => {
+router.delete('/vehicle/:id', [role('owner')], async (req, res, next) => {
     let wantedId = parseInt(req.params.id);
-    if (isNaN(wantedId)) throw invalidRequest();
+    if (isNaN(wantedId)) return next(invalidRequest());
 
-    let vehicleIndex = vehicles.findIndex(({id}) => id == wantedId);
-    if (vehicleIndex < 0) throw notFound();
-
-    vehicles.splice(vehicleIndex, 1);
+    try {
+        await vehicleController.deleteVehicle(wantedId);
+    }
+    catch (err) {
+        return next(err);
+    }
 
     res.ok();
 });
