@@ -5,6 +5,7 @@ let { getFirst } = require('../helpers/query-utils');
 CREATE TABLE `VdWUtFNeZC`.`bookings` (
     `id` INT NOT NULL AUTO_INCREMENT ,
     `userId` INT NOT NULL , 
+    `date` VARCHAR(10) NOT NULL ,
     `hour` VARCHAR(8) NOT NULL , 
     `normalTickets` TINYINT UNSIGNED NOT NULL , 
     `reducedTickets` TINYINT UNSIGNED NOT NULL , 
@@ -18,9 +19,10 @@ CREATE TABLE `VdWUtFNeZC`.`bookings` (
 */
 
 module.exports.addBooking = (booking) => {
-    return db.query('INSERT INTO bookings VALUES (?,?,?,?,?,?,?,?,?,?)', [
+    return db.query('INSERT INTO bookings VALUES (?,?,?,?,?,?,?,?,?,?,?)', [
         null,
         booking.userId,
+        booking.date,
         booking.hour,
         booking.normalTickets,
         booking.reducedTickets,
@@ -36,6 +38,18 @@ module.exports.findAllBookings = () => {
     return db.query('SELECT * FROM bookings');
 };
 
+module.exports.findUserBookingsByRoute = (routeId, date, hour) => {
+    return db.query(`SELECT bookings.*, firstName, lastName
+        FROM bookings
+        INNER JOIN users
+        ON bookings.userId=users.id
+        WHERE routeId=? AND hour=? AND date=?`, [
+            routeId,
+            hour,
+            date
+        ]);
+};
+
 module.exports.findUserBookings = (userId) => {
     return db.query('SELECT * FROM bookings WHERE userId=?', [userId]);
 };
@@ -47,8 +61,9 @@ module.exports.findBooking = (bookingId) => {
 
 module.exports.updateBooking = (bookingId, booking) => {
     return db.query(`UPDATE bookings
-        SET hour=?, normalTickets=?, reducedTickets=?, childTickets=?, routeId=?, firstStop=?, lastStop=?, price=?
+        SET date=?, hour=?, normalTickets=?, reducedTickets=?, childTickets=?, routeId=?, firstStop=?, lastStop=?, price=?
         WHERE id=?`, [
+            booking.date,
             booking.hour,
             booking.normalTickets,
             booking.reducedTickets,

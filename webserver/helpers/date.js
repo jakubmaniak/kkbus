@@ -41,3 +41,27 @@ module.exports.parseDate = (date) => {
         return null;
     }
 };
+
+module.exports.parseTime = (time) => {
+    try {
+        let t = time.split(':').slice(0, 2)
+            .map((i) => parseInt(i))
+            .map((i) => i.toString().padStart(2, '0'));
+        let text = t.join(':');
+
+
+        if (t[0] == 24 && t[1] == 0) {
+            t[0] = 0;
+        }
+        if (t[0] < 0 || t[0] > 23) return null;
+        if (t[1] < 0 || t[1] > 59) return null;
+    
+        return {
+            toString: () => text,
+            toArray: () => [...t]
+        };
+    }
+    catch {
+        return null;
+    }
+};
