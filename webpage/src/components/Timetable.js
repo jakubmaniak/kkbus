@@ -34,11 +34,19 @@ function Timetable() {
     let [ranges, setRanges] = useState(''); 
     let [label, setLabel] = useState('');
 
+    let [currentEditAvailabilityId, setCurrentEditAvailabityId] = useState(-1);
+    let [currentUserId, setCurrentUserId] = useState(-1);
+
+    let [selectedAvailableTypeEdit, setSelectedAvailableTypeEdit] = useState();
+    let [selectedDateEdit, setSelectedDateEdit] = useState();
+    let [daysEdit, setDaysEdit] = useState(''); 
+    let [rangesEdit, setRangesEdit] = useState([]); 
+    let [labelEdit, setLabelEdit] = useState('');
+
     useEffect(() => {
         api.getTimetable()
         .then((results) => {
             setTimetable(results);
-            console.log(results);
             setTimeout(() => {
                 setLoading(false);
             }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
@@ -82,6 +90,7 @@ function Timetable() {
         let range = item.ranges;
         let available = item.available;
         let label = item.label;
+        let id = item.id;
 
         filterDays.forEach((filterDay, i) => {
             if(filterDay.includes(comparer)) {
@@ -89,7 +98,8 @@ function Timetable() {
                     range, 
                     width: availableTileWidth * days + availableTileMargin * (days - 1),
                     available,
-                    label
+                    label,
+                    id
                 };
 
                 if(days > 1) {
@@ -125,7 +135,7 @@ function Timetable() {
    }
 
    function translateRole(role) {
-        return ({
+    return ({
             client: 'klient',
             driver: 'kierowca',
             office: 'pracownik sekretariatu',
@@ -133,11 +143,23 @@ function Timetable() {
         })[role];
     }
 
-    function editAvailable(id) {
+    function editAvailable(itemId, userId) {
         setModalEditAvailabilityVisibility(true);
-        console.log(id);
-        //api.updateTimetableItem(itemId, startDate, days, ranges, available, label);
-        //refreshTimeTable();
+        setCurrentEditAvailabityId(itemId);
+        setCurrentUserId(userId);
+
+        let user = timetable.find(v => v.userId === userId);
+        let item = user.items.find(v => v.id === itemId);
+
+        setLabelEdit(item.label);
+        setDaysEdit(item.days);
+        setRangesEdit(item.ranges.join(','));
+    }
+
+    function saveEditAvailability() {
+        setModalEditAvailabilityVisibility(false);
+        api.updateTimetableItem(currentEditAvailabilityId, selectedDateEdit.toJSON().slice(0, 10), parseInt(daysEdit), rangesEdit.split(','), selectedAvailableTypeEdit[0], labelEdit);
+        refreshTimeTable();
     }
 
 
@@ -188,7 +210,7 @@ function Timetable() {
                                                     {
                                                         (filterResult.userId == user.id)
                                                         ? <div className="menu">
-                                                            <button className="menu-item edit" onClick={() => editAvailable(i)} title="Edytuj"></button>
+                                                            <button className="menu-item edit" onClick={() => editAvailable(item.id, user.id)} title="Edytuj"></button>
                                                             <button className="menu-item delete" title="Usuń"></button>
                                                         </div>
                                                         : null 
@@ -211,12 +233,12 @@ function Timetable() {
                 <header>Dodawanie dyspozycji</header>
                 <section className="content">
                     <form className="add-availability">
-                    <Dropdown
-                            placeholder="Typ"
-                            alwaysSelected
-                            items={availableTypes}
-                            textProperty="1"
-                            handleChange={setSelectedAvailableType}
+                        <Dropdown
+                                placeholder="Typ"
+                                alwaysSelected
+                                items={availableTypes}
+                                textProperty="1"
+                                handleChange={setSelectedAvailableType}
                         />
                         <input placeholder="Etykieta (opcjonalnie)" onChange={fromValue(setLabel)}/>
                         <Dropdown 
@@ -239,28 +261,28 @@ function Timetable() {
                 <header>Edycja dyspozycji</header>
                 <section className="content">
                     <form className="add-availability">
-                    <Dropdown
+                        <Dropdown
                             placeholder="Typ"
                             alwaysSelected
                             items={availableTypes}
                             textProperty="1"
-                            handleChange={setSelectedAvailableType}
+                            handleChange={setSelectedAvailableTypeEdit}
                         />
-                        <input placeholder="Etykieta (opcjonalnie)"/>
+                        <input placeholder="Etykieta (opcjonalnie)" defaultValue={labelEdit} onChange={fromValue(setLabelEdit)}/>
                         <Dropdown 
                             placeholder="Data rozpoczęcia"
                             alwaysSelected
                             items={dates}
                             textFormatter={(item) => item && item.toLocaleDateString()}
-                            handleChange={setSelectedDate}
+                            handleChange={setSelectedDateEdit}
                         />
-                        <input placeholder="Liczba dni" onChange={fromValue(setDays)} />
-                        <input placeholder="Godziny" onChange={fromValue(setRanges)}/>
+                        <input placeholder="Liczba dni" defaultValue={daysEdit} onChange={fromValue(setDaysEdit)} />
+                        <input placeholder="Godziny" defaultValue={rangesEdit} onChange={fromValue(setRangesEdit)}/>
                     </form>
                 </section>
                 <section className="footer">
                     <button onClick={() => setModalEditAvailabilityVisibility(false)}>Anuluj</button>
-                    <button onClick={saveAvailability}>Zapisz</button>
+                    <button onClick={saveEditAvailability}>Zapisz</button>
                 </section>  
             </Modal>
         </div>
