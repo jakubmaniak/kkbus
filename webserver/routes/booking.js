@@ -232,6 +232,18 @@ router.delete('/booking/:bookingId', [role('client')], async (req, res, next) =>
     let wantedId = parseInt(req.params.bookingId);
     if (isNaN(wantedId)) return next(invalidRequest());
 
+    let booking;
+    try {
+        booking = await bookingController.findBooking(bookingId);
+    }
+    catch (err) {
+        return next(err);
+    }
+
+    if (booking.userId != user.id && req.user.role != 'office' && req.user.role != 'owner') {
+        return next(unauthorized());
+    }
+
     try {
         if (req.user.role == 'client') {
             await bookingController.deleteBooking(wantedId, req.user.id);
