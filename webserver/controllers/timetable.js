@@ -92,3 +92,7 @@ module.exports.updateAvailability = (availabilityId, availability) => {
         ]
     );
 };
+
+module.exports.deleteAvailability = (availabilityId) => {
+    return db.query('DELETE FROM timetable WHERE id=?', [availabilityId]);
+};

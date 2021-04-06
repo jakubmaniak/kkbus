@@ -164,29 +164,12 @@ router.delete('/timetable/:itemId', [role('driver')], async (req, res, next) => 
     let wantedId = parseInt(req.params.itemId);
     if (isNaN(wantedId)) return next(invalidRequest());
 
-    let targetEmployee = null;
-    let itemIndex;
-
-    for (let employee of timetable) {
-        itemIndex = employee.items.findIndex(({ id }) => id == wantedId);
-        
-        if (itemIndex >= 0) {
-            targetEmployee = employee;
-            break;
-        }
-    }
-
-    if (targetEmployee == null) {
-        next(notFound());
-    }
-    else {
-        targetEmployee.items.splice(itemIndex, 1);
-
-        if (targetEmployee.items.length == 0) {
-            timetable.splice(timetable.indexOf(targetEmployee), 1);
-        }
-
+    try {
+        await timetableController.deleteAvailability(wantedId);
         res.ok();
+    }
+    catch {
+        next(serverError());
     }
 });
 
