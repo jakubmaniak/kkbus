@@ -4,14 +4,23 @@ import '../styles/Timetable.css';
 import TimetableFilterDays from './TimetableFilterDays';
 import TimetableItem from './TimetableItem';
 import * as api from '../api';
+import { ModalLoader } from './Loader';
 
 
 function Timetable() {
+    let [loading, setLoading] = useState(true);
+    let loadingInitTime = Date.now();
+
     let [timetable, setTimetable] = useState([]); 
 
     useEffect(() => {
         api.getTimetable()
-        .then(setTimetable)
+        .then((results) => {
+            setTimetable(results);
+            setTimeout(() => {
+                setLoading(false);
+            }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
+        })    
         .catch((err) => {
             throw err;
         });
@@ -65,6 +74,7 @@ function Timetable() {
 
     return (
         <div className="timetable page">
+             <ModalLoader loading={loading} />
             <div className="main">
                 <div className="tile">
                     <h2>Filtry</h2>
