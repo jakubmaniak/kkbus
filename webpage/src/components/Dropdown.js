@@ -17,13 +17,28 @@ function Dropdown(props) {
             typeof props.alwaysSelected === 'string' && props.alwaysSelected.toLowerCase() === 'true'
         );
 
-        if (alwaysSelected) {
+        if ('selectedIndex' in props) {
+            let index = parseInt(props.selectedIndex);
+
+            if (!isNaN(index)) {
+                selectItem(index);
+            }
+        }
+        else if (alwaysSelected) {
             selectItem(0);
         }
         else if ('placeholder' in props) {
             setPlaceholderVisible(true);
         }
     }, [props.items]);
+
+    useEffect(() => {
+        let index = parseInt(props.selectedIndex);
+
+        if (!isNaN(index)) {
+            selectItem(index);
+        }
+    }, [props.selectedIndex]);
 
     function getLength() {
         return (props.items instanceof Array) ? props.items.length : 0;
