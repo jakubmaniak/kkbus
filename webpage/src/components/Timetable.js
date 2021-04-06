@@ -29,6 +29,7 @@ function Timetable() {
     );
     let [selectedDate, setSelectedDate] = useState();
     let [modalAddAvailabilityVisibility, setModalAddAvailabilityVisibility] = useState(false);
+    let [modalEditAvailabilityVisibility, setModalEditAvailabilityVisibility] = useState(false);
     let [days, setDays] = useState(''); 
     let [ranges, setRanges] = useState(''); 
     let [label, setLabel] = useState('');
@@ -37,6 +38,7 @@ function Timetable() {
         api.getTimetable()
         .then((results) => {
             setTimetable(results);
+            console.log(results);
             setTimeout(() => {
                 setLoading(false);
             }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
@@ -54,7 +56,7 @@ function Timetable() {
         })
     }, []);
 
-    let d = new Date('2021-04-03'); //data pozyskana z filtru
+    let d = new Date(); //data pozyskana z filtru
     let filterDays = [];
     let availableTileWidth = 115;
     let availableTileMargin = 15;
@@ -79,13 +81,15 @@ function Timetable() {
         let days = item.days;
         let range = item.ranges;
         let available = item.available;
+        let label = item.label;
 
         filterDays.forEach((filterDay, i) => {
             if(filterDay.includes(comparer)) {
                 weekAvailable[i] = {
                     range, 
                     width: availableTileWidth * days + availableTileMargin * (days - 1),
-                    available
+                    available,
+                    label
                 };
 
                 if(days > 1) {
@@ -114,7 +118,6 @@ function Timetable() {
         api.getTimetable()
         .then((results) => {
             setTimetable(results);
-            console.log(results);
         })    
         .catch((err) => {
             throw err;
@@ -122,13 +125,20 @@ function Timetable() {
    }
 
    function translateRole(role) {
-    return ({
-        client: 'klient',
-        driver: 'kierowca',
-        office: 'pracownik sekretariatu',
-        owner: 'właściciel'
-    })[role];
-}
+        return ({
+            client: 'klient',
+            driver: 'kierowca',
+            office: 'pracownik sekretariatu',
+            owner: 'właściciel'
+        })[role];
+    }
+
+    function editAvailable(id) {
+        setModalEditAvailabilityVisibility(true);
+        console.log(id);
+        //api.updateTimetableItem(itemId, startDate, days, ranges, available, label);
+        //refreshTimeTable();
+    }
 
 
     return (
@@ -178,7 +188,7 @@ function Timetable() {
                                                     {
                                                         (filterResult.userId == user.id)
                                                         ? <div className="menu">
-                                                            <button className="menu-item edit" title="Edytuj"></button>
+                                                            <button className="menu-item edit" onClick={() => editAvailable(i)} title="Edytuj"></button>
                                                             <button className="menu-item delete" title="Usuń"></button>
                                                         </div>
                                                         : null 
@@ -208,7 +218,7 @@ function Timetable() {
                             textProperty="1"
                             handleChange={setSelectedAvailableType}
                         />
-                        <input placeholder="Etykieta (opcjonalnie)"/>
+                        <input placeholder="Etykieta (opcjonalnie)" onChange={fromValue(setLabel)}/>
                         <Dropdown 
                             placeholder="Data rozpoczęcia"
                             alwaysSelected
@@ -222,6 +232,34 @@ function Timetable() {
                 </section>
                 <section className="footer">
                     <button onClick={() => setModalAddAvailabilityVisibility(false)}>Anuluj</button>
+                    <button onClick={saveAvailability}>Zapisz</button>
+                </section>  
+            </Modal>
+            <Modal visible={modalEditAvailabilityVisibility}>
+                <header>Edycja dyspozycji</header>
+                <section className="content">
+                    <form className="add-availability">
+                    <Dropdown
+                            placeholder="Typ"
+                            alwaysSelected
+                            items={availableTypes}
+                            textProperty="1"
+                            handleChange={setSelectedAvailableType}
+                        />
+                        <input placeholder="Etykieta (opcjonalnie)"/>
+                        <Dropdown 
+                            placeholder="Data rozpoczęcia"
+                            alwaysSelected
+                            items={dates}
+                            textFormatter={(item) => item && item.toLocaleDateString()}
+                            handleChange={setSelectedDate}
+                        />
+                        <input placeholder="Liczba dni" onChange={fromValue(setDays)} />
+                        <input placeholder="Godziny" onChange={fromValue(setRanges)}/>
+                    </form>
+                </section>
+                <section className="footer">
+                    <button onClick={() => setModalEditAvailabilityVisibility(false)}>Anuluj</button>
                     <button onClick={saveAvailability}>Zapisz</button>
                 </section>  
             </Modal>
