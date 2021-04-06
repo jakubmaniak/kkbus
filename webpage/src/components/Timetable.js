@@ -175,6 +175,14 @@ function Timetable() {
                                                             <span key={j}>{range}</span>
                                                         );
                                                     })}
+                                                    {
+                                                        (filterResult.userId == user.id)
+                                                        ? <div className="menu">
+                                                            <button className="menu-item edit" title="Edytuj"></button>
+                                                            <button className="menu-item delete" title="Usuń"></button>
+                                                        </div>
+                                                        : null 
+                                                    }
                                             </div>                                            
                                         );
                                     }

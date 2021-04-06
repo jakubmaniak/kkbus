@@ -72,6 +72,7 @@
 
 .timetable-item-container .tile .available,
 .timetable-item-container .tile .unavailable  {
+    position: relative;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
@@ -114,3 +115,53 @@
     height: 40px;
 }
 
+.timetable-item-container .tile div > .menu {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: absolute;
+    padding-right: 8px;
+    top: 0;
+    right: 0;
+    height: 100%;
+    max-width: 150px;
+    width: 100%;
+    background-size: 150px 100%;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.1s;
+}
+
+.timetable-item-container .tile .unavailable >  .menu {
+    background-image: linear-gradient(to right, transparent, #C73535 50%);
+}
+
+.timetable-item-container .tile .available >  .menu {
+    background-image: linear-gradient(to right, transparent, #47BE61 50%);
+}
+
+.timetable-item-container .tile div:hover > .menu {
+    opacity: 1;
+}
+
+.timetable-item-container .tile div > button.menu-item {
+    width: 24px;
+    height: 24px;
+    background-color: transparent;
+    border: 0;
+    color: #ffffff;
+    font-weight: 15px;
+    cursor: pointer;
+}
+
+.timetable-item-container .tile div > button.menu-item + button.menu-item {
+    margin-left: 4px;
+}
+
+.timetable-item-container .tile div > button.menu-item.delete {
+    background-image: url(../static/timetable-delete.svg);
+}
+
+.timetable-item-container .tile div > button.menu-item.edit {
+    background-image: url(../static/timetable-edit.svg);
+}
