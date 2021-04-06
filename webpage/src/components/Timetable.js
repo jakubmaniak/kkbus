@@ -6,6 +6,7 @@ import TimetableItem from './TimetableItem';
 import * as api from '../api';
 import { ModalLoader } from './Loader';
 import Modal from './Modal';
+import { fromValue } from '../helpers/from-value';
 
 
 function Timetable() {
@@ -28,6 +29,9 @@ function Timetable() {
     );
     let [selectedDate, setSelectedDate] = useState();
     let [modalAddAvailabilityVisibility, setModalAddAvailabilityVisibility] = useState(false);
+    let [days, setDays] = useState(''); 
+    let [ranges, setRanges] = useState(''); 
+    let [label, setLabel] = useState('');
 
     useEffect(() => {
         api.getTimetable()
@@ -99,6 +103,24 @@ function Timetable() {
         setModalAddAvailabilityVisibility(true);
    }
 
+   function saveAvailability() {
+        setModalAddAvailabilityVisibility(false);
+        api.addTimetableItem(selectedDate.toJSON().slice(0, 10), parseInt(days), ranges.split(','), selectedAvailableType[0], label);
+        refreshTimeTable();
+        
+   }
+
+   function refreshTimeTable() {
+        api.getTimetable()
+        .then((results) => {
+            setTimetable(results);
+            console.log(results);
+        })    
+        .catch((err) => {
+            throw err;
+        });
+   }
+
    function translateRole(role) {
     return ({
         client: 'klient',
@@ -147,7 +169,7 @@ function Timetable() {
                                     if(item !== null && item !== 'occupied') {
                                         return (
                                             <div className={item.available ? 'available' : 'unavailable'} key={i} style={{width: item.width + "px"}}>
-                                                <span>{item.available ? 'Dostępność' : 'Niedyspozycja'}</span>
+                                                <span>{(item.label ? item.label : (item.available ? 'Dostępność' : 'Niedostępność'))}</span>
                                                     {item.range.map((range, j) => {
                                                         return (
                                                             <span key={j}>{range}</span>
@@ -186,13 +208,13 @@ function Timetable() {
                             textFormatter={(item) => item && item.toLocaleDateString()}
                             handleChange={setSelectedDate}
                         />
-                        <input placeholder="Liczba dni" />
-                        <input placeholder="Godziny"/>
+                        <input placeholder="Liczba dni" onChange={fromValue(setDays)} />
+                        <input placeholder="Godziny" onChange={fromValue(setRanges)}/>
                     </form>
                 </section>
                 <section className="footer">
                     <button onClick={() => setModalAddAvailabilityVisibility(false)}>Anuluj</button>
-                    <button onClick={() => setModalAddAvailabilityVisibility(false)}>Zapisz</button>
+                    <button onClick={saveAvailability}>Zapisz</button>
                 </section>  
             </Modal>
         </div>
