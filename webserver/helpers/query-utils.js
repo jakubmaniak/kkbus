@@ -21,5 +21,21 @@ module.exports = {
             }
         }
         return results;
+    },
+    resolveBooleans: (...props) => (results) => {
+        for (let result of results) {
+            for (let prop of props) {
+                result[prop] = (result[prop] == 1);
+            }
+        }
+        return results;
+    },
+    resolveRoles: (...props) => (results) => {
+        for (let result of results) {
+            for (let prop of props) {
+                result[prop] = (['guest', 'client', 'driver', 'office', 'owner'])[result[prop]];
+            }
+        }
+        return results;
     }
 };

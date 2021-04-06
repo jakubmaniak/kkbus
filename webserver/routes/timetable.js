@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { invalidRequest, notFound } = require('../errors');
+const { invalidRequest, notFound, serverError } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const role = require('../middlewares/roles')(
     [0, 'guest'],
@@ -11,118 +11,54 @@ const role = require('../middlewares/roles')(
     [4, 'owner']
 );
 
-
-let timetable = [
-    {
-        userId: 1,
-        name: 'Kazimierz Rajdowiec',
-        role: 'driver',
-        items: [
-            {
-                id: 0,
-                available: true,
-                label: null,
-                startDate: '2021-04-03',
-                days: 1,
-                ranges: ['10:00 - 20:00']
-            },
-            {
-                id: 33,
-                available: true,
-                label: null,
-                startDate: '2021-04-04',
-                days: 1,
-                ranges: ['10:00 - 14:00', '18:00 - 22:00']
-            },
-            {
-                id: 34,
-                available: true,
-                label: null,
-                startDate: '2021-04-05',
-                days: 3,
-                ranges: ['12:00 - 20:00']
-            },
-            {
-                id: 2,
-                available: false,
-                label: null,
-                startDate: '2021-04-08',
-                days: 2,
-                ranges: ['12:00 - 16:00']
-            }
-        ]
-    },
-    {
-        userId: 2,
-        name: 'Jan Doświadczony',
-        role: 'driver',
-        items: [
-            {
-                id: 8,
-                available: true,
-                label: null,
-                startDate: '2021-04-04',
-                days: 4,
-                ranges: ['16:00 - 24:00']
-            }
-        ]
-    },
-
-    {
-        userId: 3,
-        name: 'Mirosław Szybki',
-        role: 'driver',
-        items: [
-            {
-                id: 7,
-                available: true,
-                label: null,
-                startDate: '2021-04-03',
-                days: 2,
-                ranges: ['10:00 - 20:00']
-            }
-        ]
-    },
-    {
-        userId: 4,
-        name: 'Tomasz Rajdowiec',
-        role: 'driver',
-        items: [
-            {
-                id: 4,
-                available: true,
-                label: null,
-                startDate: '2021-04-03',
-                days: 2,
-                ranges: ['12:00 - 20:00']
-            },
-            {
-                id: 5,
-                available: false,
-                label: null,
-                startDate: '2021-04-05',
-                days: 2,
-                ranges: ['12:00 - 16:00']
-            },
-            {
-                id: 6,
-                available: true,
-                label: null,
-                startDate: '2021-04-07',
-                days: 3,
-                ranges: ['12:00 - 20:00']
-            }
-        ]
-    },
-];
+const timetableController = require('../controllers/timetable');
+const userController = require('../controllers/user');
 
 
-router.get('/timetable', [role('driver')], (req, res) => {
-    res.ok(timetable);
+router.get('/timetable', [role('driver')], async (req, res, next) => {
+    try {
+        res.ok(await timetableController.findAllAvailabilities());
+    }
+    catch {
+        next(serverError());
+    }
+});
+
+router.post('/timetable', [
+    role('driver'),
+    bodySchema(`{
+        available: boolean,
+        label?: string,
+        startDate: string,
+        days: number,
+        ranges: string[]
+    }`)
+], async (req, res, next) => {
+    let { available, label, startDate, days, ranges } = req.body;
+
+    let result;
+    try {
+        result = await timetableController.addAvailability({
+            userId: req.user.id,
+            available,
+            label,
+            startDate,
+            days,
+            ranges
+        });
+    }
+    catch (err) {
+        if (err.code == 'ER_DATA_TOO_LONG') {
+            return next(invalidRequest());
+        }
+        return next(serverError());
+    }
+
+    res.ok({ id: result.insertId });
 });
 
 router.post('/timetable/:userId', [
-    role('driver'),
+    role('office'),
     bodySchema(`{
         available: boolean,
         label?: string,
@@ -136,24 +72,32 @@ router.post('/timetable/:userId', [
     let userId = parseInt(req.params.userId);
     if (isNaN(userId)) return next(invalidRequest());
 
-    let user = timetable.find((user) => user.userId == userId);
-
-    if (!user) {
-        user = {
-            userId,
-            name: 'Jan Testowy' + userId,
-            role: 'driver',
-            items: []
-        };
-
-        timetable.push(user);
+    try {
+        await userController.findUserById(userId);
+    }
+    catch (err) {
+        return next(err);
     }
 
-    let itemId = Math.max(...timetable.map((u) => u.items.map((i) => i.id)).flat()) + 1;
-    let item = { id: itemId, available, label, startDate, days, ranges };
+    let result;
+    try {
+        result = await timetableController.addAvailability({
+            userId,
+            available,
+            label,
+            startDate,
+            days,
+            ranges
+        });
+    }
+    catch (err) {
+        if (err.code == 'ER_DATA_TOO_LONG') {
+            return next(invalidRequest());
+        }
+        return next(serverError());
+    }
 
-    user.items.push(item);
-    res.ok(item);
+    res.ok({ id: result.insertId });
 });
 
 router.put('/timetable/:itemId', [
