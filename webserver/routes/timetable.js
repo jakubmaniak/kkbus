@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { invalidRequest, notFound, serverError } = require('../errors');
+const { invalidRequest, notFound, serverError, unauthorized } = require('../errors');
 const { parseDate } = require('../helpers/date');
 const bodySchema = require('../middlewares/body-schema');
 const role = require('../middlewares/roles')(
@@ -144,6 +144,18 @@ router.put('/timetable/:itemId', [
     let { available, label, startDate, days, ranges } = req.body;
     ranges = ranges.map((range) => range.trim());
 
+    let availability;
+    try {
+        availability = await timetableController.findAvailability();
+    }
+    catch (err) {
+        return next(err);
+    }
+
+    if (availability.userId != req.user.id && req.user.role != 'office' && req.user.role != 'owner') {
+        return next(unauthorized());
+    }
+
     try {
         await timetableController.updateAvailability(wantedId, {
             available,
@@ -163,6 +175,18 @@ router.put('/timetable/:itemId', [
 router.delete('/timetable/:itemId', [role('driver')], async (req, res, next) => {
     let wantedId = parseInt(req.params.itemId);
     if (isNaN(wantedId)) return next(invalidRequest());
+
+    let availability;
+    try {
+        availability = await timetableController.findAvailability();
+    }
+    catch (err) {
+        return next(err);
+    }
+
+    if (availability.userId != req.user.id && req.user.role != 'office' && req.user.role != 'owner') {
+        return next(unauthorized());
+    }
 
     try {
         await timetableController.deleteAvailability(wantedId);

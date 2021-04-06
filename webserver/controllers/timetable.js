@@ -63,7 +63,7 @@ module.exports.findAllAvailabilities = (date = null) => {
     let from = date.toString();
     let to = date.addDays(7).toString();
 
-    return db.query(`SELECT timetable.id, userId, days, ranges, available, label, startDate, role, firstName, lastName
+    return db.query(`SELECT timetable.*, role, firstName, lastName
         FROM timetable
         LEFT JOIN users
         ON timetable.userId=users.id
@@ -77,6 +77,22 @@ module.exports.findAllAvailabilities = (date = null) => {
     .then(resolveRoles('role'))
     .then(resolveBooleans('available'))
     .then(groupAvailabilities);
+};
+
+module.exports.findAvailability = (availabilityId) => {
+    return db.query(`SELECT timetable.*, role, firstName, lastName
+        FROM timetable
+        LEFT JOIN users
+        ON timetable.userId=users.id
+        WHERE id=?
+        LIMIT 1`, [
+            availabilityId
+        ]
+    )
+    .then(splitProps('ranges'))
+    .then(resolveRoles('role'))
+    .then(resolveBooleans('available'))
+    .then(getFirst);
 };
 
 module.exports.updateAvailability = (availabilityId, availability) => {
