@@ -5,6 +5,7 @@ import TimetableFilterDays from './TimetableFilterDays';
 import TimetableItem from './TimetableItem';
 import * as api from '../api';
 import { ModalLoader } from './Loader';
+import Modal from './Modal';
 
 
 function Timetable() {
@@ -13,6 +14,8 @@ function Timetable() {
 
     let [timetable, setTimetable] = useState([]); 
     let [user, setUser] = useState({});
+
+    let [modalAddAvailabilityVisibility, setModalAddAvailabilityVisibility] = useState(false);
 
     useEffect(() => {
         api.getTimetable()
@@ -25,6 +28,7 @@ function Timetable() {
         .catch((err) => {
             throw err;
         });
+
         api.getUserInfo()
         .then((result) => {
             setUser(result);
@@ -80,10 +84,14 @@ function Timetable() {
     return weekAvailable;
    }
 
+   function addAvailability() {
+        setModalAddAvailabilityVisibility(true);
+   }
+
 
     return (
         <div className="timetable page">
-             <ModalLoader loading={loading} />
+            <ModalLoader loading={loading} />
             <div className="main">
                 <div className="tile">
                     <h2>Filtry</h2>
@@ -106,12 +114,13 @@ function Timetable() {
                     })}
                />
                <div className="timetable-item-container">
-                {timetable.map((filterResult, i) => {
+                {timetable.map((filterResult) => {
                     return (
                             <TimetableItem key={filterResult.userId}
                                 loggedUserRole={user.role}
                                 loggedUserId={user.id}
                                 id={filterResult.userId}
+                                addAvailability={addAvailability}
                                 name={filterResult.name}
                                 role={filterResult.role}
                                 children={compareDate(filterResult).map((item, i) => {
@@ -138,6 +147,22 @@ function Timetable() {
                 })}
                </div>
             </div>
+            <Modal visible={modalAddAvailabilityVisibility}>
+                <header>Dodawanie dyspozycji</header>
+                <section className="content">
+                    <form className="add-availability">
+                        <Dropdown placeholder="Typ"/>
+                        <input placeholder="Etykieta"/>
+                        <Dropdown placeholder="Data rozpoczęcia"/>
+                        <input placeholder="Liczba dni" />
+                        <input placeholder="Godziny"/>
+                    </form>
+                </section>
+                <section className="footer">
+                    <button onClick={() => setModalAddAvailabilityVisibility(false)}>Anuluj</button>
+                    <button onClick={() => setModalAddAvailabilityVisibility(false)}>Zapisz</button>
+                </section>  
+            </Modal>
         </div>
     );
 }

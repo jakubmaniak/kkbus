@@ -106,6 +106,7 @@
     height: 40px;
     font-size: 22px;
     border-radius: 4px;
+    cursor: pointer;
 }
 
 .timetable-item-container .tile .dummy {

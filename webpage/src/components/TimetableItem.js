@@ -10,13 +10,11 @@ function TimetableItem(props) {
                     <span className="proffesion">{props.role}</span>
                 </div>
                 {props.role === props.loggedUserRole && props.id === props.loggedUserId ? 
-                        <div className="add">
+                        <div className="add" onClick={props.addAvailability}>
                             <span>+</span>
                         </div> 
                     : 
-                        <div className="dummy">
-                            <span></span>
-                        </div> 
+                        <div className="dummy"></div> 
                     }
             </div>
             {props.children}
