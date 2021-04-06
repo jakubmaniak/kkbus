@@ -21,8 +21,7 @@ function groupAvailabilities(items) {
         if (!parent) {
             parent = {
                 userId: item.userId,
-                firstName: item.firstName,
-                lastName: item.lastName,
+                name: item.firstName + ' ' + item.lastName,
                 role: item.role,
                 items: []
             };
