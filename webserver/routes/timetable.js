@@ -146,7 +146,7 @@ router.put('/timetable/:itemId', [
 
     let availability;
     try {
-        availability = await timetableController.findAvailability();
+        availability = await timetableController.findAvailability(wantedId);
     }
     catch (err) {
         return next(err);
@@ -178,7 +178,7 @@ router.delete('/timetable/:itemId', [role('driver')], async (req, res, next) => 
 
     let availability;
     try {
-        availability = await timetableController.findAvailability();
+        availability = await timetableController.findAvailability(wantedId);
     }
     catch (err) {
         return next(err);

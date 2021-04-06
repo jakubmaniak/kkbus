@@ -234,7 +234,7 @@ router.delete('/booking/:bookingId', [role('client')], async (req, res, next) =>
 
     let booking;
     try {
-        booking = await bookingController.findBooking(bookingId);
+        booking = await bookingController.findBooking(wantedId);
     }
     catch (err) {
         return next(err);
