@@ -58,7 +58,8 @@ module.exports.findAllAvailabilities = () => {
     return db.query(`SELECT timetable.*, users.role, users.firstName, users.lastName
         FROM timetable
         LEFT JOIN users
-        ON timetable.userId=users.id`
+        ON timetable.userId=users.id
+        ORDER BY users.role DESC, users.lastName, users.firstName, timetable.startDate`
     )
     .then(splitProps('ranges'))
     .then(resolveRoles('role'))
