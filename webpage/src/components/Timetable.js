@@ -32,7 +32,6 @@ function Timetable() {
         api.getUserInfo()
         .then((result) => {
             setUser(result);
-            console.log(result);
         })
         .catch((err) => {
             throw err;
@@ -88,6 +87,15 @@ function Timetable() {
         setModalAddAvailabilityVisibility(true);
    }
 
+   function translateRole(role) {
+    return ({
+        client: 'klient',
+        driver: 'kierowca',
+        office: 'pracownik sekretariatu',
+        owner: 'właściciel'
+    })[role];
+}
+
 
     return (
         <div className="timetable page">
@@ -122,7 +130,7 @@ function Timetable() {
                                 id={filterResult.userId}
                                 addAvailability={addAvailability}
                                 name={filterResult.name}
-                                role={filterResult.role}
+                                role={translateRole(filterResult.role)}
                                 children={compareDate(filterResult).map((item, i) => {
                                     if(item !== null && item !== 'occupied') {
                                         return (

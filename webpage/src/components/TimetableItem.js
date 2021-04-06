@@ -9,9 +9,10 @@ function TimetableItem(props) {
                     <p>{props.name}</p>
                     <span className="proffesion">{props.role}</span>
                 </div>
-                {props.role === props.loggedUserRole && props.id === props.loggedUserId ? 
+                {props.id === props.loggedUserId ? 
                         <div className="add" onClick={props.addAvailability}>
                             <span>+</span>
+                            
                         </div> 
                     : 
                         <div className="dummy"></div> 
