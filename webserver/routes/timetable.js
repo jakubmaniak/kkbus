@@ -54,6 +54,37 @@ let timetable = [
     },
     {
         userId: 2,
+        name: 'Jan Doświadczony',
+        role: 'driver',
+        items: [
+            {
+                id: 8,
+                available: true,
+                label: null,
+                startDate: '2021-04-04',
+                days: 4,
+                ranges: ['16:00 - 24:00']
+            }
+        ]
+    },
+
+    {
+        userId: 3,
+        name: 'Mirosław Szybki',
+        role: 'driver',
+        items: [
+            {
+                id: 7,
+                available: true,
+                label: null,
+                startDate: '2021-04-03',
+                days: 2,
+                ranges: ['10:00 - 20:00']
+            }
+        ]
+    },
+    {
+        userId: 4,
         name: 'Tomasz Rajdowiec',
         role: 'driver',
         items: [
@@ -83,36 +114,6 @@ let timetable = [
             }
         ]
     },
-    {
-        userId: 3,
-        name: 'Mirosław Szybki',
-        role: 'driver',
-        items: [
-            {
-                id: 7,
-                available: true,
-                label: null,
-                startDate: '2021-04-03',
-                days: 2,
-                ranges: ['10:00 - 20:00']
-            }
-        ]
-    },
-    {
-        userId: 4,
-        name: 'Jan Doświadczony',
-        role: 'driver',
-        items: [
-            {
-                id: 8,
-                available: true,
-                label: null,
-                startDate: '2021-04-04',
-                days: 4,
-                ranges: ['16:00 - 24:00']
-            }
-        ]
-    }
 ];
 
 

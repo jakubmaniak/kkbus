@@ -41,11 +41,18 @@
     font-weight: 500;
 }
 
+.name-proffesion-container {
+    display: flex;
+    align-items: center;
+    width: 240px;
+    height: 100%;
+}
+
 .name-proffesion {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    width: 240px;
+    width: 200px;
     height: 100%;
 }
 
@@ -92,11 +99,17 @@
 .timetable-item-container .tile .add {
     display: flex;
     align-items: center;
+    justify-content: center;
     background-color: #D9B430;
     color: white;
-    font-size: 14px;
-    height: 100%;
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
     border-radius: 4px;
-    padding-left: 14px;
+}
+
+.timetable-item-container .tile .dummy {
+    width: 40px;
+    height: 40px;
 }
 

@@ -12,6 +12,7 @@ function Timetable() {
     let loadingInitTime = Date.now();
 
     let [timetable, setTimetable] = useState([]); 
+    let [user, setUser] = useState({});
 
     useEffect(() => {
         api.getTimetable()
@@ -24,6 +25,14 @@ function Timetable() {
         .catch((err) => {
             throw err;
         });
+        api.getUserInfo()
+        .then((result) => {
+            setUser(result);
+            console.log(result);
+        })
+        .catch((err) => {
+            throw err;
+        })
     }, []);
 
     let d = new Date('2021-04-03'); //data pozyskana z filtru
@@ -99,7 +108,10 @@ function Timetable() {
                <div className="timetable-item-container">
                 {timetable.map((filterResult, i) => {
                     return (
-                            <TimetableItem key={i}
+                            <TimetableItem key={filterResult.userId}
+                                loggedUserRole={user.role}
+                                loggedUserId={user.id}
+                                id={filterResult.userId}
                                 name={filterResult.name}
                                 role={filterResult.role}
                                 children={compareDate(filterResult).map((item, i) => {
