@@ -84,7 +84,7 @@ module.exports.findAvailability = (availabilityId) => {
         FROM timetable
         LEFT JOIN users
         ON timetable.userId=users.id
-        WHERE id=?
+        WHERE timetable.id=?
         LIMIT 1`, [
             availabilityId
         ]
