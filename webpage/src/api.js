@@ -107,8 +107,13 @@ export async function getWorkSchedule(driverId, range = 0, routeId = null) {
 }
 
 
-export async function getTimetable() {
-    return sendGet('/timetable');
+export async function getTimetable(date = null) {
+    if (date) {
+        return sendGet('/timetable/' + date);
+    }
+    else {
+        return sendGet('/timetable');
+    }
 }
 
 export async function addTimetableItem(startDate, days, ranges, available, label = null) {

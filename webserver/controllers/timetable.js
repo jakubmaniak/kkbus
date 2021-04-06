@@ -1,4 +1,5 @@
 let db = require('../configs/db');
+const { parseDate } = require('../helpers/date');
 let { getFirst, splitProps, resolveRoles, resolveBooleans } = require('../helpers/query-utils');
 
 /*
@@ -54,12 +55,23 @@ module.exports.addAvailability = (availability) => {
     ]);
 };
 
-module.exports.findAllAvailabilities = () => {
-    return db.query(`SELECT timetable.*, users.role, users.firstName, users.lastName
+module.exports.findAllAvailabilities = (date = null) => {
+    if (date == null) {
+        date = parseDate(new Date());
+    }
+
+    let from = date.toString();
+    let to = date.addDays(7).toString();
+
+    return db.query(`SELECT timetable.id, userId, days, ranges, available, label, startDate, role, firstName, lastName
         FROM timetable
         LEFT JOIN users
         ON timetable.userId=users.id
-        ORDER BY users.role DESC, users.lastName, users.firstName, timetable.startDate`
+        WHERE startDate >= DATE(?) AND startDate < DATE(?)
+        ORDER BY role DESC, lastName, firstName, timetable.startDate`, [
+            from,
+            to
+        ]
     )
     .then(splitProps('ranges'))
     .then(resolveRoles('role'))
@@ -80,11 +92,3 @@ module.exports.updateAvailability = (availabilityId, availability) => {
         ]
     );
 };
-
-// module.exports.findAllAvailabilitiesByRoles = (roles) => {
-//     return db.query(`SELECT timetable.*, users.role, users.firstName, users.lastName
-//         FROM timetable
-//         LEFT JOIN users
-//         ON timetable.userId=users.id`
-//     );
-// };

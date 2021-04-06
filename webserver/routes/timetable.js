@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { invalidRequest, notFound, serverError } = require('../errors');
+const { parseDate } = require('../helpers/date');
 const bodySchema = require('../middlewares/body-schema');
 const role = require('../middlewares/roles')(
     [0, 'guest'],
@@ -18,6 +19,18 @@ const userController = require('../controllers/user');
 router.get('/timetable', [role('driver')], async (req, res, next) => {
     try {
         res.ok(await timetableController.findAllAvailabilities());
+    }
+    catch {
+        next(serverError());
+    }
+});
+
+router.get('/timetable/:date', [role('driver')], async (req, res, next) => {
+    let date = parseDate(req.params.date);
+    if (!date) return next(invalidRequest());
+
+    try {
+        res.ok(await timetableController.findAllAvailabilities(date));
     }
     catch {
         next(serverError());
