@@ -43,12 +43,19 @@ router.post('/timetable', [
         available: boolean,
         label?: string,
         startDate: string,
-        days: number,
+        days?: number,
         ranges: string[]
     }`)
 ], async (req, res, next) => {
     let { available, label, startDate, days, ranges } = req.body;
     ranges = ranges.map((range) => range.trim());
+
+    if (days == null) {
+        days = 1;
+    }
+
+    days = parseInt(days);
+    if (isNaN(days) || days <= 0) return next(invalidRequest());
 
     let result;
     try {
@@ -77,13 +84,20 @@ router.post('/timetable/:userId', [
         available: boolean,
         label?: string,
         startDate: string,
-        days: number,
+        days?: number,
         ranges: string[]
     }`)
 ], async (req, res, next) => {
     let { available, label, startDate, days, ranges } = req.body;
     ranges = ranges.map((range) => range.trim());
     
+    if (days == null) {
+        days = 1;
+    }
+
+    days = parseInt(days);
+    if (isNaN(days) || days <= 0) return next(invalidRequest());
+
     let userId = parseInt(req.params.userId);
     if (isNaN(userId)) return next(invalidRequest());
 
