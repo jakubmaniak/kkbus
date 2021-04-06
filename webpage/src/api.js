@@ -58,6 +58,15 @@ export async function deleteRoute(routeId) {
 }
 
 
+export async function addBooking(routeId, hour, normalsTickets, reducedTickets, childTickets, firstStop, lastStop) {
+    return sendPost('/booking', { routeId, hour, normalsTickets, reducedTickets, childTickets, firstStop, lastStop });
+}
+
+export async function addBookingToUser(userId, routeId, hour, normalsTickets, reducedTickets, childTickets, firstStop, lastStop) {
+    return sendPost('/booking/' + userId, { routeId, hour, normalsTickets, reducedTickets, childTickets, firstStop, lastStop });
+}
+
+
 export async function getAllVehicles() {
     return sendGet('/vehicles');
 }
