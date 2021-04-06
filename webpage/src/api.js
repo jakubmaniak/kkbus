@@ -58,12 +58,12 @@ export async function deleteRoute(routeId) {
 }
 
 
-export async function addBooking(routeId, hour, normalsTickets, reducedTickets, childTickets, firstStop, lastStop) {
-    return sendPost('/booking', { routeId, hour, normalsTickets, reducedTickets, childTickets, firstStop, lastStop });
+export async function addBooking(routeId, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop) {
+    return sendPost('/booking', { routeId, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop });
 }
 
-export async function addBookingToUser(userId, routeId, hour, normalsTickets, reducedTickets, childTickets, firstStop, lastStop) {
-    return sendPost('/booking/' + userId, { routeId, hour, normalsTickets, reducedTickets, childTickets, firstStop, lastStop });
+export async function addBookingToUser(userId, routeId, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop) {
+    return sendPost('/booking/' + userId, { routeId, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop });
 }
 
 
