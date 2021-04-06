@@ -3,7 +3,8 @@ import React from 'react';
 export const initialContext = {
     user: {
         loggedIn: false,
-        role: 'guest'
+        role: 'guest',
+        id: -1
     }
 };
 

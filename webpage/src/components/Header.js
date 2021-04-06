@@ -26,6 +26,7 @@ function Header() {
             api.getUserInfo()
             .then((data) => {
                 user.role = data.role;
+                user.id = data.id;
                 
                 setUser({ ...user });
                 setName(data.firstName + ' ' + data.lastName);
