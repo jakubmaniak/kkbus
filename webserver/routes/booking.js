@@ -12,6 +12,7 @@ const bodySchema = require('../middlewares/body-schema');
 
 const bookingController = require('../controllers/booking');
 const routeController = require('../controllers/route');
+const { parseDate, parseTime } = require('../helpers/date');
 
 
 function validateTicketNumbers(normalTickets, reducedTickets, childTickets) {
@@ -64,10 +65,30 @@ router.get('/bookings', [role('driver')], async (req, res, next) => {
     }
 });
 
+router.get('/bookings/:routeId/:date/:hour', [role('driver')], async (req, res, next) => {
+    let { routeId, date, hour } = req.params;
+
+    routeId = parseInt(routeId);
+    date = parseDate(date)?.toString();
+    hour = parseTime(hour)?.toString();
+
+    if (isNaN(routeId) || date == null || hour == null) {
+        return next(invalidRequest());
+    }
+    
+    try {
+        res.ok(await bookingController.findUserBookingsByRoute(routeId, date, hour));
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
 router.post('/booking', [
     role('client'),
     bodySchema(`{
         routeId: number,
+        date: string,
         hour: string,
         normalTickets: number,
         reducedTickets: number,
@@ -78,7 +99,15 @@ router.post('/booking', [
 ], async (req, res, next) => {
     let userId = req.user.id;
 
-    let { routeId, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop } = req.body;
+    let { routeId, date, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop } = req.body;
+
+    routeId = parseInt(routeId);
+    date = parseDate(date)?.toString();
+    hour = parseTime(hour)?.toString();
+
+    if (isNaN(routeId) || date == null || hour == null) {
+        return next(invalidRequest());
+    }
 
     let tickets = validateTicketNumbers(normalTickets, reducedTickets, childTickets);
     if (tickets == null) {
@@ -109,6 +138,7 @@ router.post('/booking', [
         result = await bookingController.addBooking({
             userId,
             routeId,
+            date,
             hour,
             normalTickets,
             reducedTickets,
@@ -130,6 +160,7 @@ router.post('/booking/:userId', [
     role('office'),
     bodySchema(`{
         routeId: number,
+        date: string,
         hour: string,
         normalTickets: number,
         reducedTickets: number,
@@ -141,7 +172,15 @@ router.post('/booking/:userId', [
     let userId = parseInt(req.params.userId);
     if (isNaN(userId)) return next(invalidRequest());
 
-    let { routeId, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop } = req.body;
+    let { routeId, date, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop } = req.body;
+
+    routeId = parseInt(routeId);
+    date = parseDate(date)?.toString();
+    hour = parseTime(hour)?.toString();
+
+    if (isNaN(routeId) || date == null || hour == null) {
+        return next(invalidRequest());
+    }
 
     let tickets = validateTicketNumbers(normalTickets, reducedTickets, childTickets);
     if (tickets == null) {
@@ -172,6 +211,7 @@ router.post('/booking/:userId', [
         result = await bookingController.addBooking({
             userId,
             routeId,
+            date,
             hour,
             normalTickets,
             reducedTickets,
