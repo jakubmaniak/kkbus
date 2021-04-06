@@ -111,7 +111,11 @@ export async function getTimetable() {
     return sendGet('/timetable');
 }
 
-export async function addTimetableItem(userId, startDate, days, ranges, available, label = null) {
+export async function addTimetableItem(startDate, days, ranges, available, label = null) {
+    return sendPost('/timetable', { startDate, days, ranges, available, label });
+}
+
+export async function addTimetableItemToUser(userId, startDate, days, ranges, available, label = null) {
     return sendPost('/timetable/' + userId, { startDate, days, ranges, available, label });
 }
 
