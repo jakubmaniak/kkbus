@@ -115,12 +115,13 @@ function LoyaltyProgram() {
                                 <button className="login" onClick={() => history.push('/logowanie')}>Zaloguj</button>
                             </div>
                         </div>
-                    : 
+                    : (role === 'client') ? 
                         <div className="tile half">
                             <h2>Historia zakupów</h2>
                             <p>28.01.2021 Kupiono 1 Bilet za 2000 punktów</p>
                             <p>28.01.2021 Kupiono 2 Bilet za 3500 punktów</p>
                         </div>
+                    : null
                 }
             </div>
         );
