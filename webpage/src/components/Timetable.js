@@ -15,6 +15,18 @@ function Timetable() {
     let [timetable, setTimetable] = useState([]); 
     let [user, setUser] = useState({});
 
+    let [availableTypes] = useState([
+        [false, 'niedyspozycja'],
+        [true, 'dostępność']
+    ]);
+    let [selectedAvailableType, setSelectedAvailableType] = useState();
+
+    let [dates, setDates] = useState(
+        new Array(7)
+        .fill(null)
+        .map((date, i) => new Date(new Date().getTime() + i * 24 * 3600 * 1000))
+    );
+    let [selectedDate, setSelectedDate] = useState();
     let [modalAddAvailabilityVisibility, setModalAddAvailabilityVisibility] = useState(false);
 
     useEffect(() => {
@@ -159,9 +171,21 @@ function Timetable() {
                 <header>Dodawanie dyspozycji</header>
                 <section className="content">
                     <form className="add-availability">
-                        <Dropdown placeholder="Typ"/>
-                        <input placeholder="Etykieta"/>
-                        <Dropdown placeholder="Data rozpoczęcia"/>
+                    <Dropdown
+                            placeholder="Typ"
+                            alwaysSelected
+                            items={availableTypes}
+                            textProperty="1"
+                            handleChange={setSelectedAvailableType}
+                        />
+                        <input placeholder="Etykieta (opcjonalnie)"/>
+                        <Dropdown 
+                            placeholder="Data rozpoczęcia"
+                            alwaysSelected
+                            items={dates}
+                            textFormatter={(item) => item && item.toLocaleDateString()}
+                            handleChange={setSelectedDate}
+                        />
                         <input placeholder="Liczba dni" />
                         <input placeholder="Godziny"/>
                     </form>
