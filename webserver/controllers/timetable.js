@@ -66,6 +66,20 @@ module.exports.findAllAvailabilities = () => {
     .then(groupAvailabilities);
 };
 
+module.exports.updateAvailability = (availabilityId, availability) => {
+    return db.query(`UPDATE timetable
+        SET available=?, label=?, startDate=?, days=?, ranges=?
+        WHERE id=?`, [
+            availability.available,
+            availability.label,
+            availability.startDate,
+            availability.days,
+            availability.ranges,
+            availabilityId
+        ]
+    );
+};
+
 // module.exports.findAllAvailabilitiesByRoles = (roles) => {
 //     return db.query(`SELECT timetable.*, users.role, users.firstName, users.lastName
 //         FROM timetable

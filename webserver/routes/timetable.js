@@ -35,6 +35,7 @@ router.post('/timetable', [
     }`)
 ], async (req, res, next) => {
     let { available, label, startDate, days, ranges } = req.body;
+    ranges = ranges.map((range) => range.trim());
 
     let result;
     try {
@@ -68,6 +69,7 @@ router.post('/timetable/:userId', [
     }`)
 ], async (req, res, next) => {
     let { available, label, startDate, days, ranges } = req.body;
+    ranges = ranges.map((range) => range.trim());
     
     let userId = parseInt(req.params.userId);
     if (isNaN(userId)) return next(invalidRequest());
@@ -108,37 +110,32 @@ router.put('/timetable/:itemId', [
         days: number,
         ranges: string[]
     }`)
-], (req, res) => {
+], async (req, res, next) => {
     let wantedId = parseInt(req.params.itemId);
-    if (isNaN(wantedId)) throw invalidRequest();
+    if (isNaN(wantedId)) return next(invalidRequest());
 
     let { available, label, startDate, days, ranges } = req.body;
+    ranges = ranges.map((range) => range.trim());
 
-    let targetEmployee = null;
-    let itemIndex;
-
-    for (let employee of timetable) {
-        itemIndex = employee.items.findIndex(({ id }) => id == wantedId);
-        
-        if (itemIndex >= 0) {
-            targetEmployee = employee;
-            break;
-        }
+    try {
+        await timetableController.updateAvailability(wantedId, {
+            available,
+            label,
+            startDate,
+            days,
+            ranges
+        });
+    }
+    catch (err) {
+        return next(err);
     }
 
-    if (targetEmployee == null) {
-        return next(notFound());
-    }
-    
-    let updatedItem = { id: wantedId, available, label, startDate, days, ranges };
-    targetEmployee.items[itemIndex] = updatedItem;
-
-    res.ok(updatedItem);
+    res.ok();
 });
 
 router.delete('/timetable/:itemId', [role('driver')], async (req, res, next) => {
     let wantedId = parseInt(req.params.itemId);
-    if (isNaN(wantedId)) throw invalidRequest();
+    if (isNaN(wantedId)) return next(invalidRequest());
 
     let targetEmployee = null;
     let itemIndex;
