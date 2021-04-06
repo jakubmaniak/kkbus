@@ -42,6 +42,8 @@ function Timetable() {
     let [daysEdit, setDaysEdit] = useState(''); 
     let [rangesEdit, setRangesEdit] = useState([]); 
     let [labelEdit, setLabelEdit] = useState('');
+    let [availableIndex, setAvailableIndex] = useState(-1);
+    let [dateIndex, setDateIndex] = useState('');
 
     useEffect(() => {
         api.getTimetable()
@@ -68,6 +70,7 @@ function Timetable() {
     let filterDays = [];
     let availableTileWidth = 115;
     let availableTileMargin = 15;
+    let formatterFilterDays = [];
 
     function setFilterDays() {
         for(let i = 0; i < 7; i++) {
@@ -76,6 +79,8 @@ function Timetable() {
             let month = (d.getMonth() + 1).toString().padStart(2, '0');
             let displayText = `${weekDay}, ${monthDay}.${month}`; 
             filterDays[i] = displayText;
+            
+            formatterFilterDays[i] = filterDays[i].slice(4).split('-').reverse().join('.');
         }
 
         return filterDays;
@@ -154,12 +159,21 @@ function Timetable() {
         setLabelEdit(item.label);
         setDaysEdit(item.days);
         setRangesEdit(item.ranges.join(','));
+        setAvailableIndex(item.available ? 1 : 0);
+        
+        let index = formatterFilterDays.indexOf(item.startDate.slice(5).split('-').reverse().join('.'));
+        setDateIndex(index);
     }
 
     function saveEditAvailability() {
         setModalEditAvailabilityVisibility(false);
-        api.updateTimetableItem(currentEditAvailabilityId, selectedDateEdit.toJSON().slice(0, 10), parseInt(daysEdit), rangesEdit.split(','), selectedAvailableTypeEdit[0], labelEdit);
-        refreshTimeTable();
+        if(typeof(parseInt(daysEdit)) !== 'number') {
+            alert('Nieprawidłowy typ danych!');
+        }
+        else {
+            api.updateTimetableItem(currentEditAvailabilityId, selectedDateEdit.toJSON().slice(0, 10), parseInt(daysEdit), rangesEdit.split(','), selectedAvailableTypeEdit[0], labelEdit);
+            refreshTimeTable();
+        }
     }
 
 
@@ -264,6 +278,7 @@ function Timetable() {
                         <Dropdown
                             placeholder="Typ"
                             alwaysSelected
+                            selectedIndex={availableIndex.toString()}
                             items={availableTypes}
                             textProperty="1"
                             handleChange={setSelectedAvailableTypeEdit}
@@ -272,6 +287,7 @@ function Timetable() {
                         <Dropdown 
                             placeholder="Data rozpoczęcia"
                             alwaysSelected
+                            selectedIndex={dateIndex}
                             items={dates}
                             textFormatter={(item) => item && item.toLocaleDateString()}
                             handleChange={setSelectedDateEdit}
