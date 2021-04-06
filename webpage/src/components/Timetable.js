@@ -126,7 +126,6 @@ function Timetable() {
         setModalAddAvailabilityVisibility(false);
         api.addTimetableItem(selectedDate.toJSON().slice(0, 10), parseInt(days), ranges.split(','), selectedAvailableType[0], label);
         refreshTimeTable();
-        
    }
 
    function refreshTimeTable() {
@@ -171,9 +170,19 @@ function Timetable() {
             alert('Nieprawidłowy typ danych!');
         }
         else {
-            api.updateTimetableItem(currentEditAvailabilityId, selectedDateEdit.toJSON().slice(0, 10), parseInt(daysEdit), rangesEdit.split(','), selectedAvailableTypeEdit[0], labelEdit);
-            refreshTimeTable();
+            api.updateTimetableItem(
+                currentEditAvailabilityId, 
+                selectedDateEdit.toJSON().slice(0, 10), 
+                parseInt(daysEdit), rangesEdit.split(','), 
+                selectedAvailableTypeEdit[0], 
+                labelEdit
+            ).then(refreshTimeTable);
         }
+    }
+
+    function deleteAvailability(itemId) {
+        api.deleteTimetableItem(itemId)
+        .then(refreshTimeTable);
     }
 
 
@@ -225,7 +234,7 @@ function Timetable() {
                                                         (filterResult.userId == user.id)
                                                         ? <div className="menu">
                                                             <button className="menu-item edit" onClick={() => editAvailable(item.id, user.id)} title="Edytuj"></button>
-                                                            <button className="menu-item delete" title="Usuń"></button>
+                                                            <button className="menu-item delete" onClick={() => deleteAvailability(item.id)} title="Usuń"></button>
                                                         </div>
                                                         : null 
                                                     }
