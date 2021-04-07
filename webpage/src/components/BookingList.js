@@ -11,44 +11,22 @@ function BookingList() {
     let [routes, setRoutes] = useState([]);
     let [dates] = useState(['aktualna']);
     let [hours] = useState(['aktualna']);
-    let [bookinglist, setBookingList] = useState([
-        {
-            bookingNumber: 233706,
-            clientName: 'Krzysztof Niebieski',
-            ticket: '2 normalne, 1 ulgowy'
-        },
-        {
-            bookingNumber: 614281,
-            clientName: 'Anna Biała',
-            ticket: '1 ulgowy'
-        },
-        {
-            bookingNumber: 441899,
-            clientName: 'Tomasz Czerwiński',
-            ticket: '2 normalne, 1 dziecko do lat 5'
-        },
-        {
-            bookingNumber: 280442,
-            clientName: 'Jan Fioleciak',
-            ticket: '1 normalny'
-        },
-        {
-            bookingNumber: 54413,
-            clientName: 'Ewa Czarna',
-            ticket: '2 normalne'
-        },
-        {
-            bookingNumber: 563149,
-            clientName: 'Adam Blady',
-            ticket: '2 normalne, 1 ulgowy, 2 dzieci do lat 5'
-        }
-    ]);
+    let [selectedRoute, setSelectedRoute] = useState('');
+    let [bookinglist, setBookingList] = useState([]);
 
     useEffect(() => {
         api.getAllRoutes()
             .then((routes) => setRoutes(routes))
             .catch(api.errorAlert);
     }, []);
+
+    useEffect(() => {
+        if(selectedRoute != '') {
+           api.getRouteBookings(selectedRoute.id, '2021-04-07', '15:00')
+            .then((results) => setBookingList(results))
+            .catch(api.errorAlert);
+        }
+    }, [selectedRoute]);
 
     return (
         <div className="booking-list page">
@@ -61,7 +39,9 @@ function BookingList() {
                             <Dropdown
                                 items={routes}
                                 textFormatter={routeFormatter}
-                                placeholder="Wybierz trasę" />
+                                placeholder="Wybierz trasę" 
+                                handleChange={setSelectedRoute}    
+                            />
                         </div>
                     </div>
                     <div className="row-filter-container">
@@ -81,9 +61,12 @@ function BookingList() {
                         {bookinglist.map((bookingItem) => {
                             return (
                                 <BookingListItem
-                                    bookingNumber={bookingItem.bookingNumber}
-                                    clientName={bookingItem.clientName}
-                                    ticket={bookingItem.ticket}
+                                    id={bookingItem.id}
+                                    firstName={bookingItem.firstName}
+                                    lastName={bookingItem.lastName}
+                                    childTickets={bookingItem.childTickets}
+                                    normalTickets={bookingItem.normalTickets}
+                                    reducedTickets={bookingItem.reducedTickets}
                                 />
                             )
                         })}
