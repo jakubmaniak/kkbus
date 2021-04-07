@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import '../styles/Dropdown.css';
 
 function Dropdown(props) {
@@ -6,6 +6,19 @@ function Dropdown(props) {
     let [selectedIndex, setSelectedIndex] = useState(0);
     let [expanded, setExpanded] = useState(false);
     let [placeholderVisible, setPlaceholderVisible] = useState(false);
+
+    let collapseListener = useCallback(() => {
+        setExpanded(false);
+    }, []);
+
+    useEffect(() => {
+        if (expanded) {
+            document.body.addEventListener('click', collapseListener);
+        }
+        else {
+            document.body.removeEventListener('click', collapseListener);
+        }
+    }, [expanded]);
 
     useEffect(() => {
         if (!(props.items instanceof Array)) {
