@@ -56,12 +56,21 @@ function Route(props) {
                 <header>Rezerwacja</header>
                 <section className="content">
                     <form className="book-route">
-                        <Dropdown placeholder="Godzina"/>
+                        <Dropdown 
+                            placeholder="Godzina"
+                            items={hours} 
+                        />
                         <input placeholder="Liczba osób objętych biletem normalnym"/>
                         <input placeholder="Liczba osób objętych biletem ulgowym"/>
                         <input placeholder="Liczba dzieci do lat 5"/>
-                        <Dropdown placeholder="Przystanek początkowy"/>
-                        <Dropdown placeholder="Przystanek końcowy"/>
+                        <Dropdown 
+                            placeholder="Przystanek początkowy"
+                            items={stops}
+                        />
+                        <Dropdown 
+                            placeholder="Przystanek końcowy"
+                            items={stops}
+                        />
                     </form>
                 </section>
                 <section className="footer reserve">
