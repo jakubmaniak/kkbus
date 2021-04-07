@@ -45,6 +45,8 @@ function Timetable() {
     let [availableIndex, setAvailableIndex] = useState(-1);
     let [dateIndex, setDateIndex] = useState('');
 
+    let[selectedItem, setSelectedItem] = useState(-1);
+
     useEffect(() => {
         api.getTimetable()
         .then((results) => {
@@ -124,8 +126,14 @@ function Timetable() {
 
    function saveAvailability() {
         setModalAddAvailabilityVisibility(false);
-        api.addTimetableItem(selectedDate.toJSON().slice(0, 10), parseInt(days), ranges.split(','), selectedAvailableType[0], label);
-        refreshTimeTable();
+        api.addTimetableItem(selectedDate.toJSON().slice(0, 10), parseInt(days), ranges.split(','), selectedAvailableType[0], label)
+        .then(refreshTimeTable);
+   }
+
+   function saveAvailabilityToUser() {
+    setModalAddAvailabilityVisibility(false);
+    api.addTimetableItemToUser(selectedItem.userId, selectedDate.toJSON().slice(0, 10), parseInt(days), ranges.split(','), selectedAvailableType[0], label)
+    .then(refreshTimeTable);
    }
 
    function refreshTimeTable() {
@@ -173,7 +181,8 @@ function Timetable() {
             api.updateTimetableItem(
                 currentEditAvailabilityId, 
                 selectedDateEdit.toJSON().slice(0, 10), 
-                parseInt(daysEdit), rangesEdit.split(','), 
+                parseInt(daysEdit), 
+                rangesEdit.split(','), 
                 selectedAvailableTypeEdit[0], 
                 labelEdit
             ).then(refreshTimeTable);
@@ -214,12 +223,11 @@ function Timetable() {
                 {timetable.map((filterResult) => {
                     return (
                             <TimetableItem key={filterResult.userId}
-                                loggedUserRole={user.role}
-                                loggedUserId={user.id}
                                 id={filterResult.userId}
                                 addAvailability={addAvailability}
                                 name={filterResult.name}
                                 role={translateRole(filterResult.role)}
+                                onSelected={() => setSelectedItem(filterResult)}
                                 children={compareDate(filterResult).map((item, i) => {
                                     if(item !== null && item !== 'occupied') {
                                         return (
@@ -231,12 +239,12 @@ function Timetable() {
                                                         );
                                                     })}
                                                     {
-                                                        (filterResult.userId == user.id)
+                                                        (filterResult.userId == user.id || user.role === 'owner')
                                                         ? <div className="menu">
                                                             <button className="menu-item edit" onClick={() => editAvailable(item.id, user.id)} title="Edytuj"></button>
                                                             <button className="menu-item delete" onClick={() => deleteAvailability(item.id)} title="Usuń"></button>
                                                         </div>
-                                                        : null 
+                                                        : null   
                                                     }
                                             </div>                                            
                                         );
@@ -263,7 +271,7 @@ function Timetable() {
                                 textProperty="1"
                                 handleChange={setSelectedAvailableType}
                         />
-                        <input placeholder="Etykieta (opcjonalnie)" onChange={fromValue(setLabel)}/>
+                        <input placeholder="Etykieta (opcjonalnie)" onChange={fromValue(setLabel)} />
                         <Dropdown 
                             placeholder="Data rozpoczęcia"
                             alwaysSelected
@@ -272,12 +280,12 @@ function Timetable() {
                             handleChange={setSelectedDate}
                         />
                         <input placeholder="Liczba dni" onChange={fromValue(setDays)} />
-                        <input placeholder="Godziny" onChange={fromValue(setRanges)}/>
+                        <input placeholder="Godziny" onChange={fromValue(setRanges)} />
                     </form>
                 </section>
                 <section className="footer">
                     <button onClick={() => setModalAddAvailabilityVisibility(false)}>Anuluj</button>
-                    <button onClick={saveAvailability}>Zapisz</button>
+                    <button onClick={user.role !== 'owner' ? saveAvailability : saveAvailabilityToUser}>Zapisz</button>
                 </section>  
             </Modal>
             <Modal visible={modalEditAvailabilityVisibility}>
