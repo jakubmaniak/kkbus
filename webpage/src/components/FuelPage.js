@@ -12,7 +12,7 @@ function FuelPage() {
     let [loading, setLoading] = useState(true);
     let loadingInitTime = Date.now();
 
-    let [fuelUsage, setFuelUsage] = useState([]);
+    let [refuels, setRefuels] = useState([]);
     let [vehicle, setVehicle] = useState('');
     let [vehicles, setVehicles] = useState([]);
 
@@ -33,9 +33,8 @@ function FuelPage() {
     }
 
     function getData(vehicleId) {
-        api.getFuelUsage(vehicleId).then((data) => {
-            setFuelUsage(data);
-        })
+        api.getRefuels(vehicleId)
+        .then(setRefuels)
         .catch(api.errorAlert);
     }
 
@@ -71,14 +70,14 @@ function FuelPage() {
                             <span>Przebieg</span>
                         </div>
                         <div className="fuel-usage-history-items">
-                        {fuelUsage.map((refueling, index) => {
+                        {refuels.map((refuel, index) => {
                             return (
                                 <FuelHistoryItem 
                                     key={index}
-                                    date={refueling.date}
-                                    price={refueling.cost}
-                                    liters={refueling.amount}
-                                    vehicleMileage={refueling.mileage}
+                                    date={refuel.date}
+                                    price={refuel.cost}
+                                    liters={refuel.amount}
+                                    vehicleMileage={refuel.mileage}
                                 />      
                             );
                         })}
@@ -86,7 +85,7 @@ function FuelPage() {
                     </div>
                     <div className="tile half">
                         <h2>Zużycie paliwa</h2>
-                        <FuelUsageChart values={fuelUsage.map((e) => e.amount)} />
+                        <FuelUsageChart values={refuels.map((refuel) => refuel.amount)} />
                     </div>
                 </div>
         </div>

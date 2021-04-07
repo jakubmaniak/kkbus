@@ -91,8 +91,12 @@ export async function deleteVehicle(vehicleId) {
     return sendDelete('/vehicle/' + vehicleId);
 }
 
-export async function getFuelUsage(vehicleId) {
-    return sendGet(`/vehicle/${vehicleId}/fuel-usage`);
+export async function getRefuels(vehicleId) {
+    return sendGet(`/vehicle/${vehicleId}/refuels`);
+}
+
+export async function addRefuel(vehicleId, amount, cost, mileage = null) {
+    return sendPost(`/vehicle/${vehicleId}/refuel`, { amount, cost, mileage });
 }
 
 

@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const { invalidRequest } = require('../errors');
+const { invalidRequest, serverError } = require('../errors');
+const { deleteProps, resolveDateTime3 } = require('../helpers/query-utils');
+const { parseDateTime } = require('../helpers/date');
 const bodySchema = require('../middlewares/body-schema');
 const role = require('../middlewares/roles')(
     [0, 'guest'],
@@ -12,23 +14,8 @@ const role = require('../middlewares/roles')(
 );
 
 const vehicleController = require('../controllers/vehicle');
+const refuelController = require('../controllers/refuel');
 
-let fuelHistory = new Map([
-    [1, [
-        { date: '2021-03-02 15:09', cost: 203.45, amount: 40.7, mileage: 1330087 },
-        { date: '2021-03-03 15:11', cost: 183.45, amount: 36.4, mileage: 1331223 },
-        { date: '2021-03-04 15:06', cost: 203.31, amount: 40.8, mileage: 1332057 },
-        { date: '2021-03-05 15:08', cost: 203.52, amount: 40.7, mileage: 1333483 }
-    ]],
-    [2, [
-        { date: '2021-03-02 15:09', cost: 203.45, amount: 40.7, mileage: 1330087 },
-        { date: '2021-03-03 15:11', cost: 183.45, amount: 36.4, mileage: 1331223 },
-        { date: '2021-03-04 15:06', cost: 203.31, amount: 40.8, mileage: 1332057 },
-        { date: '2021-03-05 15:08', cost: 203.52, amount: 40.7, mileage: 1333483 },
-        { date: '2021-03-06 15:08', cost: 202.50, amount: 40.6, mileage: 1334403 },
-        { date: '2021-03-07 15:08', cost: 200.12, amount: 40.5, mileage: 1335489 }
-    ]]
-]);
 
 router.get('/vehicles', [role('driver')], async (req, res, next) => {
     let vehicles = (await vehicleController.findAllVehicles()).map((vehicle) => ({
@@ -146,11 +133,65 @@ router.delete('/vehicle/:id', [role('owner')], async (req, res, next) => {
     res.ok();
 });
 
-router.get('/vehicle/:id/fuel-usage', [role('driver')], (req, res) => {
-    let vehicleId = parseInt(req.params.id);
-    if (isNaN(vehicleId)) throw invalidRequest();
+router.get('/vehicle/:vehicleId/refuels', [role('driver')], async (req, res, next) => {
+    let vehicleId = parseInt(req.params.vehicleId);
+    if (isNaN(vehicleId)) return next(invalidRequest());
 
-    res.ok(fuelHistory.get(vehicleId) || []);
+    try {
+        let refuels = await refuelController.findVehicleRefuels(vehicleId)
+            .then(deleteProps('vehicleId'))
+            .then(resolveDateTime3('date'));
+        res.ok(refuels);
+    }
+    catch {
+        next(serverError());
+    }
+});
+
+router.post('/vehicle/:vehicleId/refuel', [
+    role('driver'),
+    bodySchema(`{
+        cost: number,
+        amount: number,
+        mileage?: number
+    }`)
+], async (req, res, next) => {
+    let vehicleId = parseInt(req.params.vehicleId);
+    if (isNaN(vehicleId)) return next(invalidRequest());
+
+    let { cost, amount, mileage } = req.body;
+    let date = parseDateTime(new Date());
+
+    let vehicle;
+    try {
+        vehicle = await vehicleController.findVehicle(vehicleId);
+    }
+    catch (err) {
+        return next(err);
+    }
+
+    let result;
+    try {
+        result = await refuelController.addRefuel({
+            vehicleId,
+            cost,
+            amount,
+            mileage,
+            date
+        });
+        
+        if (mileage > vehicle.mileage) {
+            await vehicleController.updateVehicle(vehicleId, {
+                ...vehicle,
+                mileage
+            });
+        }
+    }
+    catch {
+        return next(serverError());
+    }
+
+    res.ok({ id: result.insertId });
 });
 
 

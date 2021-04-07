@@ -1,4 +1,5 @@
 const { notFound } = require('../errors');
+const { parseDateTime } = require('./date');
 
 module.exports = {
     getFirst: (results) => {
@@ -34,6 +35,22 @@ module.exports = {
         for (let result of results) {
             for (let prop of props) {
                 result[prop] = (['guest', 'client', 'driver', 'office', 'owner'])[result[prop]];
+            }
+        }
+        return results;
+    },
+    resolveDateTime: (...props) => (results) => {
+        for (let result of results) {
+            for (let prop of props) {
+                result[prop] = parseDateTime(result[prop]).toString();
+            }
+        }
+        return results;
+    },
+    resolveDateTime3: (...props) => (results) => {
+        for (let result of results) {
+            for (let prop of props) {
+                result[prop] = parseDateTime(result[prop]).toString(3);
             }
         }
         return results;
