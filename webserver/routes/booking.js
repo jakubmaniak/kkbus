@@ -110,6 +110,7 @@ router.post('/booking', [
     }
 
     let tickets = validateTicketNumbers(normalTickets, reducedTickets, childTickets);
+
     if (tickets == null) {
         return next(invalidRequest());
     }
@@ -122,6 +123,8 @@ router.post('/booking', [
     catch (err) {
         return next(err);
     }
+
+    route.hours = route.hours.map((hour) => parseTime(hour)?.toString());
 
     if (!route.hours.includes(hour)) {
         return next(invalidRequest());

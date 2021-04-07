@@ -16,6 +16,7 @@ function Route(props) {
     let [modalVisibility, setModalVisibility] = useState(false);
     let [departureLocation, setDepartureLocation] = useState(props.departureLocation);
     let [arrivalLocation, setArrivalLocation] = useState(props.arrivalLocation);
+    let [dates, setDates] = useState([]);
     let [hours, setHours] = useState([]);
     let [prices, setPrices] = useState([]);
     let [stops, setStops] = useState([]);
@@ -23,11 +24,21 @@ function Route(props) {
     let [reducedTickets, setReducedTickets] = useState(0);
     let [childTickets, setChildTickets] = useState(0);
 
+    let [selectedDate, setSelectedDate] = useState();
+    let [selectedHour, setSelectedHour] = useState();
+    let [selectedFirstStop, setSelectedFirstStop] = useState();
+    let [selectedLastStop, setSelectedLastStop] = useState();
+
     let history = useHistory();
 
     useEffect(() => { 
         setPrices(props.stopsPrices.split(',').map((e) => e.trim()).filter((e, i) => i % 2 == 1).map(parseFloat));
         setStops(props.stopsPrices.split(',').map((e) => e.trim()).filter((e, i) => i % 2 == 0));
+
+        setDates(new Array(8).fill(null).map((d, i) => {
+            let date = new Date(new Date().getTime() + i * 24 * 3600 * 1000);
+            return [date.toJSON().slice(0, 10), date.toLocaleDateString()];
+        }));
     }, []);
 
     useEffect(() => { 
@@ -57,6 +68,32 @@ function Route(props) {
         setPrices(parts.filter((e, i) => i % 2 == 1).map(parseFloat));   
     }
 
+    function addBooking() {
+        if (selectedFirstStop === selectedLastStop) {
+            alert('Nie możesz wybrać takich samych przystanków');
+            return;
+        }
+
+        if (!selectedDate || !selectedHour) {
+            alert('Nie wybrano daty lub godziny');
+            return null;
+        }
+
+        let tickets = {
+            normal: normalTickets == '' ? 0 : parseInt(normalTickets),
+            reduced: reducedTickets == '' ? 0 : parseInt(reducedTickets),
+            child: childTickets == '' ? 0 : parseInt(childTickets)
+        };
+
+        if (isNaN(tickets.normal) || isNaN(tickets.reduced) || isNaN(tickets.child)) {
+            alert('Wprowadzano niepoprawną liczbę biletów');
+            return null;
+        }
+
+        console.log(props.routeId, selectedDate[0], selectedHour, tickets.normal, tickets.reduced, tickets.child, selectedFirstStop, selectedLastStop);
+        api.addBooking(props.routeId, selectedDate[0], selectedHour, tickets.normal, tickets.reduced, tickets.child, selectedFirstStop, selectedLastStop);
+    }
+
     function clientModal() {
         return (
             <Modal visible={modalVisibility}>
@@ -64,9 +101,15 @@ function Route(props) {
                 <section className="content">
                     <form className="book-route">
                         <Dropdown 
+                            placeholder="Data"
+                            items={dates}
+                            textProperty="1"
+                            handleChange={setSelectedDate} 
+                        />
+                        <Dropdown 
                             placeholder="Godzina"
                             items={hours}
-                            handleChange={setHours} 
+                            handleChange={setSelectedHour} 
                         />
                         <input placeholder="Liczba osób objętych biletem normalnym" onChange={fromValue(setNormalTickets)}/>
                         <input placeholder="Liczba osób objętych biletem ulgowym" onChange={fromValue(setReducedTickets)}/>
@@ -74,12 +117,12 @@ function Route(props) {
                         <Dropdown 
                             placeholder="Przystanek początkowy"
                             items={stops}
-                            handleChange={setDepartureLocation}
+                            handleChange={setSelectedFirstStop}
                         />
                         <Dropdown 
                             placeholder="Przystanek końcowy"
                             items={stops}
-                            handleChange={setArrivalLocation}
+                            handleChange={setSelectedLastStop}
                         />
                     </form>
                 </section>
@@ -89,7 +132,7 @@ function Route(props) {
                     </div>
                     <div>
                         <button onClick={() => setModalVisibility(false)}>Anuluj</button>
-                        <button onClick={() => console.log(hours, normalTickets, reducedTickets, childTickets, departureLocation, arrivalLocation)}>Zapisz</button>
+                        <button onClick={addBooking}>Zapisz</button>
                     </div>
                 </section>
             </Modal>
