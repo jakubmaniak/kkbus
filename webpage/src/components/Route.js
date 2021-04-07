@@ -16,9 +16,12 @@ function Route(props) {
     let [modalVisibility, setModalVisibility] = useState(false);
     let [departureLocation, setDepartureLocation] = useState(props.departureLocation);
     let [arrivalLocation, setArrivalLocation] = useState(props.arrivalLocation);
-    let [hours, setHours] = useState(props.allHours);
+    let [hours, setHours] = useState([]);
     let [prices, setPrices] = useState([]);
     let [stops, setStops] = useState([]);
+    let [normalTickets, setNormalTickets] = useState(0);
+    let [reducedTickets, setReducedTickets] = useState(0);
+    let [childTickets, setChildTickets] = useState(0);
 
     let history = useHistory();
 
@@ -26,6 +29,10 @@ function Route(props) {
         setPrices(props.stopsPrices.split(',').map((e) => e.trim()).filter((e, i) => i % 2 == 1).map(parseFloat));
         setStops(props.stopsPrices.split(',').map((e) => e.trim()).filter((e, i) => i % 2 == 0));
     }, []);
+
+    useEffect(() => { 
+        setHours([...props.allHours]);
+    }, [props.allHours]);
 
 
     function showModal() {
@@ -58,18 +65,21 @@ function Route(props) {
                     <form className="book-route">
                         <Dropdown 
                             placeholder="Godzina"
-                            items={hours} 
+                            items={hours}
+                            handleChange={setHours} 
                         />
-                        <input placeholder="Liczba osób objętych biletem normalnym"/>
-                        <input placeholder="Liczba osób objętych biletem ulgowym"/>
-                        <input placeholder="Liczba dzieci do lat 5"/>
+                        <input placeholder="Liczba osób objętych biletem normalnym" onChange={fromValue(setNormalTickets)}/>
+                        <input placeholder="Liczba osób objętych biletem ulgowym" onChange={fromValue(setReducedTickets)}/>
+                        <input placeholder="Liczba dzieci do lat 5" onChange={fromValue(setChildTickets)}/>
                         <Dropdown 
                             placeholder="Przystanek początkowy"
                             items={stops}
+                            handleChange={setDepartureLocation}
                         />
                         <Dropdown 
                             placeholder="Przystanek końcowy"
                             items={stops}
+                            handleChange={setArrivalLocation}
                         />
                     </form>
                 </section>
@@ -79,7 +89,7 @@ function Route(props) {
                     </div>
                     <div>
                         <button onClick={() => setModalVisibility(false)}>Anuluj</button>
-                        <button onClick={() => setModalVisibility(false)}>Zapisz</button>
+                        <button onClick={() => console.log(hours, normalTickets, reducedTickets, childTickets, departureLocation, arrivalLocation)}>Zapisz</button>
                     </div>
                 </section>
             </Modal>
