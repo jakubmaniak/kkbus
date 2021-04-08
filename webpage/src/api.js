@@ -1,8 +1,14 @@
 import axios from 'axios';
 
 const errorMessages = new Map(Object.entries({
+    'axios_connection': 'Błąd połączenia',
+    'server_error': 'Błąd serwera',
+    'invalid_request': 'Błędny format żądania',
+    'not_found': 'Nie znaleziono',
+    'unauthorized': 'Niewystarczające uprawnienia',
+    'bad_session_token': 'Niepoprawny lub nieważny identyfikator sesji',
     'bad_credentials': 'Niepoprawny login lub hasło',
-    'axios_error': 'Błąd połączenia lub serwera'
+    'email_already_taken': 'Konto o tym adresie e-mail już istnieje'
 }));
 
 export function errorToString(err) {
