@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import '../styles/VehicleInfo.css';
 import Modal from './Modal';
 import UserContext from '../contexts/User';
@@ -20,23 +20,57 @@ function Vehicle(props) {
     let [mileage, setMileage] = useState(props.mileage);
     let [plate, setPlate] = useState(props.plate);
     let [seats, setSeats] = useState(props.seats);
+    
+    let [state, setState] = useState(['Aktywny', 'Nieaktywny', 'W naprawie']);
+    let [parking, setParking] = useState(['Parking nr 1', 'Parking nr 2']);
+    let [routes, setRoutes] = useState([]);
+    let [directions, setDirections] = useState([]);
 
+    let [selectedState, setSelectedState] = useState(props.state);
+    let [selectedParking, setSelectedParking] = useState(props.parking);
+
+    useEffect(() => {
+        api.getAllRoutes()
+            .then((results) => {
+                results.map((result, i) => {
+                    setDirections([...directions, result.departureLocation + ' - ' + result.arrivalLocation]);             
+                });
+            })
+            .catch(api.errorAlert);
+    }, []);
 
     function editVehicle(vehicleId) {
         setModalEditVehicleVisibility(false);
-
+        console.log('abc');
+        console.log(vehicleId,
+            brand,
+            model, 
+            year, 
+            seats, 
+            plate, 
+            mileage,
+            selectedState,
+            selectedParking);
         //!!!dopisac parking, ab, ba!!!
 
         //sprzwdzanie czy nie ma pustych pol
         if(brand !== '' && model !== '' && year !== '' && mileage !== '' && plate !== '' && seats !== '') {
             //sprawdzenie czy pola liczbowe sa liczbami
             if(!isNaN(parseInt(year)) && !isNaN(parseInt(seats)) && !isNaN(parseInt(mileage))) {
-                if(brand !== props.brand || model !== props.model || parseInt(year) !== props.year 
-                    || parseInt(mileage) !== props.mileage || parseInt(seats) !== seats) {
                     let currentYear = year !== props.year ? parseInt(year) : props.year;
                     let currentMileage = mileage !== props.mileage ? parseInt(mileage) : props.mileage;
                     let currentSeats = seats !== props.seats ? parseInt(seats) : props.seats;
                     
+                    console.log(vehicleId,
+                        brand,
+                        model, 
+                        year, 
+                        seats, 
+                        plate, 
+                        mileage,
+                        selectedState,
+                        selectedParking);
+
                     api.updateVehicle(
                         vehicleId,
                         brand,
@@ -45,14 +79,13 @@ function Vehicle(props) {
                         currentSeats, 
                         plate, 
                         currentMileage,
-                        null,
-                        null,
-                        null  
+                        selectedState,
+                        selectedParking,
+                        null //mozna zrobic na podstawie listy wyboru tras -> wziac routeId  
                         )
                     .then(() => 
                         props.updateVehicle()
                     );
-                } 
             }
             else {
                 alert('Nieprawidłowy typ danych');
@@ -81,9 +114,22 @@ function Vehicle(props) {
                             <input placeholder="Rejestracja" defaultValue={props.plate} onChange={fromValue(setPlate)}/>
                             <input placeholder="Ilość miejsc" defaultValue={props.seats} onChange={fromValue(setSeats)}/>
                         </div>
-                        <Dropdown placeholder="Aktualny stan pojazdu"/>
-                        <Dropdown placeholder="Miejsce stałego parkowania"/>
-                        <DropdownMultiple placeholder="Dostępne trasy dla pojazdów"/>
+                        <Dropdown 
+                            placeholder="Aktualny stan pojazdu"
+                            items={state}
+                            selectedIndex={state.indexOf(props.state)}
+                            handleChange={setSelectedState}
+                        />
+                        <Dropdown 
+                            placeholder="Miejsce stałego parkowania"
+                            items={parking}
+                            selectedIndex={parking.indexOf(props.parking)}
+                            handleChange={setSelectedParking}
+                        />
+                        <DropdownMultiple 
+                            placeholder="Dostępne trasy dla pojazdów"
+                            items={directions}
+                        />
                     </form>
                 </section>
                 <section className="footer">

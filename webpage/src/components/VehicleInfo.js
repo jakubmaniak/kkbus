@@ -32,6 +32,7 @@ function VehicleInfo() {
         api.getAllVehicles()
         .then((results) => {
             setVehicles(results);
+            console.log(results);
             setTimeout(() => {
                 setLoading(false);
             }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
