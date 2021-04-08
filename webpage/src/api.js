@@ -179,11 +179,15 @@ export async function updateContact(address, zipCode, email, phoneNumber, faxNum
 }
 
 
-async function sendGet(path) {
-    let res = await axios.get(root + path)
+async function send(method, path, body = undefined) {
+    let res = await axios({
+        method,
+        url: root + path,
+        body
+    })
     .catch((err) => {
         console.error(err);
-        throw new Error('axios_error');
+        throw new Error('connection_error');
     });
 
     if (res.data.error) {
@@ -191,46 +195,20 @@ async function sendGet(path) {
     }
 
     return res.data.result;
+}
+
+async function sendGet(path) {
+    return send('GET', path);
 }
 
 async function sendPost(path, body) {
-    let res = await axios.post(root + path, body)
-    .catch((err) => {
-        console.error(err);
-        throw new Error('axios_error');
-    });
-
-    if (res.data.error) {
-        throw new Error(res.data.errorCode);
-    }
-
-    return res.data.result;
+    return send('POST', path, body);
 }
 
 async function sendPut(path, body) {
-    let res = await axios.put(root + path, body)
-    .catch((err) => {
-        console.error(err);
-        throw new Error('axios_error');
-    });
-
-    if (res.data.error) {
-        throw new Error(res.data.errorCode);
-    }
-
-    return res.data.result;
+    return send('PUT', path, body);
 }
 
 async function sendDelete(path) {
-    let res = await axios.delete(root + path)
-    .catch((err) => {
-        console.error(err);
-        throw new Error('axios_error');
-    });
-
-    if (res.data.error) {
-        throw new Error(res.data.errorCode);
-    }
-
-    return res.data.result;
+    return send('DELETE', path);
 }
