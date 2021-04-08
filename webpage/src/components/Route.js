@@ -87,11 +87,9 @@ function Route(props) {
 
     function calculatePrice(route, firstStop, lastStop) {
         let tickets = {
-            normal: normalTickets == '' ? 0 : parseInt(normalTickets),
-            reduced: reducedTickets == '' ? 0 : parseInt(reducedTickets),
+            normal: normalTickets == '' || isNaN(normalTickets) || normalTickets === null ? 0 : parseInt(normalTickets),
+            reduced: reducedTickets == '' || isNaN(reducedTickets) || reducedTickets === null ? 0 : parseInt(reducedTickets),
         };
-
-        console.log({normalny: tickets.normal, ulgowy: tickets.reduced});
 
         let stops = route.stops;
         let prices = route.prices;
@@ -154,18 +152,8 @@ function Route(props) {
                             items={hours}
                             handleChange={setSelectedHour} 
                         />
-                        <input placeholder="Liczba osób objętych biletem normalnym" onChange={(ev) => {
-                            fromValue(setNormalTickets)(ev);
-                            // let currentPrice = calculatePrice(props.route, selectedFirstStop, selectedLastStop, ev.target.value, reducedTickets);
-                            // setPrice((isNaN(currentPrice) || currentPrice === null) ? 0 : currentPrice.toFixed(2));
-                            // console.log({currentPrice: currentPrice, price: price});
-                        }}/>
-                        <input placeholder="Liczba osób objętych biletem ulgowym" onChange={(ev) => {
-                            fromValue(setReducedTickets)(ev);
-                            // let currentPrice = calculatePrice(props.route, selectedFirstStop, selectedLastStop, ev.target.value, reducedTickets);
-                            // setPrice((isNaN(currentPrice) || currentPrice === null) ? 0 : currentPrice.toFixed(2));
-                            // console.log({currentPrice: currentPrice, price: price});
-                        }}/>
+                        <input placeholder="Liczba osób objętych biletem normalnym" onChange={fromValue(setNormalTickets)}/>
+                        <input placeholder="Liczba osób objętych biletem ulgowym" onChange={fromValue(setReducedTickets)}/>
                         <input placeholder="Liczba dzieci do lat 5" onChange={fromValue(setChildTickets)}/>
                         <Dropdown 
                             placeholder="Przystanek początkowy"
