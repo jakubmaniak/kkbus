@@ -30,6 +30,7 @@ function Timetable() {
     let [selectedDate, setSelectedDate] = useState();
     let [modalAddAvailabilityVisibility, setModalAddAvailabilityVisibility] = useState(false);
     let [modalEditAvailabilityVisibility, setModalEditAvailabilityVisibility] = useState(false);
+    let [modalDeleteVisibility, setModalDeleteVisibility] = useState(false);
     let [days, setDays] = useState(''); 
     let [ranges, setRanges] = useState(''); 
     let [label, setLabel] = useState('');
@@ -45,7 +46,9 @@ function Timetable() {
     let [availableIndex, setAvailableIndex] = useState(-1);
     let [dateIndex, setDateIndex] = useState('');
 
-    let[selectedItem, setSelectedItem] = useState(-1);
+    let [selectedItem, setSelectedItem] = useState(-1);
+
+    let [itemToDelete, setItemToDelete] = useState(-1);
 
     useEffect(() => {
         api.getTimetable()
@@ -228,6 +231,9 @@ function Timetable() {
                                 name={filterResult.name}
                                 role={translateRole(filterResult.role)}
                                 onSelected={() => setSelectedItem(filterResult)}
+                                modalDeleteVisibility={modalDeleteVisibility}
+                                setModalDeleteVisibility={() => setModalDeleteVisibility(false)}
+                                deleteAvailability={() => deleteAvailability(itemToDelete)}
                                 children={compareDate(filterResult).map((item, i) => {
                                     if(item !== null && item !== 'occupied') {
                                         return (
@@ -242,7 +248,12 @@ function Timetable() {
                                                         (filterResult.userId === user.id || user.role === 'owner')
                                                         ? <div className="menu">
                                                             <button className="menu-item edit" onClick={() => editAvailable(item.id, user.id)} title="Edytuj"></button>
-                                                            <button className="menu-item delete" onClick={() => deleteAvailability(item.id)} title="Usuń"></button>
+                                                            <button className="menu-item delete" onClick={() => {
+                                                                setModalDeleteVisibility(true);
+                                                                //deleteAvailability(item.id)
+                                                                setItemToDelete(item.id);
+                                                            }} 
+                                                                title="Usuń"></button>
                                                         </div>
                                                         : null   
                                                     }
