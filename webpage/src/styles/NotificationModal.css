@@ -1,0 +1,16 @@
+.notification-modal .modal {
+    width: 450px;
+}
+
+.notification-modal header {
+    text-align: start;
+}
+
+.notification-modal .modal .content p {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.notification-modal .modal .footer button.delete {
+    background-color: rgb(199, 53, 53);
+}
