@@ -28,7 +28,7 @@ router.get('/employees', [role('owner')], async (req, res, next) => {
     }
 });
 
-router.get('/employees/drivers/names', async (req, res, next) => {
+router.get('/employees/drivers/names', [role('driver')], async (req, res, next) => {
     try {
         let drivers = userController.findManyUsersByRole(2)
             .then(selectProps('id', 'firstName', 'lastName'));
