@@ -27,8 +27,8 @@ function VehicleInfo() {
     let [state, setState] = useState(['Aktywny', 'Nieaktywny', 'W naprawie']);
     let [parking, setParking] = useState(['Parking nr 1', 'Parking nr 2']);
 
-    let [selectedState, setSelectedState] = useState();
-    let [selectedParking, setSelectedParking] = useState();
+    let [selectedState, setSelectedState] = useState('');
+    let [selectedParking, setSelectedParking] = useState('');
 
     useEffect(() => {
         updateVehicle();
@@ -38,7 +38,6 @@ function VehicleInfo() {
         api.getAllVehicles()
         .then((results) => {
             setVehicles(results);
-            console.log(results);
             setTimeout(() => {
                 setLoading(false);
             }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
@@ -46,40 +45,19 @@ function VehicleInfo() {
     }
 
     function deleteVehicle(vehicleId) {
-        let vehicle = vehicles.find(({id}) => id === vehicleId);
-        let index = vehicles.indexOf(vehicle);  
-
-        api.deleteVehicle(vehicleId);
-
-        vehicles.splice(index, 1);
-        setVehicles(vehicles);
-        
-        updateVehicle();
+        console.log(vehicleId);
+        api.deleteVehicle(vehicleId).then(() => {
+            updateVehicle();
+        });
     }
 
     function addVehicle() {
-        if(brand !== '' && model !== '' && year !== '' && plate !== '' && mileage !== '' && seats !== '') {
+        if(brand !== '' && model !== '' && year !== '' && plate !== '' && mileage !== '' && seats !== '' && selectedState !== '' && selectedParking !== '') {
             if(!isNaN(parseInt(year)) && !isNaN(parseInt(seats)) && !isNaN(parseInt(mileage))) {
-                api.addVehicle(brand, model, parseInt(year), parseInt(seats), plate, parseInt(mileage))
-                .then((id) => {
-                    setVehicles([
-                        ...vehicles,
-                        {
-                            brand,
-                            model,
-                            year: parseInt(year),
-                            seats: parseInt(seats),
-                            plate,
-                            mileage: parseInt(mileage),
-                            state: selectedState,
-                            parking: selectedParking,
-                            routeId: null,
-                            //arrivalLocation: null,
-                            //departureLocation : null, 
-                            //driver: null
-                        }
-                    ]);
-                    setModalAddVehicleVisibility(false);
+                setModalAddVehicleVisibility(false);
+                api.addVehicle(brand, model, parseInt(year), parseInt(seats), plate, parseInt(mileage), selectedState, selectedParking)
+                .then(() => {
+                    updateVehicle();
                 })
             }
             else {

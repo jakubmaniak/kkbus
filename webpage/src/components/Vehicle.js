@@ -6,6 +6,7 @@ import Dropdown from './Dropdown';
 import DropdownMultiple from './DropdownMultiple';
 import { fromValue} from '../helpers/from-value';
 import * as api from '../api';
+import NotificationModal from './NotificationModal';
 
 function Vehicle(props) {
     let { role } = useContext(UserContext).user;
@@ -217,18 +218,13 @@ function Vehicle(props) {
                     <button onClick={() => setModalDetailsVisibility(false)}>Zamknij</button>
                 </section>
             </Modal>
-            <Modal visible={modalDeleteVehicleVisibility}>
-                <header>Usuwanie Pojazdu</header>
-                <section className="content">
-                    <p>Czy na pewno chcesz usunąć pojazd?</p>
-                </section>
-                <section className="footer">
-                    <div>
-                        <button onClick={() => setModalDeleteVehicleVisibility(false)}>Anuluj</button>
-                        <button className="delete" onClick={() => props.deleteVehicle()}>Tak, usuń</button>
-                    </div>
-                </section>
-            </Modal>
+            <NotificationModal 
+                visible={modalDeleteVehicleVisibility}
+                header={'Usuwanie pojazdu'}
+                name={'pojazd'}
+                notificationModalExit={() => setModalDeleteVehicleVisibility(false)}
+                delete={() => props.deleteVehicle()}
+            />
             {role === 'owner' ? editDataModal() : null}
             {role === 'owner' || role === 'office' ? changeDriverModal() : null} 
         </div>
