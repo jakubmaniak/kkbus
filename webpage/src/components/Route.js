@@ -90,8 +90,20 @@ function Route(props) {
             return null;
         }
 
-        console.log(props.routeId, selectedDate[0], selectedHour, tickets.normal, tickets.reduced, tickets.child, selectedFirstStop, selectedLastStop);
-        api.addBooking(props.routeId, selectedDate[0], selectedHour, tickets.normal, tickets.reduced, tickets.child, selectedFirstStop, selectedLastStop);
+        
+        console.log(props.routeId, selectedDate[0], selectedHour, tickets.normal, tickets.reduced, tickets.child, selectedFirstStop, selectedLastStop)
+        api.addBooking(props.routeId, selectedDate[0], selectedHour, tickets.normal, tickets.reduced, tickets.child, selectedFirstStop, selectedLastStop)
+        .then(() => {
+            setSelectedDate(null);
+            setSelectedHour(null);
+            setNormalTickets(null);
+            setChildTickets(null);
+            setReducedTickets(null);
+            setSelectedFirstStop(null);
+            setSelectedLastStop(null);        
+        });
+
+        setModalVisibility(false);
     }
 
     function clientModal() {
