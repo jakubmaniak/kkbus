@@ -6,6 +6,7 @@ import UserContext from '../contexts/User';
 import { ModalLoader } from './Loader';
 import Modal from './Modal';
 import { fromValue } from '../helpers/from-value';
+import NotificationModal from './NotificationModal';
 
 function RoutesPage() {
     let [loading, setLoading] = useState(true);

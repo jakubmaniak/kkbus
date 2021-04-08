@@ -7,6 +7,7 @@ import UserContext from '../contexts/User';
 import RouteDirection from './RouteDirection';
 import Modal from './Modal';
 import Dropdown from './Dropdown';
+import NotificationModal from './NotificationModal';
 
 import '../styles/RoutesPage.css';
 
@@ -14,6 +15,7 @@ import '../styles/RoutesPage.css';
 function Route(props) {
     let { role } = useContext(UserContext).user;
     let [modalVisibility, setModalVisibility] = useState(false);
+    let [modalDeleteRewardVisibility, setModalDeleteRewardVisibility] = useState(false);
     let [departureLocation, setDepartureLocation] = useState(props.departureLocation);
     let [arrivalLocation, setArrivalLocation] = useState(props.arrivalLocation);
     let [dates, setDates] = useState([]);
@@ -226,7 +228,7 @@ function Route(props) {
                         {(role === 'owner') ? 
                             <div className="button-container">
                                 <button className="btn-book" onClick={showModal}>Edytuj</button>
-                                <button className="delete" onClick={props.deleteRoute}>Usuń</button>
+                                <button className="delete" onClick={() => setModalDeleteRewardVisibility(true)}>Usuń</button>
                             </div> 
                         : (role === 'client') ?
                             <button className="btn-book" onClick={showModal}>Rezerwuj</button>
@@ -257,6 +259,13 @@ function Route(props) {
                         </div>
                 </div>
             </div>
+            <NotificationModal 
+                    visible={modalDeleteRewardVisibility}
+                    header={'Usuwanie trasy'}
+                    name={'trasę'}
+                    notificationModalExit={() => setModalDeleteRewardVisibility(false)}
+                    delete={() => props.deleteRoute()}
+            />
         </>
     );
 }
