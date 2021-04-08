@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const env = require('../helpers/env');
-const { invalidRequest, emailAlreadyTaken, badCredentials } = require('../errors');
+const { invalidRequest, emailAlreadyTaken, badCredentials, serverError } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const roles = new Map([
     [0, 'guest'],
@@ -22,7 +22,17 @@ router.post('/user/login', [
     //NOTE: login = login / e-mail
     let { login, password } = req.body;
 
-    let user = await userController.findUserByCredentials(login, login, password);
+    let user;
+    try {
+        user = await userController.findUserByCredentials(login, login, password);
+    }
+    catch (err) {
+        if (err.message == 'not_found') {
+            return next(badCredentials());
+        }
+        return next(serverError());
+    }
+
     if (!user) return next(badCredentials());
     
     //NOTE: true login
