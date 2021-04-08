@@ -21,7 +21,7 @@ function BookingList() {
     }, []);
 
     useEffect(() => {
-        if(selectedRoute != '') {
+        if(selectedRoute !== '') {
            api.getRouteBookings(selectedRoute.id, '2021-04-07', '15:00')
             .then((results) => setBookingList(results))
             .catch(api.errorAlert);

@@ -98,7 +98,7 @@ function WorkSchedule() {
                     </div>
                 </div>
                 <Loader loading={loading} />
-                {(!loading && results.length == 0) ? <p className="no-results">Brak wyników</p> : null}
+                {(!loading && results.length === 0) ? <p className="no-results">Brak wyników</p> : null}
                 {results.map((element, i) => {
                     return (
                         <WorkScheduleItem 

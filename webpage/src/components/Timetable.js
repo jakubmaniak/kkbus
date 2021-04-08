@@ -239,7 +239,7 @@ function Timetable() {
                                                         );
                                                     })}
                                                     {
-                                                        (filterResult.userId == user.id || user.role === 'owner')
+                                                        (filterResult.userId === user.id || user.role === 'owner')
                                                         ? <div className="menu">
                                                             <button className="menu-item edit" onClick={() => editAvailable(item.id, user.id)} title="Edytuj"></button>
                                                             <button className="menu-item delete" onClick={() => deleteAvailability(item.id)} title="Usuń"></button>

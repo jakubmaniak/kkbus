@@ -60,8 +60,8 @@ function RoutesPage() {
 
     function convertStopsPrices(ev) {
         let parts = ev.target.value.split(',').map((e) => e.trim());
-        setStops(parts.filter((e, i) => i % 2 == 0));
-        setPrices(parts.filter((e, i) => i % 2 == 1).map(parseFloat));   
+        setStops(parts.filter((e, i) => i % 2 === 0));
+        setPrices(parts.filter((e, i) => i % 2 === 1).map(parseFloat));   
     }
 
     return (

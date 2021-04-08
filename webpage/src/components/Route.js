@@ -33,8 +33,8 @@ function Route(props) {
     let history = useHistory();
 
     useEffect(() => { 
-        setPrices(props.stopsPrices.split(',').map((e) => e.trim()).filter((e, i) => i % 2 == 1).map(parseFloat));
-        setStops(props.stopsPrices.split(',').map((e) => e.trim()).filter((e, i) => i % 2 == 0));
+        setPrices(props.stopsPrices.split(',').map((e) => e.trim()).filter((e, i) => i % 2 === 1).map(parseFloat));
+        setStops(props.stopsPrices.split(',').map((e) => e.trim()).filter((e, i) => i % 2 === 0));
 
         setDates(new Array(8).fill(null).map((d, i) => {
             let date = new Date(new Date().getTime() + i * 24 * 3600 * 1000);
@@ -81,14 +81,14 @@ function Route(props) {
 
     function convertStopsPrices(ev) {
         let parts = ev.target.value.split(',').map((e) => e.trim());
-        setStops(parts.filter((e, i) => i % 2 == 0));
-        setPrices(parts.filter((e, i) => i % 2 == 1).map(parseFloat));   
+        setStops(parts.filter((e, i) => i % 2 === 0));
+        setPrices(parts.filter((e, i) => i % 2 === 1).map(parseFloat));   
     }
 
     function calculatePrice(route, firstStop, lastStop) {
         let tickets = {
-            normal: normalTickets == '' || isNaN(normalTickets) || normalTickets === null ? 0 : parseInt(normalTickets),
-            reduced: reducedTickets == '' || isNaN(reducedTickets) || reducedTickets === null ? 0 : parseInt(reducedTickets),
+            normal: normalTickets === '' || isNaN(normalTickets) || normalTickets === null ? 0 : parseInt(normalTickets),
+            reduced: reducedTickets === '' || isNaN(reducedTickets) || reducedTickets === null ? 0 : parseInt(reducedTickets),
         };
 
         let stops = route.stops;
@@ -120,9 +120,9 @@ function Route(props) {
         }
 
         let tickets = {
-            normal: normalTickets == '' ? 0 : parseInt(normalTickets),
-            reduced: reducedTickets == '' ? 0 : parseInt(reducedTickets),
-            child: childTickets == '' ? 0 : parseInt(childTickets)
+            normal: normalTickets === '' ? 0 : parseInt(normalTickets),
+            reduced: reducedTickets === '' ? 0 : parseInt(reducedTickets),
+            child: childTickets === '' ? 0 : parseInt(childTickets)
         };
 
         if (isNaN(tickets.normal) || isNaN(tickets.reduced) || isNaN(tickets.child)) {

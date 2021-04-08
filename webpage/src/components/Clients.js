@@ -47,7 +47,7 @@ function Clients() {
                             <button className="submit">Szukaj</button>
                         </form>
                     </div>
-                    {(clients.length == 0) ? <p className="no-results" style={{marginTop: '20px'}}>Brak wyników</p> : null}
+                    {(clients.length === 0) ? <p className="no-results" style={{marginTop: '20px'}}>Brak wyników</p> : null}
                     { clients.map((client, i) => {
                         return (
                             <Client
