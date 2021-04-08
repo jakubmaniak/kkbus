@@ -3,6 +3,7 @@ import '../styles/LoyaltyProgram.css';
 import Modal from './Modal';
 import { fromValue } from '../helpers/from-value';
 import * as api from '../api';
+import NotificationModal from './NotificationModal';
 
 function Reward(props) {
     let [modalEditRewardVisibility, setModalEditRewardVisibility] = useState(false);
@@ -83,18 +84,12 @@ function Reward(props) {
                     </div>
                 </section>
             </Modal>
-            <Modal visible={modalDeleteRewardVisibility}>
-                <header>Usuwanie nagrody</header>
-                <section className="content">
-                    <p>Czy na pewno chcesz usunąć nagrodę?</p>
-                </section>
-                <section className="footer">
-                    <div>
-                        <button onClick={() => setModalDeleteRewardVisibility(false)}>Anuluj</button>
-                        <button className="delete" onClick={() => props.deleteReward()}>Tak, usuń</button>
-                    </div>
-                </section>
-            </Modal>
+            <NotificationModal 
+                visible={modalDeleteRewardVisibility}
+                header={'Usuwanie nagrody'}
+                notificationModalExit={() => setModalDeleteRewardVisibility(false)}
+                delete={() => props.deleteReward()}
+            />
         </div>
     )
 }
