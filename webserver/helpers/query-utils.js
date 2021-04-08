@@ -6,6 +6,19 @@ module.exports = {
         if (results instanceof Array && results.length > 0) return results[0];
         else throw notFound();
     },
+    selectProps: (...props) => (results) => {
+        if (!results || results.length == 0) return results;
+
+        for (let prop in results[0]) {
+            if (props.includes(prop)) continue;
+
+            for (let result of results) {
+                delete result[prop];    
+            }
+        }
+
+        return results;
+    },
     deleteProps: (...props) => (results) => {
         for (let result of results) {
             for (let prop of props) {

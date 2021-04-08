@@ -105,8 +105,12 @@ export async function getClients(param, query) {
 }
 
 
-export async function getDrivers() {
-    return sendGet('/drivers');
+export async function getEmployees() {
+    return sendGet('/employees');
+}
+
+export async function getDriverNames() {
+    return sendGet('/employees/drivers/names');
 }
 
 

@@ -45,6 +45,13 @@ module.exports.findManyUsers = (by, query, role = null) => {
         .then(deleteProps('password'));
 };
 
+module.exports.findManyUsersByRole = (...roles) => {
+    let conditions = new Array(roles.length).fill('role=?').join(' OR ');
+
+    return db.query('SELECT * FROM users WHERE ' + conditions, roles)
+        .then(deleteProps('password'));
+};
+
 module.exports.findUserById = (userId) => {
     return db.query('SELECT * FROM users WHERE id=? LIMIT 1', [userId])
         .then(getFirst);

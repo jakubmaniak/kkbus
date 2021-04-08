@@ -15,7 +15,7 @@ function WorkSchedule() {
     let [selectedRoute, setSelectedRoute] = useState();
     let [selectedRange, setSelectedRange] = useState();
 
-    let [drivers, setDrivers] = useState([]);
+    let [driverNames, setDriverNames] = useState([]);
     let [routes, setRoutes] = useState(['wszystkie']);
     let [ranges] = useState([
         [0, 'dzisiaj'],
@@ -27,8 +27,8 @@ function WorkSchedule() {
     let [results, setResults] = useState([]);
 
     useEffect(() => {
-        api.getDrivers()
-            .then(setDrivers)
+        api.getDriverNames()
+            .then(setDriverNames)
             .catch(api.errorAlert);
 
         api.getAllRoutes()
@@ -47,7 +47,7 @@ function WorkSchedule() {
         let routeId = null;
         if (typeof selectedRoute === 'object') routeId = selectedRoute.id;
 
-        api.getWorkSchedule(selectedDriver[0], selectedRange[0], routeId)
+        api.getWorkSchedule(selectedDriver.id, selectedRange[0], routeId)
             .then((results) => {
                 if (Date.now() - start > 250) {
                     setResults(results);
@@ -72,8 +72,8 @@ function WorkSchedule() {
                         <div className="filter-container">
                             <span>Kierowca:</span>
                             <Dropdown
-                                items={drivers}
-                                textProperty="1"
+                                items={driverNames}
+                                textFormatter={(driver) => driver.firstName + ' ' + driver.lastName}
                                 placeholder="Wybierz kierowcę"
                                 handleChange={setSelectedDriver} />
                         </div>
