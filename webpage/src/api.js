@@ -1,14 +1,14 @@
 import axios from 'axios';
 
 const errorMessages = new Map(Object.entries({
-    'axios_connection': 'Błąd połączenia',
-    'server_error': 'Błąd serwera',
-    'invalid_request': 'Błędny format żądania',
-    'not_found': 'Nie znaleziono',
-    'unauthorized': 'Niewystarczające uprawnienia',
-    'bad_session_token': 'Niepoprawny lub nieważny identyfikator sesji',
-    'bad_credentials': 'Niepoprawny login lub hasło',
-    'email_already_taken': 'Konto o tym adresie e-mail już istnieje'
+    axios_connection:       'Błąd połączenia',
+    server_error:           'Błąd serwera',
+    invalid_request:        'Błędny format żądania',
+    not_found:              'Nie znaleziono',
+    unauthorized:           'Niewystarczające uprawnienia',
+    bad_session_token:      'Niepoprawny lub nieważny identyfikator sesji',
+    bad_credentials:        'Niepoprawny login lub hasło',
+    email_already_taken:    'Konto o tym adresie e-mail już istnieje'
 }));
 
 export function errorToString(err) {
@@ -189,7 +189,7 @@ async function send(method, path, body = undefined) {
     let res = await axios({
         method,
         url: root + path,
-        body
+        data: body
     })
     .catch((err) => {
         console.error(err);
