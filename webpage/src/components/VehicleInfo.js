@@ -24,6 +24,12 @@ function VehicleInfo() {
     let [plate, setPlate] = useState('');
     let [seats, setSeats] = useState('');
 
+    let [state, setState] = useState(['Aktywny', 'Nieaktywny', 'W naprawie']);
+    let [parking, setParking] = useState(['Parking nr 1', 'Parking nr 2']);
+
+    let [selectedState, setSelectedState] = useState();
+    let [selectedParking, setSelectedParking] = useState();
+
     useEffect(() => {
         updateVehicle();
     }, []);
@@ -65,8 +71,8 @@ function VehicleInfo() {
                             seats: parseInt(seats),
                             plate,
                             mileage: parseInt(mileage),
-                            state: null,
-                            parking: null,
+                            state: selectedState,
+                            parking: selectedParking,
                             routeId: null,
                             //arrivalLocation: null,
                             //departureLocation : null, 
@@ -130,8 +136,16 @@ function VehicleInfo() {
                             <input placeholder="Rejestracja" onChange={fromValue(setPlate)}/>
                             <input placeholder="Ilość miejsc" onChange={fromValue(setSeats)}/>
                         </div>
-                        <Dropdown placeholder="Aktualny stan pojazdu"/>
-                        <Dropdown placeholder="Miejsce stałego parkowania"/>
+                        <Dropdown 
+                            placeholder="Aktualny stan pojazdu"
+                            items={state}
+                            handleChange={setSelectedState}
+                        />
+                        <Dropdown 
+                            placeholder="Miejsce stałego parkowania"
+                            items={parking}
+                            handleChange={setSelectedParking}
+                        />
                         <DropdownMultiple placeholder="Dostępne trasy dla pojazdów"/>
                     </form>
                 </section>
