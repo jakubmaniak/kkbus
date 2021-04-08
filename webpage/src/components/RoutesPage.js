@@ -76,6 +76,7 @@ function RoutesPage() {
                 {routes.map((route) => (
                         <Route
                             key={route.id}
+                            route={route}
                             departureLocation={route.departureLocation}
                             arrivalLocation={route.arrivalLocation}
                             stops={route.stops.map((stop, i) => (

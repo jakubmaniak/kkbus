@@ -28,6 +28,7 @@ function Route(props) {
     let [selectedHour, setSelectedHour] = useState();
     let [selectedFirstStop, setSelectedFirstStop] = useState();
     let [selectedLastStop, setSelectedLastStop] = useState();
+    let [price, setPrice] = useState(0);
 
     let history = useHistory();
 
@@ -44,6 +45,22 @@ function Route(props) {
     useEffect(() => { 
         setHours([...props.allHours]);
     }, [props.allHours]);
+
+    useEffect(() => {
+        //setPrice(0);
+        setSelectedDate(null);
+        setSelectedHour(null);
+        setNormalTickets(null);
+        setChildTickets(null);
+        setReducedTickets(null);
+        setSelectedFirstStop(null);
+        setSelectedLastStop(null); 
+    }, [modalVisibility])
+
+    useEffect(() => {
+        let currentPrice = calculatePrice(props.route, selectedFirstStop, selectedLastStop, normalTickets, reducedTickets);
+        setPrice((isNaN(currentPrice) || currentPrice === null) ? 0 : currentPrice.toFixed(2));
+    }, [normalTickets, reducedTickets, selectedFirstStop, selectedLastStop]);
 
 
     function showModal() {
@@ -68,6 +85,31 @@ function Route(props) {
         setPrices(parts.filter((e, i) => i % 2 == 1).map(parseFloat));   
     }
 
+    function calculatePrice(route, firstStop, lastStop) {
+        let tickets = {
+            normal: normalTickets == '' ? 0 : parseInt(normalTickets),
+            reduced: reducedTickets == '' ? 0 : parseInt(reducedTickets),
+        };
+
+        console.log({normalny: tickets.normal, ulgowy: tickets.reduced});
+
+        let stops = route.stops;
+        let prices = route.prices;
+
+        let firstStopIndex = stops.indexOf(firstStop);
+        let lastStopIndex = stops.indexOf(lastStop);
+
+        if(firstStopIndex === -1 || lastStopIndex === -1 || firstStopIndex >= lastStopIndex) {
+            return null;
+        }
+
+        let multiplier = tickets.normal + tickets.reduced * 0.7;
+
+        return multiplier * prices
+            .slice(firstStopIndex, lastStopIndex)
+            .reduce((a, b) => a + b);
+    }
+
     function addBooking() {
         if (selectedFirstStop === selectedLastStop) {
             alert('Nie możesz wybrać takich samych przystanków');
@@ -90,18 +132,7 @@ function Route(props) {
             return null;
         }
 
-        
-        console.log(props.routeId, selectedDate[0], selectedHour, tickets.normal, tickets.reduced, tickets.child, selectedFirstStop, selectedLastStop)
-        api.addBooking(props.routeId, selectedDate[0], selectedHour, tickets.normal, tickets.reduced, tickets.child, selectedFirstStop, selectedLastStop)
-        .then(() => {
-            setSelectedDate(null);
-            setSelectedHour(null);
-            setNormalTickets(null);
-            setChildTickets(null);
-            setReducedTickets(null);
-            setSelectedFirstStop(null);
-            setSelectedLastStop(null);        
-        });
+        api.addBooking(props.routeId, selectedDate[0], selectedHour, tickets.normal, tickets.reduced, tickets.child, selectedFirstStop, selectedLastStop);
 
         setModalVisibility(false);
     }
@@ -123,8 +154,18 @@ function Route(props) {
                             items={hours}
                             handleChange={setSelectedHour} 
                         />
-                        <input placeholder="Liczba osób objętych biletem normalnym" onChange={fromValue(setNormalTickets)}/>
-                        <input placeholder="Liczba osób objętych biletem ulgowym" onChange={fromValue(setReducedTickets)}/>
+                        <input placeholder="Liczba osób objętych biletem normalnym" onChange={(ev) => {
+                            fromValue(setNormalTickets)(ev);
+                            // let currentPrice = calculatePrice(props.route, selectedFirstStop, selectedLastStop, ev.target.value, reducedTickets);
+                            // setPrice((isNaN(currentPrice) || currentPrice === null) ? 0 : currentPrice.toFixed(2));
+                            // console.log({currentPrice: currentPrice, price: price});
+                        }}/>
+                        <input placeholder="Liczba osób objętych biletem ulgowym" onChange={(ev) => {
+                            fromValue(setReducedTickets)(ev);
+                            // let currentPrice = calculatePrice(props.route, selectedFirstStop, selectedLastStop, ev.target.value, reducedTickets);
+                            // setPrice((isNaN(currentPrice) || currentPrice === null) ? 0 : currentPrice.toFixed(2));
+                            // console.log({currentPrice: currentPrice, price: price});
+                        }}/>
                         <input placeholder="Liczba dzieci do lat 5" onChange={fromValue(setChildTickets)}/>
                         <Dropdown 
                             placeholder="Przystanek początkowy"
@@ -140,7 +181,7 @@ function Route(props) {
                 </section>
                 <section className="footer reserve">
                     <div>
-                        <p>Koszt rezerwacji: 200zł</p>
+                        <p>Koszt rezerwacji: {price}zł</p>
                     </div>
                     <div>
                         <button onClick={() => setModalVisibility(false)}>Anuluj</button>
