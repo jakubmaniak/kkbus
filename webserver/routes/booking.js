@@ -203,6 +203,8 @@ router.post('/booking/:userId', [
         return next(err);
     }
 
+    route.hours = route.hours.map((hour) => parseTime(hour)?.toString());
+
     if (!route.hours.includes(hour)) {
         return next(invalidRequest());
     }
