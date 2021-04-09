@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import * as api from '../api';
 import Dropdown from './Dropdown';
 import Client from './Client';
+import { ModalLoader } from './Loader';
+import { fromValue } from '../helpers/from-value';
 
 import '../styles/Clients.css';
 
@@ -18,6 +20,15 @@ function Clients() {
     let [searchQuery, setSearchQuery] = useState('');
     let [clients, setClients] = useState([]);
 
+    let [email, setEmail] = useState('');
+    let [firstname, setFirstName] = useState('');
+    let [lastName, setLastName] = useState('');
+    let [birthDate, setBirthDate] = useState('');
+    let [phoneNumber, setPhoneNumber] = useState('');
+
+    // let [loading, setLoading] = useState(true);
+    // let loadingInitTime = Date.now();
+
     function handleQueryChange(ev) {
         setSearchQuery(ev.target.value);
     }
@@ -26,12 +37,35 @@ function Clients() {
         ev.preventDefault();
 
         api.getClients(selectedSearchParam[0], searchQuery)
-            .then(setClients)
+            .then((results) => {
+                setClients(results)
+                // setTimeout(() => {
+                //     setLoading(false);
+                // }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
+            })
             .catch(api.errorAlert);
+    }
+
+    function handleRegisterSubmit(ev) {
+        ev.preventDefault();
+
+        api.register(email, firstname, lastName, birthDate, phoneNumber)
+        .then(() => {
+            setEmail('');
+            setFirstName('');
+            setLastName('')
+            setBirthDate('');
+            setPhoneNumber('');
+            alert('Dodano konto użytkowinka');
+        })
+        .catch((err) => {
+            alert(api.errorToString(err));
+        });
     }
 
     return (
         <div className="client page">
+            {/* <ModalLoader loading={loading} /> */}
             <div className="main">
                 <div className="tile half tile-container">
                     <div className="tile">
@@ -62,20 +96,23 @@ function Clients() {
                             />
                         );
                     }) }
-                </div>
-               
+                </div>       
                 <div className="tile half">
                     <h2>Utwórz konto klienta</h2>
-                    <form className="client-create">
-                        <input placeholder="Adres email"/>
-                        <input placeholder="Imię"/>
-                        <input placeholder="Nazwisko"/>
-                        <input placeholder="Data urodzenia"/>
-                        <input placeholder="Numer telefonu"/>
-                        <button className="submit">Szukaj</button>
+                    <form className="client-create" onSubmit={handleRegisterSubmit}>
+                        <input type="text" placeholder="Adres email" 
+                            value={email} onChange={fromValue(setEmail)} />
+                        <input type="text" placeholder="Imię" 
+                            value={firstname} onChange={fromValue(setFirstName)} />
+                        <input type="text" placeholder="Nazwisko" 
+                            value={lastName} onChange={fromValue(setLastName)} />
+                        <input type="date" placeholder="Data urodzenia" 
+                            value={birthDate} onChange={fromValue(setBirthDate)} />
+                        <input type="text" placeholder="Numer telefonu" 
+                            value={phoneNumber} onChange={fromValue(setPhoneNumber)} />
+                        <button className="submit">Stwórz konto</button>
                     </form>
-                </div>
-                
+                </div>        
             </div>
         </div>
     );
