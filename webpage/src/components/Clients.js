@@ -90,8 +90,9 @@ function Clients() {
                                 surname={client.lastName}
                                 login={client.login}
                                 email={client.email}
-                                birthday={client.birthDate}
+                                birthday={(new Date(client.birthDate)).toLocaleDateString()}
                                 phone={client.phoneNumber}
+                                userId={client.id}
                                 /*reservation={client.reservation}*/
                             />
                         );
