@@ -52,7 +52,7 @@ router.post('/user/login', [
 
 router.post('/user/register', [
     bodySchema('{email: string, firstName: string, lastName: string, birthDate: string, phoneNumber: string}')
-], async (req, res) => {
+], async (req, res, next) => {
     let { email, firstName, lastName, birthDate, phoneNumber } = req.body;
     
     if (/\d{1,2}-\d{1,2}-\d{4}/.test(birthDate)) {
@@ -64,16 +64,35 @@ router.post('/user/register', [
     }
     else if (/^[ -+\/0-9]+$/.test(phoneNumber)) { }
     else return next(invalidRequest());
-    
 
-    if (await userController.findUserByEmail(email)) return next(emailAlreadyTaken());
+    try {
+        if (await userController.findUserByEmail(email)) {
+            return next(emailAlreadyTaken());
+        }
+    }
+    catch (err) {
+        if (err.message != 'not_found') {
+            return next(serverError());
+        }
+    }
 
     let offset = 0;
     let phoneNumberPart = parseInt(phoneNumber.slice(-4));
     let login = firstName.toLowerCase() + lastName.toLowerCase();
     
-    while (await userController.findUserByLogin(login + (phoneNumberPart + offset))) {
-        offset++;
+    while (true) {
+        try {
+            await userController.findUserByLogin(login + (phoneNumberPart + offset));
+            offset++;
+        }
+        catch (err) {
+            if (err.message == 'not_found') {
+                break;
+            }
+            else {
+                return next(serverError());
+            }
+        }
     }
 
     login += (phoneNumberPart + offset);
