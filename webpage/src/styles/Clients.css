@@ -30,6 +30,18 @@
     border-radius: 4px;
 }
 
+.client.page .tile.half form.client-create input {
+    width: 100%;
+}
+
+.client.page .tile.half form.client-create {
+    align-items: flex-end;
+}
+
+.client.page .tile.half form.client-create .submit {
+    width: 180px;
+}
+
 .client-data {
     display: flex;
     justify-content: space-between;
@@ -51,4 +63,16 @@
 
 .client-data:last-child {
     margin-bottom: 0;
+}
+
+.client-new-reservation {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.client-new-reservation button {
+    width: 180px;
+    height: 48px;
 }

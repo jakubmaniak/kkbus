@@ -32,8 +32,12 @@ function Client(props) {
                 <span>Liczba rezerwacji zrealizowanych/niezrealizowanych</span>
                 <span>{props.reservation}</span>
             </div>
+            <div className="client-new-reservation">
+                <button>Nowa rezerwację</button>
+            </div>
         </div>
     );
 }
 
+//addBookingToUser
 export default Client;
