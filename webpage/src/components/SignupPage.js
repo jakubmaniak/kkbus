@@ -51,7 +51,7 @@ function SignupPage() {
                             value={birthDate} onChange={fromValue(setBirthDate)} />
                         <input type="text" placeholder="Numer telefonu" 
                             value={phoneNumber} onChange={fromValue(setPhoneNumber)} />
-                        <button className="submit" onClick={history.push('/aktywuj-konto')}>Zarejestruj</button>
+                        <button className="submit">Zarejestruj</button>
                     </form>
                     <div className="action">
                         <Link to="/logowanie">Mam już konto</Link>
