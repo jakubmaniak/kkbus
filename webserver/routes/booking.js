@@ -104,6 +104,8 @@ router.post('/booking', [
     routeId = parseInt(routeId);
     date = parseDate(date)?.toString();
     hour = parseTime(hour)?.toString();
+    firstStop = firstStop.trim();
+    lastStop = lastStop.trim();
 
     if (isNaN(routeId) || date == null || hour == null) {
         return next(invalidRequest());
@@ -180,6 +182,8 @@ router.post('/booking/:userId', [
     routeId = parseInt(routeId);
     date = parseDate(date)?.toString();
     hour = parseTime(hour)?.toString();
+    firstStop = firstStop.trim();
+    lastStop = lastStop.trim();
 
     if (isNaN(routeId) || date == null || hour == null) {
         return next(invalidRequest());
