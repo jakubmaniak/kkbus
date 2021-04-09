@@ -107,7 +107,7 @@ router.post('/user/register', [
     };
     await userController.addUser(user);
 
-    if (user.role == 'office' || user.role == 'owner') {
+    if (user.role == 3 || user.role == 4) {
         return res.ok({
             login
         });
