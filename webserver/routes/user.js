@@ -107,6 +107,12 @@ router.post('/user/register', [
     };
     await userController.addUser(user);
 
+    if (user.role == 'office' || user.role == 'owner') {
+        return res.ok({
+            login
+        });
+    }
+
     let sessionToken = jwt.sign({ login }, env.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
 
     res.cookie('session', sessionToken);
