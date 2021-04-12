@@ -1,13 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { invalidRequest, unauthorized, serverError } = require('../errors');
-const role = require('../middlewares/roles')(
-    [0, 'guest'],
-    [1, 'client'],
-    [2, 'driver'],
-    [3, 'office'],
-    [4, 'owner']
-);
+const { minimumRole, onlyRoles, roles } = require('../middlewares/roles');
 const bodySchema = require('../middlewares/body-schema');
 
 const bookingController = require('../controllers/booking');
@@ -56,7 +50,7 @@ function calculatePrice(route, firstStop, lastStop, normalTickets, reducedTicket
         .reduce((a, b) => a + b);
 }
 
-router.get('/bookings', [role('driver')], async (req, res, next) => {
+router.get('/bookings', [minimumRole('driver')], async (req, res, next) => {
     try {
         res.ok(await bookingController.findAllBookings());
     }
@@ -65,7 +59,7 @@ router.get('/bookings', [role('driver')], async (req, res, next) => {
     }
 });
 
-router.get('/bookings/:routeId/:date/:hour', [role('driver')], async (req, res, next) => {
+router.get('/bookings/:routeId/:date/:hour', [minimumRole('driver')], async (req, res, next) => {
     let { routeId, date, hour } = req.params;
 
     routeId = parseInt(routeId);
@@ -85,7 +79,7 @@ router.get('/bookings/:routeId/:date/:hour', [role('driver')], async (req, res, 
 });
 
 router.post('/booking', [
-    role('client'),
+    minimumRole('client'),
     bodySchema(`{
         routeId: number,
         date: string,
@@ -162,7 +156,7 @@ router.post('/booking', [
 
 
 router.post('/booking/:userId', [
-    role('office'),
+    minimumRole('office'),
     bodySchema(`{
         routeId: number,
         date: string,
@@ -237,7 +231,7 @@ router.post('/booking/:userId', [
     res.ok({ id: result.insertId });
 });
 
-router.delete('/booking/:bookingId', [role('client')], async (req, res, next) => {
+router.delete('/booking/:bookingId', [onlyRoles('client', 'office', 'owner')], async (req, res, next) => {
     let wantedId = parseInt(req.params.bookingId);
     if (isNaN(wantedId)) return next(invalidRequest());
 
@@ -249,19 +243,16 @@ router.delete('/booking/:bookingId', [role('client')], async (req, res, next) =>
         return next(err);
     }
 
-    if (booking.userId != user.id && req.user.role != 'office' && req.user.role != 'owner') {
+    if (booking.userId != user.id && req.user.role != roles.office && req.user.role != roles.owner) {
         return next(unauthorized());
     }
 
     try {
-        if (req.user.role == 'client') {
+        if (req.user.role == roles.client) {
             await bookingController.deleteBooking(wantedId, req.user.id);
         }
-        else if (req.user.role == 'office' || req.user.role == 'owner') {
+        else if (req.user.role == roles.office || req.user.role == roles.owner) {
             await bookingController.deleteBooking(wantedId);
-        }
-        else {
-            throw unauthorized();
         }
     }
     catch (err) {

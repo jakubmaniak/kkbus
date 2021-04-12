@@ -3,13 +3,7 @@ const router = express.Router();
 
 const { invalidRequest, serverError } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
-const role = require('../middlewares/roles')(
-    [0, 'guest'],
-    [1, 'client'],
-    [2, 'driver'],
-    [3, 'office'],
-    [4, 'owner']
-);
+const { minimumRole } = require('../middlewares/roles');
 
 const routeController = require('../controllers/route');
 
@@ -48,7 +42,7 @@ router.get('/route/:id', async (req, res, next) => {
 });
 
 router.post('/route', [
-    role('office'),
+    minimumRole('office'),
     bodySchema(`{
         oppositeId?: number,
         departureLocation: string,
@@ -78,7 +72,7 @@ router.post('/route', [
     }
 });
 
-router.delete('/route/:id', [role('office')], async (req, res, next) => {
+router.delete('/route/:id', [minimumRole('office')], async (req, res, next) => {
     let routeId = parseInt(req.params.id);
 
     if (isNaN(routeId)) return next(invalidRequest());
@@ -95,7 +89,7 @@ router.delete('/route/:id', [role('office')], async (req, res, next) => {
 });
 
 router.put('/route/:id', [
-    role('office'),
+    minimumRole('office'),
     bodySchema(`{
         oppositeId?: number,
         departureLocation: string,

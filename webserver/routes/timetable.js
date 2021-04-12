@@ -4,19 +4,13 @@ const router = express.Router();
 const { invalidRequest, notFound, serverError, unauthorized } = require('../errors');
 const { parseDate } = require('../helpers/date');
 const bodySchema = require('../middlewares/body-schema');
-const role = require('../middlewares/roles')(
-    [0, 'guest'],
-    [1, 'client'],
-    [2, 'driver'],
-    [3, 'office'],
-    [4, 'owner']
-);
+const { roles, minimumRole } = require('../middlewares/roles');
 
 const timetableController = require('../controllers/timetable');
 const userController = require('../controllers/user');
 
 
-router.get('/timetable', [role('driver')], async (req, res, next) => {
+router.get('/timetable', [minimumRole('driver')], async (req, res, next) => {
     try {
         res.ok(await timetableController.findAllAvailabilities());
     }
@@ -25,7 +19,7 @@ router.get('/timetable', [role('driver')], async (req, res, next) => {
     }
 });
 
-router.get('/timetable/:date', [role('driver')], async (req, res, next) => {
+router.get('/timetable/:date', [minimumRole('driver')], async (req, res, next) => {
     let date = parseDate(req.params.date);
     if (!date) return next(invalidRequest());
 
@@ -38,7 +32,7 @@ router.get('/timetable/:date', [role('driver')], async (req, res, next) => {
 });
 
 router.post('/timetable', [
-    role('driver'),
+    minimumRole('driver'),
     bodySchema(`{
         available: boolean,
         label?: string,
@@ -79,7 +73,7 @@ router.post('/timetable', [
 });
 
 router.post('/timetable/:userId', [
-    role('office'),
+    minimumRole('office'),
     bodySchema(`{
         available: boolean,
         label?: string,
@@ -130,7 +124,7 @@ router.post('/timetable/:userId', [
 });
 
 router.put('/timetable/:itemId', [
-    role('driver'),
+    minimumRole('driver'),
     bodySchema(`{
         available: boolean,
         startDate: string,
@@ -152,7 +146,7 @@ router.put('/timetable/:itemId', [
         return next(err);
     }
 
-    if (availability.userId != req.user.id && req.user.role != 'office' && req.user.role != 'owner') {
+    if (availability.userId != req.user.id && req.user.role != roles.office && req.user.role != roles.owner) {
         return next(unauthorized());
     }
 
@@ -172,7 +166,7 @@ router.put('/timetable/:itemId', [
     res.ok();
 });
 
-router.delete('/timetable/:itemId', [role('driver')], async (req, res, next) => {
+router.delete('/timetable/:itemId', [minimumRole('driver')], async (req, res, next) => {
     let wantedId = parseInt(req.params.itemId);
     if (isNaN(wantedId)) return next(invalidRequest());
 
@@ -184,7 +178,7 @@ router.delete('/timetable/:itemId', [role('driver')], async (req, res, next) => 
         return next(err);
     }
 
-    if (availability.userId != req.user.id && req.user.role != 'office' && req.user.role != 'owner') {
+    if (availability.userId != req.user.id && req.user.role != roles.office && req.user.role != roles.owner) {
         return next(unauthorized());
     }
 

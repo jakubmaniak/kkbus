@@ -1,5 +1,6 @@
 const { notFound } = require('../errors');
 const { parseDateTime } = require('./date');
+const { roleDictionary } = require('../middlewares/roles');
 
 module.exports = {
     getFirst: (results) => {
@@ -47,7 +48,7 @@ module.exports = {
     resolveRoles: (...props) => (results) => {
         for (let result of results) {
             for (let prop of props) {
-                result[prop] = (['guest', 'client', 'driver', 'office', 'owner'])[result[prop]];
+                result[prop] = roleDictionary.getRole(result[prop]).name;
             }
         }
         return results;

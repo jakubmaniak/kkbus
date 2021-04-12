@@ -5,19 +5,13 @@ const { invalidRequest, serverError } = require('../errors');
 const { deleteProps, resolveDateTime3 } = require('../helpers/query-utils');
 const { parseDateTime } = require('../helpers/date');
 const bodySchema = require('../middlewares/body-schema');
-const role = require('../middlewares/roles')(
-    [0, 'guest'],
-    [1, 'client'],
-    [2, 'driver'],
-    [3, 'office'],
-    [4, 'owner']
-);
+const { minimumRole } = require('../middlewares/roles');
 
 const vehicleController = require('../controllers/vehicle');
 const refuelController = require('../controllers/refuel');
 
 
-router.get('/vehicles', [role('driver')], async (req, res, next) => {
+router.get('/vehicles', [minimumRole('driver')], async (req, res, next) => {
     let vehicles = (await vehicleController.findAllVehicles()).map((vehicle) => ({
         ...vehicle,
         combustion: 0,
@@ -26,7 +20,7 @@ router.get('/vehicles', [role('driver')], async (req, res, next) => {
     res.ok(vehicles);
 });
 
-router.get('/vehicle/:id', [role('driver')], async (req, res, next) => {
+router.get('/vehicle/:id', [minimumRole('driver')], async (req, res, next) => {
     let wantedId = parseInt(req.params.id);
     if (isNaN(wantedId)) return next(invalidRequest());
 
@@ -44,7 +38,7 @@ router.get('/vehicle/:id', [role('driver')], async (req, res, next) => {
 });
 
 router.post('/vehicle', [
-    role('owner'),
+    minimumRole('owner'),
     bodySchema(`{
         state?: string,
         brand: string,
@@ -77,7 +71,7 @@ router.post('/vehicle', [
 });
 
 router.put('/vehicle/:id', [
-    role('owner'),
+    minimumRole('owner'),
     bodySchema(`{
         state?: string,
         brand: string,
@@ -119,7 +113,7 @@ router.put('/vehicle/:id', [
     res.ok({ id: wantedId, ...updatedVehicle, combustion: 0, driver: null });
 });
 
-router.delete('/vehicle/:id', [role('owner')], async (req, res, next) => {
+router.delete('/vehicle/:id', [minimumRole('owner')], async (req, res, next) => {
     let wantedId = parseInt(req.params.id);
     if (isNaN(wantedId)) return next(invalidRequest());
 
@@ -133,7 +127,7 @@ router.delete('/vehicle/:id', [role('owner')], async (req, res, next) => {
     res.ok();
 });
 
-router.get('/vehicle/:vehicleId/refuels', [role('driver')], async (req, res, next) => {
+router.get('/vehicle/:vehicleId/refuels', [minimumRole('driver')], async (req, res, next) => {
     let vehicleId = parseInt(req.params.vehicleId);
     if (isNaN(vehicleId)) return next(invalidRequest());
 
@@ -149,7 +143,7 @@ router.get('/vehicle/:vehicleId/refuels', [role('driver')], async (req, res, nex
 });
 
 router.post('/vehicle/:vehicleId/refuel', [
-    role('driver'),
+    minimumRole('driver'),
     bodySchema(`{
         cost: number,
         amount: number,

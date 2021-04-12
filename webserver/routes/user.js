@@ -5,14 +5,7 @@ const router = express.Router();
 const env = require('../helpers/env');
 const { invalidRequest, emailAlreadyTaken, badCredentials, serverError } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
-const roles = new Map([
-    [0, 'guest'],
-    [1, 'client'],
-    [2, 'driver'],
-    [3, 'office'],
-    [4, 'owner']
-]);
-const role = require('../middlewares/roles')(...roles);
+const { roles, minimumRole } = require('../middlewares/roles');
 const userController = require('../controllers/user');
 
 
@@ -45,7 +38,7 @@ router.post('/user/login', [
         sessionToken,
         firstName: user.firstName,
         lastName: user.lastName,
-        role: roles.get(user.role)
+        role: user.role.name
     });
 });
 
@@ -103,11 +96,11 @@ router.post('/user/register', [
         firstName, lastName,
         birthDate,
         phoneNumber,
-        role: 1
+        role: roles.client.priority
     };
     await userController.addUser(user);
 
-    if (user.role == 3 || user.role == 4) {
+    if (user.role == roles.office || user.role == roles.owner) {
         return res.ok({
             login
         });
@@ -121,12 +114,12 @@ router.post('/user/register', [
         login,
         firstName: user.firstName,
         lastName: user.lastName,
-        role: roles.get(user.role)
+        role: user.role.name
     });
 });
 
 
-router.get('/user/logout', [role('client')], (req, res) => {
+router.get('/user/logout', [minimumRole('client')], (req, res) => {
     res.header('Cache-Control', 'no-cache');
     res.clearCookie('session');
     res.ok();
@@ -136,11 +129,11 @@ router.get('/user/info', (req, res) => {
     let { loggedIn, login, role, id, firstName, lastName } = req.user;
 
     if (loggedIn) {
-        res.ok({ role, id, login, firstName, lastName });
+        res.ok({ role: role.name, id, login, firstName, lastName });
     }
     else {
         res.ok({
-            role: 'guest',
+            role: roles.guest.name,
             id: -1,
             login: '',
             firstName: '',

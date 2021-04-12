@@ -2,17 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 const { invalidRequest } = require('../errors');
-const role = require('../middlewares/roles')(
-    [0, 'guest'],
-    [1, 'client'],
-    [2, 'driver'],
-    [3, 'office'],
-    [4, 'owner']
-);
+const { roles, minimumRole } = require('../middlewares/roles');
 const userController = require('../controllers/user');
 
 
-router.get('/clients', [role('office')], async (req, res, next) => {
+router.get('/clients', [minimumRole(roles.office)], async (req, res, next) => {
     //let { param, query } = req.params;
     let [[param, query]] = Object.entries(req.query);
 

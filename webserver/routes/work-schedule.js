@@ -1,17 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const bodySchema = require('../middlewares/body-schema');
-const role = require('../middlewares/roles')(
-    [0, 'guest'],
-    [1, 'client'],
-    [2, 'driver'],
-    [3, 'office'],
-    [4, 'owner']
-);
+const { minimumRole } = require('../middlewares/roles');
 
 
 router.post('/work-schedule', [
-    role('client'),
+    minimumRole('client'),
     bodySchema('{driverId: number, range: number, routeId?: number}')
 ], (req, res) => {
     let { driverId, range, routeId } = req.body;

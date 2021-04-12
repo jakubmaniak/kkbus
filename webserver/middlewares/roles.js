@@ -1,13 +1,47 @@
 const { unauthorized } = require('../errors');
+const { Role, RoleDictionary } = require('../helpers/role');
 
-module.exports = (...roleProrities) => (requiredRole) => (req, res, next) => {
+module.exports.roles = {
+    guest: new Role('guest', 0),
+    client: new Role('client', 1),
+    driver: new Role('driver', 2),
+    office: new Role('office', 3),
+    owner: new Role('owner', 4)
+};
+
+module.exports.roleDictionary = new RoleDictionary(this.roles);
+
+module.exports.onlyRoles = (...allowedRoles) => (req, res, next) => {
     let userRole = req.user.role;
-    let requiredPriority = roleProrities.find((pair) => pair[1] === requiredRole)[0];
-    let userPriority = roleProrities.find((pair) => pair[1] === userRole)[0];
-
-    if (userPriority < requiredPriority) {
-        throw unauthorized();
+    
+    for (let role of allowedRoles) {
+        role = this.roleDictionary.getRole(role);
+        if (role.priority == userRole.priority) {
+            return next();
+        }
     }
 
-    next();
+    throw unauthorized();
+};
+
+module.exports.minimumRole = (role) => (req, res, next) => {
+    let userRole = req.user.role;
+
+    role = this.roleDictionary.getRole(role);
+    if (role.priority <= userRole.priority) {
+        return next();
+    }
+
+    throw unauthorized();
+};
+
+module.exports.maximumRole = (role) => (req, res, next) => {
+    let userRole = req.user.role;
+    
+    role = this.roleDictionary.getRole(role);
+    if (role.priority >= userRole.priority) {
+        return next();
+    }
+
+    throw unauthorized();
 };

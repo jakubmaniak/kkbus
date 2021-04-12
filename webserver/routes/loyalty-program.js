@@ -2,13 +2,7 @@ const express = require('express');
 const { invalidRequest, notFound } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const router = express.Router();
-const role = require('../middlewares/roles')(
-    [0, 'guest'],
-    [1, 'client'],
-    [2, 'driver'],
-    [3, 'office'],
-    [4, 'owner']
-);
+const { minimumRole } = require('../middlewares/roles');
 
 const userPoints = new Map([
     ['annanowak1234', 1000000]
@@ -39,7 +33,7 @@ router.get('/loyalty-program/rewards', (req, res) => {
     res.ok([...rewards.values()]);
 });
 
-router.get('/loyalty-program/reward/:id', [role('client')], (req, res) => {
+router.get('/loyalty-program/reward/:id', [minimumRole('client')], (req, res) => {
     let id = parseInt(req.params.id);
     if (isNaN(id)) throw invalidRequest();
 
@@ -60,7 +54,7 @@ router.get('/loyalty-program/reward/:id', [role('client')], (req, res) => {
 });
 
 router.post('/loyalty-program/reward', [
-    role('owner'),
+    minimumRole('owner'),
     bodySchema('{name: string, requiredPoints: number, amount?: number, limit?: number}')
 ], (req, res) => {
     let { name, requiredPoints, amount, limit } = req.body;
@@ -77,7 +71,7 @@ router.post('/loyalty-program/reward', [
 });
 
 router.put('/loyalty-program/reward/:id', [
-    role('owner'),
+    minimumRole('owner'),
     bodySchema('{name: string, requiredPoints: number, amount: number, limit: number}')
 ], (req, res) => {
     let id = parseInt(req.params.id);
@@ -100,7 +94,7 @@ router.put('/loyalty-program/reward/:id', [
     res.ok(updatedReward);
 });
 
-router.delete('/loyalty-program/reward/:id', [role('owner')], (req, res) => {
+router.delete('/loyalty-program/reward/:id', [minimumRole('owner')], (req, res) => {
     let id = parseInt(req.params.id);
     if (isNaN(id)) throw invalidRequest();
 

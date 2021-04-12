@@ -2,16 +2,10 @@ const jwt = require('jsonwebtoken');
 
 const env = require('../helpers/env');
 const { badSessionToken, serverError } = require("../errors");
+const { roles, roleDictionary } = require('../middlewares/roles');
+
 const userController = require('../controllers/user');
 
-
-const roles = new Map([
-    [0, 'guest'],
-    [1, 'client'],
-    [2, 'driver'],
-    [3, 'office'],
-    [4, 'owner']
-]);
 
 
 let cache = new Map();
@@ -57,7 +51,7 @@ module.exports = () => async (req, res, next) => {
 
     req.user = {
         loggedIn: false,
-        role: 'guest'
+        role: roles.guest.name
     };
 
     if (sessionToken) {
@@ -93,7 +87,7 @@ module.exports = () => async (req, res, next) => {
 
                 if (!user) return next(badSessionToken());
 
-                user.role = roles.get(user.role);
+                user.role = roleDictionary.getRole(user.role);
                 delete user.password;
 
                 cache.set(sessionToken, user);
