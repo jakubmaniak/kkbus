@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import * as api from '../api';
 import Vehicle from './Vehicle';
 import { fromValue } from '../helpers/from-value';
+import { routeFormatter } from '../helpers/text-formatters';
 
 import '../styles/VehicleInfo.css';
 import Modal from './Modal';
@@ -30,42 +31,64 @@ function VehicleInfo() {
 
     let [selectedState, setSelectedState] = useState('');
     let [selectedParking, setSelectedParking] = useState('');
+    let [selectedRoutes, setSelectedRoutes] = useState('');
 
     useEffect(() => {
         updateVehicle();
     }, []);
 
+    useEffect(() => {
+        setBrand('');
+        setModel('');
+        setYear('');
+        setPlate('');
+        setMileage('');
+        setSeats('');
+        setSelectedState('');
+        setSelectedParking('');
+        setSelectedRoutes('');
+    }, [modalAddVehicleVisibility]);
+
     function updateVehicle() {
         api.getAllVehicles()
         .then((results) => {
             setVehicles(results);
-            console.log(results, 'wehicle');
             setTimeout(() => {
                 setLoading(false);
-            }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
-        });
+            }, Math.max(0, 1000 - (Date.now() - loadingInitTime)));
+        })
+        .catch(api.errorAlert);
 
         api.getAllRoutes()
         .then((results) => {
             setRoutes(results);
         })
+        .catch(api.errorAlert);
     }
 
     function deleteVehicle(vehicleId) {
         console.log(vehicleId);
-        api.deleteVehicle(vehicleId).then(() => {
+        api.deleteVehicle(vehicleId)
+        .then(() => {
             updateVehicle();
-        });
+        })
+        .catch(api.errorAlert);;
     }
 
     function addVehicle() {
-        if(brand !== '' && model !== '' && year !== '' && plate !== '' && mileage !== '' && seats !== '' && selectedState !== '' && selectedParking !== '') {
+        if(brand !== '' && model !== '' && year !== '' && plate !== '' && mileage !== '' && seats !== '' 
+            && selectedState !== '' && selectedParking !== '' && selectedRoutes !== '') {
             if(!isNaN(parseInt(year)) && !isNaN(parseInt(seats)) && !isNaN(parseInt(mileage))) {
                 setModalAddVehicleVisibility(false);
-                api.addVehicle(brand, model, parseInt(year), parseInt(seats), plate, parseInt(mileage), selectedState, selectedParking)
+                
+                let currentRoutes = [];
+                currentRoutes = selectedRoutes.map((route) => route.id);
+
+                api.addVehicle(brand, model, parseInt(year), parseInt(seats), plate, parseInt(mileage), selectedState, selectedParking, currentRoutes)
                 .then(() => {
                     updateVehicle();
                 })
+                .catch(api.errorAlert);
             }
             else {
                 alert('Nieprawidłowy typ danych');
@@ -130,7 +153,15 @@ function VehicleInfo() {
                             items={parking}
                             handleChange={setSelectedParking}
                         />
-                        <DropdownMultiple placeholder="Dostępne trasy dla pojazdów"/>
+                        <DropdownMultiple 
+                            placeholder="Dostępne trasy dla pojazdów"
+                            items={routes}
+                            selectedItems={selectedRoutes}
+                            textFormatter={routeFormatter}
+                            handleSelect={(item, items) => console.log('select', items)}
+                            handleUnselect={(item, items) => console.log('unselect', items)}
+                            handleChange={setSelectedRoutes}
+                        />
                     </form>
                 </section>
                 <section className="footer">
