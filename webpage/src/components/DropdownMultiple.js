@@ -87,7 +87,7 @@ function DropdownMultiple(props) {
                             : [...selectedItems].map((item) => item[props.textProperty]).join(', ')
                     }</span>
                 </div>
-                <button className="dropdown-button">&gt;</button>
+                <button type="button" className="dropdown-button">&gt;</button>
             </div>
             { (expanded && props.items instanceof Array) ?
                 <ul className="dropdown-list">
