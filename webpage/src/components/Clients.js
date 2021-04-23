@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
+import '../styles/Clients.css';
 
 import * as api from '../api';
+
 import Dropdown from './Dropdown';
 import Client from './Client';
-import { ModalLoader } from './Loader';
+
 import { fromValue } from '../helpers/from-value';
 
-import '../styles/Clients.css';
 
 function Clients() {
     let [selectedSearchParam, setSelectedSearchParam] = useState('');
@@ -26,8 +27,6 @@ function Clients() {
     let [birthDate, setBirthDate] = useState('');
     let [phoneNumber, setPhoneNumber] = useState('');
 
-    // let [loading, setLoading] = useState(true);
-    // let loadingInitTime = Date.now();
 
     function handleQueryChange(ev) {
         setSearchQuery(ev.target.value);
@@ -39,9 +38,6 @@ function Clients() {
         api.getClients(selectedSearchParam[0], searchQuery)
             .then((results) => {
                 setClients(results)
-                // setTimeout(() => {
-                //     setLoading(false);
-                // }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
             })
             .catch(api.errorAlert);
     }
@@ -65,7 +61,6 @@ function Clients() {
 
     return (
         <div className="client page">
-            {/* <ModalLoader loading={loading} /> */}
             <div className="main">
                 <div className="tile half tile-container">
                     <div className="tile">
