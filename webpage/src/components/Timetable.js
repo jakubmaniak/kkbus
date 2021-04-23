@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import Dropdown from './Dropdown';
 import '../styles/Timetable.css';
+
+import Dropdown from './Dropdown';
 import TimetableFilterDays from './TimetableFilterDays';
 import TimetableItem from './TimetableItem';
-import * as api from '../api';
 import { ModalLoader } from './Loader';
 import Modal from './Modal';
 import { fromValue } from '../helpers/from-value';
+
+import * as api from '../api';
 
 
 function Timetable() {
@@ -20,6 +22,7 @@ function Timetable() {
         [false, 'niedyspozycja'],
         [true, 'dostępność']
     ]);
+
     let [selectedAvailableType, setSelectedAvailableType] = useState();
 
     let [dates, setDates] = useState(
@@ -27,10 +30,13 @@ function Timetable() {
         .fill(null)
         .map((date, i) => new Date(new Date().getTime() + i * 24 * 3600 * 1000))
     );
+
     let [selectedDate, setSelectedDate] = useState();
+
     let [modalAddAvailabilityVisibility, setModalAddAvailabilityVisibility] = useState(false);
     let [modalEditAvailabilityVisibility, setModalEditAvailabilityVisibility] = useState(false);
     let [modalDeleteVisibility, setModalDeleteVisibility] = useState(false);
+
     let [days, setDays] = useState(''); 
     let [ranges, setRanges] = useState(''); 
     let [label, setLabel] = useState('');
@@ -52,23 +58,19 @@ function Timetable() {
 
     useEffect(() => {
         api.getTimetable()
-        .then((results) => {
-            setTimetable(results);
-            setTimeout(() => {
-                setLoading(false);
-            }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
-        })    
-        .catch((err) => {
-            throw err;
-        });
+            .then((results) => {
+                setTimetable(results);
+                setTimeout(() => {
+                    setLoading(false);
+                }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
+            })    
+            .catch(api.errorAlert);
 
         api.getUserInfo()
-        .then((result) => {
-            setUser(result);
-        })
-        .catch((err) => {
-            throw err;
-        })
+            .then((result) => {
+                setUser(result);
+            })
+            .catch(api.errorAlert);
     }, []);
 
     let d = new Date(); //data pozyskana z filtru
@@ -83,8 +85,8 @@ function Timetable() {
             let monthDay = (d.getDate() + i).toString().padStart(2, '0');
             let month = (d.getMonth() + 1).toString().padStart(2, '0');
             let displayText = `${weekDay}, ${monthDay}.${month}`; 
+
             filterDays[i] = displayText;
-            
             formatterFilterDays[i] = filterDays[i].slice(4).split('-').reverse().join('.');
         }
 
@@ -129,24 +131,25 @@ function Timetable() {
 
    function saveAvailability() {
         setModalAddAvailabilityVisibility(false);
+
         api.addTimetableItem(selectedDate.toJSON().slice(0, 10), parseInt(days), ranges.split(','), selectedAvailableType[0], label)
-        .then(refreshTimeTable);
+            .then(refreshTimeTable)
+            .catch(api.errorAlert);
    }
 
    function saveAvailabilityToUser() {
     setModalAddAvailabilityVisibility(false);
     api.addTimetableItemToUser(selectedItem.userId, selectedDate.toJSON().slice(0, 10), parseInt(days), ranges.split(','), selectedAvailableType[0], label)
-    .then(refreshTimeTable);
+        .then(refreshTimeTable)
+        .catch(api.errorAlert);
    }
 
    function refreshTimeTable() {
         api.getTimetable()
-        .then((results) => {
-            setTimetable(results);
-        })    
-        .catch((err) => {
-            throw err;
-        });
+            .then((results) => {
+                setTimetable(results);
+            })    
+            .catch(api.errorAlert);
    }
 
    function translateRole(role) {
@@ -177,6 +180,7 @@ function Timetable() {
 
     function saveEditAvailability() {
         setModalEditAvailabilityVisibility(false);
+
         if(typeof(parseInt(daysEdit)) !== 'number') {
             alert('Nieprawidłowy typ danych!');
         }
@@ -188,13 +192,16 @@ function Timetable() {
                 rangesEdit.split(','), 
                 selectedAvailableTypeEdit[0], 
                 labelEdit
-            ).then(refreshTimeTable);
+            )
+                .then(refreshTimeTable)
+                .catch(api.errorAlert);
         }
     }
 
     function deleteAvailability(itemId) {
         api.deleteTimetableItem(itemId)
-        .then(refreshTimeTable);
+            .then(refreshTimeTable)
+            .catch(api.errorAlert);
     }
 
 
@@ -250,7 +257,6 @@ function Timetable() {
                                                             <button className="menu-item edit" onClick={() => editAvailable(item.id, user.id)} title="Edytuj"></button>
                                                             <button className="menu-item delete" onClick={() => {
                                                                 setModalDeleteVisibility(true);
-                                                                //deleteAvailability(item.id)
                                                                 setItemToDelete(item.id);
                                                             }} 
                                                                 title="Usuń"></button>
@@ -290,8 +296,8 @@ function Timetable() {
                             textFormatter={(item) => item && item.toLocaleDateString()}
                             handleChange={setSelectedDate}
                         />
-                        <input placeholder="Liczba dni" onChange={fromValue(setDays)} />
-                        <input placeholder="Godziny" onChange={fromValue(setRanges)} />
+                        <input placeholder="Liczba dni" value={days} onChange={fromValue(setDays)} />
+                        <input placeholder="Godziny" value={ranges} onChange={fromValue(setRanges)} />
                     </form>
                 </section>
                 <section className="footer">
