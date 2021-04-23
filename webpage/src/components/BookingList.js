@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import '../styles/BookingList.css';
 
 import * as api from '../api';
 
 import Dropdown from './Dropdown';
 import BookingListItem from './BookingListItem';
-import '../styles/BookingList.css';
+
 import { routeFormatter } from '../helpers/text-formatters';
 
 function BookingList() {
