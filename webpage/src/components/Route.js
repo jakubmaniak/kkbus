@@ -1,23 +1,27 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import '../styles/RoutesPage.css';
 
 import { fromValue } from '../helpers/from-value';
-import * as api from '../api';
 import UserContext from '../contexts/User';
+
+import * as api from '../api';
+
 import RouteDirection from './RouteDirection';
 import Modal from './Modal';
 import Dropdown from './Dropdown';
 import NotificationModal from './NotificationModal';
 
-import '../styles/RoutesPage.css';
-
 
 function Route(props) {
     let { role } = useContext(UserContext).user;
+
     let [modalVisibility, setModalVisibility] = useState(false);
     let [modalDeleteRewardVisibility, setModalDeleteRewardVisibility] = useState(false);
+
     let [departureLocation, setDepartureLocation] = useState(props.departureLocation);
     let [arrivalLocation, setArrivalLocation] = useState(props.arrivalLocation);
+
     let [dates, setDates] = useState([]);
     let [hours, setHours] = useState([]);
     let [prices, setPrices] = useState([]);
@@ -49,7 +53,6 @@ function Route(props) {
     }, [props.allHours]);
 
     useEffect(() => {
-        //setPrice(0);
         setSelectedDate(null);
         setSelectedHour(null);
         setNormalTickets(null);
@@ -71,8 +74,10 @@ function Route(props) {
 
     function updateRoute() {
         setModalVisibility(false);
+
         api.updateRoute(props.routeId, departureLocation, arrivalLocation, stops, hours, prices, null)
-        .then(() => props.refreshRoutes());
+            .then(() => props.refreshRoutes())
+            .catch(api.errorAlert);
     }
 
     function convertHoursIntoArray(ev) {
@@ -154,9 +159,9 @@ function Route(props) {
                             items={hours}
                             handleChange={setSelectedHour} 
                         />
-                        <input placeholder="Liczba osób objętych biletem normalnym" onChange={fromValue(setNormalTickets)}/>
-                        <input placeholder="Liczba osób objętych biletem ulgowym" onChange={fromValue(setReducedTickets)}/>
-                        <input placeholder="Liczba dzieci do lat 5" onChange={fromValue(setChildTickets)}/>
+                        <input placeholder="Liczba osób objętych biletem normalnym" value={normalTickets} onChange={fromValue(setNormalTickets)}/>
+                        <input placeholder="Liczba osób objętych biletem ulgowym" value={reducedTickets} onChange={fromValue(setReducedTickets)}/>
+                        <input placeholder="Liczba dzieci do lat 5" value={childTickets} onChange={fromValue(setChildTickets)}/>
                         <Dropdown 
                             placeholder="Przystanek początkowy"
                             items={stops}
