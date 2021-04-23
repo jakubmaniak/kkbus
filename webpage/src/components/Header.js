@@ -1,11 +1,12 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-
 import '../styles/Header.css';
+
 import menuIcon from '../static/menu.svg';
 import menuActiveIcon from '../static/menu_active.svg';
 
 import * as api from '../api';
+
 import HeaderItem from './HeaderItem';
 import UserContext from '../contexts/User';
 
@@ -24,13 +25,14 @@ function Header() {
             setUser({ ...user });
 
             api.getUserInfo()
-            .then((data) => {
-                user.role = data.role;
-                user.id = data.id;
-                
-                setUser({ ...user });
-                setName(data.firstName + ' ' + data.lastName);
-            });
+                .then((data) => {
+                    user.role = data.role;
+                    user.id = data.id;
+                    
+                    setUser({ ...user });
+                    setName(data.firstName + ' ' + data.lastName);
+                })
+                .catch(api.errorAlert);
         }
         
         handlePageResize();
@@ -42,10 +44,11 @@ function Header() {
 
     function signout() {
         api.logout()
-        .then(() => {
-            setUser({ loggedIn: false, role: 'guest' });
-            history.replace('/');
-        });
+            .then(() => {
+                setUser({ loggedIn: false, role: 'guest' });
+                history.replace('/');
+            })
+            .catch(api.errorAlert);
     }
 
     function handlePageResize() {
