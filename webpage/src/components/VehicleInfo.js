@@ -26,6 +26,7 @@ function VehicleInfo() {
 
     let [state, setState] = useState(['Aktywny', 'Nieaktywny', 'W naprawie']);
     let [parking, setParking] = useState(['Parking nr 1', 'Parking nr 2']);
+    let [routes, setRoutes] = useState([]);
 
     let [selectedState, setSelectedState] = useState('');
     let [selectedParking, setSelectedParking] = useState('');
@@ -38,10 +39,16 @@ function VehicleInfo() {
         api.getAllVehicles()
         .then((results) => {
             setVehicles(results);
+            console.log(results, 'wehicle');
             setTimeout(() => {
                 setLoading(false);
             }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
         });
+
+        api.getAllRoutes()
+        .then((results) => {
+            setRoutes(results);
+        })
     }
 
     function deleteVehicle(vehicleId) {
@@ -86,9 +93,10 @@ function VehicleInfo() {
                             year={vehicle.year}
                             state={vehicle.state}
                             parking={vehicle.parking}
-                            seats={vehicle.seats} 
-                            arrivalLocation={vehicle.arrivalLocation}
-                            departureLocation={vehicle.departureLocation}
+                            seats={vehicle.seats}
+                            // arrivalDepartureLocation={findDepartureArrivalLocation(vehicle.routeIds)}
+                            routeIds={vehicle.routeIds}
+                            // departureLocation={vehicle.departureLocation}
                             mileage={vehicle.mileage}
                             combustion={vehicle.combustion}
                             updateVehicle={updateVehicle}

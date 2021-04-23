@@ -28,33 +28,27 @@ function Vehicle(props) {
     let [state, setState] = useState(['Aktywny', 'Nieaktywny', 'W naprawie']);
     let [parking, setParking] = useState(['Parking nr 1', 'Parking nr 2']);
     let [routes, setRoutes] = useState([]);
-    let [directions, setDirections] = useState([]);
+    let [departureArrivalLocations, setDepartureArrivalLocations] = useState([]);
 
     let [selectedState, setSelectedState] = useState(props.state);
     let [selectedParking, setSelectedParking] = useState(props.parking);
+    let [selectedRoutes, setSelectedRoutes] = useState(props.route);
 
     useEffect(() => {
-        if (modalEditVehicleVisibility) {
-            api.getAllRoutes()
-                .then((results) => {
-                    setDirections(results);
-                })
-                .catch(api.errorAlert);
-        }
-    }, [modalEditVehicleVisibility]);
+        api.getAllRoutes()
+        .then((results) => {
+            setRoutes(results);
+            let availableRoutes = [];
+        availableRoutes = props.routeIds.map((routeId) => results.find((({id}) => id === routeId)));
+        console.log(availableRoutes.map((avaibleRoute) => avaibleRoute.departureLocation + ' - ' + avaibleRoute.arrivalLocation));
+
+        setDepartureArrivalLocations(availableRoutes.map((avaibleRoute) => avaibleRoute.departureLocation + ' - ' + avaibleRoute.arrivalLocation));
+        })
+        .catch(api.errorAlert);
+    }, [props.routeIds]);
 
     function editVehicle(vehicleId) {
         setModalEditVehicleVisibility(false);
-        console.log('abc');
-        console.log(vehicleId,
-            brand,
-            model, 
-            year, 
-            seats, 
-            plate, 
-            mileage,
-            selectedState,
-            selectedParking);
 
         //sprzwdzanie czy nie ma pustych pol
         if(brand !== '' && model !== '' && year !== '' && mileage !== '' && plate !== '' && seats !== '') {
@@ -63,16 +57,8 @@ function Vehicle(props) {
                     let currentYear = year !== props.year ? parseInt(year) : props.year;
                     let currentMileage = mileage !== props.mileage ? parseInt(mileage) : props.mileage;
                     let currentSeats = seats !== props.seats ? parseInt(seats) : props.seats;
-                    
-                    console.log(vehicleId,
-                        brand,
-                        model, 
-                        year, 
-                        seats, 
-                        plate, 
-                        mileage,
-                        selectedState,
-                        selectedParking);
+                    let currentRoutes = [];
+                    currentRoutes = selectedRoutes.map((route) => route.id);
 
                     api.updateVehicle(
                         vehicleId,
@@ -84,7 +70,7 @@ function Vehicle(props) {
                         currentMileage,
                         selectedState,
                         selectedParking,
-                        null //mozna zrobic na podstawie listy wyboru tras -> wziac routeId  
+                        currentRoutes //mozna zrobic na podstawie listy wyboru tras -> wziac routeId  
                         )
                     .then(() => 
                         props.updateVehicle()
@@ -131,11 +117,12 @@ function Vehicle(props) {
                         />
                         <DropdownMultiple 
                             placeholder="Dostępne trasy dla pojazdów"
-                            items={directions}
+                            selectedItems={selectedRoutes}
+                            items={routes}
                             textFormatter={routeFormatter}
                             handleSelect={(item, items) => console.log('select', items)}
                             handleUnselect={(item, items) => console.log('unselect', items)}
-                            handleChange={(items) => console.log('change', items)}
+                            handleChange={setSelectedRoutes}
                         />
                     </form>
                 </section>
@@ -162,6 +149,11 @@ function Vehicle(props) {
         );
     }
 
+    
+    function setDetartureArrivalLocations(routeIds) {
+        
+    }
+
     return (
         <div className="vehicle-item">
             <div className="tile half">
@@ -176,10 +168,15 @@ function Vehicle(props) {
                 </div>
                 <div className="vehicle-info route-info-container">
                     <span>Dostępność tras</span>
-                    <span>
-                        <p>{props.departureLocation} - </p> 
-                        <p>{props.arrivalLocation}</p>
-                    </span>
+                    <div className="available-routes-container">
+                        {departureArrivalLocations.map((location, i) => {
+                                return (
+                                    <span key={i}>
+                                        <p>{location}</p>
+                                    </span>
+                                );
+                            })}
+                    </div>
                 </div>
                 <div className="details">
                     <button onClick={() => setModalDetailsVisibility(true)}>Szczegóły</button>
