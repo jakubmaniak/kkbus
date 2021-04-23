@@ -38,6 +38,13 @@ function DropdownMultiple(props) {
         return (props.items instanceof Array) ? props.items.length : 0;
     }
 
+    function getItemText(item) {
+        if ('textProperty' in props) {
+            return item[props.textProperty];
+        }
+        return item;
+    }
+
     function isItemSelected(index) {
         let item = props.items[index];
 
@@ -84,7 +91,7 @@ function DropdownMultiple(props) {
                     <span>{
                         (placeholderVisible && !expanded)
                             ? props.placeholder
-                            : [...selectedItems].map((item) => item[props.textProperty]).join(', ')
+                            : [...selectedItems].map(getItemText).join(', ')
                     }</span>
                 </div>
                 <button type="button" className="dropdown-button">&gt;</button>
@@ -98,11 +105,7 @@ function DropdownMultiple(props) {
                             <div
                                 className={'dropdown-checkbox' + (isItemSelected(i) ? ' selected' : '')}
                                 style={{backgroundImage: `url(${checkmark})`}}></div>
-                            <span>{
-                                ('textProperty' in props)
-                                    ? item[props.textProperty]
-                                    : item
-                            }</span>
+                            <span>{getItemText(item)}</span>
                         </li>
                     )}
                 </ul>

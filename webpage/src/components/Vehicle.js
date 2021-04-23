@@ -31,14 +31,14 @@ function Vehicle(props) {
     let [selectedParking, setSelectedParking] = useState(props.parking);
 
     useEffect(() => {
-        api.getAllRoutes()
-            .then((results) => {
-                results.map((result, i) => {
-                    setDirections([...directions, result.departureLocation + ' - ' + result.arrivalLocation]);             
-                });
-            })
-            .catch(api.errorAlert);
-    }, []);
+        if (modalEditVehicleVisibility) {
+            api.getAllRoutes()
+                .then((results) => {
+                    setDirections(results.map((result) => result.departureLocation + ' - ' + result.arrivalLocation));
+                })
+                .catch(api.errorAlert);
+        }
+    }, [modalEditVehicleVisibility]);
 
     function editVehicle(vehicleId) {
         setModalEditVehicleVisibility(false);
