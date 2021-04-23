@@ -1,21 +1,23 @@
 import React, { useEffect, useState, useContext } from 'react';
+import '../styles/RouteReport.css';
 
 import * as api from '../api';
 import { routeFormatter } from '../helpers/text-formatters';
+import UserContext from '../contexts/User';
 
 import Dropdown from './Dropdown';
-import '../styles/RouteReport.css';
-import UserContext from '../contexts/User';
 
 
 function RouteReport() {
     let [routes, setRoutes] = useState([]);
     let [stops, setStops] = useState([]);
+
     let { role } = useContext(UserContext).user;
 
     useEffect(() => {
         api.getAllRoutes()
-        .then(setRoutes);
+            .then(setRoutes)
+            .catch(api.errorAlert);
     }, []);
 
     function handleRouteChange(route) {
