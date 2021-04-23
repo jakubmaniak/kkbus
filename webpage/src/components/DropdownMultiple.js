@@ -38,11 +38,18 @@ function DropdownMultiple(props) {
         return (props.items instanceof Array) ? props.items.length : 0;
     }
 
-    function getItemText(item) {
-        if ('textProperty' in props) {
+    function getItemText(item, index) {
+        if ('textFormatter' in props) {
+            return props.textFormatter(item, index);
+        }
+        if ('textProperty' in props && typeof item === 'object') {
             return item[props.textProperty];
         }
-        return item;
+        if (typeof item !== 'object' && typeof item !== 'function') {
+            return item;
+        }
+        
+        return null;
     }
 
     function isItemSelected(index) {
@@ -56,9 +63,14 @@ function DropdownMultiple(props) {
 
         if (selectedItems.add(item)) {
             setSelectedItems(new Set(selectedItems));
+            
+            let items = [...selectedItems];
 
             if (typeof props.handleSelect === 'function') {
-                props.handleSelect(item, [...selectedItems]);
+                props.handleSelect(item, items);
+            }
+            if (typeof props.handleChange === 'function') {
+                props.handleChange(items);
             }
         }
     }
@@ -69,8 +81,13 @@ function DropdownMultiple(props) {
         if (selectedItems.delete(item)) {
             setSelectedItems(new Set(selectedItems));
 
-            if (typeof props.handleSelect === 'function') {
-                props.handleUnselect(item, [...selectedItems]);
+            let items = [...selectedItems];
+
+            if (typeof props.handleUnselect === 'function') {
+                props.handleUnselect(item, items);
+            }
+            if (typeof props.handleChange === 'function') {
+                props.handleChange(items);
             }
         }
     }
@@ -105,7 +122,7 @@ function DropdownMultiple(props) {
                             <div
                                 className={'dropdown-checkbox' + (isItemSelected(i) ? ' selected' : '')}
                                 style={{backgroundImage: `url(${checkmark})`}}></div>
-                            <span>{getItemText(item)}</span>
+                            <span>{getItemText(item, i)}</span>
                         </li>
                     )}
                 </ul>

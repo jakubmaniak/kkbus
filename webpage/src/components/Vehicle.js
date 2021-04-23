@@ -1,11 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
+
 import '../styles/VehicleInfo.css';
+
+import * as api from '../api';
+import { fromValue} from '../helpers/from-value';
+import { routeFormatter } from '../helpers/text-formatters';
 import Modal from './Modal';
 import UserContext from '../contexts/User';
 import Dropdown from './Dropdown';
 import DropdownMultiple from './DropdownMultiple';
-import { fromValue} from '../helpers/from-value';
-import * as api from '../api';
 import NotificationModal from './NotificationModal';
 
 function Vehicle(props) {
@@ -34,7 +37,7 @@ function Vehicle(props) {
         if (modalEditVehicleVisibility) {
             api.getAllRoutes()
                 .then((results) => {
-                    setDirections(results.map((result) => result.departureLocation + ' - ' + result.arrivalLocation));
+                    setDirections(results);
                 })
                 .catch(api.errorAlert);
         }
@@ -52,7 +55,6 @@ function Vehicle(props) {
             mileage,
             selectedState,
             selectedParking);
-        //!!!dopisac parking, ab, ba!!!
 
         //sprzwdzanie czy nie ma pustych pol
         if(brand !== '' && model !== '' && year !== '' && mileage !== '' && plate !== '' && seats !== '') {
@@ -130,6 +132,10 @@ function Vehicle(props) {
                         <DropdownMultiple 
                             placeholder="Dostępne trasy dla pojazdów"
                             items={directions}
+                            textFormatter={routeFormatter}
+                            handleSelect={(item, items) => console.log('select', items)}
+                            handleUnselect={(item, items) => console.log('unselect', items)}
+                            handleChange={(items) => console.log('change', items)}
                         />
                     </form>
                 </section>
