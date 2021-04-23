@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Clients.css';
+
 import * as api from '../api';
+
 import Dropdown from './Dropdown';
 import Modal from './Modal';
+
 import { fromValue } from '../helpers/from-value';
 import { routeFormatter } from '../helpers/text-formatters';
 
@@ -30,8 +33,8 @@ function Client(props) {
         api.getAllRoutes()
         .then((routes) => {
             setRoutes(routes);
-            console.log(routes);
-        });
+        })
+        .catch(api.errorAlert);
     }, []);
 
     useEffect(() => {
@@ -117,9 +120,9 @@ function Client(props) {
                             items={hours}
                             handleChange={setSelectedHour} 
                         />
-                        <input placeholder="Liczba osób objętych biletem normalnym" onChange={fromValue(setNormalTickets)}/>
-                        <input placeholder="Liczba osób objętych biletem ulgowym" onChange={fromValue(setReducedTickets)}/>
-                        <input placeholder="Liczba dzieci do lat 5" onChange={fromValue(setChildTickets)}/>
+                        <input placeholder="Liczba osób objętych biletem normalnym" value={normalTickets} onChange={fromValue(setNormalTickets)}/>
+                        <input placeholder="Liczba osób objętych biletem ulgowym" value={reducedTickets} onChange={fromValue(setReducedTickets)}/>
+                        <input placeholder="Liczba dzieci do lat 5" value={childTickets} onChange={fromValue(setChildTickets)}/>
                         <Dropdown 
                             placeholder="Przystanek początkowy"
                             items={stops}
