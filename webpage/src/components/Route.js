@@ -222,7 +222,9 @@ function Route(props) {
                                 departureLocation={props.departureLocation}
                                 arrivalLocation={props.arrivalLocation}
                             />
-                            {props.stops}
+                            <div className="stops">
+                                {props.stops}
+                            </div>
                         </div>
                         <div className="book">
                         {(role === 'owner') ? 

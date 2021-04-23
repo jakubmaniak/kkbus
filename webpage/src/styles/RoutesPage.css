@@ -80,19 +80,24 @@
     color: #D9B430;
 }
 
-.route {
+.stops {
+    display: flex;
+    height: 50px;
+}
+
+.stop {
     margin-top: 4px;
     height: 46px;
 }
 
-.route span {
+.stop span {
     margin-right: 8px;
     width: 40px;
     font-size: 13px;
     color: #A0A0A0;
 }
 
-.route p:first-child {
+.stop p:first-child {
     color: #D9B430;
     font-weight: 500;
     font-size: 13px;

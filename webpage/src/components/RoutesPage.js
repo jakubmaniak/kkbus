@@ -81,7 +81,7 @@ function RoutesPage() {
                             departureLocation={route.departureLocation}
                             arrivalLocation={route.arrivalLocation}
                             stops={route.stops.map((stop, i) => (
-                                <span className="route" key={i}>
+                                <span className="stop" key={i}>
                                     <span>{stop}</span>
                                     {i < route.stops.length - 1 ? <span> - </span> : null}
                                 </span>
