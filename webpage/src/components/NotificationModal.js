@@ -1,6 +1,7 @@
 import React from 'react';
-import Modal from './Modal';
 import '../styles/NotificationModal.css';
+
+import Modal from './Modal';
 
 function NotificationModal(props) {
     return (
