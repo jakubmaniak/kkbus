@@ -39,10 +39,8 @@ function Vehicle(props) {
         .then((results) => {
             setRoutes(results);
             let availableRoutes = [];
-        availableRoutes = props.routeIds.map((routeId) => results.find((({id}) => id === routeId)));
-        console.log(availableRoutes.map((avaibleRoute) => avaibleRoute.departureLocation + ' - ' + avaibleRoute.arrivalLocation));
-
-        setDepartureArrivalLocations(availableRoutes.map((avaibleRoute) => avaibleRoute.departureLocation + ' - ' + avaibleRoute.arrivalLocation));
+            availableRoutes = props.routeIds.map((routeId) => results.find((({id}) => id === routeId)));
+            setDepartureArrivalLocations(availableRoutes.map((avaibleRoute) => avaibleRoute.departureLocation + ' - ' + avaibleRoute.arrivalLocation));
         })
         .catch(api.errorAlert);
     }, [props.routeIds]);
@@ -70,7 +68,7 @@ function Vehicle(props) {
                         currentMileage,
                         selectedState,
                         selectedParking,
-                        currentRoutes //mozna zrobic na podstawie listy wyboru tras -> wziac routeId  
+                        currentRoutes
                         )
                     .then(() => 
                         props.updateVehicle()
@@ -171,9 +169,7 @@ function Vehicle(props) {
                     <div className="available-routes-container">
                         {departureArrivalLocations.map((location, i) => {
                                 return (
-                                    <span key={i}>
-                                        <p>{location}</p>
-                                    </span>
+                                    <p key={i}>{location}</p>
                                 );
                             })}
                     </div>

@@ -35,11 +35,16 @@
 .vehicle-info.route-info-container span:first-child {
     display: flex;
     align-items: center;
-    height: 46px;
 }
 
-.vehicle-info.route-info-container span:last-child {
+.vehicle-info.route-info-container .available-routes-container {
     display: flex;
+    flex-direction: column;
+    width: 170px;
+}
+
+.vehicle-info.route-info-container .available-routes-container span {
+    font-weight: normal;
 }
 
 .vehicle-info-page button {

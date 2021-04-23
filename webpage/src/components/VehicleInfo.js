@@ -94,9 +94,7 @@ function VehicleInfo() {
                             state={vehicle.state}
                             parking={vehicle.parking}
                             seats={vehicle.seats}
-                            // arrivalDepartureLocation={findDepartureArrivalLocation(vehicle.routeIds)}
                             routeIds={vehicle.routeIds}
-                            // departureLocation={vehicle.departureLocation}
                             mileage={vehicle.mileage}
                             combustion={vehicle.combustion}
                             updateVehicle={updateVehicle}
