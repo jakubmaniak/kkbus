@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import '../styles/WorkSchedule.css';
 
 import * as api from '../api';
+
 import { routeFormatter } from '../helpers/text-formatters';
 
-import '../styles/WorkSchedule.css';
 import Dropdown from './Dropdown';
 import Loader from './Loader';
 import WorkScheduleItem from './WorkScheduleItem';
