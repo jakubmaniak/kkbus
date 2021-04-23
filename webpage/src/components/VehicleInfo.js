@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import '../styles/VehicleInfo.css';
 
 import * as api from '../api';
-import Vehicle from './Vehicle';
+
 import { fromValue } from '../helpers/from-value';
 import { routeFormatter } from '../helpers/text-formatters';
 
-import '../styles/VehicleInfo.css';
+import Vehicle from './Vehicle';
 import Modal from './Modal';
 import DropdownMultiple from './DropdownMultiple';
 import Dropdown from './Dropdown';
@@ -53,6 +54,7 @@ function VehicleInfo() {
         api.getAllVehicles()
         .then((results) => {
             setVehicles(results);
+
             setTimeout(() => {
                 setLoading(false);
             }, Math.max(0, 1000 - (Date.now() - loadingInitTime)));
@@ -132,16 +134,16 @@ function VehicleInfo() {
                 <section className="content">
                     <form className="vehicle-edit">
                         <div className="input-container"> 
-                            <input placeholder="Marka" onChange={fromValue(setBrand)}/>
-                            <input placeholder="Model" onChange={fromValue(setModel)}/>
+                            <input placeholder="Marka" value={brand} onChange={fromValue(setBrand)}/>
+                            <input placeholder="Model" value={model} onChange={fromValue(setModel)}/>
                         </div>
                        <div className="input-container">
-                            <input placeholder="Rocznik" onChange={fromValue(setYear)}/>
-                            <input placeholder="Przebieg" onChange={fromValue(setMileage)}/>
+                            <input placeholder="Rocznik" value={year} onChange={fromValue(setYear)}/>
+                            <input placeholder="Przebieg" value={mileage} onChange={fromValue(setMileage)}/>
                        </div>
                         <div className="input-container">
-                            <input placeholder="Rejestracja" onChange={fromValue(setPlate)}/>
-                            <input placeholder="Ilość miejsc" onChange={fromValue(setSeats)}/>
+                            <input placeholder="Rejestracja" value={plate} onChange={fromValue(setPlate)}/>
+                            <input placeholder="Ilość miejsc" value={seats} onChange={fromValue(setSeats)}/>
                         </div>
                         <Dropdown 
                             placeholder="Aktualny stan pojazdu"
@@ -158,8 +160,6 @@ function VehicleInfo() {
                             items={routes}
                             selectedItems={selectedRoutes}
                             textFormatter={routeFormatter}
-                            handleSelect={(item, items) => console.log('select', items)}
-                            handleUnselect={(item, items) => console.log('unselect', items)}
                             handleChange={setSelectedRoutes}
                         />
                     </form>
