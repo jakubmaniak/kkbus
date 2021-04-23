@@ -8,12 +8,10 @@ function TimetableItem(props) {
 
     useEffect(() => {
         api.getUserInfo()
-        .then((result) => {
-            setUser(result);
-        })
-        .catch((err) => {
-            throw err;
-        });
+            .then((result) => {
+                setUser(result);
+            })
+            .catch(api.errorAlert);
     }, [])
 
     return (
