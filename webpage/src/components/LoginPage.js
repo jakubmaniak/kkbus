@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import '../styles/AuthPage.css';
 
 import { fromValue } from '../helpers/from-value';
+
 import * as api from '../api';
 
 import background from '../static/background.jpg';
-import '../styles/AuthPage.css';
-
 
 
 function LoginPage() {
@@ -19,13 +19,10 @@ function LoginPage() {
         ev.preventDefault();
         
         api.login(userLogin, userPassword)
-        .then((data) => {
-            //data.result.sessionToken
-            history.replace('/');
-        })
-        .catch((err) => {
-            alert(api.errorToString(err));
-        });
+            .then(() => {
+                history.replace('/');
+            })
+            .catch(api.errorAlert);
     }
 
     return (
