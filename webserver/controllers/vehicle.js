@@ -31,13 +31,11 @@ module.exports.addVehicle = (vehicle) => {
 };
 
 module.exports.findAllVehicles = () => {
-    return db.query(`SELECT vehicles.*, routes.departureLocation, routes.arrivalLocation
-        FROM vehicles`
-    );
+    return db.query('SELECT * FROM vehicles');
 };
 
 module.exports.findVehicle = (vehicleId) => {
-    return db.query(`SELECT vehicles.*, routes.departureLocation, routes.arrivalLocation
+    return db.query(`SELECT *
         FROM vehicles
         WHERE vehicles.id=?
         LIMIT 1`,
