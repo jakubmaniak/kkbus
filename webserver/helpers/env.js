@@ -5,8 +5,8 @@ const env = JSON.parse(fs.readFileSync('env.json'));
 module.exports = {
     ...env,
     server: {
-        host: env.host || 'localhost',
-        port: env.port || 3200
+        host: env.server.host || 'localhost',
+        port: env.server.port || 3200
     },
     jwtSecret: env.jwtSecret || 'kkbus_jwt_secret',
     mysql: {
