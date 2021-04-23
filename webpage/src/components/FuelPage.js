@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import '../styles/FuelPage.css';
 
 import * as api from '../api';
+
 import FuelHistoryItem from './FuelHistoryItem';
 import FuelUsageChart from './FuelUsageChart';
 import Dropdown from './Dropdown';
 import { ModalLoader } from './Loader';
 
-import '../styles/FuelPage.css';
 
 function FuelPage() {
     let [loading, setLoading] = useState(true);
@@ -17,12 +18,14 @@ function FuelPage() {
     let [vehicles, setVehicles] = useState([]);
 
     useEffect(() => {
-        api.getAllVehicles().then((vehicles) => {
-            setVehicles(vehicles);
-            setTimeout(() => {
-                setLoading(false);
-            }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
-        });
+        api.getAllVehicles()
+            .then((vehicles) => {
+                setVehicles(vehicles);
+                setTimeout(() => {
+                    setLoading(false);
+                }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
+            })
+            .cathc(api.errorAlert);
     }, []);
 
     function handleVehicleChange(item) {
@@ -34,8 +37,8 @@ function FuelPage() {
 
     function getData(vehicleId) {
         api.getRefuels(vehicleId)
-        .then(setRefuels)
-        .catch(api.errorAlert);
+            .then(setRefuels)
+            .catch(api.errorAlert);
     }
 
     return (
