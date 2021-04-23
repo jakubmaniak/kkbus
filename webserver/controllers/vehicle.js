@@ -9,7 +9,7 @@ let { getFirst } = require('../helpers/query-utils');
     `year` SMALLINT UNSIGNED NOT NULL , 
     `plate` VARCHAR(16) NULL , 
     `parking` TEXT NULL , 
-    `routeId` INT UNSIGNED NULL,
+    `routeIds` TEXT NULL,
     `seats` SMALLINT UNSIGNED NOT NULL , 
     `mileage` INT UNSIGNED NULL DEFAULT '0' , 
     PRIMARY KEY (`id`)
@@ -24,26 +24,21 @@ module.exports.addVehicle = (vehicle) => {
         vehicle.year,
         vehicle.plate || null,
         vehicle.parking || null,
-        vehicle.routeId || null,
+        vehicle.routeIds.join(',') || '',
         vehicle.seats,
         vehicle.mileage || 0
     ]);
 };
 
 module.exports.findAllVehicles = () => {
-    //return db.query('SELECT * FROM vehicles');
     return db.query(`SELECT vehicles.*, routes.departureLocation, routes.arrivalLocation
-        FROM vehicles
-        LEFT JOIN routes ON vehicles.routeId=routes.id`
+        FROM vehicles`
     );
 };
 
 module.exports.findVehicle = (vehicleId) => {
-    //return db.query('SELECT * FROM vehicles WHERE id=? LIMIT 1', [vehicleId])
-    //    .then(getFirst);
     return db.query(`SELECT vehicles.*, routes.departureLocation, routes.arrivalLocation
         FROM vehicles
-        LEFT JOIN routes ON vehicles.routeId=routes.id
         WHERE vehicles.id=?
         LIMIT 1`,
         [vehicleId]
@@ -52,7 +47,7 @@ module.exports.findVehicle = (vehicleId) => {
 
 module.exports.updateVehicle = (vehicleId, vehicle) => {
     return db.query(`UPDATE vehicles
-        SET state=?, brand=?, model=?, year=?, plate=?, parking=?, routeId=?, seats=?, mileage=?
+        SET state=?, brand=?, model=?, year=?, plate=?, parking=?, routeIds=?, seats=?, mileage=?
         WHERE id=?`, [
             vehicle.state || null,
             vehicle.brand,
@@ -60,7 +55,7 @@ module.exports.updateVehicle = (vehicleId, vehicle) => {
             vehicle.year,
             vehicle.plate || null,
             vehicle.parking || null,
-            vehicle.routeId || null,
+            vehicle.routeIds.join(',') || '',
             vehicle.seats,
             vehicle.mileage || 0,
             vehicleId

@@ -15,7 +15,8 @@ router.get('/vehicles', [minimumRole('driver')], async (req, res, next) => {
     let vehicles = (await vehicleController.findAllVehicles()).map((vehicle) => ({
         ...vehicle,
         combustion: 0,
-        driver: null
+        driver: null,
+        routeIds: vehicle.routeIds.split(',')
     }));
     res.ok(vehicles);
 });
@@ -32,7 +33,7 @@ router.get('/vehicle/:id', [minimumRole('driver')], async (req, res, next) => {
         return next(err);
     }
     
-    vehicle = { ...vehicle, combustion: 0, driver: null };
+    vehicle = { ...vehicle, combustion: 0, driver: null, routeIds: vehicle.routeIds.split(',') };
 
     res.ok(vehicle);
 });
@@ -46,12 +47,12 @@ router.post('/vehicle', [
         year: number,
         plate?: string,
         parking?: string,
-        routeId?: number,
+        routeIds?: number[],
         seats: number,
         mileage?: number
     }`)
 ], async (req, res, next) => {
-    let { state, brand, model, year, plate, parking, routeId, seats, mileage } = req.body;
+    let { state, brand, model, year, plate, parking, routeIds, seats, mileage } = req.body;
 
     if (mileage == null) mileage = 0;
 
@@ -62,7 +63,7 @@ router.post('/vehicle', [
         year,
         plate,
         parking,
-        routeId,
+        routeIds,
         seats,
         mileage
     });
@@ -79,7 +80,7 @@ router.put('/vehicle/:id', [
         year: number,
         plate?: string,
         parking?: string,
-        routeId?: number,
+        routeIds?: number[],
         seats: number,
         mileage?: number
     }`)
@@ -87,7 +88,7 @@ router.put('/vehicle/:id', [
     let wantedId = parseInt(req.params.id);
     if (isNaN(wantedId)) return next(invalidRequest());
 
-    let { state, brand, model, year, plate, parking, routeId, seats, mileage } = req.body;
+    let { state, brand, model, year, plate, parking, routeIds, seats, mileage } = req.body;
 
     if (mileage == null) mileage = 0;
 
@@ -98,7 +99,7 @@ router.put('/vehicle/:id', [
         year,
         plate,
         parking,
-        routeId,
+        routeIds,
         seats,
         mileage
     };
