@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-
 import '../styles/LoyaltyProgram.css';
-import * as api from '../api';
-import { fromValue } from '../helpers/from-value';
 
+import * as api from '../api';
+
+import { fromValue } from '../helpers/from-value';
 import UserContext from '../contexts/User';
+
 import Reward from './Reward';
 import Modal from './Modal';
 import { ModalLoader } from './Loader';
@@ -15,8 +16,10 @@ function LoyaltyProgram() {
     let loadingInitTime = Date.now();
 
     let history = useHistory();
-    let [rewards, setRewards] = useState([]);
+
     let [modalAddRewardVisibility, setModalAddRewardVisibility] = useState(false);
+
+    let [rewards, setRewards] = useState([]);
     let [name, setName] = useState('');
     let [requiredPoints, setRequiredPoints] = useState('');
     let [amount, setAmount] = useState('');
@@ -26,19 +29,21 @@ function LoyaltyProgram() {
 
     useEffect(() => {
         api.getAllRewards()
-        .then((results) => {
-            setRewards(results);
-            setTimeout(() => {
-                setLoading(false);
-            }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
-        });
+            .then((results) => {
+                setRewards(results);
+                setTimeout(() => {
+                    setLoading(false);
+                }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
+            })
+            .catch(api.errorAlert);
     }, []);
 
     function updateRewards() {
         api.getAllRewards()
-        .then((results) => {
-            setRewards(results);
-        });
+            .then((results) => {
+                setRewards(results);
+            })
+            .catch(api.errorAlert);
     }
 
     function addReward() {
@@ -52,19 +57,18 @@ function LoyaltyProgram() {
         }
         
         api.addReward(name, currentRequiredPoints, currentAmount, currentLimit)
-        .then((id) => {
-            setRewards([
-                ...rewards,
-                {
-                    id,
-                    name,
-                    requiredPoints: currentRequiredPoints,
-                    amount: currentAmount,
-                    limit: currentLimit
-                }
-            ]);
-            setModalAddRewardVisibility(false);
-        });
+            .then((id) => {
+                setRewards([
+                    ...rewards,
+                    {
+                        id, name, requiredPoints: currentRequiredPoints, amount: currentAmount, limit: currentLimit
+                    }
+                ]);
+
+                updateRewards();
+                setModalAddRewardVisibility(false);
+            })
+            .catch(api.errorAlert);
     }
 
     function showModal() {
@@ -72,18 +76,16 @@ function LoyaltyProgram() {
         setRequiredPoints('');
         setAmount('');
         setLimit('');
+
         setModalAddRewardVisibility(true);
     }
 
-    function deleteReward(rewardId) {
-        let reward = rewards.find(({id}) => id === rewardId);
-        let index = rewards.indexOf(reward);     
-        api.deleteReward(rewardId);
-
-        rewards.splice(index, 1);
-        setRewards(rewards);
-        
-        updateRewards();
+    function deleteReward(rewardId) {           
+        api.deleteReward(rewardId)
+            .then(() => {
+                updateRewards();
+            })
+            .catch(api.errorAlert);;
     }
 
     function clientGuestTile() {
