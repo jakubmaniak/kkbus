@@ -1,10 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
-
 import '../styles/VehicleInfo.css';
 
 import * as api from '../api';
+
 import { fromValue} from '../helpers/from-value';
 import { routeFormatter } from '../helpers/text-formatters';
+
 import Modal from './Modal';
 import UserContext from '../contexts/User';
 import Dropdown from './Dropdown';
