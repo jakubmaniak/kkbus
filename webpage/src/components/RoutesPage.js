@@ -1,19 +1,24 @@
 import React, { useEffect, useState, useContext } from 'react';
 import '../styles/RoutesPage.css';
-import Route from './Route';
+
 import * as api from '../api';
+
 import UserContext from '../contexts/User';
+import { fromValue } from '../helpers/from-value';
+
 import { ModalLoader } from './Loader';
 import Modal from './Modal';
-import { fromValue } from '../helpers/from-value';
-import NotificationModal from './NotificationModal';
+import Route from './Route';
+
 
 function RoutesPage() {
     let [loading, setLoading] = useState(true);
     let loadingInitTime = Date.now();
 
     let [routes, setRoutes] = useState([]);
+
     let [modalVisibility, setModalVisibility] = useState(false);
+
     let { role } = useContext(UserContext).user;
 
     let [departureLocation, setDepartureLocation] = useState('');
@@ -24,29 +29,34 @@ function RoutesPage() {
     
     useEffect(() => {
         api.getAllRoutes()
-        .then((routes) => {
-            setRoutes(routes);
-            setTimeout(() => {
-                setLoading(false);
-            }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
-        });
+            .then((routes) => {
+                setRoutes(routes);
+                setTimeout(() => {
+                    setLoading(false);
+                }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
+            })
+            .catch(api.errorAlert);
     }, []);
 
     function refreshRoutes() {
         api.getAllRoutes()
-        .then(setRoutes);
+            .then(setRoutes)
+            .catch(api.errorAlert);
     }
 
     function deleteRoute(routeId) {
         api.deleteRoute(routeId)
-        .then(() => refreshRoutes());
+            .then(() => refreshRoutes())
+            .catch(api.errorAlert);
     }
 
     function addRoute() {
         if(departureLocation !== '' && arrivalLocation !== '' && stops !== '' && hours !== '' && prices !== '') {
             setModalVisibility(false);
+
             api.addRoute(departureLocation, arrivalLocation, stops, hours, prices, null)
-            .then(() => refreshRoutes());
+                .then(() => refreshRoutes())
+                .catch(api.errorAlert);
         }
         else {
             alert('Wypełnij wszystkie pola!');
@@ -56,11 +66,13 @@ function RoutesPage() {
     function convertHoursIntoArray(ev) {
         let string = ev.target.value;
         let array = string.split(',').map((element) => element.trim());
+
         setHours(array);
     }
 
     function convertStopsPrices(ev) {
         let parts = ev.target.value.split(',').map((e) => e.trim());
+
         setStops(parts.filter((e, i) => i % 2 === 0));
         setPrices(parts.filter((e, i) => i % 2 === 1).map(parseFloat));   
     }
@@ -109,8 +121,8 @@ function RoutesPage() {
                     <header>Dodawanie trasy</header>
                     <section className="content">
                         <form className="edit-route">
-                            <input placeholder="Punkt startowy" onChange={fromValue(setDepartureLocation)}/>
-                            <input placeholder="Punkt docelowy" onChange={fromValue(setArrivalLocation)}/>
+                            <input placeholder="Punkt startowy" value={departureLocation} onChange={fromValue(setDepartureLocation)}/>
+                            <input placeholder="Punkt docelowy" value={arrivalLocation} onChange={fromValue(setArrivalLocation)}/>
                             <textarea placeholder="Godziny odjazdu (odzielone przecinkami)" onChange={convertHoursIntoArray}/>
                             <textarea placeholder="Przystanki (cena, przystanek, cena, przystanek...)" onChange={(ev) => convertStopsPrices(ev)}/>
                         </form>
