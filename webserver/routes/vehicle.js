@@ -16,7 +16,7 @@ router.get('/vehicles', [minimumRole('driver')], async (req, res, next) => {
         ...vehicle,
         combustion: 0,
         driver: null,
-        routeIds: vehicle.routeIds.split(',')
+        routeIds: vehicle.routeIds.split(',').map((id) => parseInt(id))
     }));
     res.ok(vehicles);
 });
@@ -33,7 +33,7 @@ router.get('/vehicle/:id', [minimumRole('driver')], async (req, res, next) => {
         return next(err);
     }
     
-    vehicle = { ...vehicle, combustion: 0, driver: null, routeIds: vehicle.routeIds.split(',') };
+    vehicle = { ...vehicle, combustion: 0, driver: null, routeIds: vehicle.routeIds.split(',').map((id) => parseInt(id)) };
 
     res.ok(vehicle);
 });
