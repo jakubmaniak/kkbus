@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import '../styles/AuthPage.css';
+
 import background from '../static/background.jpg';
 
 import { fromValue } from '../helpers/from-value';
 import * as api from '../api';
 
 import { Link, useHistory } from 'react-router-dom';
-import PostSignup from './PostSignup';
 
 function SignupPage() {
     let history = useHistory();
@@ -20,12 +20,10 @@ function SignupPage() {
         ev.preventDefault();
 
         api.register(email, firstname, lastName, birthDate, phoneNumber)
-        .then((data) => {
-            history.replace('/');
-        })
-        .catch((err) => {
-            alert(api.errorToString(err));
-        });
+            .then(() => {
+                history.replace('/');
+            })
+            .catch(api.errorAlert);
     }
 
     return (
