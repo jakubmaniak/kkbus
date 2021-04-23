@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import '../styles/LoyaltyProgram.css';
-import Modal from './Modal';
+
 import { fromValue } from '../helpers/from-value';
+
 import * as api from '../api';
+
 import NotificationModal from './NotificationModal';
+import Modal from './Modal';
 
 function Reward(props) {
     let [modalEditRewardVisibility, setModalEditRewardVisibility] = useState(false);
     let [modalDeleteRewardVisibility, setModalDeleteRewardVisibility] = useState(false);
+
     let [name, setName] = useState(props.name);
     let [requiredPoints, setRequiredPoints] = useState(props.requiredPoints);
     let [amount, setAmount] = useState(props.amount);
