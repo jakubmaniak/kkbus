@@ -40,9 +40,10 @@ function Reward(props) {
                 let currentLimit = limit !== props.limit ? parseInt(limit) : props.limit;
                 
                 api.updateReward(rewardId, currentName, currentRequirePoints, currentAmout, currentLimit)
-                .then(() => {
-                    props.updateRewards();
-                });
+                    .then(() => {
+                        props.updateRewards();
+                    })
+                    .catch(api.errorAlert);
             }
             else {
                 alert('Nieprawidłowy typ danych');
