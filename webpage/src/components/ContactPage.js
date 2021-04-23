@@ -24,28 +24,34 @@ function ContactPage() {
     let [contactCopy, setContactCopy] = useState({ });
 
     useEffect(() => {
-        api.getContact().then((contact) => {
-            setContactCopy(contact);
+        api.getContact()
+            .then((contact) => {
+                setContactCopy(contact);
 
-            setAddress(contact.address);
-            setZipCode(contact.zipCode);
-            setPhoneNumber(contact.phoneNumber);
-            setFaxNumber(contact.faxNumber);
-            setEmail(contact.email);
-            setTimeout(() => {
-                setLoading(false);
-            }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
-        });
+                setAddress(contact.address);
+                setZipCode(contact.zipCode);
+                setPhoneNumber(contact.phoneNumber);
+                setFaxNumber(contact.faxNumber);
+                setEmail(contact.email);
+                
+                setTimeout(() => {
+                    setLoading(false);
+                }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
+            })
+            .catch(api.errorAlert);
     }, []);
 
     function updateContact() {
         setModalVisibility(false);
+
         api.updateContact(address, zipCode, email, phoneNumber, faxNumber)
-            .then(setContactCopy);
+            .then(setContactCopy)
+            .catch(api.errorAlert);
     }
 
     function cancelUpdate() {
         let contact = contactCopy;
+        
         setAddress(contact.address);
         setZipCode(contact.zipCode);
         setPhoneNumber(contact.phoneNumber);
