@@ -32,12 +32,15 @@ function Vehicle(props) {
 
     let [selectedState, setSelectedState] = useState(props.state);
     let [selectedParking, setSelectedParking] = useState(props.parking);
-    let [selectedRoutes, setSelectedRoutes] = useState(props.route);
+    let [selectedRoutes, setSelectedRoutes] = useState([]);
 
     useEffect(() => {
         api.getAllRoutes()
         .then((results) => {
             setRoutes(results);
+
+            setSelectedRoutes(props.routeIds.map((routeId) => results.find((({id}) => id === routeId))))
+           
             let availableRoutes = [];
             availableRoutes = props.routeIds.map((routeId) => results.find((({id}) => id === routeId)));
             setDepartureArrivalLocations(availableRoutes.map((avaibleRoute) => avaibleRoute.departureLocation + ' - ' + avaibleRoute.arrivalLocation));
@@ -115,8 +118,8 @@ function Vehicle(props) {
                         />
                         <DropdownMultiple 
                             placeholder="Dostępne trasy dla pojazdów"
-                            selectedItems={selectedRoutes}
                             items={routes}
+                            selectedItems={selectedRoutes}
                             textFormatter={routeFormatter}
                             handleSelect={(item, items) => console.log('select', items)}
                             handleUnselect={(item, items) => console.log('unselect', items)}
@@ -145,11 +148,6 @@ function Vehicle(props) {
                 </section>
             </Modal>
         );
-    }
-
-    
-    function setDetartureArrivalLocations(routeIds) {
-        
     }
 
     return (
