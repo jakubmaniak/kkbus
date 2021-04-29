@@ -29,6 +29,13 @@ module.exports = {
         
         return results;
     },
+    renameProp: (prop, newName) => (results) => {
+        for (let result of results) {
+            result[newName] = result[prop];
+            delete result[prop];
+        }
+        return results;
+    },
     splitProps: (...props) => (results) => {
         for (let result of results) {
             for (let prop of props) {

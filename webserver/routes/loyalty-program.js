@@ -1,51 +1,52 @@
 const express = require('express');
-const { invalidRequest, notFound } = require('../errors');
-const bodySchema = require('../middlewares/body-schema');
 const router = express.Router();
-const { minimumRole } = require('../middlewares/roles');
+const { invalidRequest, notFound, invalidValue } = require('../errors');
+const bodySchema = require('../middlewares/body-schema');
+const { minimumRole, roles } = require('../middlewares/roles');
+
+const rewardController = require('../controllers/reward');
 
 const userPoints = new Map([
     ['annanowak1234', 1000000]
 ]);
 
-const rewards = new Map([
-    [1, { id: 1, name: 'Zniżka 10%', requiredPoints: 5000, amount: 0, limit: 0 }],
-    [2, { id: 2, name: 'Zniżka 20%', requiredPoints: 8000, amount: 0, limit: 0 }],
-    [3, { id: 3, name: 'Zniżka 40%', requiredPoints: 12000, amount: 0, limit: 0 }],
-    [4, { id: 4, name: 'Mała maskotka firmy', requiredPoints: 12000, amount: 500, limit: 3 }],
-    [5, { id: 5, name: 'Duża maskotka firmy', requiredPoints: 20000, amount: 100, limit: 1 }]
-]);
 
-
-router.get('/loyalty-program', (req, res) => {
+router.get('/loyalty-program', async (req, res, next) => {
     let { login, role } = req.user;
     
     let points = 0;
 
-    if (role === 'client') {
+    if (role == roles.client) {
         points = userPoints.get(login);
     }
 
-    res.ok({ points, rewards: [...rewards.values()] });
+    res.ok({
+        points,
+        rewards: await rewardController.findAllRewards()
+    });
 });
 
-router.get('/loyalty-program/rewards', (req, res) => {
-    res.ok([...rewards.values()]);
+router.get('/loyalty-program/rewards', async (req, res, next) => {
+    res.ok(await rewardController.findAllRewards());
 });
 
-router.get('/loyalty-program/reward/:id', [minimumRole('client')], (req, res) => {
-    let id = parseInt(req.params.id);
-    if (isNaN(id)) throw invalidRequest();
+router.get('/loyalty-program/reward/:rewardId', [minimumRole('client')], async (req, res, next) => {
+    let rewardId = parseInt(req.params.rewardId);
+    if (isNaN(rewardId)) return next(invalidRequest());
 
     let { login } = req.user;
 
-    if (!rewards.has(id)) throw notFound();
-    if (!userPoints.has(login)) throw invalidRequest();
-    
-    let reward = rewards.get(id);
+    let reward;
+    try {
+        reward = await rewardController.findReward(rewardId);
+    }
+    catch (err) {
+        return next(err);
+    }
+
+    if (!userPoints.has(login)) return next(invalidRequest());
     let points = userPoints.get(login);
-    
-    if (points < reward.requiredPoints) throw invalidRequest();
+    if (points < reward.requiredPoints) return next(invalidRequest());
 
     points -= reward.requiredPoints;
     userPoints.set(login, points);
@@ -55,52 +56,82 @@ router.get('/loyalty-program/reward/:id', [minimumRole('client')], (req, res) =>
 
 router.post('/loyalty-program/reward', [
     minimumRole('owner'),
-    bodySchema('{name: string, requiredPoints: number, amount?: number, limit?: number}')
-], (req, res) => {
+    bodySchema(`{
+        name: string,
+        requiredPoints: number,
+        amount?: number,
+        limit?: number
+    }`)
+], async (req, res, next) => {
     let { name, requiredPoints, amount, limit } = req.body;
 
-    let id = rewards.size + 1;
+    if (amount < 0 || limit < 0) {
+        return next(invalidValue());
+    }
 
-    rewards.set(id, {
-        id, name,
-        requiredPoints,
-        amount, limit
-    });
+    try {
+        let result = await rewardController.addReward({
+            name,
+            requiredPoints,
+            amount: amount ?? 0,
+            limit: limit ?? 0
+        });
 
-    res.ok({ id });
+        res.ok({ id: result.insertId });
+    }
+    catch {
+        return next(serverError());
+    }
 });
 
-router.put('/loyalty-program/reward/:id', [
+router.put('/loyalty-program/reward/:rewardId', [
     minimumRole('owner'),
-    bodySchema('{name: string, requiredPoints: number, amount: number, limit: number}')
-], (req, res) => {
-    let id = parseInt(req.params.id);
-    
-    if (isNaN(id)) throw invalidRequest();
-    if (!rewards.has(id)) throw notFound();
+    bodySchema(`{
+        name: string,
+        requiredPoints: number,
+        amount: number,
+        limit: number
+    }`)
+], async (req, res, next) => {
+    let rewardId = parseInt(req.params.rewardId);
+    if (isNaN(rewardId)) {
+        return next(invalidRequest());
+    }
 
     let { name, requiredPoints, amount, limit } = req.body;
+    if (amount < 0 || limit < 0) {
+        return next(invalidValue());
+    }
 
     let updatedReward = {
-        id,
         name,
         requiredPoints,
         amount,
         limit
     };
 
-    rewards.set(id, updatedReward);
+    try {
+        await rewardController.updateReward(rewardId, updatedReward);
+    }
+    catch (err) {
+        return next(err);
+    }
 
-    res.ok(updatedReward);
+    res.ok({ id: rewardId, ...updatedReward });
 });
 
-router.delete('/loyalty-program/reward/:id', [minimumRole('owner')], (req, res) => {
-    let id = parseInt(req.params.id);
-    if (isNaN(id)) throw invalidRequest();
+router.delete('/loyalty-program/reward/:rewardId', [minimumRole('owner')], async (req, res, next) => {
+    let rewardId = parseInt(req.params.rewardId);
+    if (isNaN(rewardId)) {
+        return next(invalidRequest());
+    }
 
-    if (!rewards.has(id)) throw notFound();
-
-    rewards.delete(id);
+    try {
+        await rewardController.deleteReward(rewardId);
+    }
+    catch (err) {
+        return next(err);
+    }
 
     res.ok();
 });
