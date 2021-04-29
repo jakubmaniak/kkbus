@@ -23,7 +23,6 @@ router.post('/reports/route/:routeId', [
     if (isNaN(routeId)) return next(invalidValue());
 
     let { stop, vehicleId, amount } = req.body;
-    vehicleId = parseInt(vehicleId, 10);
     
     if (amount < 0) {
         return next(invalidValue());
