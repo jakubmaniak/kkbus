@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { invalidRequest, serverError } = require('../errors');
+const { invalidRequest, serverError, invalidValue } = require('../errors');
 const { deleteProps, resolveDateTime3 } = require('../helpers/query-utils');
 const { parseDateTime } = require('../helpers/date');
 const bodySchema = require('../middlewares/body-schema');
@@ -152,10 +152,13 @@ router.post('/vehicle/:vehicleId/refuel', [
     }`)
 ], async (req, res, next) => {
     let vehicleId = parseInt(req.params.vehicleId);
-    if (isNaN(vehicleId)) return next(invalidRequest());
+    if (isNaN(vehicleId)) return next(invalidValue());
 
     let { cost, amount, mileage } = req.body;
-    let date = parseDateTime(new Date());
+    
+    if (cost < 0 || amount <= 0 || mileage < 0) {
+        return next(invalidValue());
+    }
 
     let vehicle;
     try {
@@ -165,14 +168,17 @@ router.post('/vehicle/:vehicleId/refuel', [
         return next(err);
     }
 
-    let result;
+    if (mileage < vehicle.mileage) {
+        return next(invalidValue());
+    }
+
     try {
-        result = await refuelController.addRefuel({
+        let result = await refuelController.addRefuel({
             vehicleId,
             cost,
             amount,
             mileage,
-            date
+            date: parseDateTime(new Date())
         });
         
         if (mileage > vehicle.mileage) {
@@ -181,12 +187,12 @@ router.post('/vehicle/:vehicleId/refuel', [
                 mileage
             });
         }
+
+        res.ok({ id: result.insertId });
     }
     catch {
         return next(serverError());
     }
-
-    res.ok({ id: result.insertId });
 });
 
 
