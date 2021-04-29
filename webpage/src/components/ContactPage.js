@@ -1,13 +1,17 @@
 import React, { useContext, useState, useEffect } from 'react';
 
 import * as api from '../api';
+
 import { fromValue } from '../helpers/from-value';
+import toast from '../helpers/toast';
 import UserContext from '../contexts/User';
+
 import Modal from './Modal';
 import { ModalLoader } from './Loader';
 
 import '../styles/ContactPage.css';
 import map from '../static/map.png';
+
 
 function ContactPage() {
     let [loading, setLoading] = useState(true);
@@ -45,7 +49,10 @@ function ContactPage() {
         setModalVisibility(false);
 
         api.updateContact(address, zipCode, email, phoneNumber, faxNumber)
-            .then(setContactCopy)
+            .then((contact) => {
+                setContactCopy(contact);
+                toast.success('Zmieniono dane kontaktowe');
+            })
             .catch(api.toastifyError);
     }
 
