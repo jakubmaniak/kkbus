@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../styles/FuelPage.css';
 
 import * as api from '../api';
-import { fromValue, floatFromValue } from '../helpers/from-value';
+import { fromValue } from '../helpers/from-value';
 
 import FuelHistoryItem from './FuelHistoryItem';
 import FuelUsageChart from './FuelUsageChart';
@@ -17,9 +17,9 @@ function FuelPage() {
     let [refuels, setRefuels] = useState([]);
     let [vehicleId, setVehicleId] = useState(-1);
     let [vehicles, setVehicles] = useState([]);
-    let [fuelCost, setFuelCost] = useState(0);
-    let [fuelAmount, setFuelAmount] = useState(0);
-    let [vehicleMileage, setVehicleMileage] = useState(0);
+    let [fuelCost, setFuelCost] = useState('');
+    let [fuelAmount, setFuelAmount] = useState('');
+    let [vehicleMileage, setVehicleMileage] = useState('');
 
     useEffect(() => {
         api.getAllVehicles()
@@ -51,7 +51,31 @@ function FuelPage() {
             return;
         }
 
-        api.addRefuel(vehicleId, fuelAmount, fuelCost, vehicleMileage)
+        let _fuelCost = parseFloat(fuelCost);
+        let _fuelAmount = parseFloat(fuelAmount);
+        let _vehicleMileage = parseFloat(vehicleMileage);        
+
+        if (isNaN(_fuelCost) || _fuelCost < 0) {
+            alert('Wprowadzony koszt paliwa jest niepoprawny');
+            return;
+        }
+
+        if (isNaN(_fuelAmount) || _fuelAmount <= 0) {
+            alert('Wprowadzona ilość paliwa jest niepoprawna');
+            return;
+        }
+
+        if (isNaN(_vehicleMileage) || _vehicleMileage < 0) {
+            alert('Wprowadzony przebieg pojazdu jest niepoprawny');
+            return;
+        }
+
+        api.addRefuel(vehicleId, _fuelAmount, _fuelCost, _vehicleMileage)
+            .then(() => {
+                setFuelCost('');
+                setFuelAmount('');
+                setVehicleMileage('');
+            })
             .catch(api.errorAlert);
     }
 
@@ -74,13 +98,13 @@ function FuelPage() {
                         <form className="fuel-form">
                             <input placeholder="Koszt tankowania [PLN]"
                                 value={fuelCost}
-                                onChange={floatFromValue(setFuelCost)} />
+                                onChange={fromValue(setFuelCost)} />
                             <input placeholder="Ilośc zatankowanego paliwa [L]"
                                 value={fuelAmount}
-                                onChange={floatFromValue(setFuelAmount)} />
+                                onChange={fromValue(setFuelAmount)} />
                             <input placeholder="Przebieg pojazdu [KM]"
                                 value={vehicleMileage}
-                                onChange={floatFromValue(setVehicleMileage)} />
+                                onChange={fromValue(setVehicleMileage)} />
                             <button type="button" className="submit" onClick={saveRefuelReport}>Zapisz tankowanie</button>
                         </form>
                     </div>
