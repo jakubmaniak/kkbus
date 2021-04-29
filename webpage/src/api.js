@@ -170,11 +170,11 @@ export async function buyReward(rewardId) {
     return sendGet('/loyalty-program/reward/' + rewardId);
 }
 
-export async function addReward(name, requiredPoints, amount = 0, limit = 0) {
+export async function addReward(name, requiredPoints, amount = null, limit = null) {
     return sendPost('/loyalty-program/reward', { name, requiredPoints, amount, limit });
 }
 
-export async function updateReward(rewardId, name, requiredPoints, amount = 0, limit = 0) {
+export async function updateReward(rewardId, name, requiredPoints, amount = null, limit = null) {
     return sendPut('/loyalty-program/reward/' + rewardId, { name, requiredPoints, amount, limit });
 }
 

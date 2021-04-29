@@ -3,8 +3,8 @@ CREATE TABLE ``rewards` (
     `id` INT NOT NULL AUTO_INCREMENT ,
     `name` VARCHAR(250) NOT NULL ,
     `requiredPoints` INT NOT NULL ,
-    `amount` INT NULL DEFAULT 0,
-    `limitPerUser` INT NULL DEFAULT 0, 
+    `amount` INT NULL DEFAULT NULL,
+    `limitPerUser` INT NULL DEFAULT NULL, 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 */

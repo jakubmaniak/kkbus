@@ -65,7 +65,7 @@ router.post('/loyalty-program/reward', [
 ], async (req, res, next) => {
     let { name, requiredPoints, amount, limit } = req.body;
 
-    if (amount < 0 || limit < 0) {
+    if ((amount != null && amount < 0) || (limit != null && limit < 0)) {
         return next(invalidValue());
     }
 
@@ -73,8 +73,8 @@ router.post('/loyalty-program/reward', [
         let result = await rewardController.addReward({
             name,
             requiredPoints,
-            amount: amount ?? 0,
-            limit: limit ?? 0
+            amount,
+            limit
         });
 
         res.ok({ id: result.insertId });
@@ -89,8 +89,8 @@ router.put('/loyalty-program/reward/:rewardId', [
     bodySchema(`{
         name: string,
         requiredPoints: number,
-        amount: number,
-        limit: number
+        amount?: number,
+        limit?: number
     }`)
 ], async (req, res, next) => {
     let rewardId = parseInt(req.params.rewardId, 10);
@@ -99,7 +99,7 @@ router.put('/loyalty-program/reward/:rewardId', [
     }
 
     let { name, requiredPoints, amount, limit } = req.body;
-    if (amount < 0 || limit < 0) {
+    if ((amount != null && amount < 0) || (limit != null && limit < 0)) {
         return next(invalidValue());
     }
 

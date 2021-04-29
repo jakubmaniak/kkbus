@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/LoyaltyProgram.css';
 
 import { fromValue } from '../helpers/from-value';
@@ -18,6 +18,17 @@ function Reward(props) {
     let [amount, setAmount] = useState(props.amount);
     let [limit, setLimit] = useState(props.limit);
 
+
+    useEffect(() => {
+        if (modalEditRewardVisibility) {
+            setName(props.name);
+            setRequiredPoints(props.requiredPoints);
+            setAmount(props.amount);
+            setLimit(props.limit);
+        }
+    }, [modalEditRewardVisibility]);
+
+
     function header() {
         if (props.role === 'guest' || props.role === 'client') {
             return <span>{props.name} ({props.requiredPoints})</span>;
@@ -33,27 +44,22 @@ function Reward(props) {
     function editReward(rewardId) {
         setModalEditRewardVisibility(false);
 
-        if(!isNaN(parseInt(requiredPoints)) && !isNaN(parseInt(amount)) && !isNaN(parseInt(limit))) {
-            if(name !== props.name || parseInt(requiredPoints) !== props.requiredPoints || parseInt(amount) !== props.amount || parseInt(limit) !== props.limit) {
-                let currentName = name !== props.name ? name : props.name;
-                let currentRequirePoints = requiredPoints !== props.requiredPoints ? parseInt(requiredPoints) : props.requiredPoints;
-                let currentAmout = amount !== props.amount ? parseInt(amount) : props.amount;
-                let currentLimit = limit !== props.limit ? parseInt(limit) : props.limit;
-                
-                api.updateReward(rewardId, currentName, currentRequirePoints, currentAmout, currentLimit)
-                    .then(() => {
-                        props.updateRewards();
-                        toast.success('Zmieniono dane nagrody');
-                    })
-                    .catch(api.toastifyError);
-            }
-            else {
-                toast.error('Nieprawidłowy typ danych');
-            }
+        let currentName = name;
+        let currentRequiredPoints = parseInt(requiredPoints, 10);
+        let currentAmount = (amount === null ? null : parseInt(amount, 10));
+        let currentLimit = (limit === null ? null : parseInt(limit, 10));
+
+        if (isNaN(currentRequiredPoints) || isNaN(currentAmount) || isNaN(currentLimit)) {
+            toast.error('Wprowadzone dane są niepoprawne');
+            return;
         }
-       else {
-           toast.error('Wypełnij wszystkie pola');
-       }     
+
+        api.updateReward(rewardId, currentName, currentRequiredPoints, currentAmount, currentLimit)
+        .then(() => {
+            props.updateRewards();
+            toast.success('Zmieniono dane nagrody');
+        })
+        .catch(api.toastifyError);    
     }
 
     return (
@@ -65,8 +71,8 @@ function Reward(props) {
             }
             {props.role === 'owner' ?
                 <>
-                    <span>{props.amount}</span> 
-                    <span>{props.limit}</span> 
+                    <span>{props.amount ?? '-'}</span> 
+                    <span>{props.limit ?? '-'}</span> 
                     <div className="modify">
                         <button className="edit" onClick={() => setModalEditRewardVisibility(true)}>Edytuj</button>
                         <button className="delete" onClick={() => setModalDeleteRewardVisibility(true)}>Usuń</button>
@@ -78,10 +84,16 @@ function Reward(props) {
                 <header>Edycja nagrody</header>
                 <section className="content">
                     <form>
-                        <input placeholder="Nazwa" defaultValue={props.name} onChange={fromValue(setName)}/>
-                        <input placeholder="Wymagane punkty" defaultValue={props.requiredPoints} onChange={fromValue(setRequiredPoints)}/>
-                        <input placeholder="Stan magazynu (puste = nieograniczony)" defaultValue={props.amount} onChange={fromValue(setAmount)}/>
-                        <input placeholder="Limit na 1 osobę (puste = bez limitu)" defaultValue={props.limit} onChange={fromValue(setLimit)}/>
+                        <input placeholder="Nazwa" value={name} onChange={fromValue(setName)}/>
+                        <input placeholder="Wymagane punkty" value={requiredPoints} onChange={fromValue(setRequiredPoints)}/>
+                        <input placeholder="Stan magazynu (puste = nieograniczony)"
+                            value={amount ?? ''}
+                            onChange={fromValue((value) => setAmount(value.trim() || null))}
+                        />
+                        <input placeholder="Limit na 1 osobę (puste = bez limitu)"
+                            value={limit ?? ''}
+                            onChange={fromValue((value) => setLimit(value.trim() || null))}
+                        />
                     </form>
                 </section>
                 <section className="footer">

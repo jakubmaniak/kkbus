@@ -48,25 +48,25 @@ function LoyaltyProgram() {
     }
 
     function addReward() {
-        let currentRequiredPoints = parseInt(requiredPoints);
-        let currentAmount = amount === '' ? 0 : parseInt(amount);
-        let currentLimit = limit === '' ? 0 : parseInt(limit);
+        let currentRequiredPoints = parseInt(requiredPoints, 10);
+        let currentAmount = amount === '' ? null : parseInt(amount, 10);
+        let currentLimit = limit === '' ? null : parseInt(limit, 10);
 
         if (isNaN(currentRequiredPoints) || isNaN(currentLimit) || isNaN(currentAmount)) {
-            toast.error('Nieprawidłowy typ danych');
+            toast.error('Wprowadzone dane są niepoprawne');
             return;
         }
         
         api.addReward(name, currentRequiredPoints, currentAmount, currentLimit)
-            .then((id) => {
-                setRewards([
-                    ...rewards,
-                    {
-                        id, name, requiredPoints: currentRequiredPoints, amount: currentAmount, limit: currentLimit
-                    }
-                ]);
-
-                updateRewards();
+            .then((result) => {
+                rewards.push({
+                    id: result.id,
+                    name,
+                    requiredPoints: currentRequiredPoints,
+                    amount: currentAmount,
+                    limit: currentLimit
+                });
+                
                 setModalAddRewardVisibility(false);
                 toast.success('Dodano nagrodę');
             })
