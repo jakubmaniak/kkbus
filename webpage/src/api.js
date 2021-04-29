@@ -66,6 +66,11 @@ export async function deleteRoute(routeId) {
 }
 
 
+export async function addRouteReport(routeId, stop, vehicleId, amount) {
+    return sendPost('/reports/route/' + routeId, { stop, vehicleId, amount });
+}
+
+
 export async function addBooking(routeId, date, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop) {
     return sendPost('/booking', { routeId, date, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop });
 }
