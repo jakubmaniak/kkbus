@@ -36,10 +36,10 @@ else {
 process.stdin.on('data', (data) => {
     let command = data.toString().toLowerCase().trim();
 
-    if (command === 'p' || command == 'wp' || command === 'page') {
+    if (command === 'r' || command === 'react') {
         pageIO();
     }
-    else if (command === 's' || command == 'ws' || command === 'server') {
+    else if (command === 's' || command === 'server') {
         serverIO();
     }
 });
