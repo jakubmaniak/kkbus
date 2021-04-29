@@ -74,8 +74,9 @@ function VehicleInfo() {
         api.deleteVehicle(vehicleId)
         .then(() => {
             updateVehicle();
+            toast.success('Usunięto pojazd');
         })
-        .catch(api.toastifyError);;
+        .catch(api.toastifyError);
     }
 
     function addVehicle() {
@@ -90,6 +91,7 @@ function VehicleInfo() {
                 api.addVehicle(brand, model, parseInt(year), parseInt(seats), plate, parseInt(mileage), selectedState, selectedParking, currentRoutes)
                 .then(() => {
                     updateVehicle();
+                    toast.success('Dodano pojazd');
                 })
                 .catch(api.toastifyError);
             }

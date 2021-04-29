@@ -43,6 +43,7 @@ function Reward(props) {
                 api.updateReward(rewardId, currentName, currentRequirePoints, currentAmout, currentLimit)
                     .then(() => {
                         props.updateRewards();
+                        toast.success('Zmieniono dane nagrody');
                     })
                     .catch(api.toastifyError);
             }

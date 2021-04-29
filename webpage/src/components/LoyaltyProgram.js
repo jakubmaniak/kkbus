@@ -68,6 +68,7 @@ function LoyaltyProgram() {
 
                 updateRewards();
                 setModalAddRewardVisibility(false);
+                toast.success('Dodano nagrodę');
             })
             .catch(api.toastifyError);
     }
@@ -85,8 +86,9 @@ function LoyaltyProgram() {
         api.deleteReward(rewardId)
             .then(() => {
                 updateRewards();
+                toast.success('Usunięto nagrodę');
             })
-            .catch(api.toastifyError);;
+            .catch(api.toastifyError);
     }
 
     function clientGuestTile() {

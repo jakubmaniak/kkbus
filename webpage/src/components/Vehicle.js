@@ -74,10 +74,11 @@ function Vehicle(props) {
                         selectedState,
                         selectedParking,
                         currentRoutes
-                        )
-                    .then(() => 
-                        props.updateVehicle()
-                    );
+                    )
+                    .then(() => {
+                        props.updateVehicle();
+                        toast.success('Zmieniono dane pojazdu');
+                    });
             }
             else {
                 toast.error('Nieprawidłowy typ danych');

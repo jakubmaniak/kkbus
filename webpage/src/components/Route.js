@@ -77,7 +77,10 @@ function Route(props) {
         setModalVisibility(false);
 
         api.updateRoute(props.routeId, departureLocation, arrivalLocation, stops, hours, prices, null)
-            .then(() => props.refreshRoutes())
+            .then(() => {
+                props.refreshRoutes();
+                toast.success('Zmieniono dane trasy');
+            })
             .catch(api.toastifyError);
     }
 
@@ -138,7 +141,8 @@ function Route(props) {
             return null;
         }
 
-        api.addBooking(props.routeId, selectedDate[0], selectedHour, tickets.normal, tickets.reduced, tickets.child, selectedFirstStop, selectedLastStop);
+        api.addBooking(props.routeId, selectedDate[0], selectedHour, tickets.normal, tickets.reduced, tickets.child, selectedFirstStop, selectedLastStop)
+        .then(() => toast.success('Dodano rezerwację'));
 
         setModalVisibility(false);
     }

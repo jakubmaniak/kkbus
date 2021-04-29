@@ -47,7 +47,10 @@ function RoutesPage() {
 
     function deleteRoute(routeId) {
         api.deleteRoute(routeId)
-            .then(() => refreshRoutes())
+            .then(() => {
+                refreshRoutes();
+                toast.success('Usunięto trasę');
+            })
             .catch(api.toastifyError);
     }
 
@@ -56,7 +59,10 @@ function RoutesPage() {
             setModalVisibility(false);
 
             api.addRoute(departureLocation, arrivalLocation, stops, hours, prices, null)
-                .then(() => refreshRoutes())
+                .then(() => {
+                    toast.success('Dodano trasę');
+                    refreshRoutes();
+                })
                 .catch(api.toastifyError);
         }
         else {
