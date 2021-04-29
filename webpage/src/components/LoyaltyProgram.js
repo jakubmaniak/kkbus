@@ -164,7 +164,7 @@ function LoyaltyProgram() {
                     <section className="content">
                         <form>
                             <input placeholder="Nazwa" onChange={fromValue(setName)}/>
-                            <input placeholder="Wymagene punkty" onChange={fromValue(setRequiredPoints)}/>
+                            <input placeholder="Wymagane punkty" onChange={fromValue(setRequiredPoints)}/>
                             <input placeholder="Stan magazynu (puste = nieograniczony)" onChange={fromValue(setAmount)}/>
                             <input placeholder="Limit na 1 osobę (puste = bez limitu)" onChange={fromValue(setLimit)}/>
                         </form>

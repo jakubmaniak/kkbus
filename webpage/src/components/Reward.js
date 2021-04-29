@@ -79,7 +79,7 @@ function Reward(props) {
                 <section className="content">
                     <form>
                         <input placeholder="Nazwa" defaultValue={props.name} onChange={fromValue(setName)}/>
-                        <input placeholder="Wymagene punkty" defaultValue={props.requiredPoints} onChange={fromValue(setRequiredPoints)}/>
+                        <input placeholder="Wymagane punkty" defaultValue={props.requiredPoints} onChange={fromValue(setRequiredPoints)}/>
                         <input placeholder="Stan magazynu (puste = nieograniczony)" defaultValue={props.amount} onChange={fromValue(setAmount)}/>
                         <input placeholder="Limit na 1 osobę (puste = bez limitu)" defaultValue={props.limit} onChange={fromValue(setLimit)}/>
                     </form>
