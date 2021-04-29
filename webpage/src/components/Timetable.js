@@ -7,6 +7,7 @@ import TimetableItem from './TimetableItem';
 import { ModalLoader } from './Loader';
 import Modal from './Modal';
 import { fromValue } from '../helpers/from-value';
+import toast from '../helpers/toast';
 
 import * as api from '../api';
 
@@ -182,7 +183,7 @@ function Timetable() {
         setModalEditAvailabilityVisibility(false);
 
         if(typeof(parseInt(daysEdit)) !== 'number') {
-            alert('Nieprawidłowy typ danych!');
+            toast.error('Nieprawidłowy typ danych!');
         }
         else {
             api.updateTimetableItem(

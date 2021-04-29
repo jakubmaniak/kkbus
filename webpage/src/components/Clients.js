@@ -7,6 +7,7 @@ import Dropdown from './Dropdown';
 import Client from './Client';
 
 import { fromValue } from '../helpers/from-value';
+import toast from '../helpers/toast';
 
 
 function Clients() {
@@ -52,11 +53,9 @@ function Clients() {
             setLastName('')
             setBirthDate('');
             setPhoneNumber('');
-            alert('Dodano konto użytkowinka');
+            toast.success('Dodano konto użytkowinka');
         })
-        .catch((err) => {
-            alert(api.errorToString(err));
-        });
+        .catch(api.toastifyError);
     }
 
     return (

@@ -5,6 +5,7 @@ import * as api from '../api';
 
 import { fromValue } from '../helpers/from-value';
 import { routeFormatter } from '../helpers/text-formatters';
+import toast from '../helpers/toast';
 
 import Vehicle from './Vehicle';
 import Modal from './Modal';
@@ -93,11 +94,11 @@ function VehicleInfo() {
                 .catch(api.toastifyError);
             }
             else {
-                alert('Nieprawidłowy typ danych');
+                toast.error('Nieprawidłowy typ danych');
             }
         }
         else {
-            alert('Wypełnij wszystkie pola');
+            toast.error('Wypełnij wszystkie pola');
         }
     }
 

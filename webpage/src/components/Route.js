@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import '../styles/RoutesPage.css';
 
 import { fromValue } from '../helpers/from-value';
+import toast from '../helpers/toast';
 import UserContext from '../contexts/User';
 
 import * as api from '../api';
@@ -117,12 +118,12 @@ function Route(props) {
 
     function addBooking() {
         if (selectedFirstStop === selectedLastStop) {
-            alert('Nie możesz wybrać takich samych przystanków');
+            toast.error('Nie możesz wybrać takich samych przystanków');
             return;
         }
 
         if (!selectedDate || !selectedHour) {
-            alert('Nie wybrano daty lub godziny');
+            toast.error('Nie wybrano daty lub godziny');
             return null;
         }
 
@@ -133,7 +134,7 @@ function Route(props) {
         };
 
         if (isNaN(tickets.normal) || isNaN(tickets.reduced) || isNaN(tickets.child)) {
-            alert('Wprowadzano niepoprawną liczbę biletów');
+            toast.error('Wprowadzano niepoprawną liczbę biletów');
             return null;
         }
 

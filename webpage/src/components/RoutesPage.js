@@ -5,6 +5,7 @@ import * as api from '../api';
 
 import UserContext from '../contexts/User';
 import { fromValue } from '../helpers/from-value';
+import toast from '../helpers/toast';
 
 import { ModalLoader } from './Loader';
 import Modal from './Modal';
@@ -59,7 +60,7 @@ function RoutesPage() {
                 .catch(api.toastifyError);
         }
         else {
-            alert('Wypełnij wszystkie pola!');
+            toast.error('Wypełnij wszystkie pola!');
         }
     }
 

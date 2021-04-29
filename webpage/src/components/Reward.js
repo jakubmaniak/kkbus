@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../styles/LoyaltyProgram.css';
 
 import { fromValue } from '../helpers/from-value';
+import toast from '../helpers/toast';
 
 import * as api from '../api';
 
@@ -46,11 +47,11 @@ function Reward(props) {
                     .catch(api.toastifyError);
             }
             else {
-                alert('Nieprawidłowy typ danych');
+                toast.error('Nieprawidłowy typ danych');
             }
         }
        else {
-           alert('Wypełnij wszystkie pola');
+           toast.error('Wypełnij wszystkie pola');
        }     
     }
 

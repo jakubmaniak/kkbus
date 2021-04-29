@@ -10,6 +10,7 @@ import UserContext from '../contexts/User';
 import Reward from './Reward';
 import Modal from './Modal';
 import { ModalLoader } from './Loader';
+import toast from '../helpers/toast';
 
 function LoyaltyProgram() {
     let [loading, setLoading] = useState(true);
@@ -52,7 +53,7 @@ function LoyaltyProgram() {
         let currentLimit = limit === '' ? 0 : parseInt(limit);
 
         if (isNaN(currentRequiredPoints) || isNaN(currentLimit) || isNaN(currentAmount)) {
-            alert('Nieprawidłowy typ danych');
+            toast.error('Nieprawidłowy typ danych');
             return;
         }
         

@@ -49,7 +49,6 @@ function FuelPage() {
 
     function saveRefuelReport() {
         if (vehicleId === -1) {
-            //alert('Nie wybrano pojazdu');
             toast.error('Nie wybrano pojazdu');
             return;
         }
@@ -78,6 +77,7 @@ function FuelPage() {
                 setFuelCost('');
                 setFuelAmount('');
                 setVehicleMileage('');
+                toast.success('Dodano raport tankowania');
             })
             .catch(api.toastifyError);
     }

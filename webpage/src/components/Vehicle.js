@@ -5,6 +5,7 @@ import * as api from '../api';
 
 import { fromValue} from '../helpers/from-value';
 import { routeFormatter } from '../helpers/text-formatters';
+import toast from '../helpers/toast';
 
 import Modal from './Modal';
 import UserContext from '../contexts/User';
@@ -79,11 +80,11 @@ function Vehicle(props) {
                     );
             }
             else {
-                alert('Nieprawidłowy typ danych');
+                toast.error('Nieprawidłowy typ danych');
             }
         }
         else {
-            alert('Wypełnij wszystkie pola!');
+            toast.error('Wypełnij wszystkie pola!');
         }        
     }
 
