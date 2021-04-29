@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
 import './App.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import UserContext, { initialContext } from './contexts/User';
 
@@ -88,6 +90,7 @@ function App() {
                     </Switch>
                 </Router>
             </UserContext.Provider>
+            <ToastContainer limit={4} />
         </div>
     );
 }

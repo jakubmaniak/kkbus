@@ -1,4 +1,5 @@
 import axios from 'axios';
+import toast from './helpers/toast';
 
 const errorMessages = new Map(Object.entries({
     axios_connection:       'Błąd połączenia',
@@ -21,8 +22,8 @@ export function errorToString(err) {
     return errorMessages.get(err.message);
 }
 
-export function errorAlert(err) {
-    alert(errorToString(err));
+export function errorToast(err) {
+    toast.error(errorToString(err));
 }
 
 const root = '/api';

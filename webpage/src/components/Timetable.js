@@ -64,13 +64,13 @@ function Timetable() {
                     setLoading(false);
                 }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
             })    
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
 
         api.getUserInfo()
             .then((result) => {
                 setUser(result);
             })
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
     }, []);
 
     let d = new Date(); //data pozyskana z filtru
@@ -134,14 +134,14 @@ function Timetable() {
 
         api.addTimetableItem(selectedDate.toJSON().slice(0, 10), parseInt(days), ranges.split(','), selectedAvailableType[0], label)
             .then(refreshTimeTable)
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
    }
 
    function saveAvailabilityToUser() {
     setModalAddAvailabilityVisibility(false);
     api.addTimetableItemToUser(selectedItem.userId, selectedDate.toJSON().slice(0, 10), parseInt(days), ranges.split(','), selectedAvailableType[0], label)
         .then(refreshTimeTable)
-        .catch(api.errorAlert);
+        .catch(api.errorToast);
    }
 
    function refreshTimeTable() {
@@ -149,7 +149,7 @@ function Timetable() {
             .then((results) => {
                 setTimetable(results);
             })    
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
    }
 
    function translateRole(role) {
@@ -194,14 +194,14 @@ function Timetable() {
                 labelEdit
             )
                 .then(refreshTimeTable)
-                .catch(api.errorAlert);
+                .catch(api.errorToast);
         }
     }
 
     function deleteAvailability(itemId) {
         api.deleteTimetableItem(itemId)
             .then(refreshTimeTable)
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
     }
 
 

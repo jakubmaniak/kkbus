@@ -35,19 +35,19 @@ function RoutesPage() {
                     setLoading(false);
                 }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
             })
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
     }, []);
 
     function refreshRoutes() {
         api.getAllRoutes()
             .then(setRoutes)
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
     }
 
     function deleteRoute(routeId) {
         api.deleteRoute(routeId)
             .then(() => refreshRoutes())
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
     }
 
     function addRoute() {
@@ -56,7 +56,7 @@ function RoutesPage() {
 
             api.addRoute(departureLocation, arrivalLocation, stops, hours, prices, null)
                 .then(() => refreshRoutes())
-                .catch(api.errorAlert);
+                .catch(api.errorToast);
         }
         else {
             alert('Wypełnij wszystkie pola!');

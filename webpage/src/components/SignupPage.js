@@ -23,7 +23,7 @@ function SignupPage() {
             .then(() => {
                 history.replace('/');
             })
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
     }
 
     return (

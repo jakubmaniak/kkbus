@@ -11,7 +11,7 @@ function TimetableItem(props) {
             .then((result) => {
                 setUser(result);
             })
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
     }, [])
 
     return (

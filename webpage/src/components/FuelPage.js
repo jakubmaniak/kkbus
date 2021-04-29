@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+
 import '../styles/FuelPage.css';
 
 import * as api from '../api';
 import { fromValue } from '../helpers/from-value';
+import toast from '../helpers/toast';
 
 import FuelHistoryItem from './FuelHistoryItem';
 import FuelUsageChart from './FuelUsageChart';
@@ -29,7 +31,7 @@ function FuelPage() {
                     setLoading(false);
                 }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
             })
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
     }, []);
 
     function handleVehicleChange(item) {
@@ -42,12 +44,13 @@ function FuelPage() {
     function getData(vehicleId) {
         api.getRefuels(vehicleId)
             .then(setRefuels)
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
     }
 
     function saveRefuelReport() {
         if (vehicleId === -1) {
-            alert('Nie wybrano pojazdu');
+            //alert('Nie wybrano pojazdu');
+            toast.error('Nie wybrano pojazdu');
             return;
         }
 
@@ -76,7 +79,7 @@ function FuelPage() {
                 setFuelAmount('');
                 setVehicleMileage('');
             })
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
     }
 
     return (

@@ -38,7 +38,7 @@ function ContactPage() {
                     setLoading(false);
                 }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
             })
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
     }, []);
 
     function updateContact() {
@@ -46,7 +46,7 @@ function ContactPage() {
 
         api.updateContact(address, zipCode, email, phoneNumber, faxNumber)
             .then(setContactCopy)
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
     }
 
     function cancelUpdate() {

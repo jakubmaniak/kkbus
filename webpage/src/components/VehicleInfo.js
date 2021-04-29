@@ -59,13 +59,13 @@ function VehicleInfo() {
                 setLoading(false);
             }, Math.max(0, 1000 - (Date.now() - loadingInitTime)));
         })
-        .catch(api.errorAlert);
+        .catch(api.errorToast);
 
         api.getAllRoutes()
         .then((results) => {
             setRoutes(results);
         })
-        .catch(api.errorAlert);
+        .catch(api.errorToast);
     }
 
     function deleteVehicle(vehicleId) {
@@ -74,7 +74,7 @@ function VehicleInfo() {
         .then(() => {
             updateVehicle();
         })
-        .catch(api.errorAlert);;
+        .catch(api.errorToast);;
     }
 
     function addVehicle() {
@@ -90,7 +90,7 @@ function VehicleInfo() {
                 .then(() => {
                     updateVehicle();
                 })
-                .catch(api.errorAlert);
+                .catch(api.errorToast);
             }
             else {
                 alert('Nieprawidłowy typ danych');

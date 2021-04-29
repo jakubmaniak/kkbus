@@ -35,7 +35,7 @@ function LoyaltyProgram() {
                     setLoading(false);
                 }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
             })
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
     }, []);
 
     function updateRewards() {
@@ -43,7 +43,7 @@ function LoyaltyProgram() {
             .then((results) => {
                 setRewards(results);
             })
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
     }
 
     function addReward() {
@@ -68,7 +68,7 @@ function LoyaltyProgram() {
                 updateRewards();
                 setModalAddRewardVisibility(false);
             })
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
     }
 
     function showModal() {
@@ -85,7 +85,7 @@ function LoyaltyProgram() {
             .then(() => {
                 updateRewards();
             })
-            .catch(api.errorAlert);;
+            .catch(api.errorToast);;
     }
 
     function clientGuestTile() {

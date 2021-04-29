@@ -32,7 +32,7 @@ function Header() {
                     setUser({ ...user });
                     setName(data.firstName + ' ' + data.lastName);
                 })
-                .catch(api.errorAlert);
+                .catch(api.errorToast);
         }
         
         handlePageResize();
@@ -48,7 +48,7 @@ function Header() {
                 setUser({ loggedIn: false, role: 'guest' });
                 history.replace('/');
             })
-            .catch(api.errorAlert);
+            .catch(api.errorToast);
     }
 
     function handlePageResize() {
