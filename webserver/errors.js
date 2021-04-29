@@ -12,7 +12,7 @@ module.exports = {
     notFound:           error('not_found'),
     unauthorized:       error('unauthorized'),
     badSessionToken:    error('bad_session_token'),
-    invalidValue:       error('invalid_valid'),
+    invalidValue:       error('invalid_value'),
     badCredentials:     error('bad_credentials'),
     emailAlreadyTaken:  error('email_already_taken')
 };
