@@ -146,6 +146,14 @@ button.delete {
     font-weight: 400;
 }
 
+.Toastify .Toastify__toast--success {
+    background-color: #47BE61;
+}
+
+.Toastify .Toastify__toast--error {
+    background-color: #D84A41;
+}
+
 .row-filter-container {
     display: flex;
     justify-content: space-between;
