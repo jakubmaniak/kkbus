@@ -42,7 +42,7 @@ function RouteReport() {
                             items={stops}
                             placeholder="Wybierz przystanek" />
                         <input placeholder="Liczba osób" />
-                        <button className="submit">Zapis raport</button>
+                        <button className="submit">Zapisz raport</button>
                     </form>
                 </div>
             </div>

@@ -53,7 +53,7 @@ function Clients() {
             setLastName('')
             setBirthDate('');
             setPhoneNumber('');
-            toast.success('Dodano konto użytkowinka');
+            toast.success('Dodano konto użytkownika');
         })
         .catch(api.toastifyError);
     }
