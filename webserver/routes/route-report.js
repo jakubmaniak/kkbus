@@ -19,7 +19,7 @@ router.post('/reports/route/:routeId', [
         amount: number
     }`)
 ], async (req, res, next) => {
-    let routeId = parseInt(req.params.routeId);
+    let routeId = parseInt(req.params.routeId, 10);
     if (isNaN(routeId)) return next(invalidValue());
 
     let { stop, vehicleId, amount } = req.body;

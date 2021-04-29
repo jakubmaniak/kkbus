@@ -31,7 +31,7 @@ router.get('/loyalty-program/rewards', async (req, res, next) => {
 });
 
 router.get('/loyalty-program/reward/:rewardId', [minimumRole('client')], async (req, res, next) => {
-    let rewardId = parseInt(req.params.rewardId);
+    let rewardId = parseInt(req.params.rewardId, 10);
     if (isNaN(rewardId)) return next(invalidRequest());
 
     let { login } = req.user;
@@ -93,7 +93,7 @@ router.put('/loyalty-program/reward/:rewardId', [
         limit: number
     }`)
 ], async (req, res, next) => {
-    let rewardId = parseInt(req.params.rewardId);
+    let rewardId = parseInt(req.params.rewardId, 10);
     if (isNaN(rewardId)) {
         return next(invalidRequest());
     }
@@ -121,7 +121,7 @@ router.put('/loyalty-program/reward/:rewardId', [
 });
 
 router.delete('/loyalty-program/reward/:rewardId', [minimumRole('owner')], async (req, res, next) => {
-    let rewardId = parseInt(req.params.rewardId);
+    let rewardId = parseInt(req.params.rewardId, 10);
     if (isNaN(rewardId)) {
         return next(invalidRequest());
     }

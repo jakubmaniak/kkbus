@@ -70,7 +70,7 @@ router.post('/user/register', [
     }
 
     let offset = 0;
-    let phoneNumberPart = parseInt(phoneNumber.slice(-4));
+    let phoneNumberPart = parseInt(phoneNumber.slice(-4), 10);
     let login = firstName.toLowerCase() + lastName.toLowerCase();
     
     while (true) {

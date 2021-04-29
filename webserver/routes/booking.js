@@ -10,17 +10,17 @@ const { parseDate, parseTime } = require('../helpers/date');
 
 
 function validateTicketNumbers(normalTickets, reducedTickets, childTickets) {
-    normalTickets = parseInt(normalTickets);
+    normalTickets = parseInt(normalTickets, 10);
     if (isNaN(normalTickets) || normalTickets < 0) {
         return null;
     }
 
-    reducedTickets = parseInt(reducedTickets);
+    reducedTickets = parseInt(reducedTickets, 10);
     if (isNaN(reducedTickets) || reducedTickets < 0) {
         return null;
     }
 
-    childTickets = parseInt(childTickets);
+    childTickets = parseInt(childTickets, 10);
     if (isNaN(childTickets) || childTickets < 0) {
         return null;
     }
@@ -62,7 +62,7 @@ router.get('/bookings', [minimumRole('driver')], async (req, res, next) => {
 router.get('/bookings/:routeId/:date/:hour', [minimumRole('driver')], async (req, res, next) => {
     let { routeId, date, hour } = req.params;
 
-    routeId = parseInt(routeId);
+    routeId = parseInt(routeId, 10);
     date = parseDate(date)?.toString();
     hour = parseTime(hour)?.toString();
 
@@ -95,7 +95,7 @@ router.post('/booking', [
 
     let { routeId, date, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop } = req.body;
 
-    routeId = parseInt(routeId);
+    routeId = parseInt(routeId, 10);
     date = parseDate(date)?.toString();
     hour = parseTime(hour)?.toString();
     firstStop = firstStop.trim();
@@ -168,12 +168,12 @@ router.post('/booking/:userId', [
         lastStop: string
     }`)
 ], async (req, res, next) => {
-    let userId = parseInt(req.params.userId);
+    let userId = parseInt(req.params.userId, 10);
     if (isNaN(userId)) return next(invalidRequest());
 
     let { routeId, date, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop } = req.body;
 
-    routeId = parseInt(routeId);
+    routeId = parseInt(routeId, 10);
     date = parseDate(date)?.toString();
     hour = parseTime(hour)?.toString();
     firstStop = firstStop.trim();
@@ -232,7 +232,7 @@ router.post('/booking/:userId', [
 });
 
 router.delete('/booking/:bookingId', [onlyRoles('client', 'office', 'owner')], async (req, res, next) => {
-    let wantedId = parseInt(req.params.bookingId);
+    let wantedId = parseInt(req.params.bookingId, 10);
     if (isNaN(wantedId)) return next(invalidRequest());
 
     let booking;

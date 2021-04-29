@@ -48,7 +48,7 @@ router.post('/timetable', [
         days = 1;
     }
 
-    days = parseInt(days);
+    days = parseInt(days, 10);
     if (isNaN(days) || days <= 0) return next(invalidRequest());
 
     let result;
@@ -89,10 +89,10 @@ router.post('/timetable/:userId', [
         days = 1;
     }
 
-    days = parseInt(days);
+    days = parseInt(days, 10);
     if (isNaN(days) || days <= 0) return next(invalidRequest());
 
-    let userId = parseInt(req.params.userId);
+    let userId = parseInt(req.params.userId, 10);
     if (isNaN(userId)) return next(invalidRequest());
 
     try {
@@ -132,7 +132,7 @@ router.put('/timetable/:itemId', [
         ranges: string[]
     }`)
 ], async (req, res, next) => {
-    let wantedId = parseInt(req.params.itemId);
+    let wantedId = parseInt(req.params.itemId, 10);
     if (isNaN(wantedId)) return next(invalidRequest());
 
     let { available, label, startDate, days, ranges } = req.body;
@@ -167,7 +167,7 @@ router.put('/timetable/:itemId', [
 });
 
 router.delete('/timetable/:itemId', [minimumRole('driver')], async (req, res, next) => {
-    let wantedId = parseInt(req.params.itemId);
+    let wantedId = parseInt(req.params.itemId, 10);
     if (isNaN(wantedId)) return next(invalidRequest());
 
     let availability;

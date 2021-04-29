@@ -14,7 +14,7 @@ router.get('/routes', async (req, res, next) => {
 });
 
 router.get('/route/:id', async (req, res, next) => {
-    let routeId = parseInt(req.params.id);
+    let routeId = parseInt(req.params.id, 10);
 
     // let includeOpposite = ('includeOpposite' in req.query);
 
@@ -73,7 +73,7 @@ router.post('/route', [
 });
 
 router.delete('/route/:id', [minimumRole('office')], async (req, res, next) => {
-    let routeId = parseInt(req.params.id);
+    let routeId = parseInt(req.params.id, 10);
 
     if (isNaN(routeId)) return next(invalidRequest());
 
@@ -99,7 +99,7 @@ router.put('/route/:id', [
         prices?: number[]
     }`)
 ], async (req, res, next) => {
-    let routeId = parseInt(req.params.id);
+    let routeId = parseInt(req.params.id, 10);
 
     if (isNaN(routeId)) return next(invalidRequest());
 

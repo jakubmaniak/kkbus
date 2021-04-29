@@ -16,13 +16,13 @@ router.get('/vehicles', [minimumRole('driver')], async (req, res, next) => {
         ...vehicle,
         combustion: 0,
         driver: null,
-        routeIds: vehicle.routeIds.split(',').map((id) => parseInt(id))
+        routeIds: vehicle.routeIds.split(',').map((id) => parseInt(id, 10))
     }));
     res.ok(vehicles);
 });
 
 router.get('/vehicle/:id', [minimumRole('driver')], async (req, res, next) => {
-    let wantedId = parseInt(req.params.id);
+    let wantedId = parseInt(req.params.id, 10);
     if (isNaN(wantedId)) return next(invalidRequest());
 
     let vehicle;
@@ -33,7 +33,7 @@ router.get('/vehicle/:id', [minimumRole('driver')], async (req, res, next) => {
         return next(err);
     }
     
-    vehicle = { ...vehicle, combustion: 0, driver: null, routeIds: vehicle.routeIds.split(',').map((id) => parseInt(id)) };
+    vehicle = { ...vehicle, combustion: 0, driver: null, routeIds: vehicle.routeIds.split(',').map((id) => parseInt(id, 10)) };
 
     res.ok(vehicle);
 });
@@ -85,7 +85,7 @@ router.put('/vehicle/:id', [
         mileage?: number
     }`)
 ], async (req, res, next) => {
-    let wantedId = parseInt(req.params.id);
+    let wantedId = parseInt(req.params.id, 10);
     if (isNaN(wantedId)) return next(invalidRequest());
 
     let { state, brand, model, year, plate, parking, routeIds, seats, mileage } = req.body;
@@ -115,7 +115,7 @@ router.put('/vehicle/:id', [
 });
 
 router.delete('/vehicle/:id', [minimumRole('owner')], async (req, res, next) => {
-    let wantedId = parseInt(req.params.id);
+    let wantedId = parseInt(req.params.id, 10);
     if (isNaN(wantedId)) return next(invalidRequest());
 
     try {
@@ -129,7 +129,7 @@ router.delete('/vehicle/:id', [minimumRole('owner')], async (req, res, next) => 
 });
 
 router.get('/vehicle/:vehicleId/refuels', [minimumRole('driver')], async (req, res, next) => {
-    let vehicleId = parseInt(req.params.vehicleId);
+    let vehicleId = parseInt(req.params.vehicleId, 10);
     if (isNaN(vehicleId)) return next(invalidRequest());
 
     try {
@@ -151,7 +151,7 @@ router.post('/vehicle/:vehicleId/refuel', [
         mileage?: number
     }`)
 ], async (req, res, next) => {
-    let vehicleId = parseInt(req.params.vehicleId);
+    let vehicleId = parseInt(req.params.vehicleId, 10);
     if (isNaN(vehicleId)) return next(invalidValue());
 
     let { cost, amount, mileage } = req.body;

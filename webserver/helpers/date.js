@@ -30,7 +30,7 @@ module.exports.parseDate = (date) => {
     
         return {
             toString: () => text,
-            toArray: () => text.split('-').map((i) => parseInt(i)),
+            toArray: () => text.split('-').map((i) => parseInt(i, 10)),
             toObject: () => new Date(text),
             addDays: (days) => {
                 return this.parseDate(d.getTime() + days * 24 * 3600 * 1000);
@@ -59,7 +59,7 @@ module.exports.parseTime = (time) => {
             if (t.length == 2) t.push(0);
         }
 
-        t = t.map((i) => parseInt(i))
+        t = t.map((i) => parseInt(i, 10))
             .map((i) => i.toString().padStart(2, '0'));
 
         if (t[0] == 24 && t[1] == 0) {
