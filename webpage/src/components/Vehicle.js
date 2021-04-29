@@ -46,7 +46,7 @@ function Vehicle(props) {
             availableRoutes = props.routeIds.map((routeId) => results.find((({id}) => id === routeId)));
             setDepartureArrivalLocations(availableRoutes.map((avaibleRoute) => avaibleRoute.departureLocation + ' - ' + avaibleRoute.arrivalLocation));
         })
-        .catch(api.errorToast);
+        .catch(api.toastifyError);
     }, [props.routeIds]);
 
     function editVehicle(vehicleId) {

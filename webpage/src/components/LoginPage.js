@@ -22,7 +22,7 @@ function LoginPage() {
             .then(() => {
                 history.replace('/');
             })
-            .catch(api.errorToast);
+            .catch(api.toastifyError);
     }
 
     return (

@@ -77,7 +77,7 @@ function Route(props) {
 
         api.updateRoute(props.routeId, departureLocation, arrivalLocation, stops, hours, prices, null)
             .then(() => props.refreshRoutes())
-            .catch(api.errorToast);
+            .catch(api.toastifyError);
     }
 
     function convertHoursIntoArray(ev) {

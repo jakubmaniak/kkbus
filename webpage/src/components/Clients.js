@@ -39,7 +39,7 @@ function Clients() {
             .then((results) => {
                 setClients(results)
             })
-            .catch(api.errorToast);
+            .catch(api.toastifyError);
     }
 
     function handleRegisterSubmit(ev) {

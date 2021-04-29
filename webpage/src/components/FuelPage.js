@@ -31,7 +31,7 @@ function FuelPage() {
                     setLoading(false);
                 }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
             })
-            .catch(api.errorToast);
+            .catch(api.toastifyError);
     }, []);
 
     function handleVehicleChange(item) {
@@ -44,7 +44,7 @@ function FuelPage() {
     function getData(vehicleId) {
         api.getRefuels(vehicleId)
             .then(setRefuels)
-            .catch(api.errorToast);
+            .catch(api.toastifyError);
     }
 
     function saveRefuelReport() {
@@ -59,17 +59,17 @@ function FuelPage() {
         let _vehicleMileage = parseFloat(vehicleMileage);        
 
         if (isNaN(_fuelCost) || _fuelCost < 0) {
-            alert('Wprowadzony koszt paliwa jest niepoprawny');
+            toast.error('Wprowadzony koszt paliwa jest niepoprawny');
             return;
         }
 
         if (isNaN(_fuelAmount) || _fuelAmount <= 0) {
-            alert('Wprowadzona ilość paliwa jest niepoprawna');
+            toast.error('Wprowadzona ilość paliwa jest niepoprawna');
             return;
         }
 
         if (isNaN(_vehicleMileage) || _vehicleMileage < 0) {
-            alert('Wprowadzony przebieg pojazdu jest niepoprawny');
+            toast.error('Wprowadzony przebieg pojazdu jest niepoprawny');
             return;
         }
 
@@ -79,7 +79,7 @@ function FuelPage() {
                 setFuelAmount('');
                 setVehicleMileage('');
             })
-            .catch(api.errorToast);
+            .catch(api.toastifyError);
     }
 
     return (

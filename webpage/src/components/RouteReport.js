@@ -17,7 +17,7 @@ function RouteReport() {
     useEffect(() => {
         api.getAllRoutes()
             .then(setRoutes)
-            .catch(api.errorToast);
+            .catch(api.toastifyError);
     }, []);
 
     function handleRouteChange(route) {

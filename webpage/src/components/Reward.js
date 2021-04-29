@@ -43,7 +43,7 @@ function Reward(props) {
                     .then(() => {
                         props.updateRewards();
                     })
-                    .catch(api.errorToast);
+                    .catch(api.toastifyError);
             }
             else {
                 alert('Nieprawidłowy typ danych');

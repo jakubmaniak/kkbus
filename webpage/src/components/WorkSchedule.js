@@ -30,11 +30,11 @@ function WorkSchedule() {
     useEffect(() => {
         api.getDriverNames()
             .then(setDriverNames)
-            .catch(api.errorToast);
+            .catch(api.toastifyError);
 
         api.getAllRoutes()
             .then((routes) => setRoutes(['wszystkie'].concat(routes)))
-            .catch(api.errorToast);
+            .catch(api.toastifyError);
     }, []);
 
     useEffect(() => {
@@ -61,7 +61,7 @@ function WorkSchedule() {
                     }, 500 - (Date.now() - start));
                 }
             })
-            .catch(api.errorToast);
+            .catch(api.toastifyError);
     }, [selectedDriver, selectedRoute, selectedRange]);  
 
     return (

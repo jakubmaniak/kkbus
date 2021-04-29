@@ -34,7 +34,7 @@ function Client(props) {
         .then((routes) => {
             setRoutes(routes);
         })
-        .catch(api.errorToast);
+        .catch(api.toastifyError);
     }, []);
 
     useEffect(() => {
@@ -174,7 +174,7 @@ function Client(props) {
         .then(() => {
             alert('Dodano rezerwacje');
         })
-        .catch(api.errorToast);
+        .catch(api.toastifyError);
 
         setModalVisibility(false);
     }

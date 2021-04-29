@@ -18,14 +18,14 @@ function BookingList() {
     useEffect(() => {
         api.getAllRoutes()
             .then((routes) => setRoutes(routes))
-            .catch(api.errorToast);
+            .catch(api.toastifyError);
     }, []);
 
     useEffect(() => {
         if(selectedRoute !== '') {
            api.getRouteBookings(selectedRoute.id, '2021-04-07', '15:00')
             .then((results) => setBookingList(results))
-            .catch(api.errorToast);
+            .catch(api.toastifyError);
         }
     }, [selectedRoute]);
 

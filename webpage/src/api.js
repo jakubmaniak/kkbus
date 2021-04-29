@@ -22,7 +22,7 @@ export function errorToString(err) {
     return errorMessages.get(err.message);
 }
 
-export function errorToast(err) {
+export function toastifyError(err) {
     toast.error(errorToString(err));
 }
 
