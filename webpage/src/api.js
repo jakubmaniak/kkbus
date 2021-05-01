@@ -9,6 +9,7 @@ const errorMessages = new Map(Object.entries({
     unauthorized:           'Niewystarczające uprawnienia',
     bad_session_token:      'Niepoprawny lub nieważny identyfikator sesji',
     invalid_value:          'Wprowadzona wartość jest niedozwolona lub niepoprawna',
+    not_enought:            'Niewystarczająca ilość',
     bad_credentials:        'Niepoprawny login lub hasło',
     email_already_taken:    'Konto o tym adresie e-mail już istnieje'
 }));
