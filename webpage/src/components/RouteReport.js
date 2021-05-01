@@ -59,7 +59,10 @@ function RouteReport() {
         }
 
         api.addRouteReport(selectedRoute.id, selectedStop, selectedVehicle.id, currentAmount, selectedDriver?.id)
-            .then(() => toast.success('Dodano raport'))
+            .then(() => {
+                setAmount('');
+                toast.success('Dodano raport');
+            })
             .catch(api.toastifyError);
     }
 
