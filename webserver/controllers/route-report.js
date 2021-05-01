@@ -4,6 +4,7 @@ CREATE TABLE `route_reports` (
     `routeId` INT NOT NULL , 
     `stop` VARCHAR(200) NOT NULL , 
     `vehicleId` INT NOT NULL , 
+    `driverId` INT NOT NULL,
     `date` DATETIME NOT NULL , 
     `amount` INT NOT NULL ,
      PRIMARY KEY (`id`)
@@ -11,14 +12,14 @@ CREATE TABLE `route_reports` (
 */
 
 let db = require('../configs/db');
-let { getFirst, deleteProps, splitProps } = require('../helpers/query-utils');
 
 module.exports.addReport = (report) => {
-    return db.query('INSERT INTO route_reports VALUES (?,?,?,?,?,?)', [
+    return db.query('INSERT INTO route_reports VALUES (?,?,?,?,?,?,?)', [
         null,
         report.routeId,
         report.stop,
         report.vehicleId,
+        report.driverId,
         report.date.toString(),
         report.amount
     ]);

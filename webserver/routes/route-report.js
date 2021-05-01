@@ -3,12 +3,13 @@ const router = express.Router();
 
 const { serverError, invalidValue } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
-const { minimumRole } = require('../middlewares/roles');
+const { minimumRole, roles } = require('../middlewares/roles');
 const { parseDateTime } = require('../helpers/date');
 
 const routeReportController = require('../controllers/route-report');
 const vehicleController = require('../controllers/vehicle');
 const routeController = require('../controllers/route');
+const userController = require('../controllers/user');
 
 
 router.post('/reports/route/:routeId', [
@@ -16,13 +17,14 @@ router.post('/reports/route/:routeId', [
     bodySchema(`{
         stop: string,
         vehicleId: number,
+        driverId: number,
         amount: number
     }`)
 ], async (req, res, next) => {
     let routeId = parseInt(req.params.routeId, 10);
     if (isNaN(routeId)) return next(invalidValue());
 
-    let { stop, vehicleId, amount } = req.body;
+    let { stop, vehicleId, driverId, amount } = req.body;
     
     if (amount < 0) {
         return next(invalidValue());
@@ -31,6 +33,11 @@ router.post('/reports/route/:routeId', [
     try {
         await vehicleController.findVehicle(vehicleId);
         let route = await routeController.findRoute(routeId);
+        let user = await userController.findUserById(driverId);
+
+        if (user.role !== roles.driver) {
+            throw invalidValue();
+        }
 
         if (!route.stops.includes(stop)) {
             throw invalidValue();
@@ -45,6 +52,7 @@ router.post('/reports/route/:routeId', [
             routeId,
             stop,
             vehicleId,
+            driverId,
             date: parseDateTime(new Date()).toString(3),
             amount
         });

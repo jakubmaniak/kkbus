@@ -68,8 +68,8 @@ export async function deleteRoute(routeId) {
 }
 
 
-export async function addRouteReport(routeId, stop, vehicleId, amount) {
-    return sendPost('/reports/route/' + routeId, { stop, vehicleId, amount });
+export async function addRouteReport(routeId, stop, vehicleId, driverId, amount) {
+    return sendPost('/reports/route/' + routeId, { stop, vehicleId, driverId, amount });
 }
 
 
