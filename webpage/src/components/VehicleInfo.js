@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../styles/VehicleInfo.css';
 
 import * as api from '../api';
@@ -30,6 +30,8 @@ function VehicleInfo() {
     let [state, setState] = useState(['Aktywny', 'Nieaktywny', 'W naprawie']);
     let [parking, setParking] = useState(['Parking nr 1', 'Parking nr 2']);
     let [routes, setRoutes] = useState([]);
+
+    let routesRef = useRef(routes);
 
     let [selectedState, setSelectedState] = useState('');
     let [selectedParking, setSelectedParking] = useState('');
@@ -65,6 +67,7 @@ function VehicleInfo() {
         api.getAllRoutes()
         .then((results) => {
             setRoutes(results);
+            routesRef.current = results;
         })
         .catch(api.toastifyError);
     }
@@ -122,6 +125,7 @@ function VehicleInfo() {
                             state={vehicle.state}
                             parking={vehicle.parking}
                             seats={vehicle.seats}
+                            routes={routesRef}
                             routeIds={vehicle.routeIds}
                             mileage={vehicle.mileage}
                             combustion={vehicle.combustion}

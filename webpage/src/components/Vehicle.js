@@ -26,7 +26,7 @@ function Vehicle(props) {
     let [mileage, setMileage] = useState(props.mileage);
     let [plate, setPlate] = useState(props.plate);
     let [seats, setSeats] = useState(props.seats);
-    
+
     let [state, setState] = useState(['Aktywny', 'Nieaktywny', 'W naprawie']);
     let [parking, setParking] = useState(['Parking nr 1', 'Parking nr 2']);
     let [routes, setRoutes] = useState([]);
@@ -37,18 +37,17 @@ function Vehicle(props) {
     let [selectedRoutes, setSelectedRoutes] = useState([]);
 
     useEffect(() => {
-        api.getAllRoutes()
-        .then((results) => {
-            setRoutes(results);
+        let routeMap = props.routes.current.reduce((a, b) => (a[b.id] = b) && a, { });
+        
+        setDepartureArrivalLocations(props.routeIds.map((routeId) => {
+            let route = routeMap[routeId];
+            if (!route) {
+                return '...';
+            }
 
-            setSelectedRoutes(props.routeIds.map((routeId) => results.find((({id}) => id === routeId))))
-           
-            let availableRoutes = [];
-            availableRoutes = props.routeIds.map((routeId) => results.find((({id}) => id === routeId)));
-            setDepartureArrivalLocations(availableRoutes.map((avaibleRoute) => avaibleRoute.departureLocation + ' - ' + avaibleRoute.arrivalLocation));
-        })
-        .catch(api.toastifyError);
-    }, [props.routeIds]);
+            return route.arrivalLocation + ' - ' + route.departureLocation;
+        }));
+    }, [props.routes.current]);
 
     function editVehicle(vehicleId) {
         setModalEditVehicleVisibility(false);
