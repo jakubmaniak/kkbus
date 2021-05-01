@@ -94,11 +94,9 @@ function LoyaltyProgram() {
     }
 
     function buyReward(rewardId, requiredPoints) {
-        console.log(rewardId);
         api.buyReward(rewardId)
             .then(() => {
                 setClientsPoints(clientPoints - requiredPoints);
-                console.log(clientPoints - requiredPoints);
             })
             .catch(api.toastifyError);
     }
