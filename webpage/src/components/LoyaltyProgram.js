@@ -93,6 +93,16 @@ function LoyaltyProgram() {
             .catch(api.toastifyError);
     }
 
+    function buyReward(rewardId, requiredPoints) {
+        console.log(rewardId);
+        api.buyReward(rewardId)
+            .then(() => {
+                setClientsPoints(clientPoints - requiredPoints);
+                console.log(clientPoints - requiredPoints);
+            })
+            .catch(api.toastifyError);
+    }
+
     function clientGuestTile() {
         api.getLoyaltyProgram()
             .then((results) => {
@@ -107,13 +117,14 @@ function LoyaltyProgram() {
                         <h2>Sklep</h2>
                         {role === 'client' ? <h3 className="points">Punkty: {clientPoints}</h3> : null}
                     </div>
-                    {rewards.map((reward, i) => {
+                    {rewards.map((reward) => {
                         return (
                             <Reward key={reward.id}
                                 role={role}
                                 name={reward.name}
                                 requiredPoints={reward.requiredPoints}
-                                rewardId={i + 1}
+                                rewardId={reward.id}
+                                buyReward={() => buyReward(reward.id, reward.requiredPoints)}
                             />
                         );
                     })}
@@ -162,7 +173,7 @@ function LoyaltyProgram() {
                                 limit={reward.limit}
                                 rewardId={reward.id}
                                 updateRewards={updateRewards}
-                                deleteReward={() =>deleteReward(reward.id)}
+                                deleteReward={() => deleteReward(reward.id)}
                             />
                         );
                     })}

@@ -66,7 +66,7 @@ function Reward(props) {
         <div className="reward">
             {header()}
             {(props.role === 'client') ? 
-                <button>Kup</button> 
+                <button onClick={props.buyReward}>Kup</button> 
             : null
             }
             {props.role === 'owner' ?
