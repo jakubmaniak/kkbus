@@ -46,8 +46,10 @@ router.get('/loyalty-program/reward/:rewardId', [onlyRoles('client')], async (re
         return next(err);
     }
 
+    let userPoints;
+
     try {
-        let userPoints = await userController.findUserPoints(userId);
+        userPoints = await userController.findUserPoints(userId);
         if (userPoints < reward.requiredPoints) return next(notEnough());
 
         await userController.updateUserPoints(userId, userPoints - reward.requiredPoints);
@@ -56,7 +58,7 @@ router.get('/loyalty-program/reward/:rewardId', [onlyRoles('client')], async (re
         return next(err);
     }
 
-    res.ok({ points });
+    res.ok({ userPoints });
 });
 
 router.post('/loyalty-program/reward', [
