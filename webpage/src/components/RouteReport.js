@@ -47,8 +47,6 @@ function RouteReport() {
             toast.error('Wprowadzone dane są niepoprawne');
             return;
         }
-        
-        console.log(selectedRoute.id, selectedStop, selectedVehicle.id, currentAmount);
 
         api.addRouteReport(selectedRoute.id, selectedStop, selectedVehicle.id, currentAmount)
         .then(() => toast.success('Dodano raport'))
