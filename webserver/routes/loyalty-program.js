@@ -32,7 +32,7 @@ router.get('/loyalty-program/rewards', async (req, res, next) => {
     res.ok(await rewardController.findAllRewards());
 });
 
-router.get('/loyalty-program/reward/:rewardId', [onlyRoles(['client'])], async (req, res, next) => {
+router.get('/loyalty-program/reward/:rewardId', [onlyRoles('client')], async (req, res, next) => {
     let rewardId = parseInt(req.params.rewardId, 10);
     if (isNaN(rewardId)) return next(invalidRequest());
 
