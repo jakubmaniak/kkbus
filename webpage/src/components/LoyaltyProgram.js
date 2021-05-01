@@ -26,6 +26,8 @@ function LoyaltyProgram() {
     let [amount, setAmount] = useState('');
     let [limit, setLimit] = useState('');
 
+    let [clientPoints, setClientsPoints] = useState();
+
     let { role } = useContext(UserContext).user;
 
     useEffect(() => {
@@ -92,12 +94,18 @@ function LoyaltyProgram() {
     }
 
     function clientGuestTile() {
+        api.getLoyaltyProgram()
+            .then((results) => {
+                setClientsPoints(results.points);
+            })
+            .catch(api.errorToString);
+
         return (
             <div className="main">
                 <div className='tile half'>
                     <div className="title">
                         <h2>Sklep</h2>
-                        {role === 'client' ? <h3 className="points">Punkty: 1156</h3> : null}
+                        {role === 'client' ? <h3 className="points">Punkty: {clientPoints}</h3> : null}
                     </div>
                     {rewards.map((reward, i) => {
                         return (
