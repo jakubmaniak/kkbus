@@ -98,6 +98,7 @@ module.exports.parseDateTime = (datetime) => {
     return {
         getTime: () => time,
         getDate: () => date,
-        toString: (timeSegments = 2) => date.toString() + ' ' + time.toString(timeSegments)
+        toString: (timeSegments = 2) => date.toString() + ' ' + time.toString(timeSegments),
+        toObject: () => new Date(date.toString() + ' ' + time.toString())
     };
 };

@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { invalidRequest, unauthorized, serverError } = require('../errors');
+const { invalidRequest, unauthorized, serverError, tooLate } = require('../errors');
 const { minimumRole, onlyRoles, roles } = require('../middlewares/roles');
 const bodySchema = require('../middlewares/body-schema');
 
 const bookingController = require('../controllers/booking');
 const routeController = require('../controllers/route');
-const { parseDate, parseTime } = require('../helpers/date');
+const { parseDate, parseTime, parseDateTime } = require('../helpers/date');
 
 
 function validateTicketNumbers(normalTickets, reducedTickets, childTickets) {
@@ -103,6 +103,11 @@ router.post('/booking', [
 
     if (isNaN(routeId) || date == null || hour == null) {
         return next(invalidRequest());
+    }
+
+    let dateTime = parseDateTime(date + ' ' + hour).toObject();
+    if (dateTime.getTime() - Date.now() < 24 * 60 * 60 * 1000) {
+        return next(tooLate());
     }
 
     let tickets = validateTicketNumbers(normalTickets, reducedTickets, childTickets);
