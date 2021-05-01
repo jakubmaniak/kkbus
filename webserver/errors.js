@@ -13,6 +13,7 @@ module.exports = {
     unauthorized:       error('unauthorized'),
     badSessionToken:    error('bad_session_token'),
     invalidValue:       error('invalid_value'),
+    notEnough:          error('not_enough'),
     badCredentials:     error('bad_credentials'),
     emailAlreadyTaken:  error('email_already_taken')
 };

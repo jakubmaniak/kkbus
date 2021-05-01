@@ -1,5 +1,5 @@
 let db = require('../configs/db');
-let { getFirst, deleteProps } = require('../helpers/query-utils');
+let { getFirst, deleteProps, pullProp } = require('../helpers/query-utils');
 
 module.exports.addUser = (user) => {
     return db.query('INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?)', [
@@ -83,4 +83,14 @@ module.exports.findUserByCredentials = (login, email, password) => {
 
 module.exports.deleteUser = (login) => {
     return db.query('DELETE FROM users WHERE login=?', [login]);
+};
+
+module.exports.findUserPoints = (userId) => {
+    return db.query('SELECT points FROM users WHERE id=? LIMIT 1', [userId])
+    .then(pullProp('points'))
+    .then(getFirst);
+};
+
+module.exports.updateUserPoints = (userId, points) => {
+    return db.query('UPDATE users SET points=? WHERE id=?', [points, userId]);
 };

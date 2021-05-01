@@ -1,23 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const { invalidRequest, notFound, invalidValue } = require('../errors');
+const { invalidRequest, notFound, invalidValue, notEnough } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
-const { minimumRole, roles } = require('../middlewares/roles');
+const { minimumRole, roles, onlyRoles } = require('../middlewares/roles');
 
 const rewardController = require('../controllers/reward');
-
-const userPoints = new Map([
-    ['annanowak1234', 1000000]
-]);
+const userController = require('../controllers/user');
 
 
 router.get('/loyalty-program', async (req, res, next) => {
-    let { login, role } = req.user;
+    let { id: userId, role } = req.user;
     
     let points = 0;
 
     if (role == roles.client) {
-        points = userPoints.get(login);
+        try {
+            points = await userController.findUserPoints(userId);
+        }
+        catch (err) {
+            return next(err);
+        }
     }
 
     res.ok({
@@ -30,11 +32,11 @@ router.get('/loyalty-program/rewards', async (req, res, next) => {
     res.ok(await rewardController.findAllRewards());
 });
 
-router.get('/loyalty-program/reward/:rewardId', [minimumRole('client')], async (req, res, next) => {
+router.get('/loyalty-program/reward/:rewardId', [onlyRoles(['client'])], async (req, res, next) => {
     let rewardId = parseInt(req.params.rewardId, 10);
     if (isNaN(rewardId)) return next(invalidRequest());
 
-    let { login } = req.user;
+    let { id: userId } = req.user;
 
     let reward;
     try {
@@ -44,12 +46,15 @@ router.get('/loyalty-program/reward/:rewardId', [minimumRole('client')], async (
         return next(err);
     }
 
-    if (!userPoints.has(login)) return next(invalidRequest());
-    let points = userPoints.get(login);
-    if (points < reward.requiredPoints) return next(invalidRequest());
+    try {
+        let userPoints = await userController.findUserPoints(userId);
+        if (userPoints < reward.requiredPoints) return next(notEnough());
 
-    points -= reward.requiredPoints;
-    userPoints.set(login, points);
+        await userController.updateUserPoints(userId, userPoints - reward.requiredPoints);
+    }
+    catch (err) {
+        return next(err);
+    }
 
     res.ok({ points });
 });

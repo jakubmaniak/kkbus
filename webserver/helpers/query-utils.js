@@ -7,6 +7,9 @@ module.exports = {
         if (results instanceof Array && results.length > 0) return results[0];
         else throw notFound();
     },
+    pullProp: (prop) => (results) => {
+        return results.map((result) => result[prop]);
+    },
     selectProps: (...props) => (results) => {
         if (!results || results.length == 0) return results;
 
