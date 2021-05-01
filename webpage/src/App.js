@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,6 +26,9 @@ import BookingList from './components/BookingList';
 import PostSignup from './components/PostSignup';
 import PostActivation from './components/PostActivation';
 import Timetable from './components/Timetable';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 function App() {
     let [user, setUser] = useState(initialContext.user);

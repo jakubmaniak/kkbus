@@ -1,5 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+
 import '../styles/RoutesPage.css';
 
 import { fromValue } from '../helpers/from-value';
@@ -44,8 +47,8 @@ function Route(props) {
         setStops(props.stopsPrices.split(',').map((e) => e.trim()).filter((e, i) => i % 2 === 0));
 
         setDates(new Array(8).fill(null).map((d, i) => {
-            let date = new Date(new Date().getTime() + i * 24 * 3600 * 1000);
-            return [date.toJSON().slice(0, 10), date.toLocaleDateString()];
+            let date = dayjs().tz('Europe/Warsaw').set('second', 0).set('millisecond', 0).add(i + 1, 'day');
+            return [date.format('YYYY-MM-DD'), date.format('DD.MM.YYYY'), date];
         }));
     }, []);
 
@@ -56,9 +59,9 @@ function Route(props) {
     useEffect(() => {
         setSelectedDate(null);
         setSelectedHour(null);
-        setNormalTickets(null);
-        setChildTickets(null);
-        setReducedTickets(null);
+        setNormalTickets('');
+        setChildTickets('');
+        setReducedTickets('');
         setSelectedFirstStop(null);
         setSelectedLastStop(null); 
     }, [modalVisibility])
@@ -67,6 +70,27 @@ function Route(props) {
         let currentPrice = calculatePrice(props.route, selectedFirstStop, selectedLastStop, normalTickets, reducedTickets);
         setPrice((isNaN(currentPrice) || currentPrice === null) ? 0 : currentPrice.toFixed(2));
     }, [normalTickets, reducedTickets, selectedFirstStop, selectedLastStop]);
+
+    useEffect(() => {
+        if (!selectedDate) {
+            return;
+        }
+
+        let now = dayjs().tz('Europe/Warsaw').set('second', 0).set('millisecond', 0);
+        let tomorrow = now.add(1, 'day');
+
+        if (selectedDate[2].diff(tomorrow, 'days') === 0) {
+            setHours(props.allHours.filter((hour) => {
+                let [h, m] = hour.split(':').map((e) => parseInt(e, 10));
+                
+                let time = tomorrow.set('hour', h).set('minute', m);
+                return time.diff(now, 'hours') >= 24;
+            }));
+        }
+        else {
+            setHours([...props.allHours])
+        }
+    }, [selectedDate]);
 
 
     function showModal() {
@@ -131,9 +155,9 @@ function Route(props) {
         }
 
         let tickets = {
-            normal: normalTickets === '' ? 0 : parseInt(normalTickets),
-            reduced: reducedTickets === '' ? 0 : parseInt(reducedTickets),
-            child: childTickets === '' ? 0 : parseInt(childTickets)
+            normal: normalTickets.trim() === '' ? 0 : parseInt(normalTickets, 10),
+            reduced: reducedTickets.trim() === '' ? 0 : parseInt(reducedTickets, 10),
+            child: childTickets.trim() === '' ? 0 : parseInt(childTickets, 10)
         };
 
         if (isNaN(tickets.normal) || isNaN(tickets.reduced) || isNaN(tickets.child)) {
@@ -142,9 +166,16 @@ function Route(props) {
         }
 
         api.addBooking(props.routeId, selectedDate[0], selectedHour, tickets.normal, tickets.reduced, tickets.child, selectedFirstStop, selectedLastStop)
-        .then(() => toast.success('Dodano rezerwację'));
-
-        setModalVisibility(false);
+        .then(() => {
+            setModalVisibility(false);
+            toast.success('Dodano rezerwację');
+        })
+        .catch((err) => {
+            if (err.message === 'too_late') {
+                toast.error('Nie można składać rezerwacji później niż 24 godziny przed wyjazdem');
+            }
+            else api.toastifyError(err);
+        });
     }
 
     function clientModal() {
