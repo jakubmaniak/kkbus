@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { serverError, invalidValue } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
-const { minimumRole, roles, onlyRoles } = require('../middlewares/roles');
+const { roles, onlyRoles, roleDictionary } = require('../middlewares/roles');
 const { parseDateTime } = require('../helpers/date');
 
 const routeReportController = require('../controllers/route-report');
@@ -45,7 +45,7 @@ router.post('/reports/route/:routeId', [
         if (req.user.role == roles.owner) {
             let user = await userController.findUserById(driverId);
 
-            if (user.role !== roles.driver) {
+            if (roleDictionary.getRole(user.role) !== roles.driver) {
                 throw invalidValue();
             }
         }
