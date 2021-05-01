@@ -24,5 +24,6 @@ Projekt tworzony z wykorzystaniem biblioteki React, Express.js oraz bazy MySQL.
 |  Zadania  |  Anna Burdzy  |  Jakub Maniak  |
 | ------------ | :------------: | :------------: |
 |  Szata graficzna  |  ●  |  ●●●  |
+|  Wdrożenie szaty graficznej  |  ●●●  |  ●  |
 |  Strona internetowa  |  ●●●  |  ●  |
 |  Aplikacja serwerowa  |    | ●●● |
