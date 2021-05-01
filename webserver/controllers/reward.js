@@ -31,7 +31,7 @@ module.exports.findAllRewards = () => {
 module.exports.findReward = (rewardId) => {
     return db.query('SELECT * FROM rewards WHERE id=?', [rewardId])
         .then(renameProp('limitPerUser', 'limit'))
-        .then(getFirst());
+        .then(getFirst);
 };
 
 module.exports.updateReward = (rewardId, reward) => {
