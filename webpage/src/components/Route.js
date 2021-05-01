@@ -47,7 +47,7 @@ function Route(props) {
         setStops(props.stopsPrices.split(',').map((e) => e.trim()).filter((e, i) => i % 2 === 0));
 
         setDates(new Array(8).fill(null).map((d, i) => {
-            let date = dayjs().tz('Europe/Warsaw').set('second', 0).set('millisecond', 0).add(i + 1, 'day');
+            let date = dayjs().tz('Europe/Warsaw').startOf('minute').add(i + 1, 'day');
             return [date.format('YYYY-MM-DD'), date.format('DD.MM.YYYY'), date];
         }));
     }, []);
@@ -76,7 +76,7 @@ function Route(props) {
             return;
         }
 
-        let now = dayjs().tz('Europe/Warsaw').set('second', 0).set('millisecond', 0);
+        let now = dayjs().tz('Europe/Warsaw').startOf('minute');
         let tomorrow = now.add(1, 'day');
 
         if (selectedDate[2].diff(tomorrow, 'days') === 0) {
