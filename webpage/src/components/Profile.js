@@ -42,10 +42,17 @@ function Profile() {
                         phoneNumber={person.phoneNumber}
                         client={role === 'client' ? true : false}
                     />
+                    <div className="data-change">
+                        <button>Zmień hasło</button>
+                        <button>Edytuj dane</button>
+                    </div>
                 </div>
-                <div className="tile half">
-                    <h2>Historia rezerwacji</h2>
-                </div>
+                {role === 'client' ?
+                    <div className="tile half">
+                        <h2>Historia rezerwacji</h2>
+                    </div>
+                    : null    
+                }
             </div>
         </div>
     );
