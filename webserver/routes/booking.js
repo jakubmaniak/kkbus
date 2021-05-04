@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { invalidRequest, unauthorized, serverError, tooLate } = require('../errors');
-const { minimumRole, onlyRoles, roles } = require('../middlewares/roles');
+const { minimumRole, onlyRoles, roles, roleDictionary } = require('../middlewares/roles');
 const bodySchema = require('../middlewares/body-schema');
 
 const bookingController = require('../controllers/booking');
@@ -50,9 +50,15 @@ function calculatePrice(route, firstStop, lastStop, normalTickets, reducedTicket
         .reduce((a, b) => a + b);
 }
 
-router.get('/bookings', [minimumRole('driver')], async (req, res, next) => {
+router.get('/bookings', [minimumRole('client')], async (req, res, next) => {
+    let role = roleDictionary.getRole(req.user.role);
     try {
-        res.ok(await bookingController.findAllBookings());
+        if (role == roles.client) {
+            res.ok(await bookingController.findUserBookings(req.user.id));
+        }
+        else {
+            res.ok(await bookingController.findAllBookings());
+        }
     }
     catch {
         next(serverError());
