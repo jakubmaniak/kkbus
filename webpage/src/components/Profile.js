@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import '../styles/Profile.css';
 
 import Person from './Person';
+import BookingHistoryItem from './BookingHistoryItem';
 import { ModalLoader } from './Loader';
 
 import UserContext from '../contexts/User';
@@ -63,6 +64,18 @@ function Profile() {
                 {role === 'client' ?
                     <div className="tile half">
                         <h2>Historia rezerwacji</h2>
+                        {bookingHistory.map((bookingHistoryItem, i) => {
+                            return (
+                                <BookingHistoryItem 
+                                    key={i}
+                                    date={bookingHistoryItem.date}
+                                    route={bookingHistoryItem.firstStop + ' ' + bookingHistoryItem.lastStop}
+                                    normalTickets={bookingHistoryItem.normalTickets}
+                                    reducedTickets={bookingHistoryItem.reducedTickets}
+                                    childTicekts={bookingHistoryItem.childTicekts}
+                                />
+                            );
+                        })}
                     </div>
                     : null    
                 }
