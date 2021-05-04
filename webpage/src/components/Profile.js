@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import Person from './Person';
+
 function Profile() {
     let [person, setPerson] = useState([]);
 
@@ -12,6 +14,7 @@ function Profile() {
             <div className="main">
                 <div className=" half tile">
                     <h2>Profil</h2>
+                    <Person />
                 </div>
                 <div className=" half tile">
                     <h2>Historia rezerwacji</h2>

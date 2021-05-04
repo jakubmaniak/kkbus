@@ -27,10 +27,12 @@ function Person(props) {
                 <span>Numer telefonu</span>
                 <span>{props.phoneNumber}</span>
             </div>
-            <div className="client-data">
-                <span>Liczba rezerwacji zrealizowanych/niezrealizowanych</span>
-                <span>{props.reservation}</span>
-            </div>
+            {props.client ?
+                <div className="client-data">
+                    <span>Liczba rezerwacji zrealizowanych/niezrealizowanych</span>
+                    <span>{props.reservation}</span>
+                </div>
+            : null}
         </>
     );
 }

@@ -191,6 +191,7 @@ function Client(props) {
                 birthday={props.birthday}
                 phoneNumber={props.phoneNumber}
                 reservation={props.reservation}
+                client={true}
             />
             <div className="client-new-reservation">
                 <button onClick={() => setModalVisibility(true)}>Nowa rezerwację</button>
