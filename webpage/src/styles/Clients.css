@@ -42,36 +42,6 @@
     width: 180px;
 }
 
-.client-data {
-    display: flex;
-    justify-content: space-between;
-}
-
-.client-data span:first-child {
-    width: 270px;
-}
-
-.client-data span {
-    margin-bottom: 8px;
-    height: 40px;
-}
-
-.client-data:last-child span:last-child {
-    display: flex;
-    align-items: center;
-}
-
-.client-data:last-child {
-    margin-bottom: 0;
-}
-
-.client-new-reservation {
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
-    margin-top: 8px;
-}
-
 .client-new-reservation button {
     width: 180px;
     height: 48px;

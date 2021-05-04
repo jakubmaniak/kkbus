@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Clients.css';
+import '../styles/Person.css';
 
 import * as api from '../api';
 

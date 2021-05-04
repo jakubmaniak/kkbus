@@ -1,0 +1,29 @@
+.person-data {
+    display: flex;
+    justify-content: space-between;
+}
+
+.person-data span:first-child {
+    width: 270px;
+}
+
+.person-data span {
+    margin-bottom: 8px;
+    height: 40px;
+}
+
+.person-data:last-child span:last-child {
+    display: flex;
+    align-items: center;
+}
+
+.person-data:last-child {
+    margin-bottom: 0;
+}
+
+.client-new-reservation {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: 8px;
+}
