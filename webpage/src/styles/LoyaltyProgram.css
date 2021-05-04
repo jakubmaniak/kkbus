@@ -22,6 +22,9 @@
 .loyalty-program .points {
     color: #D9B430;
     font-size: 15px;
+    font-weight: 500;
+    height: 100%;
+    margin-bottom: 20px;
 }
 
 .login {

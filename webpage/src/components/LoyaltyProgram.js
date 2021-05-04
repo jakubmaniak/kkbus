@@ -113,7 +113,12 @@ function LoyaltyProgram() {
                 <div className='tile half'>
                     <div className="title">
                         <h2>Sklep</h2>
-                        {role === 'client' ? <h3 className="points">Punkty: {clientPoints}</h3> : null}
+                        {role === 'client' ? 
+                            <h3 className="points">
+                                <span>Punkty: </span> 
+                                <span>{clientPoints}</span>
+                            </h3> 
+                        : null}
                     </div>
                     {rewards.map((reward) => {
                         return (
