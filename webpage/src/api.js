@@ -46,6 +46,10 @@ export async function getUserInfo() {
     return sendGet('/user/info');
 }
 
+export async function getUserProfile() {
+    return sendGet('/user/profile');
+}
+
 
 export async function getAllRoutes() {
     return sendGet('/routes');

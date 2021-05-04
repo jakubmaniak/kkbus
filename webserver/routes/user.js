@@ -6,6 +6,8 @@ const env = require('../helpers/env');
 const { invalidRequest, emailAlreadyTaken, badCredentials, serverError } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const { roles, minimumRole } = require('../middlewares/roles');
+const { parseDate } = require('../helpers/date');
+
 const userController = require('../controllers/user');
 
 
@@ -140,6 +142,15 @@ router.get('/user/info', (req, res) => {
             lastName: ''
         });
     }
+});
+
+router.get('/user/profile', [minimumRole('client')], async (req, res, next) => {
+    let user = await userController.findUserById(req.user.id);
+    
+    delete user.password;
+    user.birthDate = parseDate(user.birthDate)?.toString();
+
+    res.ok(user);
 });
 
 
