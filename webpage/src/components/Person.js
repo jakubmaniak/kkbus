@@ -5,11 +5,11 @@ function Person(props) {
         <>
             <div className="client-data">
                 <span>Imię</span>
-                <span>{props.name}</span>
+                <span>{props.firstName}</span>
             </div>
             <div className="client-data">
                 <span>Nazwisko</span>
-                <span>{props.surname}</span>
+                <span>{props.lastName}</span>
             </div>
             <div className="client-data">
                 <span>Login</span>
@@ -25,7 +25,7 @@ function Person(props) {
             </div>
             <div className="client-data">
                 <span>Numer telefonu</span>
-                <span>{props.phone}</span>
+                <span>{props.phoneNumber}</span>
             </div>
             <div className="client-data">
                 <span>Liczba rezerwacji zrealizowanych/niezrealizowanych</span>

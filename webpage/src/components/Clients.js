@@ -80,14 +80,14 @@ function Clients() {
                         return (
                             <Client
                                 key={i}
-                                name={client.firstName}
-                                surname={client.lastName}
+                                firstName={client.firstName}
+                                lastName={client.lastName}
                                 login={client.login}
                                 email={client.email}
                                 birthday={(new Date(client.birthDate)).toLocaleDateString()}
-                                phone={client.phoneNumber}
+                                phoneNumber={client.phoneNumber}
                                 userId={client.id}
-                                /*reservation={client.reservation}*/
+                                // reservation={client.reservation}
                             />
                         );
                     }) }

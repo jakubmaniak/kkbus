@@ -184,12 +184,12 @@ function Client(props) {
     return (
         <div className="tile client">
             <Person 
-                name={props.name}
-                surname={props.surname}
+                firstName={props.firstName}
+                lastName={props.lastName}
                 login={props.login}
                 email={props.email}
                 birthday={props.birthday}
-                phone={props.phone}
+                phoneNumber={props.phoneNumber}
                 reservation={props.reservation}
             />
             <div className="client-new-reservation">
