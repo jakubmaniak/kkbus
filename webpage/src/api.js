@@ -77,6 +77,10 @@ export async function addRouteReport(routeId, stop, vehicleId, amount, driverId 
 }
 
 
+export async function getUserBookings() {
+    return sendGet('/bookings');
+}
+
 export async function addBooking(routeId, date, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop) {
     return sendPost('/booking', { routeId, date, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop });
 }
