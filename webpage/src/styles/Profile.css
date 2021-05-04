@@ -2,3 +2,19 @@
     display: flex;
     align-items: flex-start;
 }
+
+.profile-page .data-change {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.profile-page .data-change button {
+    width: 180px;
+    height: 48px;
+}
+
+.profile-page .data-change button + button {
+    margin-left: 26px;
+}
