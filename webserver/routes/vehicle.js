@@ -165,20 +165,14 @@ router.post('/vehicle/:vehicleId/refuel', [
         return next(invalidValue());
     }
 
-    let vehicle;
     try {
-        vehicle = await vehicleController.findVehicle(vehicleId);
-    }
-    catch (err) {
-        return next(err);
-    }
+        let vehicle = await vehicleController.findVehicle(vehicleId);
+        
+        if (mileage < vehicle.mileage) {
+            throw invalidValue();
+        }
 
-    if (mileage < vehicle.mileage) {
-        return next(invalidValue());
-    }
-
-    try {
-        let result = await refuelController.addRefuel({
+        let addRefuel = refuelController.addRefuel({
             vehicleId,
             cost,
             amount,
@@ -186,17 +180,24 @@ router.post('/vehicle/:vehicleId/refuel', [
             date: parseDateTime(new Date())
         });
         
+        let updateVehicle = null;
+        
         if (mileage > vehicle.mileage) {
-            await vehicleController.updateVehicle(vehicleId, {
+            updateVehicle = vehicleController.updateVehicle(vehicleId, {
                 ...vehicle,
                 mileage
             });
         }
 
+        let [result, ] = await Promise.all([
+            addRefuel,
+            updateVehicle
+        ]);
+
         res.ok({ id: result.insertId });
     }
-    catch {
-        return next(serverError());
+    catch (err) {
+        next(err);
     }
 });
 
