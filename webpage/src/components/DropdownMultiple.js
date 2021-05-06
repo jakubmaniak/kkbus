@@ -8,30 +8,22 @@ function DropdownMultiple(props) {
     let [placeholderVisible, setPlaceholderVisible] = useState(false);
 
     useEffect(() => {
-        if (!(props.items instanceof Array)) {
-            if ('placeholder' in props) {
-                setPlaceholderVisible(true);
-            }
-
-            return;
+        if (!(props.items instanceof Array) && 'placeholder' in props) {
+            setPlaceholderVisible(true);
         }
-    }, [props.items]);
+    }, [props.items, props.placeholder]);
 
     useEffect(() => {
-        if (!(props.selectedItems instanceof Array)) {
-            return;
+        if (props.selectedItems instanceof Array) {
+            setSelectedItems(new Set(props.selectedItems));
         }
-
-        setSelectedItems(new Set(props.selectedItems));
     }, [props.selectedItems]);
 
     useEffect(() => {
-        if (!('placeholder' in props)) {
-            return;
+        if ('placeholder' in props) {
+            setPlaceholderVisible(selectedItems.size === 0);
         }
-
-        setPlaceholderVisible(selectedItems.size === 0);
-    }, [selectedItems]);
+    }, [selectedItems, props.placeholder]);
 
 
     function getLength() {
