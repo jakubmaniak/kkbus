@@ -16,9 +16,11 @@ function Profile() {
 
     let [loading, setLoading] = useState(true);
     let loadingInitTime = Date.now();
-    let { role } = useContext(UserContext).user;
+    let { role, loaded: userInfoLoaded } = useContext(UserContext).user;
 
     useEffect(() => {
+        if (!userInfoLoaded) return;
+
         let userProfilePromise = api.getUserProfile()
             .then(setPerson);
 
@@ -39,7 +41,7 @@ function Profile() {
                 }, Math.max(0, 500 - (Date.now() - loadingInitTime)));
             })
             .catch(api.toastifyError);
-    }, []);
+    }, [userInfoLoaded]);
 
     return (
         <div className="profile-page page">

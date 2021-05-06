@@ -28,6 +28,7 @@ function Header() {
                 .then((data) => {
                     user.role = data.role;
                     user.id = data.id;
+                    user.loaded = true;
                     
                     setUser({ ...user });
                     setName(data.firstName + ' ' + data.lastName);
