@@ -50,19 +50,23 @@ router.post('/loyalty-program/order/:rewardId', [onlyRoles('client')], async (re
 
     let { id: userId } = req.user;
 
-    try {
-        let reward = await rewardController.findReward(rewardId);
-        let userPoints = await userController.findUserPoints(userId);
-        
+    try {        
+        let [reward, userPoints] = await Promise.all([
+            rewardController.findReward(rewardId),
+            userController.findUserPoints(userId)
+        ]);
+
         if (userPoints < reward.requiredPoints) return next(notEnough());
 
-        await rewardOrderController.addOrder({
-            rewardId,
-            userId,
-            points: reward.requiredPoints,
-            orderDate: parseDateTime(new Date()).toString()
-        });
-        await userController.updateUserPoints(userId, userPoints - reward.requiredPoints);
+        await Promise.all([
+            rewardOrderController.addOrder({
+                rewardId,
+                userId,
+                points: reward.requiredPoints,
+                orderDate: parseDateTime(new Date()).toString()
+            }),
+            userController.updateUserPoints(userId, userPoints - reward.requiredPoints)
+        ]);
 
         res.ok({ points: userPoints });
     }
