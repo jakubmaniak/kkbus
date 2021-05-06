@@ -35,7 +35,9 @@ module.exports.addBooking = (booking) => {
 };
 
 module.exports.findAllBookings = () => {
-    return db.query('SELECT * FROM bookings');
+    return db.query(`SELECT bookings.*, users.firstName, users.lastName
+        FROM bookings
+        JOIN users ON bookings.userId = users.id`);
 };
 
 module.exports.findUserBookingsByRoute = (routeId, date, hour) => {
