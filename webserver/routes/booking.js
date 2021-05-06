@@ -65,6 +65,32 @@ router.get('/bookings', [minimumRole('client')], async (req, res, next) => {
     }
 });
 
+router.get('/bookings/past', [onlyRoles('client')], async (req, res, next) => {
+    try {
+        let dateTime = parseDateTime(new Date());
+        let date = dateTime.getDate().toString();
+        let hour = dateTime.getTime().toString();
+
+        res.ok(await bookingController.findUserBookingsBeforeDate(req.user.id, date, hour));
+    }
+    catch {
+        next(serverError());
+    }
+});
+
+router.get('/bookings/future', [onlyRoles('client')], async (req, res, next) => {
+    try {
+        let dateTime = parseDateTime(new Date());
+        let date = dateTime.getDate().toString();
+        let hour = dateTime.getTime().toString();
+
+        res.ok(await bookingController.findUserBookingsAfterDate(req.user.id, date, hour));
+    }
+    catch {
+        next(serverError());
+    }
+});
+
 router.get('/bookings/:routeId/:date/:hour', [minimumRole('driver')], async (req, res, next) => {
     let { routeId, date, hour } = req.params;
 

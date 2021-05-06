@@ -81,6 +81,14 @@ export async function getUserBookings() {
     return sendGet('/bookings');
 }
 
+export async function getUserPastBookings() {
+    return sendGet('/bookings/past');
+}
+
+export async function getUserFutureBookings() {
+    return sendGet('/bookings/future');
+}
+
 export async function addBooking(routeId, date, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop) {
     return sendPost('/booking', { routeId, date, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop });
 }

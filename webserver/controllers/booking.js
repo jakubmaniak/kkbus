@@ -51,7 +51,23 @@ module.exports.findUserBookingsByRoute = (routeId, date, hour) => {
 };
 
 module.exports.findUserBookings = (userId) => {
-    return db.query('SELECT * FROM bookings WHERE userId=?', [userId]);
+    return db.query('SELECT * FROM bookings WHERE userId=? ORDER BY date DESC, hour DESC', [userId]);
+};
+
+module.exports.findUserBookingsBeforeDate = (userId, date, hour) => {
+    return db.query(`SELECT * FROM bookings
+        WHERE userId=? AND (date < ? OR (date=? AND hour <= ?))
+        ORDER BY date DESC, hour DESC`, [
+            userId, date, date, hour
+        ]);
+};
+
+module.exports.findUserBookingsAfterDate = (userId, date, hour) => {
+    return db.query(`SELECT * FROM bookings
+        WHERE userId=? AND (date > ? OR (date=? AND hour > ?))
+        ORDER BY date ASC, hour ASC`, [
+            userId, date, date, hour
+        ]);
 };
 
 module.exports.findBooking = (bookingId) => {
