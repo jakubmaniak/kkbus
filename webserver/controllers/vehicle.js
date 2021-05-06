@@ -31,7 +31,7 @@ module.exports.addVehicle = (vehicle) => {
 };
 
 module.exports.findAllVehicles = () => {
-    return db.query(`SELECT vehicles.*, AVG(refuels.amount) AS combustion
+    return db.query(`SELECT vehicles.*, SUM(refuels.amount) / (MAX(refuels.mileage) - MIN(refuels.mileage)) * 100 AS combustion
         FROM vehicles
         LEFT JOIN refuels ON vehicles.id = refuels.vehicleId
         GROUP BY vehicles.id`
@@ -39,7 +39,7 @@ module.exports.findAllVehicles = () => {
 };
 
 module.exports.findVehicle = (vehicleId) => {
-    return db.query(`SELECT vehicles.*, AVG(refuels.amount) AS combustion
+    return db.query(`SELECT vehicles.*, SUM(refuels.amount) / (MAX(refuels.mileage) - MIN(refuels.mileage)) * 100 AS combustion
         FROM vehicles
         LEFT JOIN refuels ON vehicles.id = refuels.vehicleId
         WHERE vehicles.id=?`, [
