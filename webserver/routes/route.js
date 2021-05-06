@@ -16,23 +16,8 @@ router.get('/routes', async (req, res, next) => {
 router.get('/route/:id', async (req, res, next) => {
     let routeId = parseInt(req.params.id, 10);
 
-    // let includeOpposite = ('includeOpposite' in req.query);
-
     if (isNaN(routeId)) return next(invalidRequest());
 
-    // if (includeOpposite) {
-    //     let route = routes.get(routeId);
-    //     let oppositeId = route.oppositeId;
-        
-    //     if (oppositeId != null && routes.has(oppositeId)) {
-    //         let oppositeRoute = routes.get(oppositeId);
-    //         res.ok([route, oppositeRoute]);
-    //     }
-    //     else {
-    //         res.ok([route, null]);
-    //     }
-    // }
-    // else {
     try {
         res.ok(await routeController.findRoute(routeId));
     }
@@ -77,8 +62,6 @@ router.delete('/route/:id', [minimumRole('office')], async (req, res, next) => {
 
     if (isNaN(routeId)) return next(invalidRequest());
 
-    //routes.delete(routeId);
-
     try {
         await routeController.deleteRoute(routeId);
         res.ok();
@@ -114,7 +97,6 @@ router.put('/route/:id', [
 
     let updatedRoute = { id: routeId, oppositeId, departureLocation, arrivalLocation, hours, stops, prices };
 
-    //routes.set(routeId, updatedRoute);
     try {
         await routeController.updateRoute(routeId, updatedRoute);
         res.ok(updatedRoute);

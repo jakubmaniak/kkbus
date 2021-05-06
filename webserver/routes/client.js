@@ -7,7 +7,6 @@ const userController = require('../controllers/user');
 
 
 router.get('/clients', [minimumRole(roles.office)], async (req, res, next) => {
-    //let { param, query } = req.params;
     let [[param, query]] = Object.entries(req.query);
 
     let availableParams = ['id', 'email', 'login', 'name', 'phone'];
