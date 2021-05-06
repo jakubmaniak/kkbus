@@ -15,7 +15,6 @@ function Profile() {
     let [bookingHistory, setBookingHistory] = useState([]);
 
     let [loading, setLoading] = useState(true);
-    let loadingInitTime = Date.now();
     let { role, loaded: userInfoLoaded } = useContext(UserContext).user;
 
     useEffect(() => {
@@ -35,13 +34,9 @@ function Profile() {
         }
 
         Promise.all([userProfilePromise, bookingsPromise])
-            .then(() => {
-                setTimeout(() => {
-                    setLoading(false);
-                }, Math.max(0, 500 - (Date.now() - loadingInitTime)));
-            })
+            .then(() => setLoading(false))
             .catch(api.toastifyError);
-    }, [userInfoLoaded]);
+    }, [userInfoLoaded, role]);
 
     return (
         <div className="profile-page page">
