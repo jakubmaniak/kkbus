@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { serverError, invalidValue } = require('../errors');
+const { invalidValue } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const { roles, onlyRoles, roleDictionary } = require('../middlewares/roles');
 const { parseDateTime } = require('../helpers/date');
@@ -39,8 +39,10 @@ router.post('/reports/route/:routeId', [
     }
 
     try {
-        await vehicleController.findVehicle(vehicleId);
-        let route = await routeController.findRoute(routeId);
+        let [route, ] = await Promise.all([
+            routeController.findRoute(routeId),
+            vehicleController.findVehicle(vehicleId)
+        ]);
         
         if (req.user.role == roles.owner) {
             let user = await userController.findUserById(driverId);
@@ -53,12 +55,7 @@ router.post('/reports/route/:routeId', [
         if (!route.stops.includes(stop)) {
             throw invalidValue();
         }
-    }
-    catch (err) {
-        return next(err);
-    }
 
-    try {
         let result = await routeReportController.addReport({
             routeId,
             stop,
@@ -70,8 +67,8 @@ router.post('/reports/route/:routeId', [
 
         res.ok({ id: result.insertId });
     }
-    catch {
-        return next(serverError());
+    catch (err) {
+        next(err);
     }
 });
 
