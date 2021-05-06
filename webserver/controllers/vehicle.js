@@ -1,5 +1,5 @@
 let db = require('../configs/db');
-let { getFirst } = require('../helpers/query-utils');
+let { getFirst, splitProps } = require('../helpers/query-utils');
 
 /*CREATE TABLE `VdWUtFNeZC`.`vehicles` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
@@ -31,16 +31,22 @@ module.exports.addVehicle = (vehicle) => {
 };
 
 module.exports.findAllVehicles = () => {
-    return db.query('SELECT * FROM vehicles');
+    return db.query(`SELECT vehicles.*, AVG(refuels.amount) AS combustion
+        FROM vehicles
+        LEFT JOIN refuels ON vehicles.id = refuels.vehicleId
+        GROUP BY vehicles.id`
+    ).then(splitProps('routeIds'));
 };
 
 module.exports.findVehicle = (vehicleId) => {
-    return db.query(`SELECT *
+    return db.query(`SELECT vehicles.*, AVG(refuels.amount) AS combustion
         FROM vehicles
-        WHERE vehicles.id=?
-        LIMIT 1`,
-        [vehicleId]
-    ).then(getFirst);
+        LEFT JOIN refuels ON vehicles.id = refuels.vehicleId
+        WHERE vehicles.id=?`, [
+            vehicleId
+        ])
+        .then(splitProps('routeIds'))
+        .then(getFirst);
 };
 
 module.exports.updateVehicle = (vehicleId, vehicle) => {

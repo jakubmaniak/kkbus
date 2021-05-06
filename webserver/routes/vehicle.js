@@ -14,9 +14,9 @@ const refuelController = require('../controllers/refuel');
 router.get('/vehicles', [minimumRole('driver')], async (req, res, next) => {
     let vehicles = (await vehicleController.findAllVehicles()).map((vehicle) => ({
         ...vehicle,
-        combustion: 0,
         driver: null,
-        routeIds: vehicle.routeIds.split(',').map((id) => parseInt(id, 10))
+        combustion: parseFloat(vehicle.combustion?.toFixed(3) ?? 0),
+        routeIds: vehicle.routeIds.map((id) => parseInt(id, 10))
     }));
     res.ok(vehicles);
 });
@@ -33,7 +33,12 @@ router.get('/vehicle/:id', [minimumRole('driver')], async (req, res, next) => {
         return next(err);
     }
     
-    vehicle = { ...vehicle, combustion: 0, driver: null, routeIds: vehicle.routeIds.split(',').map((id) => parseInt(id, 10)) };
+    vehicle = { 
+        ...vehicle,
+        driver: null,
+        combustion: parseFloat(vehicle.combustion?.toFixed(3) ?? 0),
+        routeIds: vehicle.routeIds.map((id) => parseInt(id, 10))
+    };
 
     res.ok(vehicle);
 });
@@ -111,7 +116,7 @@ router.put('/vehicle/:id', [
         return next(err);
     }
 
-    res.ok({ id: wantedId, ...updatedVehicle, combustion: 0, driver: null });
+    res.ok({ id: wantedId, ...updatedVehicle });
 });
 
 router.delete('/vehicle/:id', [minimumRole('owner')], async (req, res, next) => {
