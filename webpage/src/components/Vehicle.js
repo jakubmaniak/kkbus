@@ -61,15 +61,20 @@ function Vehicle(props) {
             toast.error('Wypełnij wszystkie pola!');
             return;
         }
-        
-        if (isNaN(parseInt(year)) || isNaN(parseInt(seats)) || isNaN(parseInt(mileage))) {
-            toast.error('Nieprawidłowy typ danych');
-            return;
-        }
 
         let currentYear = (year !== props.year ? parseInt(year) : props.year);
         let currentMileage = (mileage !== props.mileage ? parseInt(mileage) : props.mileage);
         let currentSeats = (seats !== props.seats ? parseInt(seats) : props.seats);
+
+        if (isNaN(currentYear) || isNaN(currentMileage) || isNaN(currentSeats)) {
+            toast.error('Nieprawidłowy typ wprowadzonych danych');
+            return;
+        }
+
+        if (currentSeats <= 0) {
+            toast.error('Pojazd nie może mieć mniej niż 1 miejsce');
+            return;
+        }
 
         let currentRoutes = selectedRoutes.map((route) => route.id);
 
@@ -87,10 +92,10 @@ function Vehicle(props) {
         )
         .then(() => {
             props.updateVehicle();
+            setModalEditVehicleVisibility(false);
             toast.success('Zmieniono dane pojazdu');
-        });
-
-        setModalEditVehicleVisibility(false);
+        })
+        .catch(api.toastifyError);
     }
 
     function editDataModal() {

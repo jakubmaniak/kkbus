@@ -82,29 +82,40 @@ function VehicleInfo() {
         .catch(api.toastifyError);
     }
 
-    function addVehicle() {
-        if(brand !== '' && model !== '' && year !== '' && plate !== '' && mileage !== '' && seats !== '' 
-            && selectedState !== '' && selectedParking !== '' && selectedRoutes !== '') {
-            if(!isNaN(parseInt(year)) && !isNaN(parseInt(seats)) && !isNaN(parseInt(mileage))) {
-                setModalAddVehicleVisibility(false);
-                
-                let currentRoutes = [];
-                currentRoutes = selectedRoutes.map((route) => route.id);
+    function areFieldsEmpty() {
+        return [brand, model, year, mileage, plate, seats]
+            .some((value) => value.toString().trim() === '');
+    }
 
-                api.addVehicle(brand, model, parseInt(year), parseInt(seats), plate, parseInt(mileage), selectedState, selectedParking, currentRoutes)
-                .then(() => {
-                    updateVehicle();
-                    toast.success('Dodano pojazd');
-                })
-                .catch(api.toastifyError);
-            }
-            else {
-                toast.error('Nieprawidłowy typ danych');
-            }
-        }
-        else {
+    function addVehicle() {
+        if (areFieldsEmpty()) {
             toast.error('Wypełnij wszystkie pola');
+            return;
         }
+
+        let currentYear = parseInt(year);
+        let currentMileage = parseInt(mileage);
+        let currentSeats = parseInt(seats);
+
+        if (isNaN(currentYear) || isNaN(currentMileage) || isNaN(currentSeats)) {
+            toast.error('Nieprawidłowy typ wprowadzonych danych');
+            return;
+        }
+        
+        if (currentSeats <= 0) {
+            toast.error('Pojazd nie może mieć mniej niż 1 miejsce');
+            return;
+        }
+
+        let currentRoutes = selectedRoutes.map((route) => route.id);
+
+        api.addVehicle(brand, model, currentYear, currentSeats, plate, currentMileage, selectedState, selectedParking, currentRoutes)
+        .then(() => {
+            updateVehicle();
+            setModalAddVehicleVisibility(false);
+            toast.success('Dodano pojazd');
+        })
+        .catch(api.toastifyError);
     }
 
     return (
