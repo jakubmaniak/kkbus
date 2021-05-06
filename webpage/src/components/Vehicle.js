@@ -29,7 +29,6 @@ function Vehicle(props) {
 
     let [state, setState] = useState(['Aktywny', 'Nieaktywny', 'W naprawie']);
     let [parking, setParking] = useState(['Parking nr 1', 'Parking nr 2']);
-    let [routes, setRoutes] = useState([]);
     let [departureArrivalLocations, setDepartureArrivalLocations] = useState([]);
 
     let [selectedState, setSelectedState] = useState(props.state);
@@ -41,51 +40,57 @@ function Vehicle(props) {
         
         setDepartureArrivalLocations(props.routeIds.map((routeId) => {
             let route = routeMap[routeId];
+
             if (!route) {
                 return '...';
             }
 
             return route.arrivalLocation + ' - ' + route.departureLocation;
         }));
-    }, [props.routes.current]);
+
+        setSelectedRoutes(props.routeIds.map((routeId) => routeMap[routeId]));
+    }, [props.routes.current, props.routeIds]);
+    
+    function areFieldsEmpty() {
+        return [brand, model, year, mileage, plate, seats]
+            .some((value) => value.toString().trim() === '');
+    }
 
     function editVehicle(vehicleId) {
-        setModalEditVehicleVisibility(false);
-
-        //sprzwdzanie czy nie ma pustych pol
-        if(brand !== '' && model !== '' && year !== '' && mileage !== '' && plate !== '' && seats !== '') {
-            //sprawdzenie czy pola liczbowe sa liczbami
-            if(!isNaN(parseInt(year)) && !isNaN(parseInt(seats)) && !isNaN(parseInt(mileage))) {
-                    let currentYear = year !== props.year ? parseInt(year) : props.year;
-                    let currentMileage = mileage !== props.mileage ? parseInt(mileage) : props.mileage;
-                    let currentSeats = seats !== props.seats ? parseInt(seats) : props.seats;
-                    let currentRoutes = [];
-                    currentRoutes = selectedRoutes.map((route) => route.id);
-
-                    api.updateVehicle(
-                        vehicleId,
-                        brand,
-                        model, 
-                        currentYear, 
-                        currentSeats, 
-                        plate, 
-                        currentMileage,
-                        selectedState,
-                        selectedParking,
-                        currentRoutes
-                    )
-                    .then(() => {
-                        props.updateVehicle();
-                        toast.success('Zmieniono dane pojazdu');
-                    });
-            }
-            else {
-                toast.error('Nieprawidłowy typ danych');
-            }
-        }
-        else {
+        if (areFieldsEmpty()) {
             toast.error('Wypełnij wszystkie pola!');
-        }        
+            return;
+        }
+        
+        if (isNaN(parseInt(year)) || isNaN(parseInt(seats)) || isNaN(parseInt(mileage))) {
+            toast.error('Nieprawidłowy typ danych');
+            return;
+        }
+
+        let currentYear = (year !== props.year ? parseInt(year) : props.year);
+        let currentMileage = (mileage !== props.mileage ? parseInt(mileage) : props.mileage);
+        let currentSeats = (seats !== props.seats ? parseInt(seats) : props.seats);
+
+        let currentRoutes = selectedRoutes.map((route) => route.id);
+
+        api.updateVehicle(
+            vehicleId,
+            brand,
+            model, 
+            currentYear, 
+            currentSeats, 
+            plate, 
+            currentMileage,
+            selectedState,
+            selectedParking,
+            currentRoutes
+        )
+        .then(() => {
+            props.updateVehicle();
+            toast.success('Zmieniono dane pojazdu');
+        });
+
+        setModalEditVehicleVisibility(false);
     }
 
     function editDataModal() {
@@ -98,10 +103,10 @@ function Vehicle(props) {
                             <input placeholder="Marka" defaultValue={props.brand} onChange={fromValue(setBrand)}/>
                             <input placeholder="Model" defaultValue={props.model} onChange={fromValue(setModel)}/>
                         </div>
-                       <div className="input-container">
+                        <div className="input-container">
                             <input placeholder="Rocznik" defaultValue={props.year} onChange={fromValue(setYear)}/>
                             <input placeholder="Przebieg" defaultValue={props.mileage} onChange={fromValue(setMileage)}/>
-                       </div>
+                        </div>
                         <div className="input-container">
                             <input placeholder="Rejestracja" defaultValue={props.plate} onChange={fromValue(setPlate)}/>
                             <input placeholder="Ilość miejsc" defaultValue={props.seats} onChange={fromValue(setSeats)}/>
@@ -120,11 +125,9 @@ function Vehicle(props) {
                         />
                         <DropdownMultiple 
                             placeholder="Dostępne trasy dla pojazdów"
-                            items={routes}
+                            items={props.routes.current}
                             selectedItems={selectedRoutes}
                             textFormatter={routeFormatter}
-                            handleSelect={(item, items) => console.log('select', items)}
-                            handleUnselect={(item, items) => console.log('unselect', items)}
                             handleChange={setSelectedRoutes}
                         />
                     </form>
@@ -168,10 +171,10 @@ function Vehicle(props) {
                     <span>Dostępność tras</span>
                     <div className="available-routes-container">
                         {departureArrivalLocations.map((location, i) => {
-                                return (
-                                    <p key={i}>{location}</p>
-                                );
-                            })}
+                            return (
+                                <p key={i}>{location}</p>
+                            );
+                        })}
                     </div>
                 </div>
                 <div className="details">
@@ -219,8 +222,8 @@ function Vehicle(props) {
             </Modal>
             <NotificationModal 
                 visible={modalDeleteVehicleVisibility}
-                header={'Usuwanie pojazdu'}
-                name={'pojazd'}
+                header="Usuwanie pojazdu"
+                name="pojazd"
                 notificationModalExit={() => setModalDeleteVehicleVisibility(false)}
                 delete={() => props.deleteVehicle()}
             />
