@@ -52,6 +52,7 @@ function Profile() {
                         birthday={person.birthDate}
                         phoneNumber={person.phoneNumber}
                         client={role === 'client' ? true : false}
+                        role={role}
                     />
                     <div className="data-change">
                         <button>Zmień hasło</button>

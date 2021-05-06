@@ -1,6 +1,16 @@
 import React from 'react';
 
 function Person(props) {
+    function textifyRole(role) {
+        return {
+            guest: 'Niezalogowany',
+            client: 'Klient',
+            driver: 'Kierowca',
+            office: 'Pracownik sekretariatu',
+            owner: 'Właściciel'
+        }[role] ?? '-';
+    }
+
     return (
         <>
             <div className="person-data">
@@ -27,12 +37,19 @@ function Person(props) {
                 <span>Numer telefonu</span>
                 <span>{props.phoneNumber}</span>
             </div>
-            {props.client ?
+            {
+                props.client
+                ?
                 <div className="client-data">
                     <span>Liczba rezerwacji zrealizowanych/niezrealizowanych</span>
                     <span>{props.reservation}</span>
                 </div>
-            : null}
+                :
+                <div className="person-data">
+                    <span>Rola</span>
+                    <span>{textifyRole(props.role)}</span>
+                </div>
+            }
         </>
     );
 }
