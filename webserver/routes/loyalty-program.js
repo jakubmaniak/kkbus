@@ -3,8 +3,10 @@ const router = express.Router();
 const { invalidRequest, notFound, invalidValue, notEnough } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const { minimumRole, roles, onlyRoles } = require('../middlewares/roles');
+const { parseDateTime } = require('../helpers/date');
 
 const rewardController = require('../controllers/reward');
+const rewardOrderController = require('../controllers/reward-order');
 const userController = require('../controllers/user');
 
 
@@ -32,26 +34,34 @@ router.get('/loyalty-program/rewards', async (req, res, next) => {
     res.ok(await rewardController.findAllRewards());
 });
 
-router.get('/loyalty-program/reward/:rewardId', [onlyRoles('client')], async (req, res, next) => {
+router.get('/loyalty-program/orders', [onlyRoles('client')], async (req, res, next) => {
+    try {
+        let orders = await rewardOrderController.findUserOrders(req.user.id);
+        res.ok(orders);
+    }
+    catch (err) {
+        return next(err);
+    }
+});
+
+router.post('/loyalty-program/order/:rewardId', [onlyRoles('client')], async (req, res, next) => {
     let rewardId = parseInt(req.params.rewardId, 10);
     if (isNaN(rewardId)) return next(invalidRequest());
 
     let { id: userId } = req.user;
 
-    let reward;
     try {
-        reward = await rewardController.findReward(rewardId);
-    }
-    catch (err) {
-        return next(err);
-    }
-
-    let userPoints;
-
-    try {
-        userPoints = await userController.findUserPoints(userId);
+        let reward = await rewardController.findReward(rewardId);
+        let userPoints = await userController.findUserPoints(userId);
+        
         if (userPoints < reward.requiredPoints) return next(notEnough());
 
+        await rewardOrderController.addOrder({
+            rewardId,
+            userId,
+            points: reward.requiredPoints,
+            orderDate: parseDateTime(new Date()).toString()
+        });
         await userController.updateUserPoints(userId, userPoints - reward.requiredPoints);
 
         res.ok({ points: userPoints });

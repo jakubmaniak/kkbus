@@ -184,8 +184,12 @@ export async function getAllRewards() {
     return sendGet('/loyalty-program/rewards');
 }
 
+export async function getUserRewardOrders() {
+    return sendGet('/loyalty-program/orders');
+}
+
 export async function buyReward(rewardId) {
-    return sendGet('/loyalty-program/reward/' + rewardId);
+    return sendPost('/loyalty-program/order/' + rewardId);
 }
 
 export async function addReward(name, requiredPoints, amount = null, limit = null) {
