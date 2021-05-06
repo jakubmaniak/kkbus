@@ -202,11 +202,11 @@ function Vehicle(props) {
                     </div>
                     <div className="vehicle-info">
                         <span>Przebieg:</span>
-                        <span>{props.mileage}</span>
+                        <span>{props.mileage} KM</span>
                     </div>
                     <div className="vehicle-info">
                         <span>Średnie spalanie:</span>
-                        <span>{props.combustion}</span>
+                        <span>{props.combustion} L/100KM</span>
                     </div>
                     <div className="vehicle-info">
                         <span>Aktualny kierowca:</span>
