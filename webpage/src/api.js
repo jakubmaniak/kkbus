@@ -47,7 +47,7 @@ export async function register(email, firstName, lastName, birthDate, phoneNumbe
  * @async
  * @param {string} currentPassword
  * @param {string} newPassword
- * @returns Promise of object where a result is null
+ * @returns Promise of object where the result is null
  */
 export async function updateUserPassword(currentPassword, newPassword) {
     return sendPatch('/user/password', { currentPassword, newPassword })
@@ -64,7 +64,7 @@ export async function getUserProfile() {
 }
 
 /**
- * `PATCH /user/profile` Change the user personal data
+ * `PATCH /api/user/profile` Change the user personal data
  * @async
  * @param {object} user
  * @param {string} [user.firstName]
@@ -73,7 +73,7 @@ export async function getUserProfile() {
  * @param {string} [user.login]
  * @param {string} [user.email]
  * @param {string} [user.phoneNumber]
- * @return Promise of object where a result is null
+ * @return Promise of object where the result is null. Generates a new session token and passes its in a cookie if login is given.
  */
 export async function updateUserProfile({ firstName = null, lastName = null, birthDate = null, login = null, email = null, phoneNumber = null }) {
     return sendPatch('/user/profile', { firstName, lastName, birthDate, login, email, phoneNumber })
