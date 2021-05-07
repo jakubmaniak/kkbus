@@ -27,19 +27,43 @@ function LoyaltyProgram() {
     let [limit, setLimit] = useState('');
 
     let [clientPoints, setClientsPoints] = useState();
+    let [rewardOrders, setRewardOrders] = useState([]);
 
     let { role } = useContext(UserContext).user;
 
-    useEffect(() => {
+    useEffect(() => {            
         api.getAllRewards()
             .then((results) => {
                 setRewards(results);
                 setTimeout(() => {
                     setLoading(false);
-                }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
+                }, Math.max(0, 550 - (Date.now() - loadingInitTime)));
             })
             .catch(api.toastifyError);
     }, []);
+
+
+
+    useEffect(() => {
+        if(role !== 'client') {
+            return;
+        }
+
+        let promiseLoyalityProgram = api.getLoyaltyProgram()
+            .then((results) => {
+                setClientsPoints(results.points);
+            })
+            .catch(api.errorToString);
+    
+        let promiseRewardOrders = api.getUserRewardOrders()
+            .then((results) => {
+                setRewardOrders(results);
+            })
+            .catch(api.toastifyError);
+
+        Promise.all([promiseLoyalityProgram, promiseRewardOrders]);
+    }, [role]);
+
 
     function updateRewards() {
         api.getAllRewards()
@@ -102,12 +126,6 @@ function LoyaltyProgram() {
     }
 
     function clientGuestTile() {
-        api.getLoyaltyProgram()
-            .then((results) => {
-                setClientsPoints(results.points);
-            })
-            .catch(api.errorToString);
-
         return (
             <div className="main">
                 <div className='tile half'>
@@ -145,8 +163,16 @@ function LoyaltyProgram() {
                     : (role === 'client') ? 
                         <div className="tile half">
                             <h2>Historia zakupów</h2>
-                            <p>28.01.2021 Kupiono 1 Bilet za 2000 punktów</p>
-                            <p>28.01.2021 Kupiono 2 Bilet za 3500 punktów</p>
+                            {rewardOrders.map((rewardOrder, i) => {
+                                {console.log(rewards.find(({id}) => rewardOrder.rewardId === id))}
+                              return (
+                                <p className="reward-history" key={i}>
+                                    <span>{new Date(rewardOrder.orderDate).toLocaleDateString()}</span>
+                                    <span>Nagroda: {(rewards.find(({id}) => rewardOrder.rewardId === id))?.name}</span>
+                                    <span>Punkty: {rewardOrder.points}</span>
+                                </p>
+                              );  
+                            })}
                         </div>
                     : null
                 }
