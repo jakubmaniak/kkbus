@@ -3,10 +3,15 @@ import '../styles/Profile.css';
 
 import Person from './Person';
 import { ModalLoader } from './Loader';
+import Modal from './Modal';
 
 import UserContext from '../contexts/User';
+import { fromValue } from '../helpers/from-value';
 
 import * as api from '../api';
+import toast from '../helpers/toast';
+
+import dayjs from 'dayjs';
 
 
 function Profile() {
@@ -15,6 +20,16 @@ function Profile() {
     let [loading, setLoading] = useState(true);
     let { role, loaded: userInfoLoaded } = useContext(UserContext).user;
 
+    let [modalChangePasswordVisibility, setModalChangePasswordVisibility] = useState(false);
+    let [modalChangeDataVisibility, setModalChangeDataVisibility] = useState(false);
+
+    let [email, setEmail] = useState();
+    let [login, setLogin] = useState('');
+    let [firstName, setFirstName] = useState('');
+    let [lastName, setLastName] = useState('');
+    let [birthDate, setBirthDate] = useState('');
+    let [phoneNumber, setPhoneNumber] = useState('');
+
     useEffect(() => {
         if (!userInfoLoaded) return;
 
@@ -22,10 +37,41 @@ function Profile() {
             .then((results) => {
                 setPerson(results);
                 setLoading(false);
+
+                setEmail(results.email);
+                setLogin(results.login);
+                setFirstName(results.firstName);
+                setLastName(results.lastName);
+                setBirthDate(results.birthDate);
+                setPhoneNumber(results.phoneNumber);
+                console.log(results);
             })
             .catch(api.toastifyError);
             
     }, [userInfoLoaded]);
+
+    function savePassword() {
+        api.updateUserPassword()
+            .then(() => {
+                toast.success('Zmieniono hasło');
+            });
+    }
+
+    function saveData() {
+        if(firstName  && lastName  && birthDate  && login  && email  && phoneNumber) {
+            api.updateUserProfile({firstName, birthDate: dayjs(birthDate).format('YYYY-MM-DD HH:mm:ss'), lastName, login, mail: email, phoneNumber})
+                .then(() => {
+                    toast.success('Zmieniono dane');
+                    setPerson({firstName,  lastName, login, email, phoneNumber, birthDate});
+                    setModalChangeDataVisibility(false);
+                })
+                .catch(api.toastifyError);
+        }
+        else {
+            toast.error('Wypełnij wszystkie pola');
+        }
+        
+    }
 
     return (
         <div className="profile-page page">
@@ -45,10 +91,29 @@ function Profile() {
                     />
                     <div className="data-change">
                         <button>Zmień hasło</button>
-                        <button>Edytuj dane</button>
+                        <button onClick={() => setModalChangeDataVisibility(true)}>Edytuj dane</button>
                     </div>
                 </div>
             </div>
+            <Modal visible={modalChangeDataVisibility}>
+                    <header>Dane użytkownika</header>
+                    <section className="content">
+                        <form>
+                            <input placeholder="Adres email" value={email} onChange={fromValue(setEmail)}/>
+                            <input placeholder="Login" value={login} onChange={fromValue(setLogin)}/>
+                            <input placeholder="Imię" value={firstName} onChange={fromValue(setFirstName)}/>
+                            <input placeholder="Nazwisko" value={lastName} onChange={fromValue(setLastName)}/>
+                            <input placeholder="Data urodzenia" value={birthDate} onChange={fromValue(setBirthDate)}/>
+                            <input placeholder="Numer telefonu" value={phoneNumber} onChange={fromValue(setPhoneNumber)}/>
+                        </form>
+                    </section>
+                    <section className="footer">
+                        <div>
+                            <button onClick={() => setModalChangeDataVisibility(false)}>Anuluj</button>
+                            <button onClick={saveData}>Zapisz</button>
+                        </div>
+                    </section>
+            </Modal>
         </div>
     );
 }
