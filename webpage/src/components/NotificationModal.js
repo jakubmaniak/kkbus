@@ -4,6 +4,8 @@ import '../styles/NotificationModal.css';
 import Modal from './Modal';
 
 function NotificationModal(props) {
+    if (!props.visible) return null;
+    
     return (
         <div className="notification-modal">
             <Modal visible={props.visible}>

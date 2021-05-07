@@ -8,6 +8,11 @@
     width: 124px;
 }
 
+.button-add-container {
+    width: 590px;
+    flex: 100%;
+}
+
 .tile.half.tile-container {
     padding: 0;
     display: flex;
@@ -209,7 +214,6 @@
 }
 
 .note {
-    margin-right: 14px;
     margin-bottom: 40px;
     margin-left: auto;
     font-size: 13px;
