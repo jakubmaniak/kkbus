@@ -31,6 +31,7 @@ import BookingPage from './components/BookingPage';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
+dayjs.tz.setDefault('Europe/Warsaw');
 
 function App() {
     let [user, setUser] = useState(initialContext.user);
