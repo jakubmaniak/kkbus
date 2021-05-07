@@ -5,12 +5,11 @@ import * as api from '../api';
 import BookingHistoryItem from './BookingHistoryItem';
 import { ModalLoader } from './Loader';
 
-function BookingProfile() {
+function BookingPage() {
     let [pastBookings, setPastBookings] = useState([]);
     let [futureBookings, setFutureBookings] = useState([]);
 
     let [loading, setLoading] = useState(true);
-    let loadingInitTime = Date.now();
 
     useEffect(() => {
         let promisePastBookings = api.getUserPastBookings()
@@ -24,11 +23,7 @@ function BookingProfile() {
             });
 
             Promise.all([promisePastBookings, promiseFutureBookings])
-            .then(() => {
-                setTimeout(() => {
-                    setLoading(false);
-                }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
-            })
+            .then(() => setLoading(false))
             .catch(api.toastifyError);
     }, []);
 
@@ -71,4 +66,4 @@ function BookingProfile() {
     );
 }
 
-export default BookingProfile;
+export default BookingPage;
