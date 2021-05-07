@@ -32,9 +32,7 @@ function RoutesPage() {
         api.getAllRoutes()
             .then((routes) => {
                 setRoutes(routes);
-                setTimeout(() => {
-                    setLoading(false);
-                }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
+                setLoading(false);
             })
             .catch(api.toastifyError);
     }, []);
