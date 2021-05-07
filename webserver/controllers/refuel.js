@@ -25,5 +25,5 @@ module.exports.addRefuel = (refuel) => {
 };
 
 module.exports.findVehicleRefuels = (vehicleId) => {
-    return db.query('SELECT * FROM refuels WHERE vehicleId=?', [vehicleId]);
+    return db.query('SELECT * FROM refuels WHERE vehicleId=? ORDER BY date DESC', [vehicleId]);
 };

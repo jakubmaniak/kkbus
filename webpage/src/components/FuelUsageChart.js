@@ -11,7 +11,7 @@ function FuelUsageChart(props) {
         return props.values.map((entity, i, array) =>
             (i * (width / (array.length - 1))) +
             ',' +
-            (height - (entity - min) / (max - min) * height)
+            (height - (entity - min) / (max - min) * (height - 4))
         );
     }
 

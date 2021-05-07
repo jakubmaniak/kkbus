@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
 
 import '../styles/FuelPage.css';
 
@@ -9,12 +11,12 @@ import toast from '../helpers/toast';
 import FuelHistoryItem from './FuelHistoryItem';
 import FuelUsageChart from './FuelUsageChart';
 import Dropdown from './Dropdown';
-import { ModalLoader } from './Loader';
+import Loader, { ModalLoader } from './Loader';
 
 
 function FuelPage() {
     let [loading, setLoading] = useState(true);
-    let loadingInitTime = Date.now();
+    let [dataLoading, setDataLoading] = useState(false);
 
     let [refuels, setRefuels] = useState([]);
     let [vehicleId, setVehicleId] = useState(-1);
@@ -27,9 +29,7 @@ function FuelPage() {
         api.getAllVehicles()
             .then((vehicles) => {
                 setVehicles(vehicles);
-                setTimeout(() => {
-                    setLoading(false);
-                }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
+                setLoading(false);
             })
             .catch(api.toastifyError);
     }, []);
@@ -38,12 +38,20 @@ function FuelPage() {
         let vehicleId = item.id;
 
         setVehicleId(vehicleId);
+        setDataLoading(true);
         getData(vehicleId);
     }
 
     function getData(vehicleId) {
         api.getRefuels(vehicleId)
-            .then(setRefuels)
+            .then((result) => {
+                result = result.map((refuel) => {
+                    refuel.date = dayjs(refuel.date);
+                    return refuel;
+                });
+                setRefuels(result);
+                setDataLoading(false);
+            })
             .catch(api.toastifyError);
     }
 
@@ -73,13 +81,29 @@ function FuelPage() {
         }
 
         api.addRefuel(vehicleId, _fuelAmount, _fuelCost, _vehicleMileage)
-            .then(() => {
+            .then((result) => {
                 setFuelCost('');
                 setFuelAmount('');
                 setVehicleMileage('');
+                setRefuels([
+                    {
+                        id: result.id,
+                        amount: _fuelAmount,
+                        cost: _fuelCost,
+                        mileage: _vehicleMileage,
+                        date: dayjs()
+                    },
+                    ...refuels
+                ]);
                 toast.success('Dodano raport tankowania');
             })
             .catch(api.toastifyError);
+    }
+
+    function display(node) {
+        if (dataLoading) return <Loader/>;
+        if (refuels.length == 0) return 'Brak raportów z tankowania w archiwum';
+        return node;
     }
 
     return (
@@ -111,32 +135,42 @@ function FuelPage() {
                             <button type="button" className="submit" onClick={saveRefuelReport}>Zapisz tankowanie</button>
                         </form>
                     </div>
-                    <div className="tile half right">
-                        <h2>Historia tankowania</h2>
-                        <div className="fuel-usage-history header">
-                            <span>Data</span>
-                            <span>Koszt</span>
-                            <span>Ilość</span>
-                            <span>Przebieg</span>
-                        </div>
-                        <div className="fuel-usage-history-items">
-                        {refuels.map((refuel, index) => {
-                            return (
-                                <FuelHistoryItem 
-                                    key={index}
-                                    date={refuel.date}
-                                    price={refuel.cost}
-                                    liters={refuel.amount}
-                                    vehicleMileage={refuel.mileage}
-                                />      
-                            );
-                        })}
-                        </div>
-                    </div>
-                    <div className="tile half">
-                        <h2>Zużycie paliwa</h2>
-                        <FuelUsageChart values={refuels.map((refuel) => refuel.amount)} />
-                    </div>
+                    {
+                        (vehicleId !== -1)
+                        ? <>
+                            <div className="tile half right">
+                                <h2>Historia tankowania</h2>
+                                {display(<>
+                                    <div className="fuel-usage-history header">
+                                        <span>Data</span>
+                                        <span>Koszt</span>
+                                        <span>Ilość</span>
+                                        <span>Przebieg</span>
+                                    </div>
+                                    <div className="fuel-usage-history-items">
+                                    {refuels.map((refuel, index) => {
+                                        return (
+                                            <FuelHistoryItem 
+                                                key={index}
+                                                date={refuel.date.format('YYYY-MM-DD HH:mm')}
+                                                price={refuel.cost}
+                                                liters={refuel.amount}
+                                                vehicleMileage={refuel.mileage}
+                                            />      
+                                        );
+                                    })}
+                                    </div>
+                                </>)}
+                            </div>
+                            <div className="tile half">
+                                <h2>Zużycie paliwa</h2>    
+                                {display(
+                                    <FuelUsageChart values={refuels.map((refuel) => refuel.amount)} />
+                                )}
+                            </div>
+                        </>
+                        : null
+                    }
                 </div>
         </div>
     );
