@@ -37,22 +37,7 @@ function BookingProfile() {
              <ModalLoader loading={loading} />
             <div className="main">
                 <div className="tile half">
-                    <h2>Historia rezerwacji</h2>
-                    {pastBookings.map((bookingHistoryItem, i) => {
-                        return (
-                            <BookingHistoryItem 
-                                key={i}
-                                date={bookingHistoryItem.date}
-                                route={bookingHistoryItem.firstStop + ' ' + bookingHistoryItem.lastStop}
-                                normalTickets={bookingHistoryItem.normalTickets}
-                                reducedTickets={bookingHistoryItem.reducedTickets}
-                                childTicekts={bookingHistoryItem.childTicekts}
-                            />
-                        );
-                    })}
-                </div>
-                <div className="tile half">
-                    <h2>Przeszłe rezerwacje</h2>
+                    <h2>Aktualne rezerwacje</h2>
                     {futureBookings.map((previousBookingItem, i) => {
                         return (
                             <BookingHistoryItem 
@@ -62,6 +47,21 @@ function BookingProfile() {
                                 normalTickets={previousBookingItem.normalTickets}
                                 reducedTickets={previousBookingItem.reducedTickets}
                                 childTicekts={previousBookingItem.childTicekts}
+                            />
+                        );
+                    })}
+                </div>
+                <div className="tile half">
+                    <h2>Historia</h2>
+                    {pastBookings.map((bookingHistoryItem, i) => {
+                        return (
+                            <BookingHistoryItem 
+                                key={i}
+                                date={bookingHistoryItem.date}
+                                route={bookingHistoryItem.firstStop + ' ' + bookingHistoryItem.lastStop}
+                                normalTickets={bookingHistoryItem.normalTickets}
+                                reducedTickets={bookingHistoryItem.reducedTickets}
+                                childTicekts={bookingHistoryItem.childTicekts}
                             />
                         );
                     })}
