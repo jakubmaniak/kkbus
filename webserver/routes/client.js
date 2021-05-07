@@ -1,16 +1,25 @@
 const express = require('express');
 const router = express.Router();
 
-const { invalidRequest } = require('../errors');
+const { invalidRequest, invalidValue } = require('../errors');
 const { roles, minimumRole } = require('../middlewares/roles');
 const userController = require('../controllers/user');
 
 
 router.get('/clients', [minimumRole(roles.office)], async (req, res, next) => {
+    if (!Object.entries(req.query).length) {
+        return next(invalidRequest());
+    }
+
     let [[param, query]] = Object.entries(req.query);
 
     let availableParams = ['id', 'email', 'login', 'name', 'phone'];
     param = param.toLowerCase();
+
+    if (query instanceof Array) {
+        return next(invalidValue());
+    }
+
     query = query.trim();
 
     if (param != 'id' && query.length < 3) {
