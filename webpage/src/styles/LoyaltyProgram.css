@@ -170,3 +170,16 @@
 .reward-history {
     display: flex;
 }
+
+.reward-history > span:first-child,
+.reward-history > span:last-child {
+    flex: 1;
+}
+
+.reward-history > span:last-child {
+    text-align: center;
+}
+
+.reward-history > span:nth-child(2) {
+    width: 250px;
+}

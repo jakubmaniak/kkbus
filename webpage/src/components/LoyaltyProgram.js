@@ -125,6 +125,14 @@ function LoyaltyProgram() {
             .catch(api.toastifyError);
     }
 
+    function updateRewardOrders() {
+        api.getUserRewardOrders()
+            .then((results) => {
+                setRewardOrders(results);
+            })
+            .catch(api.toastifyError);
+    }
+
     function clientGuestTile() {
         return (
             <div className="main">
@@ -145,7 +153,10 @@ function LoyaltyProgram() {
                                 name={reward.name}
                                 requiredPoints={reward.requiredPoints}
                                 rewardId={reward.id}
-                                buyReward={() => buyReward(reward.id, reward.requiredPoints)}
+                                buyReward={() => {
+                                    buyReward(reward.id, reward.requiredPoints); 
+                                    updateRewardOrders()
+                                }}
                             />
                         );
                     })}
@@ -163,13 +174,17 @@ function LoyaltyProgram() {
                     : (role === 'client') ? 
                         <div className="tile half">
                             <h2>Historia zakupów</h2>
+                            <p className="reward-history">
+                                    <span>Data</span>
+                                    <span>Nagroda</span>
+                                    <span>Punkty</span>
+                            </p>
                             {rewardOrders.map((rewardOrder, i) => {
-                                {console.log(rewards.find(({id}) => rewardOrder.rewardId === id))}
                               return (
                                 <p className="reward-history" key={i}>
                                     <span>{new Date(rewardOrder.orderDate).toLocaleDateString()}</span>
-                                    <span>Nagroda: {(rewards.find(({id}) => rewardOrder.rewardId === id))?.name}</span>
-                                    <span>Punkty: {rewardOrder.points}</span>
+                                    <span>{(rewards.find(({id}) => rewardOrder.rewardId === id))?.name}</span>
+                                    <span>{rewardOrder.points}</span>
                                 </p>
                               );  
                             })}
