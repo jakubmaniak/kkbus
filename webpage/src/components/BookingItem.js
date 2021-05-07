@@ -2,13 +2,14 @@ import React from 'react';
 
 function BookingItem(props) {
     return (
-        <div>
-            <span>{props.date} </span>
-            <span>{props.route} </span>
-            <span>{props.normalTickets} normalne </span>
-            <span>{props.reducedTickets} ulgowe </span>
-            <span>{props.childTicekts} dziecko do lat 5</span>
-        </div>
+        <p className="booking-item">
+            <span>{props.date}</span>
+            <span>{props.hour}</span>
+            <span>{props.route}</span>
+            <span>{props.normalTickets}</span>
+            <span>{props.reducedTickets}</span>
+            <span>{props.childTickets}</span>
+        </p>
     );
 }
 
