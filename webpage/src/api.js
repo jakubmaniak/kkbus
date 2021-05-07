@@ -53,8 +53,6 @@ export async function updateUserPassword(currentPassword, newPassword) {
     return sendPatch('/user/password', { currentPassword, newPassword })
 }
 
-updateUserPassword()
-
 export async function getUserInfo() {
     return sendGet('/user/info');
 }
