@@ -12,51 +12,47 @@ function BookingPage() {
     let [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        let promisePastBookings = api.getUserPastBookings()
-            .then((results) => {
-                setPastBookings(results);
-            });
+        let getPastBookings = api.getUserPastBookings()
+            .then(setPastBookings);
 
-        let promiseFutureBookings = api.getUserFutureBookings()
-            .then((results) => {
-                setFutureBookings(results);
-            });
+        let getFutureBookings = api.getUserFutureBookings()
+            .then(setFutureBookings);
 
-            Promise.all([promisePastBookings, promiseFutureBookings])
+        Promise.all([getPastBookings, getFutureBookings])
             .then(() => setLoading(false))
             .catch(api.toastifyError);
     }, []);
 
     return (
         <div className="booking-profile page">
-             <ModalLoader loading={loading} />
+            <ModalLoader loading={loading} />
             <div className="main">
                 <div className="tile half">
                     <h2>Aktualne rezerwacje</h2>
-                    {futureBookings.map((previousBookingItem, i) => {
+                    {futureBookings.map((booking, i) => {
                         return (
                             <BookingHistoryItem 
                                 key={i}
-                                date={previousBookingItem.date}
-                                route={previousBookingItem.firstStop + ' ' + previousBookingItem.lastStop}
-                                normalTickets={previousBookingItem.normalTickets}
-                                reducedTickets={previousBookingItem.reducedTickets}
-                                childTicekts={previousBookingItem.childTicekts}
+                                date={booking.date}
+                                route={booking.firstStop + ' ' + booking.lastStop}
+                                normalTickets={booking.normalTickets}
+                                reducedTickets={booking.reducedTickets}
+                                childTicekts={booking.childTicekts}
                             />
                         );
                     })}
                 </div>
                 <div className="tile half">
                     <h2>Historia</h2>
-                    {pastBookings.map((bookingHistoryItem, i) => {
+                    {pastBookings.map((booking, i) => {
                         return (
                             <BookingHistoryItem 
                                 key={i}
-                                date={bookingHistoryItem.date}
-                                route={bookingHistoryItem.firstStop + ' ' + bookingHistoryItem.lastStop}
-                                normalTickets={bookingHistoryItem.normalTickets}
-                                reducedTickets={bookingHistoryItem.reducedTickets}
-                                childTicekts={bookingHistoryItem.childTicekts}
+                                date={booking.date}
+                                route={booking.firstStop + ' ' + booking.lastStop}
+                                normalTickets={booking.normalTickets}
+                                reducedTickets={booking.reducedTickets}
+                                childTicekts={booking.childTicekts}
                             />
                         );
                     })}
