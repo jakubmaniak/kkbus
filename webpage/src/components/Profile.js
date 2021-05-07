@@ -61,7 +61,7 @@ function Profile() {
                 </div>
                 {role === 'client' ?
                     <div className="tile half">
-                        <h2>Historia rezerwacji</h2>
+                        <h2>Rezerwacje</h2>
                         {bookingHistory.map((bookingHistoryItem, i) => {
                             return (
                                 <BookingHistoryItem 
