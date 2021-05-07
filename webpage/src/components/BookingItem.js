@@ -1,6 +1,6 @@
 import React from 'react';
 
-function BookingHistoryItem(props) {
+function BookingItem(props) {
     return (
         <div>
             <span>{props.date} </span>
@@ -12,4 +12,4 @@ function BookingHistoryItem(props) {
     );
 }
 
-export default BookingHistoryItem;
+export default BookingItem;

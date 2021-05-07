@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import * as api from '../api';
 
-import BookingHistoryItem from './BookingHistoryItem';
+import BookingItem from './BookingItem';
 import { ModalLoader } from './Loader';
 
 function BookingPage() {
@@ -31,7 +31,7 @@ function BookingPage() {
                     <h2>Aktualne rezerwacje</h2>
                     {futureBookings.map((booking, i) => {
                         return (
-                            <BookingHistoryItem 
+                            <BookingItem 
                                 key={i}
                                 date={booking.date}
                                 route={booking.firstStop + ' ' + booking.lastStop}
@@ -46,7 +46,7 @@ function BookingPage() {
                     <h2>Historia</h2>
                     {pastBookings.map((booking, i) => {
                         return (
-                            <BookingHistoryItem 
+                            <BookingItem 
                                 key={i}
                                 date={booking.date}
                                 route={booking.firstStop + ' ' + booking.lastStop}
