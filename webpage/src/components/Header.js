@@ -153,7 +153,7 @@ function Header() {
                         onClick={toggleMenu}></button>
                 }
                 <div className="header-container">
-                    <h1 className="logo">
+                    <h1 className="logo" onClick={() => history.push('/')}>
                         <span>KK</span>
                         <span>BUS</span>
                     </h1>
