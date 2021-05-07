@@ -38,7 +38,7 @@ function Profile() {
                         lastName={person.lastName}
                         login={person.login}
                         email={person.email}
-                        birthday={person.birthDate}
+                        birthday={new Date(person.birthDate).toLocaleDateString()}
                         phoneNumber={person.phoneNumber}
                         client={role === 'client' ? true : false}
                         role={role}

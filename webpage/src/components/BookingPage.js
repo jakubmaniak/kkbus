@@ -43,7 +43,7 @@ function BookingPage() {
                         return (
                             <BookingItem 
                                 key={i}
-                                date={booking.date}
+                                date={new Date(booking.date).toLocaleDateString()}
                                 hour={booking.hour}
                                 route={booking.firstStop + ' - ' + booking.lastStop}
                                 normalTickets={booking.normalTickets}
@@ -67,7 +67,7 @@ function BookingPage() {
                         return (
                             <BookingItem 
                                 key={i}
-                                date={booking.date}
+                                date={new Date(booking.date).toLocaleDateString()}
                                 hour={booking.hour}
                                 route={booking.firstStop + ' - ' + booking.lastStop}
                                 normalTickets={booking.normalTickets}
