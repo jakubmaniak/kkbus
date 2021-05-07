@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../styles/BookingPage.css';
 
 import * as api from '../api';
 
@@ -27,32 +28,51 @@ function BookingPage() {
         <div className="booking-profile page">
             <ModalLoader loading={loading} />
             <div className="main">
-                <div className="tile half">
+                <div className="tile">
                     <h2>Aktualne rezerwacje</h2>
+                    <p className="booking-header">
+                        <span>Data</span>
+                        <span>Godzina</span>
+                        <span>Kierunek</span>
+                        <span>Normalne</span>
+                        <span>Ulgowe</span>
+                        <span>Dzieci do lat 5</span>
+                    </p>
+                    {console.log(futureBookings)}
                     {futureBookings.map((booking, i) => {
                         return (
                             <BookingItem 
                                 key={i}
                                 date={booking.date}
-                                route={booking.firstStop + ' ' + booking.lastStop}
+                                hour={booking.hour}
+                                route={booking.firstStop + ' - ' + booking.lastStop}
                                 normalTickets={booking.normalTickets}
                                 reducedTickets={booking.reducedTickets}
-                                childTicekts={booking.childTicekts}
+                                childTickets={booking.childTickets}
                             />
                         );
                     })}
                 </div>
-                <div className="tile half">
+                <div className="tile">
                     <h2>Historia</h2>
+                    <p className="booking-header">
+                        <span>Data</span>
+                        <span>Godzina</span>
+                        <span>Kierunek</span>
+                        <span>Normalne</span>
+                        <span>Ulgowe</span>
+                        <span>Dzieci do lat 5</span>
+                    </p>
                     {pastBookings.map((booking, i) => {
                         return (
                             <BookingItem 
                                 key={i}
                                 date={booking.date}
-                                route={booking.firstStop + ' ' + booking.lastStop}
+                                hour={booking.hour}
+                                route={booking.firstStop + ' - ' + booking.lastStop}
                                 normalTickets={booking.normalTickets}
                                 reducedTickets={booking.reducedTickets}
-                                childTicekts={booking.childTicekts}
+                                childTickets={booking.childTickets}
                             />
                         );
                     })}
