@@ -34,22 +34,19 @@ function Client(props) {
 
     useEffect(() => {
         api.getAllRoutes()
-        .then((routes) => {
-            setRoutes(routes);
-        })
+        .then(setRoutes)
         .catch(api.toastifyError);
     }, []);
 
     useEffect(() => {
-        if(typeof selectedRoute !== 'undefined') {
+        if(selectedRoute !== undefined) {
             let currentPrice = calculatePrice(selectedRoute, selectedFirstStop, selectedLastStop, normalTickets, reducedTickets);
             setPrice((isNaN(currentPrice) || currentPrice === null) ? 0 : currentPrice.toFixed(2));
         }
     }, [normalTickets, reducedTickets, selectedFirstStop, selectedLastStop]);
 
     useEffect(() => {
-        if(typeof selectedRoute !== 'undefined') {
-            console.log(selectedRoute);
+        if (selectedRoute !== undefined) {
             setData(selectedRoute);
         }
     }, [selectedRoute])
