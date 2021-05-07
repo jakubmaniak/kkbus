@@ -121,6 +121,7 @@ function LoyaltyProgram() {
         api.buyReward(rewardId)
             .then(() => {
                 setClientsPoints(clientPoints - requiredPoints);
+                updateRewardOrders();
             })
             .catch(api.toastifyError);
     }
@@ -129,6 +130,7 @@ function LoyaltyProgram() {
         api.getUserRewardOrders()
             .then((results) => {
                 setRewardOrders(results);
+                toast.success('Kupiono nagrodę');
             })
             .catch(api.toastifyError);
     }
@@ -153,10 +155,7 @@ function LoyaltyProgram() {
                                 name={reward.name}
                                 requiredPoints={reward.requiredPoints}
                                 rewardId={reward.id}
-                                buyReward={() => {
-                                    buyReward(reward.id, reward.requiredPoints); 
-                                    updateRewardOrders()
-                                }}
+                                buyReward={() => {buyReward(reward.id, reward.requiredPoints)}}
                             />
                         );
                     })}
