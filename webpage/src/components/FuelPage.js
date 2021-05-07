@@ -152,7 +152,7 @@ function FuelPage() {
                                         return (
                                             <FuelHistoryItem 
                                                 key={index}
-                                                date={refuel.date.format('YYYY-MM-DD HH:mm')}
+                                                date={refuel.date.format('YYYY.MM.DD HH:mm')}
                                                 price={refuel.cost}
                                                 liters={refuel.amount}
                                                 vehicleMileage={refuel.mileage}
