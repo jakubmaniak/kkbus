@@ -6,8 +6,8 @@ import BookingHistoryItem from './BookingHistoryItem';
 import { ModalLoader } from './Loader';
 
 function BookingProfile() {
-    let [bookingHistory, setBookingHistory] = useState([]);
-    let [previousBooking, setPreviousBooking] = useState([]);
+    let [pastBookings, setPastBookings] = useState([]);
+    let [futureBookings, setFutureBookings] = useState([]);
 
     let [loading, setLoading] = useState(true);
     let loadingInitTime = Date.now();
@@ -15,12 +15,12 @@ function BookingProfile() {
     useEffect(() => {
         let promisePastBookings = api.getUserPastBookings()
             .then((results) => {
-                setBookingHistory(results);
+                setPastBookings(results);
             });
 
         let promiseFutureBookings = api.getUserFutureBookings()
             .then((results) => {
-                setPreviousBooking(results);
+                setFutureBookings(results);
             });
 
             Promise.all([promisePastBookings, promiseFutureBookings])
@@ -38,7 +38,7 @@ function BookingProfile() {
             <div className="main">
                 <div className="tile half">
                     <h2>Historia rezerwacji</h2>
-                    {bookingHistory.map((bookingHistoryItem, i) => {
+                    {pastBookings.map((bookingHistoryItem, i) => {
                         return (
                             <BookingHistoryItem 
                                 key={i}
@@ -53,7 +53,7 @@ function BookingProfile() {
                 </div>
                 <div className="tile half">
                     <h2>Przeszłe rezerwacje</h2>
-                    {previousBooking.map((previousBookingItem, i) => {
+                    {futureBookings.map((previousBookingItem, i) => {
                         return (
                             <BookingHistoryItem 
                                 key={i}
