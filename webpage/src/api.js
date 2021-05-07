@@ -42,12 +42,41 @@ export async function register(email, firstName, lastName, birthDate, phoneNumbe
     return sendPost('/user/register', { email, firstName, lastName, birthDate, phoneNumber });
 }
 
+/**
+ * `PATCH /api/user/password` Change the user password
+ * @async
+ * @param {string} currentPassword
+ * @param {string} newPassword
+ * @returns Promise of object where a result is null
+ */
+export async function updateUserPassword(currentPassword, newPassword) {
+    return sendPatch('/user/password', { currentPassword, newPassword })
+}
+
+updateUserPassword()
+
 export async function getUserInfo() {
     return sendGet('/user/info');
 }
 
 export async function getUserProfile() {
     return sendGet('/user/profile');
+}
+
+/**
+ * `PATCH /user/profile` Change the user personal data
+ * @async
+ * @param {object} user
+ * @param {string} [user.firstName]
+ * @param {string} [user.lastName]
+ * @param {string} [user.birthDate]
+ * @param {string} [user.login]
+ * @param {string} [user.email]
+ * @param {string} [user.phoneNumber]
+ * @return Promise of object where a result is null
+ */
+export async function updateUserProfile({ firstName = null, lastName = null, birthDate = null, login = null, email = null, phoneNumber = null }) {
+    return sendPatch('/user/profile', { firstName, lastName, birthDate, login, email, phoneNumber })
 }
 
 
@@ -242,6 +271,10 @@ async function sendPost(path, body) {
 
 async function sendPut(path, body) {
     return send('PUT', path, body);
+}
+
+async function sendPatch(path, body) {
+    return send('PATCH', path, body);
 }
 
 async function sendDelete(path) {

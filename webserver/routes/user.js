@@ -6,6 +6,7 @@ const env = require('../helpers/env');
 const { invalidRequest, emailAlreadyTaken, badCredentials, serverError } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const { roles, minimumRole } = require('../middlewares/roles');
+const { cache: usersCache } = require('../middlewares/session');
 const { parseDate } = require('../helpers/date');
 
 const userController = require('../controllers/user');
@@ -131,6 +132,9 @@ router.get('/user/info', (req, res) => {
     let { loggedIn, login, role, id, firstName, lastName } = req.user;
 
     if (loggedIn) {
+        let sessionToken = jwt.sign({ login }, env.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
+        
+        res.cookie('session', sessionToken);
         res.ok({ role: role.name, id, login, firstName, lastName });
     }
     else {
@@ -145,12 +149,102 @@ router.get('/user/info', (req, res) => {
 });
 
 router.get('/user/profile', [minimumRole('client')], async (req, res, next) => {
-    let user = await userController.findUserById(req.user.id);
+    let user = req.user;
     
-    delete user.password;
+    delete user.points;
     user.birthDate = parseDate(user.birthDate)?.toString();
 
     res.ok(user);
+});
+
+router.patch('/user/profile', [
+    minimumRole('client'),
+    bodySchema(`{
+        firstName?: string,
+        lastName?: string,
+        birthDate?: string,
+        login?: string,
+        email?: string,
+        phoneNumber?: string
+    }`)
+], async (req, res, next) => {
+    let {
+        firstName, lastName,
+        birthDate,
+        login,
+        email,
+        phoneNumber
+    } = req.body;
+
+    let user = req.user;
+
+    let updatedUser = {
+        firstName: firstName ?? user.firstName,
+        lastName: lastName ?? user.lastName,
+        birthDate: birthDate ?? user.birthDate,
+        login: login ?? user.login,
+        email: email ?? user.email,
+        phoneNumber: phoneNumber ?? user.phoneNumber
+    };
+
+    try {
+        await userController.updateUserPersonalData(req.user.id, updatedUser);
+    
+        if (login !== null && login !== user.login) {
+            let newSessionToken = jwt.sign({ login }, env.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
+
+            let oldSessionToken = req.cookies.session;
+            let cachedUser = usersCache.get(oldSessionToken);
+
+            usersCache.set(newSessionToken, {
+                ...cachedUser,
+                ...updatedUser
+            });
+            usersCache.delete(oldSessionToken);
+    
+            res.cookie('session', newSessionToken);
+        }
+        else {
+            let sessionToken = req.cookies.session;
+            let cachedUser = usersCache.get(sessionToken);
+            usersCache.set(sessionToken, {
+                ...cachedUser,
+                ...updatedUser
+            });
+        }
+        
+        res.ok();
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+router.patch('/user/password', [
+    minimumRole('client'),
+    bodySchema('{currentPassword: string, newPassword: string}')
+], async (req, res, next) => {
+    let { login, id: userId } = req.user;
+    let { currentPassword, newPassword } = req.body;
+
+    try {
+        await userController.findUserByCredentials(login, login, currentPassword);
+    }
+    catch (err) {
+        if (err.message == 'not_found') {
+            return next(badCredentials());
+        }
+        return next(err);
+    }
+
+    try {
+        await userController.updateUserPassword(userId, newPassword);
+
+        res.ok();
+    }
+    catch (err) {
+        next(err);
+    }
 });
 
 

@@ -94,3 +94,22 @@ module.exports.findUserPoints = (userId) => {
 module.exports.updateUserPoints = (userId, points) => {
     return db.query('UPDATE users SET points=? WHERE id=?', [points, userId]);
 };
+
+module.exports.updateUserPassword = (userId, password) => {
+    return db.query('UPDATE users SET password=? WHERE id=?', [password, userId]);
+};
+
+module.exports.updateUserPersonalData = (userId, personalData) => {
+    return db.query(`UPDATE users
+        SET firstName=?, lastName=?, birthDate=?, login=?, email=?, phoneNumber=?
+        WHERE id=?`, [
+            personalData.firstName,
+            personalData.lastName,
+            personalData.birthDate,
+            personalData.login,
+            personalData.email,
+            personalData.phoneNumber,
+            userId
+        ]
+    );
+};

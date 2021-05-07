@@ -26,6 +26,11 @@ cache.set = (key, value) => {
     cache._set(key, value);
     cache.refresh(key);
 };
+cache._delete = cache.delete;
+cache.delete = (key) => {
+    cache.expireDates.delete(key);
+    cache._delete(key);
+};
 
 setInterval(() => {
     let now = Date.now();
@@ -33,9 +38,9 @@ setInterval(() => {
 
     cache.expireDates.forEach((expireDate, key) => {
         if (now >= expireDate) {
-            console.log('Removed (' + cache.get(key).login + ') ' + key.substr(0, 16) + '... from session cache');
+            console.log('Removed (' + cache.get(key)?.login + ') ' + key.substr(0, 16) + '... from session cache');
 
-            cache.delete(key);
+            cache._delete(key);
             deletionList.push(key);
         }    
     });
