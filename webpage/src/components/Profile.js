@@ -30,6 +30,9 @@ function Profile() {
     let [birthDate, setBirthDate] = useState('');
     let [phoneNumber, setPhoneNumber] = useState('');
 
+    let [currentPassword, setCurrentPassword] = useState('');
+    let [newPassword, setNewPassword] = useState('');
+
     useEffect(() => {
         if (!userInfoLoaded) return;
 
@@ -51,10 +54,12 @@ function Profile() {
     }, [userInfoLoaded]);
 
     function savePassword() {
-        api.updateUserPassword()
+        api.updateUserPassword(currentPassword, newPassword)
             .then(() => {
                 toast.success('Zmieniono hasło');
-            });
+                setModalChangePasswordVisibility(false);
+            })
+            .catch(api.toastifyError);
     }
 
     function saveData() {
@@ -70,7 +75,6 @@ function Profile() {
         else {
             toast.error('Wypełnij wszystkie pola');
         }
-        
     }
 
     return (
@@ -90,7 +94,7 @@ function Profile() {
                         role={role}
                     />
                     <div className="data-change">
-                        <button>Zmień hasło</button>
+                        <button onClick={() => setModalChangePasswordVisibility(true)}>Zmień hasło</button>
                         <button onClick={() => setModalChangeDataVisibility(true)}>Edytuj dane</button>
                     </div>
                 </div>
@@ -111,6 +115,22 @@ function Profile() {
                         <div>
                             <button onClick={() => setModalChangeDataVisibility(false)}>Anuluj</button>
                             <button onClick={saveData}>Zapisz</button>
+                        </div>
+                    </section>
+            </Modal>
+
+            <Modal visible={modalChangePasswordVisibility}>
+                    <header>Zmiana hasła</header>
+                    <section className="content">
+                        <form>
+                            <input placeholder="Aktualne hasło" type="password" value={currentPassword} onChange={fromValue(setCurrentPassword)}/>
+                            <input placeholder="Nowe hasło" type="password" value={newPassword} onChange={fromValue(setNewPassword)}/>
+                        </form>
+                    </section>
+                    <section className="footer">
+                        <div>
+                            <button onClick={() => setModalChangePasswordVisibility(false)}>Anuluj</button>
+                            <button onClick={savePassword}>Zapisz</button>
                         </div>
                     </section>
             </Modal>
