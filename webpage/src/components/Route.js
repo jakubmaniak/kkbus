@@ -294,12 +294,6 @@ function Route(props) {
                                 {props.prices}
                         </div>
                     </div>
-                        <div className="tile-price">
-                            <div className="note">
-                                <p>*uczniowie i studenci</p>
-                                <p>dzieci do lat 5: przejazd bezpłatny</p>
-                            </div>
-                        </div>
                 </div>
             </div>
             <NotificationModal 

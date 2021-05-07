@@ -124,6 +124,10 @@ function RoutesPage() {
                             deleteRoute={() => deleteRoute(route.id)}
                         />
                 ))}
+                <div className="note">
+                    <p>* uczniowie i studenci</p>
+                    <p>dzieci do lat 5: przejazd bezpłatny</p>
+                </div>
                 <Modal visible={modalVisibility}>
                     <header>Dodawanie trasy</header>
                     <section className="content">
