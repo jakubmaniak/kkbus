@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useReactToPrint } from 'react-to-print';
 import '../styles/BookingList.css';
 
 import * as api from '../api';
 
 import Dropdown from './Dropdown';
-import BookingListItem from './BookingListItem';
+import PrintBookingList from './PrintBookingList';
 
 import { routeFormatter } from '../helpers/text-formatters';
 
@@ -56,26 +57,9 @@ function BookingList() {
                         </div>
                     </div>
                 </div>
-                <div className="tile">
-                    <h2>Lista rezerwacji</h2>
-                    <div className="booking-list-container">
-                        {bookinglist.map((bookingItem) => {
-                            return (
-                                <BookingListItem
-                                    id={bookingItem.id}
-                                    firstName={bookingItem.firstName}
-                                    lastName={bookingItem.lastName}
-                                    childTickets={bookingItem.childTickets}
-                                    normalTickets={bookingItem.normalTickets}
-                                    reducedTickets={bookingItem.reducedTickets}
-                                />
-                            )
-                        })}
-                    </div>
-                    <div className="button-container">
-                        <button className="print">Drukuj</button>
-                    </div>
-                </div>
+                <PrintBookingList 
+                    bookinglist={bookinglist.length > 0 ? bookinglist : null} 
+                />
             </div>
         </div>
     );
