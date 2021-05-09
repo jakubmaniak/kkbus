@@ -24,11 +24,26 @@
     display: flex;
     justify-content: flex-end;
     width: 100%;
+    margin-top: 20px;
 }
 
 .booking-list .print {
     width: 180px;
     height: 48px;
+}
+
+.booking-header-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.booking-header-info .booking-info p:last-child {
+    display: flex;
+    justify-content: space-between;
+}
+
+.booking-header-info .booking-info p:last-child span:last-child {
+    color: rgb(217, 180, 48);
 }
 
 @media print {
