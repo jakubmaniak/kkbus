@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/BookingList.css';
 
 import * as api from '../api';
@@ -12,10 +12,11 @@ import { routeFormatter } from '../helpers/text-formatters';
 function BookingList() {
     let [routes, setRoutes] = useState([]);
     let [dates, setDates] = useState([]);
-    let [hours] = useState(['aktualna']);
+    let [hours, setHours] = useState([]);
 
     let [selectedRoute, setSelectedRoute] = useState();
     let [selectedDate, setSelectedDate] = useState();
+    let [selectedHour, setSelectedHour] = useState();
 
     let [bookinglist, setBookingList] = useState([]);
 
@@ -28,12 +29,16 @@ function BookingList() {
     }, []);
 
     useEffect(() => {
-        if(selectedRoute && selectedDate) {
-           api.getRouteBookings(selectedRoute.id, dayjs(selectedDate).format('YYYY-DD-MM HH:mm:ss'), '19:00')
+        if(selectedRoute) {
+            setHours(selectedRoute.hours);
+        }
+        
+        if(selectedRoute && selectedDate && selectedHour) {
+           api.getRouteBookings(selectedRoute.id, dayjs(selectedDate).format('YYYY-DD-MM HH:mm:ss'), selectedHour)
             .then((results) => {setBookingList(results); console.log(results)})
             .catch(api.toastifyError);
         }
-    }, [selectedRoute, selectedDate]);
+    }, [selectedRoute, selectedDate, selectedHour]);
 
     function setDays() {
         let date = new Date();
@@ -64,18 +69,26 @@ function BookingList() {
                             <span>Data</span>
                             <Dropdown 
                                 items={dates} 
-                                handleChange={setSelectedDate}
                                 placeholder="Wybierz datę"
+                                handleChange={setSelectedDate}
+                                alwaysSelected
                             />
                         </div>
                         <div className="filter-container">
                             <span>Godzina</span>
-                            <Dropdown items={hours} alwaysSelected />
+                            <Dropdown 
+                                items={hours} 
+                                placeholder="Wybierz godzinę"
+                                handleChange={setSelectedHour}
+                            />
                         </div>
                     </div>
                 </div>
                 <PrintBookingList 
-                    bookinglist={bookinglist.length > 0 ? bookinglist : null} 
+                    bookinglist={bookinglist.length > 0 ? bookinglist : null}
+                    route={selectedRoute ? selectedRoute.departureLocation + ' - ' + selectedRoute.arrivalLocation : null}
+                    date={selectedDate}
+                    hour={selectedHour} 
                 />
             </div>
         </div>
