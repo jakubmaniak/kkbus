@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useReactToPrint } from 'react-to-print';
 import '../styles/BookingList.css';
 
 import * as api from '../api';
