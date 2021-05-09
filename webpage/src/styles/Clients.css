@@ -15,6 +15,7 @@
 
 .client.page .tile.half.tile-container {
     background-color: rgb(240, 240, 240);
+    box-shadow: initial;
 }
 
 .client.page .tile.half.tile-container > .tile.client {
