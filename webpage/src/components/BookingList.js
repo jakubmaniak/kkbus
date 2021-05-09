@@ -28,17 +28,20 @@ function BookingList() {
         setDays();
     }, []);
 
-    useEffect(() => {
-        if(selectedRoute) {
-            setHours(selectedRoute.hours);
-        }
-        
+    useEffect(() => {        
         if(selectedRoute && selectedDate && selectedHour) {
            api.getRouteBookings(selectedRoute.id, dayjs(selectedDate).format('YYYY-DD-MM HH:mm:ss'), selectedHour)
-            .then((results) => {setBookingList(results); console.log(results)})
+            .then(setBookingList)
             .catch(api.toastifyError);
         }
     }, [selectedRoute, selectedDate, selectedHour]);
+
+    useEffect(() => {
+        if(selectedRoute) {
+            setHours(selectedRoute.hours);
+            setSelectedHour();
+        }
+    }, [selectedRoute]);
 
     function setDays() {
         let date = new Date();
