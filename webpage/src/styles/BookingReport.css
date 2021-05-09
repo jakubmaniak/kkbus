@@ -1,0 +1,12 @@
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.booking-month .button-container button,
+.booking-year .button-container button {
+    width: 180px;
+    height: 48px;
+}
