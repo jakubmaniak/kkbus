@@ -1,10 +1,20 @@
 import React from 'react';
 import BookingListItem from './BookingListItem';
+import '../styles/BookingList.css';
 
 const BookingToPrint = React.forwardRef((props, ref) => {
     return (
             <div className="tile" ref={ref}>
-                <h2>Lista rezerwacji</h2>
+                <div className="booking-header-info">
+                    <h2>Lista rezerwacji</h2>
+                    <div className="booking-info">
+                        <p>{props.route}</p>
+                        <p>
+                            <span>{props.date} </span> 
+                            <span>{props.hour}</span>
+                        </p>
+                    </div>
+                </div>
                 <div className="booking-list-container">
                     {props.bookinglist !== null ?
                         props.bookinglist.map((bookingItem) => {

@@ -12,7 +12,10 @@ function PrintBookingList(props) {
   return (
         <BookingToPrint 
             ref={componentRef} 
-            bookinglist={props.bookinglist} 
+            bookinglist={props.bookinglist}
+            route={props.route} 
+            date={props.date}
+            hour={props.hour}
             handlePrint={handlePrint}
         />
   );
