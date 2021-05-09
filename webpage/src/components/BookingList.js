@@ -3,6 +3,7 @@ import { useReactToPrint } from 'react-to-print';
 import '../styles/BookingList.css';
 
 import * as api from '../api';
+import dayjs from 'dayjs';
 
 import Dropdown from './Dropdown';
 import PrintBookingList from './PrintBookingList';
@@ -11,24 +12,37 @@ import { routeFormatter } from '../helpers/text-formatters';
 
 function BookingList() {
     let [routes, setRoutes] = useState([]);
-    let [dates] = useState(['aktualna']);
+    let [dates, setDates] = useState([]);
     let [hours] = useState(['aktualna']);
-    let [selectedRoute, setSelectedRoute] = useState('');
+
+    let [selectedRoute, setSelectedRoute] = useState();
+    let [selectedDate, setSelectedDate] = useState();
+
     let [bookinglist, setBookingList] = useState([]);
 
     useEffect(() => {
         api.getAllRoutes()
             .then((routes) => setRoutes(routes))
             .catch(api.toastifyError);
+
+        setDays();
     }, []);
 
     useEffect(() => {
-        if(selectedRoute !== '') {
-           api.getRouteBookings(selectedRoute.id, '2021-04-07', '15:00')
-            .then((results) => setBookingList(results))
+        if(selectedRoute && selectedDate) {
+           api.getRouteBookings(selectedRoute.id, dayjs(selectedDate).format('YYYY-DD-MM HH:mm:ss'), '19:00')
+            .then((results) => {setBookingList(results); console.log(results)})
             .catch(api.toastifyError);
         }
-    }, [selectedRoute]);
+    }, [selectedRoute, selectedDate]);
+
+    function setDays() {
+        let date = new Date();
+
+        for(let i = 0; i < 7; i++) {
+            setDates(prevState => [...prevState, (date.getDate() + i).toString().padStart(2, '0') + '.' + (date.getMonth() + 1).toString().padStart(2, '0') + '.' + date.getFullYear()])
+        }
+    }
 
     return (
         <div className="booking-list page">
@@ -49,7 +63,11 @@ function BookingList() {
                     <div className="row-filter-container">
                         <div className="filter-container">
                             <span>Data</span>
-                            <Dropdown items={dates} alwaysSelected />
+                            <Dropdown 
+                                items={dates} 
+                                handleChange={setSelectedDate}
+                                placeholder="Wybierz datę"
+                            />
                         </div>
                         <div className="filter-container">
                             <span>Godzina</span>
