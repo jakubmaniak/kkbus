@@ -28,6 +28,7 @@ import PostActivation from './components/PostActivation';
 import Timetable from './components/Timetable';
 import Profile from './components/Profile';
 import BookingPage from './components/BookingPage';
+import BookingReportPage from './components/BookingReportPage';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -101,6 +102,9 @@ function App() {
                         </Route>
                         <Route exact path="/rezerwacje">
                             <BookingPage />
+                        </Route>
+                        <Route exact path="/raporty-z-rezerwacji">
+                            <BookingReportPage />
                         </Route>
                     </Switch>
                 </Router>
