@@ -21,10 +21,13 @@ function WorkSchedule() {
     const defaultTimeEnd = moment().startOf("day").add(1, "day").toDate();
 
     useEffect(() => {
-        setGroups([{id: 1, height: 40, title: 'Kierowcy'}])
-        api.getDriverNames().then((res) => res.map((r, i) => {
-            setGroups(groups => [...groups, {id: i + 1, height: 40, title: r.firstName + ' ' + r.lastName}])
-        }));
+        setGroups([{ id: 1, height: 40, title: 'Kierowcy' }])
+        
+        api.getDriverNames()
+            .then((results) => results.map((result, i) => {
+                setGroups(groups => [...groups, { id: (i + 2), height: 40, title: result.firstName + ' ' + result.lastName }])
+            }))
+            .catch(api.toastifyError);
 
         setItems([
             {
