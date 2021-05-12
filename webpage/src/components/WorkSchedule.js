@@ -21,43 +21,11 @@ function WorkSchedule() {
     const defaultTimeEnd = moment().startOf("day").add(1, "day").toDate();
 
     useEffect(() => {
-        setGroups([
-            { 
-                id: 1,
-                height: 40,
-                title: 'Kierowcy',
-            },
-            { 
-                id: 2,
-                height: 40,
-                title: 'Tomasz Rajdowiec',
-            },
-            { 
-                id: 3,
-                title: 'Kazimierz Rajdowiec',
-                height: 40,
-            },
-            { 
-                id: 4,
-                title: 'Mirosław Szybki',
-                height: 40
-            },
-            { 
-                id: 5,
-                title: 'Jan Doświadczony',
-                height: 40
-            },
-            { 
-                id: 6,
-                title: 'Marek Poprawny',
-                height: 40
-            },
-            { 
-                id: 7,
-                title: 'Zuzanna Konkretna',
-                height: 40
-            }
-        ]);
+        setGroups([{id: 1, height: 40, title: 'Kierowcy'}])
+        api.getDriverNames().then((res) => res.map((r, i) => {
+            setGroups(groups => [...groups, {id: i + 1, height: 40, title: r.firstName + ' ' + r.lastName}])
+        }));
+
         setItems([
             {
                 id: 1,
@@ -73,7 +41,7 @@ function WorkSchedule() {
                 start: moment().add(2, 'hour'),
                 end: moment().add(3, 'hour')
             }
-        ]);    
+        ]);
     }, []);
     
 
@@ -110,6 +78,8 @@ function WorkSchedule() {
     
         console.log("Moved", itemId, dragTime, newGroupOrder, items);
       };
+
+    
 
     return (
         <div className="work-schedule page">
