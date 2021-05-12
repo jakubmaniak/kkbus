@@ -14,70 +14,101 @@ import Timeline from 'react-calendar-timeline'
 
 function WorkSchedule() {
     let [loading, setLoading] = useState(false);
+    let [items, setItems] = useState([]);
+    let [groups, setGroups] = useState([]);
 
-    const groups = [
-        { 
-            id: 1,
-            height: 40,
-            title: 'Kierowcy',
-        },
-        { 
-            id: 2,
-            height: 40,
-            title: 'Tomasz Rajdowiec',
-        },
-        { 
-            id: 3,
-            title: 'Kazimierz Rajdowiec',
-            height: 40,
-        },
-        { 
-            id: 4,
-            title: 'Mirosław Szybki',
-            height: 40
-        },
-        { 
-            id: 5,
-            title: 'Mirosław Szybki',
-            height: 40
-        },
-        { 
-            id: 6,
-            title: 'Jan Doświadczony',
-            height: 40
-        },
-        { 
-            id: 7,
-            title: 'Marek Poprawny',
-            height: 40
-        },
-        { 
-            id: 8,
-            title: 'Zuzanna Konkretna',
-            height: 40
-        }
-    ]
+    const defaultTimeStart = moment().startOf("day").toDate();
+    const defaultTimeEnd = moment().startOf("day").add(1, "day").toDate();
 
-    const items = [
-        {
-            id: 1,
-            group: 2,
-            title: 'item 2',
-            start_time: moment().add(-0.5, 'hour'),
-            end_time: moment().add(0.5, 'hour')
-        },
-        {
-            id: 2,
-            group: 1,
-            title: 'item 3',
-            start_time: moment().add(2, 'hour'),
-            end_time: moment().add(3, 'hour')
-        }
-    ];    
+    useEffect(() => {
+        setGroups([
+            { 
+                id: 1,
+                height: 40,
+                title: 'Kierowcy',
+            },
+            { 
+                id: 2,
+                height: 40,
+                title: 'Tomasz Rajdowiec',
+            },
+            { 
+                id: 3,
+                title: 'Kazimierz Rajdowiec',
+                height: 40,
+            },
+            { 
+                id: 4,
+                title: 'Mirosław Szybki',
+                height: 40
+            },
+            { 
+                id: 5,
+                title: 'Jan Doświadczony',
+                height: 40
+            },
+            { 
+                id: 6,
+                title: 'Marek Poprawny',
+                height: 40
+            },
+            { 
+                id: 7,
+                title: 'Zuzanna Konkretna',
+                height: 40
+            }
+        ]);
+        setItems([
+            {
+                id: 1,
+                group: 2,
+                title: 'item 1',
+                start: moment().add(1, 'hour'),
+                end: moment().add(2, 'hour')
+            },
+            {
+                id: 2,
+                group: 3,
+                title: 'item 2',
+                start: moment().add(2, 'hour'),
+                end: moment().add(3, 'hour')
+            }
+        ]);    
+    }, []);
+    
+
+    let keys = {
+        groupIdKey: "id",
+        groupTitleKey: "title",
+        groupRightTitleKey: "rightTitle",
+        itemIdKey: "id",
+        itemTitleKey: "title",
+        itemDivTitleKey: "title",
+        itemGroupKey: "group",
+        itemTimeStartKey: "start",
+        itemTimeEndKey: "end",
+        groupLabelKey: "title"
+      };
 
     let groupRenderer = ({ group }) => {
         let className = group.title.includes('Kierowcy') ? 'section' : 'group';
         return <div className={className}>{group.title}</div>;
+      };
+
+    let handleItemMove = (itemId, dragTime, newGroupOrder) => {    
+        const group = groups[newGroupOrder];
+    
+        setItems(items.map((item) => item.id === itemId
+                ? Object.assign({}, item, {
+                    start: dragTime,
+                    end: dragTime + (item.end - item.start),
+                    group: group.id
+                })
+                : item
+            )
+        );
+    
+        console.log("Moved", itemId, dragTime, newGroupOrder, items);
       };
 
     return (
@@ -87,12 +118,13 @@ function WorkSchedule() {
                     groups={groups}
                     groupRenderer={groupRenderer}
                     items={items}
-                    defaultTimeStart={moment().add(-12, 'hour')}
-                    defaultTimeEnd={moment().add(12, 'hour')}
-                    horizontalLineClassNamesForGroup={(group) => group.root ? ["row-root"] : []}
-                    horizontalLineClassNamesForGroup={group =>
-                        group.title.includes("e") ? ["highlight"] : ""
-                    }
+                    keys={keys}
+                    canMove={true}
+                    itemHeightRatio={0.9}
+                    canResize={false}
+                    defaultTimeStart={defaultTimeStart}
+                    defaultTimeEnd={defaultTimeEnd}
+                    onItemMove={handleItemMove}
                 />
             </div>
         </div>
