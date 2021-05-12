@@ -1,4 +1,4 @@
-.header-wrapper {
+/* .header-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -29,4 +29,89 @@
 
 .parking-info {
     color: #D9B430;
+} */
+
+
+
+.react-calendar-timeline {
+    width: 100%;
+}
+
+.rct-sidebar-row .group,
+.react-calendar-timeline .rct-horizontal-lines .group,
+.rct-sidebar-row .section,
+.react-calendar-timeline .rct-horizontal-lines .section {
+  background-color: #DDDDDD;
+  padding-left: 8px;
+}
+
+.rct-sidebar-row .section,
+.react-calendar-timeline .rct-horizontal-lines .section {
+  font-weight: 500;
+}
+
+div.react-calendar-timeline div.rct-sidebar div.rct-sidebar-row {
+    border-bottom: 1px solid #EAEAEA;
+}
+
+div.react-calendar-timeline div.rct-sidebar div.rct-sidebar-row {
+    padding: 0;
+}
+
+div.react-calendar-timeline div.rct-calendar-header div:first-child {
+    background-color: #20201A;
+    height: 48px !important;
+}
+
+div.react-calendar-timeline div.rct-calendar-header div:last-child {
+    background-color: #DDDDDD;
+    height: 48px !important;
+}
+
+div.react-calendar-timeline div.rct-calendar-header div:last-child > div.rct-dateHeader {
+    border: none;
+}
+
+div.react-calendar-timeline div.rct-header-root {
+    background-color: #20201A;
+    border-bottom: none;
+}
+
+div.react-calendar-timeline div.rct-horizontal-lines div.rct-hl-even, 
+div.react-calendar-timeline div.rct-horizontal-lines div.rct-hl-odd {
+    border-bottom: 1px solid #EAEAEA;
+}
+
+div.react-calendar-timeline div.rct-horizontal-lines div.rct-hl-odd {
+    background-color: initial;
+}
+
+div.rct-vertical-lines > div.rct-vl.rct-day-1,
+div.rct-vertical-lines > div.rct-vl.rct-day-2,
+div.rct-vertical-lines > div.rct-vl.rct-day-3,
+div.rct-vertical-lines > div.rct-vl.rct-day-4,
+div.rct-vertical-lines > div.rct-vl.rct-day-5 {
+    border-left: none;
+}
+
+div.react-calendar-timeline div.rct-outer {
+    background-color: white;
+}
+
+div.react-calendar-timeline div.rct-sidebar {
+    border-right: none;
+    
+}
+div.react-calendar-timeline div.rct-sidebar,
+div.react-calendar-timeline div.rct-sidebar div:first-child,
+div.react-calendar-timeline div.rct-header-root div:first-child {
+    width: 250px !important;
+}
+
+div.react-calendar-timeline div.rct-header-root div.rct-calendar-header {
+    width: calc(100% - 250px) !important;
+}
+
+div.react-calendar-timeline div.rct-calendar-header  {
+    border: none;
 }
