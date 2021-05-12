@@ -41,13 +41,14 @@
 .react-calendar-timeline .rct-horizontal-lines .group,
 .rct-sidebar-row .section,
 .react-calendar-timeline .rct-horizontal-lines .section {
-  background-color: #DDDDDD;
-  padding-left: 8px;
+  background-color: #EAEAEA;
+  padding-left: 12px;
 }
 
 .rct-sidebar-row .section,
 .react-calendar-timeline .rct-horizontal-lines .section {
   font-weight: 500;
+  background-color: #DDDDDD;
 }
 
 div.react-calendar-timeline div.rct-sidebar div.rct-sidebar-row {
