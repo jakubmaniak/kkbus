@@ -53,15 +53,10 @@ function RouteReport() {
     }, [selectedRoute]);
 
     useEffect(() => {
-        let date = new Date();
-
-        if(selectedHour) {
-            console.log(selectedHour.padStart(5, '0'));
-        }
-        
+        let date = new Date();      
 
         if(selectedRoute && selectedStop && selectedHour) {
-            api.getRouteBookings(selectedRoute.id, (date.getDate()).toString().padStart(2, '0') + '.' + (date.getMonth() + 1).toString().padStart(2, '0') + '.' + date.getFullYear(), selectedHour.padStart(4, '0'))
+            api.getRouteBookings(selectedRoute.id, (date.getDate()).toString().padStart(2, '0') + '.' + (date.getMonth() + 1).toString().padStart(2, '0') + '.' + date.getFullYear(), selectedHour.padStart(5, '0'))
             .then((results) => setBookingList(results.filter(result => result.firstStop === selectedStop)))
             .catch(api.toastifyError);
         }
@@ -134,17 +129,6 @@ function RouteReport() {
                         <input placeholder="Liczba osób" value={amount} onChange={fromValue(setAmount)} />
                         <button className="submit" type="button" onClick={saveReport}>Zapisz raport</button>
                     </form>
-                </div>
-                <div className="tile half">
-                    <h2>Zaznacz zrealizowane rezerwacje</h2>
-                    {bookinglist.map((booking) => {
-                        return (
-                            <div>
-                                <span>{booking.id}</span>
-                                <span>{booking.firstName} {booking.lastName}</span>
-                            </div>
-                        );
-                    })}
                 </div>
             </div>
         </div>
