@@ -8,6 +8,7 @@ import toast from '../helpers/toast';
 import { fromValue } from '../helpers/from-value';
 
 import Dropdown from './Dropdown';
+import BookingCheck from './BookingCheck';
 
 function RouteReport() {
     let [routes, setRoutes] = useState([]);
@@ -151,14 +152,14 @@ function RouteReport() {
                     {bookinglist.map((booking) => {
                         console.log(booking)
                         return (
-                            <div className="booking-check">
-                                <span>{booking.id}</span>
-                                <span>{booking.firstName}</span>
-                                <span>{booking.lastName}</span>
-                                <span>{booking.normalTickets}</span>
-                                <span>{booking.reducedTickets}</span>
-                                <span>{booking.childTickets}</span>
-                            </div>
+                            <BookingCheck 
+                                id={booking.id}
+                                firstName={booking.firstName}
+                                lastName={booking.lastName}
+                                normalTickets={booking.normalTickets}
+                                reducedTickets={booking.reducedTickets}
+                                childTickets={booking.childTickets}
+                            />
                         );
                     })}
                 </div>
