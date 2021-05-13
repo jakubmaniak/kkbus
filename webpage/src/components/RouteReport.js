@@ -12,14 +12,18 @@ import Dropdown from './Dropdown';
 function RouteReport() {
     let [routes, setRoutes] = useState([]);
     let [stops, setStops] = useState([]);
+    let [hours, setHours] = useState([]);
     let [vehicles, setVehicles] = useState([]);
     let [drivers, setDrivers] = useState([]);
 
     let [selectedRoute, setSelectedRoute] = useState();
     let [selectedStop, setSelectedStop] = useState();
+    let [selectedHour, setSelectedHour] = useState();
     let [selectedVehicle, setSelectedVehicle] = useState();
     let [selectedDriver, setSelectedDriver] = useState(null);
     let [amount, setAmount] = useState('');
+
+    let [bookinglist, setBookingList] = useState([]);
 
     let { role } = useContext(UserContext).user;
 
@@ -40,6 +44,28 @@ function RouteReport() {
                 .catch(api.toastifyError);
         }
     }, [role]);
+
+    useEffect(() => {
+        if(selectedRoute) {
+            setHours(selectedRoute.hours);
+            setSelectedHour();
+        }
+    }, [selectedRoute]);
+
+    useEffect(() => {
+        let date = new Date();
+
+        if(selectedHour) {
+            console.log(selectedHour.padStart(5, '0'));
+        }
+        
+
+        if(selectedRoute && selectedStop && selectedHour) {
+            api.getRouteBookings(selectedRoute.id, (date.getDate()).toString().padStart(2, '0') + '.' + (date.getMonth() + 1).toString().padStart(2, '0') + '.' + date.getFullYear(), selectedHour.padStart(4, '0'))
+            .then((results) => setBookingList(results.filter(result => result.firstStop === selectedStop)))
+            .catch(api.toastifyError);
+        }
+    }, [selectedRoute, selectedStop, selectedHour]);
 
     function handleRouteChange(route) {
         setStops(route.stops);
@@ -86,6 +112,11 @@ function RouteReport() {
                             placeholder="Wybierz przystanek" 
                             handleChange={setSelectedStop}
                         />
+                         <Dropdown
+                            items={hours}
+                            placeholder="Wybierz godzinę" 
+                            handleChange={setSelectedHour}
+                        />
                         <Dropdown
                             items={vehicles}
                             textFormatter={({ brand, model, year }) => brand + ' ' + model + ' ' + year}
@@ -103,6 +134,17 @@ function RouteReport() {
                         <input placeholder="Liczba osób" value={amount} onChange={fromValue(setAmount)} />
                         <button className="submit" type="button" onClick={saveReport}>Zapisz raport</button>
                     </form>
+                </div>
+                <div className="tile half">
+                    <h2>Zaznacz zrealizowane rezerwacje</h2>
+                    {bookinglist.map((booking) => {
+                        return (
+                            <div>
+                                <span>{booking.id}</span>
+                                <span>{booking.firstName} {booking.lastName}</span>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </div>

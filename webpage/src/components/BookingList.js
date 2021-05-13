@@ -30,7 +30,7 @@ function BookingList() {
 
     useEffect(() => {        
         if(selectedRoute && selectedDate && selectedHour) {
-           api.getRouteBookings(selectedRoute.id, selectedDate.split('.').reverse().join('-'), selectedHour)
+           api.getRouteBookings(selectedRoute.id, selectedDate.split('.').reverse().join('-'), selectedHour.padStart(5, '0'))
             .then(setBookingList)
             .catch(api.toastifyError);
         }
