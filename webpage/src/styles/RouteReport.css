@@ -1,6 +1,10 @@
 .report {
     display: flex;
-    align-items: flex-end;
+}
+
+.report .row {
+    display: flex;
+    justify-content: space-between;
 }
 
 .report input {
@@ -13,6 +17,12 @@
 
 .report .dropdown {
     margin-bottom: 12px;
+}
+
+.submit-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .report .submit {

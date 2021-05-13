@@ -96,7 +96,7 @@ function RouteReport() {
                         {role === 'owner' ? <span style={{fontSize:"20px", color: "rgb(217 180 48)"}}> (dla kierowców)</span> : null}
                     </h2>
                     <form className="report">
-                        <div>
+                        <div className="row">
                             <Dropdown
                                 items={routes}
                                 textFormatter={routeFormatter}
@@ -109,7 +109,7 @@ function RouteReport() {
                                 handleChange={setSelectedStop}
                             />
                         </div>
-                        <div>
+                        <div className="row">
                             <Dropdown
                                 items={hours}
                                 placeholder="Wybierz godzinę" 
@@ -122,7 +122,7 @@ function RouteReport() {
                                 handleChange={setSelectedVehicle} 
                             />
                        </div>
-                       <div>
+                       <div className="row">
                             {role === 'owner' ? 
                                 <Dropdown
                                     items={drivers}
@@ -133,7 +133,9 @@ function RouteReport() {
                             : null}
                             <input placeholder="Liczba osób" value={amount} onChange={fromValue(setAmount)} />
                         </div>
-                        <button className="submit" type="button" onClick={saveReport}>Zapisz raport</button>
+                        <div className="submit-container">
+                            <button className="submit" type="button" onClick={saveReport}>Zapisz raport</button>
+                        </div>
                     </form>
                 </div>
                 <div className="tile">
