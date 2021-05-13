@@ -30,7 +30,7 @@ function BookingList() {
 
     useEffect(() => {        
         if(selectedRoute && selectedDate && selectedHour) {
-           api.getRouteBookings(selectedRoute.id, dayjs(selectedDate).format('YYYY-DD-MM HH:mm:ss'), selectedHour)
+           api.getRouteBookings(selectedRoute.id, selectedDate.split('.').reverse().join('-'), selectedHour)
             .then(setBookingList)
             .catch(api.toastifyError);
         }
