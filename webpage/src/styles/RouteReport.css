@@ -20,3 +20,31 @@
     width: 180px;
     height: 48px;
 }
+
+.booking-check {
+    display: flex;
+    justify-content: space-between;
+}
+
+.booking-check span:first-child {
+    width: 140px;
+}
+
+.booking-check span:nth-child(2) {
+    width: 180px;
+}
+
+.booking-check span:nth-child(3) {
+    width: 180px;
+}
+
+.booking-check span:nth-child(4),
+.booking-check span:nth-child(5) {
+    width: 100px;
+    text-align: center;
+}
+
+.booking-check span:nth-child(6) {
+    width: 120px;
+    text-align: center;
+}

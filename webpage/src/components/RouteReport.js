@@ -90,45 +90,75 @@ function RouteReport() {
     return (
         <div className="route-report page">
             <div className="main">
-                <div className="tile half">
+                <div className="tile">
                     <h2>
                         Raport z kursu
                         {role === 'owner' ? <span style={{fontSize:"20px", color: "rgb(217 180 48)"}}> (dla kierowców)</span> : null}
                     </h2>
                     <form className="report">
-                        <Dropdown
-                            items={routes}
-                            textFormatter={routeFormatter}
-                            placeholder="Wybierz trasę"
-                            handleChange={handleRouteChange} 
-                        />
-                        <Dropdown
-                            items={stops}
-                            placeholder="Wybierz przystanek" 
-                            handleChange={setSelectedStop}
-                        />
-                         <Dropdown
-                            items={hours}
-                            placeholder="Wybierz godzinę" 
-                            handleChange={setSelectedHour}
-                        />
-                        <Dropdown
-                            items={vehicles}
-                            textFormatter={({ brand, model, year }) => brand + ' ' + model + ' ' + year}
-                            placeholder="Wybierz pojazd" 
-                            handleChange={setSelectedVehicle} 
-                        />
-                        {role === 'owner' ? 
+                        <div>
                             <Dropdown
-                                items={drivers}
-                                textFormatter={({ firstName, lastName }) => firstName + ' ' + lastName}
-                                placeholder="Wybierz kierowcę" 
-                                handleChange={setSelectedDriver} 
+                                items={routes}
+                                textFormatter={routeFormatter}
+                                placeholder="Wybierz trasę"
+                                handleChange={handleRouteChange} 
                             />
-                        : null}
-                        <input placeholder="Liczba osób" value={amount} onChange={fromValue(setAmount)} />
+                            <Dropdown
+                                items={stops}
+                                placeholder="Wybierz przystanek" 
+                                handleChange={setSelectedStop}
+                            />
+                        </div>
+                        <div>
+                            <Dropdown
+                                items={hours}
+                                placeholder="Wybierz godzinę" 
+                                handleChange={setSelectedHour}
+                            />
+                            <Dropdown
+                                items={vehicles}
+                                textFormatter={({ brand, model, year }) => brand + ' ' + model + ' ' + year}
+                                placeholder="Wybierz pojazd" 
+                                handleChange={setSelectedVehicle} 
+                            />
+                       </div>
+                       <div>
+                            {role === 'owner' ? 
+                                <Dropdown
+                                    items={drivers}
+                                    textFormatter={({ firstName, lastName }) => firstName + ' ' + lastName}
+                                    placeholder="Wybierz kierowcę" 
+                                    handleChange={setSelectedDriver} 
+                                />
+                            : null}
+                            <input placeholder="Liczba osób" value={amount} onChange={fromValue(setAmount)} />
+                        </div>
                         <button className="submit" type="button" onClick={saveReport}>Zapisz raport</button>
                     </form>
+                </div>
+                <div className="tile">
+                    <h2>Zaznacz zrealizowane rezerwacje</h2>
+                    <div className="booking-check">
+                        <span>Nr rezerwacji</span>
+                        <span>Imię</span>
+                        <span>Nazwisko</span>
+                        <span>Normalne</span>
+                        <span>Ulgowe</span>
+                        <span>Dzieci do lat 5</span>
+                    </div>
+                    {bookinglist.map((booking) => {
+                        console.log(booking)
+                        return (
+                            <div className="booking-check">
+                                <span>{booking.id}</span>
+                                <span>{booking.firstName}</span>
+                                <span>{booking.lastName}</span>
+                                <span>{booking.normalTickets}</span>
+                                <span>{booking.reducedTickets}</span>
+                                <span>{booking.childTickets}</span>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </div>
