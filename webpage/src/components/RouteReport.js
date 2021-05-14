@@ -151,7 +151,6 @@ function RouteReport() {
                         <span></span>
                     </div>
                     {bookinglist.map((booking) => {
-                        console.log(booking)
                         return (
                             <BookingCheck 
                                 id={booking.id}
@@ -160,6 +159,7 @@ function RouteReport() {
                                 normalTickets={booking.normalTickets}
                                 reducedTickets={booking.reducedTickets}
                                 childTickets={booking.childTickets}
+                                toggleBooking={(ev) => console.log(ev.target.value)}
                             />
                         );
                     })}
