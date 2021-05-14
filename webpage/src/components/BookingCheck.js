@@ -9,6 +9,9 @@ function BookingCheck(props) {
             <span>{props.normalTickets}</span>
             <span>{props.reducedTickets}</span>
             <span>{props.childTickets}</span>
+            <span>
+                <button className="delete">X</button>
+            </span>
         </div>
     );
 }
