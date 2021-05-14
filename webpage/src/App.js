@@ -10,25 +10,26 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import UserContext, { initialContext } from './contexts/User';
 
-import LoginPage from './components/LoginPage';
-import SignupPage from './components/SignupPage';
-import Header from './components/Header';
-import ContactPage from './components/ContactPage';
-import RoutesPage from './components/RoutesPage';
-import RemindPasswordPage from './components/RemindPasswordPage';
-import LoyaltyProgram from './components/LoyaltyProgram';
-import VehicleInfo from './components/VehicleInfo';
-import WorkSchedule from './components/WorkSchedule';
-import FuelPage from './components/FuelPage';
-import RouteReport from './components/RouteReport';
-import Clients from './components/Clients';
-import BookingList from './components/BookingList';
-import PostSignup from './components/PostSignup';
-import PostActivation from './components/PostActivation';
-import Timetable from './components/Timetable';
-import Profile from './components/Profile';
-import BookingPage from './components/BookingPage';
-import BookingReportPage from './components/BookingReportPage';
+import RoutesPage from './components/route/RoutesPage';
+import WorkSchedule from './components/workSchedule/WorkSchedule';
+import Timetable from './components/timetable/Timetable';
+import LoyaltyProgram from './components/loyaltyProgram/LoyaltyProgram';
+import BookingReportPage from './components/bookingsReport/BookingReportPage';
+import Clients from './components/accountAndBookings/Clients';
+import RouteReport from './components/routeReport/RouteReport';
+import VehicleInfo from './components/vehicle/VehicleInfo';
+import FuelPage from './components/fuel/FuelPage';
+import ContactPage from './components/contact/ContactPage';
+import PostSignup from './components/userAuth/PostSignup';
+import LoginPage from './components/userAuth/LoginPage';
+import SignupPage from './components/userAuth/SignupPage';
+import RemindPasswordPage from './components/userAuth/RemindPasswordPage';
+import Header from './components/header/Header';
+import Profile from './components/profile/Profile';
+import BookingList from './components/bookingList/BookingList';
+import BookingPage from './components/bookingClient/BookingPage';
+import PostActivation from './components/userAuth/PostActivation';
+
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
