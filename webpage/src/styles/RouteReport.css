@@ -83,3 +83,41 @@
 .booking-check:nth-child(2n + 1) {
     background-color: rgb(240, 240, 240);
 }
+
+.booking-check .check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+}
+
+input[type=checkbox] {
+    display: none;
+}
+
+input[type=checkbox] + label:before {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    content: "\2716";
+    width: 35px;
+    height: 35px;
+    font-size: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 2px;
+    color: white;
+    cursor: pointer;
+    background-color: rgb(216, 74, 65);
+}
+
+input[type=checkbox] + label {
+    display: block;
+}
+
+input[type=checkbox]:checked + label:before {
+    background-color: rgb(71, 190, 97);
+    color: white;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    content: "\2714";
+}
