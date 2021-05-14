@@ -56,8 +56,8 @@ function RouteReport() {
     useEffect(() => {
         let date = new Date();      
 
-        if(selectedRoute && selectedStop && selectedHour) {
-            api.getRouteBookings(selectedRoute.id, (date.getDate()).toString().padStart(2, '0') + '.' + (date.getMonth() + 1).toString().padStart(2, '0') + '.' + date.getFullYear(), selectedHour.padStart(5, '0'))
+        if(selectedRoute && selectedStop && selectedHour) { //(date.getDate()).toString().padStart(2, '0') + '.' + (date.getMonth() + 1).toString().padStart(2, '0') + '.' + date.getFullYear()
+            api.getRouteBookings(selectedRoute.id, '2021-05-13', selectedHour.padStart(5, '0'))
             .then((results) => setBookingList(results.filter(result => result.firstStop === selectedStop)))
             .catch(api.toastifyError);
         }
@@ -148,6 +148,7 @@ function RouteReport() {
                         <span>Normalne</span>
                         <span>Ulgowe</span>
                         <span>Dzieci do lat 5</span>
+                        <span></span>
                     </div>
                     {bookinglist.map((booking) => {
                         console.log(booking)
