@@ -81,3 +81,7 @@ typings/
 
 # Private dev files
 *.dev.*
+
+# Environment files
+env.json
+.env
