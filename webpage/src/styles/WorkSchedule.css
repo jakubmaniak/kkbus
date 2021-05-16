@@ -1,3 +1,80 @@
+table {
+    font-size: 14px;
+}
+
+table,
+th,
+td {
+    border: none;
+    border-spacing: 0;
+}
+
+th {
+    padding: 12px 8px;
+    font-weight: 400;
+    color: #EAEAEA;
+}
+
+tr {
+    background-color: #FFFFFF;
+}
+
+thead tr:nth-child(1) {
+    background-color: #20201A;
+}
+
+thead tr:nth-child(2) {
+    background-color: #E4E4E4;
+}
+
+thead tr:nth-child(2) th {
+    color: #20201A;
+}
+
+thead th:nth-child(1) {
+    min-width: 100px;
+}
+
+tbody td:nth-child(1) {
+    background-color: #E4E4E4;
+}
+
+tbody td:nth-child(1) > span {
+    display: block;
+    padding: 4px 8px;
+    cursor: default;
+}
+
+tbody td:nth-child(1) span.role-parent {
+    display: flex;
+    align-items: center;
+    background-color: #DDDDDD;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+}
+
+tbody span.role-parent .role-parent__arrow {
+    margin-right: 4px;    
+    font-size: 10px;
+    color: #404040;
+}
+
+tbody tr:hover td,
+tbody tr:hover td > span,
+tbody tr:hover td > span.role-parent {
+    background-color: rgba(0,0,0,0.1);
+}
+
+tbody td:nth-child(n + 3) {
+    padding: 8px 0; 
+    text-align: center;
+}
+
+tbody td {
+    border-top: 1px solid #EAEAEA;
+}
+
 /* .header-wrapper {
     display: flex;
     justify-content: space-between;
