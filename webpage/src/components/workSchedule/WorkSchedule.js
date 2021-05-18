@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTable, useExpanded } from 'react-table';
 import '../../styles/WorkSchedule.css';
 
 import * as api from '../../api';
 
-import { routeFormatter } from '../../helpers/text-formatters';
-
-import Dropdown from '../dropdowns/Dropdown';
 import Loader from '../Loader';
 
 function Table({ columns, data }) {
@@ -16,8 +13,13 @@ function Table({ columns, data }) {
         prepareRow,
         headerGroups,
         rows,
-        state: { expanded }
+        state: { expanded },
+        toggleAllRowsExpanded,
     } = useTable({ columns, data }, useExpanded);
+
+    useEffect(() => {
+        toggleAllRowsExpanded?.(true);
+    }, [toggleAllRowsExpanded, data]);
 
     return (
         <table {...getTableProps()}>
@@ -63,6 +65,39 @@ function WorkSchedule() {
             .catch(api.toastifyError);
     }, []);    
 
+    let nameCellRenderer = ({row}) => {
+        if (row.canExpand) {
+            return (
+                <span
+                    className="role-parent"
+                    onClick={() => row.toggleRowExpanded()}
+                >
+                    <span className="role-parent__arrow">{row.isExpanded ? '▼' : '►'}</span>
+                    {row.values.name}
+                </span>
+            );
+        }
+        
+        return <span>{row.values.name}</span>;
+    };
+
+    let data = useMemo(() =>
+        [
+            {
+                name: 'Jan Kowalski',
+                h0: ['12:30', <strong>A</strong>],
+                h6: 'X'
+            },
+            {
+                name: 'Kierowcy',
+                subRows: [
+                    { name: 'Tomasz Rajdowiec', h4: 'B', h6: 'Y' },
+                    { name: 'Kazimierz Rajdowiec', h2: 'CCC', h8: 'Z' }
+                ]
+            }
+        ]
+    );
+
     return (
         <div className="work-schedule page">
             <div className="main">
@@ -71,32 +106,11 @@ function WorkSchedule() {
                         {
                             Header: '',
                             accessor: 'name',
-                            Cell: ({row}) => (
-                                row.canExpand
-                                ? (
-                                    <span
-                                        className="role-parent"
-                                        onClick={() => row.toggleRowExpanded()}
-                                    >
-                                        <span className="role-parent__arrow">{row.isExpanded ? '▼' : '►'}</span>
-                                        {row.values.name}
-                                    </span>
-                                )
-                                : <span>{row.values.name}</span>
-                            )
+                            Cell: nameCellRenderer
                         },
                         { Header: day.format('DD.MM.YYYY'), columns: hourHeaders }
                     ]}
-                    data={[
-                        { name: 'Jan Kowalski', h0: 'AAA', h6: 'X' },
-                        {
-                            name: 'Kierowcy',
-                            subRows: [
-                                { name: 'Tomasz Rajdowiec', h4: 'B', h6: 'YYY' },
-                                { name: 'Kazimierz Rajdowiec', h2: 'CCC', h8: 'Z' }
-                            ]
-                        }
-                    ]}
+                    data={data}
                 />
             </div>
         </div>
