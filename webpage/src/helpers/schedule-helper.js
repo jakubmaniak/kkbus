@@ -46,7 +46,7 @@ function groupOverlappingEntries(entries) {
         let overlapping = false;
 
         for (let stackedEntry of stack) {
-            overlapping ||= overlaps(stackedEntry, entry);
+            overlapping = overlapping || overlaps(stackedEntry, entry);
 
             if (overlapping) break;
         }
