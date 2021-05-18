@@ -38,7 +38,7 @@ function transformEntries(entries) {
     });
 }
 
-function aggregateOverlappingEntries(entries) {
+function groupOverlappingEntries(entries) {
     let groups = [];
     let stack = [];
 
@@ -68,7 +68,7 @@ function aggregateOverlappingEntries(entries) {
     return groups;
 }
 
-function groupEntries(groups) {
+function aggregateGroupEntries(groups) {
     return groups.map((entries) => {
         let startIndex = Math.min(...entries.map((entry) => entry.start.index));
         let endIndex = Math.max(...entries.map((entry) => entry.end.index));
@@ -115,8 +115,8 @@ function boilGroups(groups) {
 
 export default function organizeEntries(data) {
     return boilGroups(
-        groupEntries(
-            aggregateOverlappingEntries(
+        aggregateGroupEntries(
+            groupOverlappingEntries(
                 transformEntries(data)
             )
         )
@@ -141,9 +141,9 @@ let entries = [
 ];
 
 let transformedEntries = transformEntries(entries);
-let aggregatedEntries = aggregateOverlappingEntries(transformedEntries);
-let groupedEntries = groupEntries(aggregatedEntries);
-let boiledGroups = boilGroups(groupedEntries);
+let overlappingGroups = groupOverlappingEntries(transformedEntries);
+let aggregatedGroups = aggregateGroupEntries(overlappingGroups);
+let boiledGroups = boilGroups(aggregatedGroups);
 
 
 
@@ -157,10 +157,10 @@ const interface = (input) => {
     input = input.toLowerCase();
 
     if (input == 'src') console.dir(entries, { depth: 4 });
-    else if (input == 'aggregate') console.dir(aggregatedEntries, { depth: 4 });
-    else if (input == 'group') console.dir(groupedEntries, { depth: 4 });
-    else if (input == 'transform') console.dir(transformedEntries, { depth: 4 });
-    else if (input == 'boil') console.dir(boiledGroups, { depth: 4 });
+    else if (input == 'transformed') console.dir(transformedEntries, { depth: 4 });
+    else if (input == 'overlaps') console.dir(overlappingGroups, { depth: 4 });
+    else if (input == 'aggregated') console.dir(aggregatedGroups, { depth: 4 });
+    else if (input == 'boiled') console.dir(boiledGroups, { depth: 4 });
     else if (input == 'exit') process.exit();
     else if (input == 'clear') console.clear();
 
