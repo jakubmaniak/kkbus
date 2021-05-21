@@ -30,40 +30,43 @@ function BookingPage() {
             <div className="main">
                 <div className="tile">
                     <h2>Aktualne rezerwacje</h2>
-                    <p className="booking-header">
-                        <span>Data</span>
-                        <span>Godzina</span>
-                        <span>Kierunek</span>
-                        <span>Normalne</span>
-                        <span>Ulgowe</span>
-                        <span>Dzieci do lat 5</span>
-                    </p>
-                    {console.log(futureBookings)}
-                    {futureBookings.map((booking, i) => {
-                        return (
-                            <BookingItem 
-                                key={i}
-                                date={new Date(booking.date).toLocaleDateString()}
-                                hour={booking.hour}
-                                route={booking.firstStop + ' - ' + booking.lastStop}
-                                normalTickets={booking.normalTickets}
-                                reducedTickets={booking.reducedTickets}
-                                childTickets={booking.childTickets}
-                            />
-                        );
-                    })}
+                    <table className="currentBookings">
+                        <tr>
+                            <th>Data</th>
+                            <th>Godzina</th>
+                            <th>Kierunek</th>
+                            <th>Normalne</th>
+                            <th>Ulgowe</th>
+                            <th>Dzieci do lat 5</th>
+                            <th></th>
+                        </tr>
+                        {futureBookings.map((booking, i) => {
+                            return (
+                                <BookingItem 
+                                    key={i}
+                                    date={new Date(booking.date).toLocaleDateString()}
+                                    hour={booking.hour}
+                                    route={booking.firstStop + ' - ' + booking.lastStop}
+                                    normalTickets={booking.normalTickets}
+                                    reducedTickets={booking.reducedTickets}
+                                    childTickets={booking.childTickets}
+                                />
+                            );
+                        })}
+                    </table>
                 </div>
                 <div className="tile">
                     <h2>Historia</h2>
-                    <p className="booking-header">
-                        <span>Data</span>
-                        <span>Godzina</span>
-                        <span>Kierunek</span>
-                        <span>Normalne</span>
-                        <span>Ulgowe</span>
-                        <span>Dzieci do lat 5</span>
-                    </p>
-                    {pastBookings.map((booking, i) => {
+                    <table className="pastBookings">
+                        <tr>
+                            <th>Data</th>
+                            <th>Godzina</th>
+                            <th>Kierunek</th>
+                            <th>Normalne</th>
+                            <th>Ulgowe</th>
+                            <th>Dzieci do lat 5</th>
+                        </tr>
+                        {pastBookings.map((booking, i) => {
                         return (
                             <BookingItem 
                                 key={i}
@@ -76,6 +79,7 @@ function BookingPage() {
                             />
                         );
                     })}
+                    </table>
                 </div>
             </div>
         </div>

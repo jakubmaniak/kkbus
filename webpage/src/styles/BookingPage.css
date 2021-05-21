@@ -1,37 +1,48 @@
-.booking-header, 
-.booking-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+table th {
+    color: black;
+    text-align: left;
+    padding: 0;
+}
+
+table tr {
     height: 40px;
 }
 
-.booking-header:nth-child(2n + 1), 
-.booking-item:nth-child(2n + 1) {
+table tr:nth-child(2n + 1) {
     background-color: rgb(240, 240, 240);
 }
 
-.booking-header span:nth-child(1), 
-.booking-item span:nth-child(1) {
-    flex-basis: 100px;
-    text-align: left;
-    padding-left: 12px;
+table th:first-child,
+table td:first-child {
+    padding-left: 8px;
 }
 
-.booking-header span:nth-child(3), 
-.booking-item span:nth-child(3) {
-    flex-basis: 200px;
-    text-align: left;
+table {
+    width: 100%;
 }
 
-.booking-header span:last-child, 
-.booking-item span:last-child {
-    padding-right: 12px;
-}
-
-.booking-item span,
-.booking-header span {
-    flex: 1;
+table th:nth-child(4),
+table th:nth-child(5),
+table th:nth-child(6),
+table td:nth-child(4),
+table td:nth-child(5),
+table td:nth-child(6) {
     text-align: center;
+    width: 120px;
+}
+
+table td:nth-child(6) {
+    width: 120px;
+}
+
+
+.currentBookings th:last-child,
+.currentBookings td:last-child {
+    width: 100px;
+}
+
+table td button {
+    width: 100px;
+    background-color: #C73535;
 }
 

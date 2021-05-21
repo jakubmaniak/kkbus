@@ -13,15 +13,15 @@ function BookingItem(props) {
     }
 
     return (
-        <p className="booking-item">
-            <span>{props.date}</span>
-            <span>{props.hour}</span>
-            <span>{props.route}</span>
-            <span>{props.normalTickets}</span>
-            <span>{props.reducedTickets}</span>
-            <span>{props.childTickets}</span>
-            {checkCancelPosibility() ? <button>Anuluj</button> : null}
-        </p>
+        <tr>
+            <td>{props.date}</td>
+            <td>{props.hour}</td>
+            <td>{props.route}</td>
+            <td>{props.normalTickets}</td>
+            <td>{props.reducedTickets}</td>
+            <td>{props.childTickets}</td>
+            <td>{checkCancelPosibility() ? <button>Anuluj</button> : null}</td>
+        </tr>
     );
 }
 
