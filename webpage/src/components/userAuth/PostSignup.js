@@ -13,9 +13,9 @@ function PostSignup() {
                         <span>BUS</span>
                     </h1>
                     <p>Link aktywacyjny został wysłany na podany przez Ciebie adres e-mail</p>
-                    <form>
+                    {/*<form>
                         <button className="submit">Wyślij jeszcze raz</button>
-                    </form>
+                    </form>*/}
                 </div> 
             </div>
         </div>
