@@ -14,7 +14,6 @@ import Route from './Route';
 
 function RoutesPage() {
     let [loading, setLoading] = useState(true);
-    let loadingInitTime = Date.now();
 
     let [routes, setRoutes] = useState([]);
 
