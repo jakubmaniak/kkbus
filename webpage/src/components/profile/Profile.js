@@ -94,6 +94,7 @@ function Profile() {
                         phoneNumber={person.phoneNumber}
                         client={role === 'client' ? true : false}
                         role={role}
+                        unrealizedBookings={person.unrealizedBookings}
                     />
                     <div className="data-change">
                         <button onClick={() => setModalChangePasswordVisibility(true)}>Zmień hasło</button>

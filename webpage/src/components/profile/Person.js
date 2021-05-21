@@ -41,8 +41,8 @@ function Person(props) {
                 props.client
                 ?
                 <div className="client-data">
-                    <span>Liczba rezerwacji zrealizowanych/niezrealizowanych</span>
-                    <span>{props.reservation}</span>
+                    <span>Rezerwacje niezrealizowane/max. dopuszczlna liczba</span>
+                    <span>{props.unrealizedBookings} /3</span>
                 </div>
                 :
                 <div className="person-data">

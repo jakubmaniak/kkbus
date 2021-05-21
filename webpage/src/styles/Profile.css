@@ -20,5 +20,7 @@
 }
 
 .profile-page .client-data {
+    display: flex;
+    justify-content: space-between;
     height: 48px;
 }
