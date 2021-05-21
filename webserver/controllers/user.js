@@ -21,7 +21,7 @@ module.exports.sendActivationCode = (email, activationCode) => {
     return mailer.sendMail(
         email,
         'KKBus - Aktywacja konta',
-        `<p><a href="${env.server.externalAddress}/activate/${activationCode}">Aktywuj konto</a></p>`
+        `<p><a href="${env.server.externalAddress}/aktywuj-konto/${activationCode}">Aktywuj konto</a></p>`
     );
 };
 

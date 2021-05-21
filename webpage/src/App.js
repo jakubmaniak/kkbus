@@ -46,8 +46,8 @@ function App() {
                         <Route exact path="/logowanie" />
                         <Route exact path="/rejestracja" />
                         <Route exact path="/przypomnienie-hasla" />
-                        <Route exact path="/aktywuj-konto" />
-                        <Route exact path="/aktywowano-konto" />
+                        <Route exact path="/zarejestrowano" />
+                        <Route exact path="/aktywuj-konto/:activationCode" />
                         <Route>
                             <Header />
                         </Route>
@@ -65,10 +65,10 @@ function App() {
                         <Route exact path="/przypomnienie-hasla">
                             <RemindPasswordPage />
                         </Route>
-                        <Route exact path="/aktywuj-konto">
+                        <Route exact path="/zarejestrowano">
                             <PostSignup />
                         </Route>
-                        <Route exact path="/aktywowano-konto">
+                        <Route exact path="/aktywuj-konto/:activationCode">
                             <PostActivation />
                         </Route>
                         <Route exact path="/kontakt">
