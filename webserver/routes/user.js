@@ -144,8 +144,10 @@ router.post('/user/register', [
     }
 });
 
-router.get('/user/activate/:activationCode', async (req, res, next) => {
-    let activationCode = req.params.activationCode;
+router.post('/user/activate', [
+    bodySchema('{activationCode: string}')
+], async (req, res, next) => {
+    let { activationCode } = req.body;
 
     let payload;
     try {

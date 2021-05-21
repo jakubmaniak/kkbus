@@ -44,6 +44,15 @@ export async function register(email, firstName, lastName, birthDate, phoneNumbe
 }
 
 /**
+ * `POST /api/user/activate` Active the user account
+ * @param {string} activationCode 
+ * @returns Promise. Generates a new session token cookie.
+ */
+export async function activateUserAccount(activationCode) {
+    return sendPost('/user/activate', { activationCode });
+}
+
+/**
  * `PATCH /api/user/password` Change the user password
  * @async
  * @param {string} currentPassword
