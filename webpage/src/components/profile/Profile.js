@@ -5,10 +5,10 @@ import Person from './Person';
 import { ModalLoader } from '../Loader';
 import Modal from '../modals/Modal';
 
-import UserContext from '../../contexts/User';
 import { fromValue } from '../../helpers/from-value';
 
 import * as api from '../../api';
+import UserContext from '../../contexts/User';
 import toast from '../../helpers/toast';
 
 import dayjs from 'dayjs';
@@ -18,6 +18,7 @@ function Profile() {
     let [person, setPerson] = useState([]);
 
     let [loading, setLoading] = useState(true);
+    let { user, setUser } = useContext(UserContext);
     let { role, loaded: userInfoLoaded } = useContext(UserContext).user;
 
     let [modalChangePasswordVisibility, setModalChangePasswordVisibility] = useState(false);
@@ -68,6 +69,7 @@ function Profile() {
                 .then(() => {
                     toast.success('Zmieniono dane');
                     setPerson({firstName,  lastName, login, email, phoneNumber, birthDate});
+                    setUser({ ...user, firstName, lastName });
                     setModalChangeDataVisibility(false);
                 })
                 .catch(api.toastifyError);
