@@ -3,7 +3,7 @@ import React from 'react';
 function BookingItem(props) {
     function checkCancelPosibility() {
         let bookingTime = new Date(props.date.split('.').reverse().join('.') + ' ' + props.hour).getTime();
-        let currentTime = new Date().getTime();
+        let currentTime = Date.now();   
 
         if(bookingTime - currentTime >=  60 * 60 * 24 * 1000) {
             return true;
@@ -13,15 +13,16 @@ function BookingItem(props) {
     }
 
     return (
-        <tr>
-            <td>{props.date}</td>
-            <td>{props.hour}</td>
-            <td>{props.route}</td>
-            <td>{props.normalTickets}</td>
-            <td>{props.reducedTickets}</td>
-            <td>{props.childTickets}</td>
-            <td>{checkCancelPosibility() ? <button>Anuluj</button> : null}</td>
-        </tr>
+            <tr>
+                <td>{props.date}</td>
+                <td>{props.hour}</td>
+                <td>{props.route}</td>
+                <td>{props.normalTickets}</td>
+                <td>{props.reducedTickets}</td>
+                <td>{props.childTickets}</td>
+                <td>{checkCancelPosibility() ? <button onClick={props.deleteBooking}>Odwołaj</button> : null}</td>
+            </tr>
+            
     );
 }
 

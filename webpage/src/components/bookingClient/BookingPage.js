@@ -5,10 +5,14 @@ import * as api from '../../api';
 
 import BookingItem from './BookingItem';
 import { ModalLoader } from '../Loader';
+import NotificationModal from '../modals/NotificationModal';
+import toast from '../../helpers/toast';
 
 function BookingPage() {
     let [pastBookings, setPastBookings] = useState([]);
     let [futureBookings, setFutureBookings] = useState([]);
+    let [modalDeleteBookingVisibility, setModalDeleteBookingVisibility] = useState(false);
+    let [deleteBookingId, setDeleteBookingId] = useState(-1); 
 
     let [loading, setLoading] = useState(true);
 
@@ -23,6 +27,21 @@ function BookingPage() {
             .then(() => setLoading(false))
             .catch(api.toastifyError);
     }, []);
+
+    function deleteBooking(id) {
+        api.deleteBooking(id)
+        .then(() => {
+            api.getUserFutureBookings()
+                .then((results) => {
+                    setFutureBookings(results);
+                    setModalDeleteBookingVisibility(false);
+                    setDeleteBookingId(-1);
+                    toast.success('Odwołano rezerwację');
+                })
+                .catch(api.toastifyError);
+        })
+        .catch(api.toastifyError);
+    }
 
     return (
         <div className="booking-profile page">
@@ -41,16 +60,20 @@ function BookingPage() {
                                 <th>Dzieci do lat 5</th>
                                 <th></th>
                             </tr>
-                            {futureBookings.map((booking, i) => {
+                            {futureBookings.map((booking) => {
                                 return (
                                     <BookingItem 
-                                        key={i}
+                                        key={booking.id}
                                         date={new Date(booking.date).toLocaleDateString()}
                                         hour={booking.hour}
                                         route={booking.firstStop + ' - ' + booking.lastStop}
                                         normalTickets={booking.normalTickets}
                                         reducedTickets={booking.reducedTickets}
                                         childTickets={booking.childTickets}
+                                        deleteBooking={() => {
+                                            setModalDeleteBookingVisibility(true);
+                                            setDeleteBookingId(booking.id);
+                                        }}
                                     />
                                 );
                             })}
@@ -86,6 +109,14 @@ function BookingPage() {
                     </table>
                 </div>
             </div>
+            <NotificationModal 
+                    visible={modalDeleteBookingVisibility}
+                    header={'Odwołanie rezerwacji'}
+                    name={'odwołać rezerwację'}
+                    buttonText={'odwołaj'}
+                    notificationModalExit={() => setModalDeleteBookingVisibility(false)}
+                    delete={() => deleteBooking(deleteBookingId)}
+            />
         </div>
     );
 }
