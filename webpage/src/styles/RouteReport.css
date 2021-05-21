@@ -25,10 +25,11 @@
     justify-content: flex-end;
 }
 
-.report .submit {
+.route-report .submit-container .submit {
     color: white;
     width: 180px;
     height: 48px;
+    margin-top: 28px;
 }
 
 .booking-check {
