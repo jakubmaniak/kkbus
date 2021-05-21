@@ -131,6 +131,17 @@ export async function addBooking(routeId, date, hour, normalTickets, reducedTick
     return sendPost('/booking', { routeId, date, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop });
 }
 
+
+/**
+ * `DELETE /api/booking/:bookingId` Delete the booking using its id
+ * @async
+ * @param {number} bookingId
+ * @return Promise.
+ */
+export async function deleteBooking(bookingId) {
+    return sendDelete('/booking/' + bookingId);
+}
+
 export async function addBookingToUser(userId, routeId, date, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop) {
     return sendPost('/booking/' + userId, { routeId, date, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop });
 }
