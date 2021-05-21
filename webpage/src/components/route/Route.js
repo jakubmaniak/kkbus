@@ -45,15 +45,29 @@ function Route(props) {
     useEffect(() => { 
         setPrices(props.stopsPrices.split(',').map((e) => e.trim()).filter((e, i) => i % 2 === 1).map(parseFloat));
         setStops(props.stopsPrices.split(',').map((e) => e.trim()).filter((e, i) => i % 2 === 0));
-
-        setDates(new Array(8).fill(null).map((d, i) => {
-            let date = dayjs().tz('Europe/Warsaw').startOf('minute').add(i + 1, 'day');
-            return [date.format('YYYY-MM-DD'), date.format('DD.MM.YYYY'), date];
-        }));
     }, []);
 
     useEffect(() => { 
         setHours([...props.allHours]);
+
+        let dates = new Array(8).fill(null).map((d, i) => {
+            let date = dayjs().tz('Europe/Warsaw').startOf('minute').add(i, 'day');
+            return [date.format('YYYY-MM-DD'), date.format('DD.MM.YYYY'), date];
+        });
+
+        let now = dayjs().tz('Europe/Warsaw').startOf('minute');
+
+        let [firstHour, firstHourMinutes] = props.allHours[0].split(':');
+        let firstDeparture = now
+            .set('hour', parseInt(firstHour))
+            .set('minute', parseInt(firstHourMinutes));
+
+        if (firstDeparture.diff(now, 'minutes') < 120) {
+            setDates(dates.slice(1));
+        }
+        else {
+            setDates(dates);
+        }
     }, [props.allHours]);
 
     useEffect(() => {
@@ -71,26 +85,6 @@ function Route(props) {
         setPrice((isNaN(currentPrice) || currentPrice === null) ? 0 : currentPrice.toFixed(2));
     }, [normalTickets, reducedTickets, selectedFirstStop, selectedLastStop]);
 
-    useEffect(() => {
-        if (!selectedDate) {
-            return;
-        }
-
-        let now = dayjs().tz('Europe/Warsaw').startOf('minute');
-        let tomorrow = now.add(1, 'day');
-
-        if (selectedDate[2].diff(tomorrow, 'days') === 0) {
-            setHours(props.allHours.filter((hour) => {
-                let [h, m] = hour.split(':').map((e) => parseInt(e, 10));
-                
-                let time = tomorrow.set('hour', h).set('minute', m);
-                return time.diff(now, 'hours') >= 24;
-            }));
-        }
-        else {
-            setHours([...props.allHours])
-        }
-    }, [selectedDate]);
 
 
     function showModal() {

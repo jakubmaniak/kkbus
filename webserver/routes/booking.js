@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { invalidRequest, unauthorized, serverError, tooLate, bookingLocked } = require('../errors');
+const { invalidRequest, unauthorized, serverError, tooLate, bookingLocked, notFound } = require('../errors');
 const { minimumRole, onlyRoles, roles, roleDictionary } = require('../middlewares/roles');
 const bodySchema = require('../middlewares/body-schema');
 
@@ -155,11 +155,6 @@ router.post('/booking', [
         return next(invalidRequest());
     }
 
-    let dateTime = parseDateTime(date + ' ' + hour).toObject();
-    if (dateTime.getTime() - Date.now() < 24 * 60 * 60 * 1000) {
-        return next(tooLate());
-    }
-
     let tickets = validateTicketNumbers(normalTickets, reducedTickets, childTickets);
 
     if (tickets == null) {
@@ -175,10 +170,22 @@ router.post('/booking', [
         return next(err);
     }
 
-    route.hours = route.hours.map((hour) => parseTime(hour)?.toString());
+    route.hours = route.hours.sort().map((hour) => parseTime(hour)?.toString());
 
     if (!route.hours.includes(hour)) {
         return next(invalidRequest());
+    }
+
+    if (route.hours.length == 0) {
+        return next(notFound());
+    }
+
+    let now = parseDateTime(new Date());
+    let today = now.getDate().toString();
+    let firstDeparture = parseDateTime(date + ' ' + route.hours[0]).toObject();
+    
+    if (date < today || (date == today && firstDeparture.getTime() - Date.now() < 2 * 3600 * 1000)) {
+        return next(tooLate());
     }
 
     let price = calculatePrice(route, firstStop, lastStop, normalTickets, reducedTickets);
