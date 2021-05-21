@@ -290,20 +290,20 @@ router.delete('/booking/:bookingId', [onlyRoles('client', 'office', 'owner')], a
     let wantedId = parseInt(req.params.bookingId, 10);
     if (isNaN(wantedId)) return next(invalidRequest());
 
-    let booking;
     try {
-        booking = await bookingController.findBooking(wantedId);
-    }
-    catch (err) {
-        return next(err);
-    }
+        let booking = await bookingController.findBooking(wantedId);
+    
+        if (booking.userId != user.id && req.user.role != roles.office && req.user.role != roles.owner) {
+            return next(unauthorized());
+        }
 
-    if (booking.userId != user.id && req.user.role != roles.office && req.user.role != roles.owner) {
-        return next(unauthorized());
-    }
-
-    try {
         if (req.user.role == roles.client) {
+            let bookingDate = parseDateTime(booking.date + ' ' + booking.hour);
+
+            if (bookingDate.toObject().getTime() + 24 * 3600 * 1000 > Date.now()) {
+                throw tooLate();
+            }
+
             await bookingController.deleteBooking(wantedId, req.user.id);
         }
         else if (req.user.role == roles.office || req.user.role == roles.owner) {
