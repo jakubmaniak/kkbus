@@ -25,6 +25,7 @@ function RouteReport() {
     let [persons, setPersons] = useState('');
 
     let [bookinglist, setBookingList] = useState([]);
+    let [realizedBookings, setRealizedBookings] = useState([]);
 
     let { role } = useContext(UserContext).user;
 
@@ -63,9 +64,22 @@ function RouteReport() {
         }
     }, [selectedRoute, selectedStop, selectedHour]);
 
+    useEffect(() => {
+        setRealizedBookings(bookinglist.map((booking) => ({ id: booking.id, realized: true })));
+    }, [bookinglist]);
+
     function handleRouteChange(route) {
         setStops(route.stops);
         setSelectedRoute(route);
+    }
+
+    function toogleBooking(targetBooking, realized) {
+        setRealizedBookings(realizedBookings.map((booking) => {
+            if(booking.id === targetBooking.id) {
+                return {...booking, realized};
+            }
+            return booking;
+        }));
     }
 
     function saveReport() {
@@ -80,11 +94,11 @@ function RouteReport() {
             return;
         }
 
-        api.addRouteReport(selectedRoute.id, selectedStop, selectedVehicle.id, currentPersons, [], selectedDriver?.id)
+        api.addRouteReport(selectedRoute.id, selectedStop, selectedVehicle.id, currentPersons, realizedBookings, selectedDriver?.id)
             .then(() => {
                 setPersons('');
                 toast.success('Dodano raport');
-                console.log(selectedRoute.id, selectedStop, selectedVehicle.id, currentPersons, selectedDriver?.id)
+                console.log(selectedRoute.id, selectedStop, selectedVehicle.id, currentPersons, realizedBookings, selectedDriver?.id)
             })
             .catch(api.toastifyError);
     }
@@ -159,7 +173,7 @@ function RouteReport() {
                                 normalTickets={booking.normalTickets}
                                 reducedTickets={booking.reducedTickets}
                                 childTickets={booking.childTickets}
-                                toggleBooking={(ev) => console.log(ev.target.checked)}
+                                toggleBooking={(ev) => toogleBooking(booking, ev.target.checked)}
                             />
                         );
                     })}
