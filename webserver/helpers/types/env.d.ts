@@ -12,6 +12,12 @@ interface Env {
         user: string,
         password: string
     };
+    mail: {
+        service: string;
+        senderName: string;
+        user: string;
+        password: string;
+    };
 }
 
 export = Env;
