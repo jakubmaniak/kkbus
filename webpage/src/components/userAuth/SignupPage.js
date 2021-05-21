@@ -20,9 +20,7 @@ function SignupPage() {
         ev.preventDefault();
 
         api.register(email, firstname, lastName, birthDate, phoneNumber)
-            .then(() => {
-                history.replace('/');
-            })
+            .then(() => history.replace('/zarejestrowano'))
             .catch(api.toastifyError);
     }
 
