@@ -155,7 +155,7 @@ router.post('/user/activate', [
     }
     catch (err) {
         if (err.name === 'JsonWebTokenError') {
-            return next(invalidRequest());
+            return next(invalidValue());
         }
         
         return next(serverError());
