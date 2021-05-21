@@ -5,6 +5,8 @@ export const initialContext = {
         loaded: false,
         loggedIn: false,
         role: 'guest',
+        firstName: 'Gość',
+        lastName: '',
         id: -1
     }
 };

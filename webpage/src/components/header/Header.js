@@ -11,7 +11,6 @@ import HeaderItem from './HeaderItem';
 import UserContext from '../../contexts/User';
 
 function Header() {
-    let [name, setName] = useState('');
     let [menuExpanded, setMenuExpanded] = useState(true);
 
     let { user, setUser } = useContext(UserContext);
@@ -29,9 +28,10 @@ function Header() {
                     user.role = data.role;
                     user.id = data.id;
                     user.loaded = true;
+                    user.firstName = data.firstName;
+                    user.lastName = data.lastName;
                     
                     setUser({ ...user });
-                    setName(data.firstName + ' ' + data.lastName);
                 })
                 .catch(api.toastifyError);
         }
@@ -159,7 +159,7 @@ function Header() {
                     </h1>
                     {loggedIn ? 
                         <div className="header-action-signin">
-                            <Link to ="/profil">{name}</Link>
+                            <Link to ="/profil">{user.firstName} {user.lastName}</Link>
                             <p onClick={signout}>Wyloguj</p>
                         </div>
                     :
