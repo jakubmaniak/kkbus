@@ -107,7 +107,7 @@ function Profile() {
                             <input placeholder="Login" value={login} onChange={fromValue(setLogin)}/>
                             <input placeholder="Imię" value={firstName} onChange={fromValue(setFirstName)}/>
                             <input placeholder="Nazwisko" value={lastName} onChange={fromValue(setLastName)}/>
-                            <input placeholder="Data urodzenia" value={birthDate} onChange={fromValue(setBirthDate)}/>
+                            <input placeholder="Data urodzenia" type="date" value={birthDate} onChange={fromValue(setBirthDate)}/>
                             <input placeholder="Numer telefonu" value={phoneNumber} onChange={fromValue(setPhoneNumber)}/>
                         </form>
                     </section>
