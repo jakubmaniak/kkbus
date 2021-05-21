@@ -103,3 +103,13 @@ module.exports.deleteBooking = (bookingId, userId = null) => {
         return db.query('DELETE FROM bookings WHERE id=? AND userId=?', [bookingId, userId]);
     }
 };
+
+module.exports.getTicketsUsingBookingIds = (bookingIds) => {
+    return db.query(`SELECT SUM(normalTickets + reducedTickets + childTickets) AS sum
+        FROM bookings
+        WHERE id IN ?`,
+        [[bookingIds]]
+    )
+        .then(getFirst)
+        .then((row) => row.sum ?? 0);
+}

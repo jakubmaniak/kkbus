@@ -22,7 +22,7 @@ function RouteReport() {
     let [selectedHour, setSelectedHour] = useState();
     let [selectedVehicle, setSelectedVehicle] = useState();
     let [selectedDriver, setSelectedDriver] = useState(null);
-    let [amount, setAmount] = useState('');
+    let [persons, setPersons] = useState('');
 
     let [bookinglist, setBookingList] = useState([]);
 
@@ -69,10 +69,10 @@ function RouteReport() {
     }
 
     function saveReport() {
-        let currentAmount = parseInt(amount, 10);
+        let currentPersons = parseInt(persons, 10);
         
-        if(isNaN(amount) || currentAmount < 0) {
-            toast.error('Wprowadzono niepoprawną liczbę osób');
+        if(isNaN(persons) || currentPersons < 0) {
+            toast.error('Wprowadzono niepoprawną liczbę osób bez rezerwacji');
             return;
         }
         if(!selectedRoute || !selectedStop || !selectedVehicle || !selectedDriver) {
@@ -80,11 +80,11 @@ function RouteReport() {
             return;
         }
 
-        api.addRouteReport(selectedRoute.id, selectedStop, selectedVehicle.id, currentAmount, selectedDriver?.id)
+        api.addRouteReport(selectedRoute.id, selectedStop, selectedVehicle.id, currentPersons, [], selectedDriver?.id)
             .then(() => {
-                setAmount('');
+                setPersons('');
                 toast.success('Dodano raport');
-                console.log(selectedRoute.id, selectedStop, selectedVehicle.id, currentAmount, selectedDriver?.id)
+                console.log(selectedRoute.id, selectedStop, selectedVehicle.id, currentPersons, selectedDriver?.id)
             })
             .catch(api.toastifyError);
     }
@@ -133,7 +133,7 @@ function RouteReport() {
                                     handleChange={setSelectedDriver} 
                                 />
                             : null}
-                            <input placeholder="Liczba osób" value={amount} onChange={fromValue(setAmount)} />
+                            <input placeholder="Liczba osób bez rezerwacji" value={persons} onChange={fromValue(setPersons)} />
                         </div>
                         <div className="submit-container">
                             <button className="submit" type="button" onClick={saveReport}>Zapisz raport</button>

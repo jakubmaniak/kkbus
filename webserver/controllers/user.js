@@ -113,3 +113,49 @@ module.exports.updateUserPersonalData = (userId, personalData) => {
         ]
     );
 };
+
+module.exports.useBookingsIdsToSetUnrealizedBookingsCounter = (bookingIds) => {
+    return db.query(`UPDATE users
+        SET unrealizedBookings=unrealizedBookings+1
+        WHERE id IN (
+            SELECT userId
+            FROM bookings
+            WHERE id IN ?
+        )`,
+        [[bookingIds]]
+    );
+};
+
+module.exports.addManyBookLocksUsingBookingIds = (bookingIds, expirationDate, minUnrealizedBookings = 1) => {
+    return db.query(`UPDATE users
+        SET bookLockExpirationDate=?, canBook=0
+        WHERE id IN (
+            SELECT userId
+            FROM bookings
+            WHERE id IN ?
+        ) AND unrealizedBookings>=?`, [
+            expirationDate.toString(),
+            [bookingIds],
+            minUnrealizedBookings
+        ]
+    );
+};
+
+module.exports.getBookLockStatus = (userId) => {
+    return db.query('SELECT canBook, bookLockExpirationDate, unrealizedBookings FROM users WHERE id=?', [userId])
+        .then(getFirst);
+}
+
+module.exports.addBookLock = (userId, expirationDate) => {
+    return db.query(`UPDATE users
+        SET bookLockExpirationDate=?, canBook=0
+        WHERE id=?`, [
+            expirationDate.toString(),
+            userId
+        ]
+    );
+};
+
+module.exports.removeBookLock = (userId) => {
+    return db.query('UPDATE users SET unrealizedBookings=0, canBook=1, bookLockExpirationDate=NULL WHERE id=?', [userId]);
+};

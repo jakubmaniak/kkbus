@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { invalidRequest, unauthorized, serverError, tooLate } = require('../errors');
+const { invalidRequest, unauthorized, serverError, tooLate, bookingLocked } = require('../errors');
 const { minimumRole, onlyRoles, roles, roleDictionary } = require('../middlewares/roles');
 const bodySchema = require('../middlewares/body-schema');
 
 const bookingController = require('../controllers/booking');
 const routeController = require('../controllers/route');
+const userController = require('../controllers/user');
 const { parseDate, parseTime, parseDateTime } = require('../helpers/date');
 
 
@@ -111,7 +112,7 @@ router.get('/bookings/:routeId/:date/:hour', [minimumRole('driver')], async (req
 });
 
 router.post('/booking', [
-    minimumRole('client'),
+    onlyRoles('client'),
     bodySchema(`{
         routeId: number,
         date: string,
@@ -124,6 +125,23 @@ router.post('/booking', [
     }`)
 ], async (req, res, next) => {
     let userId = req.user.id;
+
+    let status = await userController.getBookLockStatus(userId);
+    if (!status.canBook) {
+        let expirationDate = parseDate(status.bookLockExpirationDate);
+        let today = new Date();
+        today.setMilliseconds(0);
+        today.setSeconds(0);
+        today.setMinutes(0);
+        today.setHours(0);
+
+        if (expirationDate.toObject() <= new Date()) {
+            await userController.removeBookLock(userId);
+        }
+        else {
+            return next(bookingLocked());
+        }
+    }
 
     let { routeId, date, hour, normalTickets, reducedTickets, childTickets, firstStop, lastStop } = req.body;
 

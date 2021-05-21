@@ -6,7 +6,7 @@ CREATE TABLE `route_reports` (
     `vehicleId` INT NOT NULL , 
     `driverId` INT NOT NULL,
     `date` DATETIME NOT NULL , 
-    `amount` INT NOT NULL ,
+    `persons` INT NOT NULL ,
      PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 */
@@ -21,7 +21,7 @@ module.exports.addReport = (report) => {
         report.vehicleId,
         report.driverId,
         report.date.toString(),
-        report.amount
+        report.persons
     ]);
 };
 

@@ -12,7 +12,8 @@ const errorMessages = new Map(Object.entries({
     not_enough:             'Niewystarczająca ilość',
     too_late:               'Za późno',
     bad_credentials:        'Niepoprawny login lub hasło',
-    email_already_taken:    'Konto o tym adresie e-mail już istnieje'
+    email_already_taken:    'Konto o tym adresie e-mail już istnieje',
+    booking_locked:         'Możliwość rezerwacji została zablokowana na miesiąc'
 }));
 
 export function errorToString(err) {
@@ -98,9 +99,19 @@ export async function deleteRoute(routeId) {
     return sendDelete('/route/' + routeId);
 }
 
-
-export async function addRouteReport(routeId, stop, vehicleId, amount, driverId = null) {
-    return sendPost('/reports/route/' + routeId, { stop, vehicleId, driverId, amount });
+/**
+ * `POST /api/reports/route/:routeId` Add a route report
+ * @async
+ * @param {number} routeId
+ * @param {string} stop
+ * @param {number} vehicleId
+ * @param {number} noBookingPersons
+ * @param {[{id: number, realized: boolean}]} [bookings]
+ * @param {number} [driverId]
+ * @return Promise that returns id of added report.
+ */
+export async function addRouteReport(routeId, stop, vehicleId, noBookingPersons, bookings = [], driverId = null) {
+    return sendPost('/reports/route/' + routeId, { stop, vehicleId, noBookingPersons, bookings, driverId });
 }
 
 

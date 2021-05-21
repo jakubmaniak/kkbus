@@ -16,5 +16,6 @@ module.exports = {
     notEnough:          error('not_enough'),
     tooLate:            error('too_late'),
     badCredentials:     error('bad_credentials'),
-    emailAlreadyTaken:  error('email_already_taken')
+    emailAlreadyTaken:  error('email_already_taken'),
+    bookingLocked:      error('booking_locked')
 };
