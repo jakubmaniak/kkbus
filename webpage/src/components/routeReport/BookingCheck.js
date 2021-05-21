@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 
 function BookingCheck(props) {
-    let [checked, setChecked] = useState(false);
+    let [checked, setChecked] = useState(true);
 
     function toggleBooking(ev) {
         setChecked(!checked);
-
-        if(!checked) {
-            props.toggleBooking(ev);
-        }
+        props.toggleBooking(ev);
     }
 
 
@@ -21,7 +18,7 @@ function BookingCheck(props) {
             <span>{props.reducedTickets}</span>
             <span>{props.childTickets}</span>
             <div className="check">
-                <input type="checkbox" id={props.id} name={props.id} value={props.id} onClick={toggleBooking} />
+                <input type="checkbox" id={props.id} name={props.id} checked={checked} onChange={toggleBooking} />
                 <label htmlFor={props.id}></label>
             </div>
         </div>

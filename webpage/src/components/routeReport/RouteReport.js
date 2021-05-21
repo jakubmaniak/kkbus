@@ -135,9 +135,7 @@ function RouteReport() {
                             : null}
                             <input placeholder="Liczba osób bez rezerwacji" value={persons} onChange={fromValue(setPersons)} />
                         </div>
-                        <div className="submit-container">
-                            <button className="submit" type="button" onClick={saveReport}>Zapisz raport</button>
-                        </div>
+                       
                     </form>
                 </div>
                 <div className="tile">
@@ -161,10 +159,13 @@ function RouteReport() {
                                 normalTickets={booking.normalTickets}
                                 reducedTickets={booking.reducedTickets}
                                 childTickets={booking.childTickets}
-                                toggleBooking={(ev) => console.log(ev.target.value)}
+                                toggleBooking={(ev) => console.log(ev.target.checked)}
                             />
                         );
                     })}
+                    <div className="submit-container">
+                        <button className="submit" type="button" onClick={saveReport}>Zapisz raport</button>
+                    </div>
                 </div>
             </div>
         </div>
