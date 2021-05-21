@@ -37,13 +37,17 @@ function Person(props) {
                 <span>Numer telefonu</span>
                 <span>{props.phoneNumber}</span>
             </div>
-            {
-                props.client
-                ?
+            {props.client ?
+                <>
                 <div className="client-data">
                     <span>Rezerwacje niezrealizowane/max. dopuszczlna liczba</span>
                     <span>{props.unrealizedBookings} /3</span>
                 </div>
+                <div className="client-data">
+                    <span>Data zakończenia blokady rezerwacji</span>
+                    <span>{props.bookLockExpirationDate}</span>
+                </div>
+                </>
                 :
                 <div className="person-data">
                     <span>Rola</span>
