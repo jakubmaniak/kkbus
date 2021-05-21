@@ -106,7 +106,7 @@ function Reward(props) {
             <NotificationModal 
                 visible={modalDeleteRewardVisibility}
                 header={'Usuwanie nagrody'}
-                name={'nagrodę'}
+                name={'usunąć nagrodę'}
                 notificationModalExit={() => setModalDeleteRewardVisibility(false)}
                 delete={() => props.deleteReward()}
             />

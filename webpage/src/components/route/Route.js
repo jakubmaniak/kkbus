@@ -293,7 +293,7 @@ function Route(props) {
             <NotificationModal 
                     visible={modalDeleteRewardVisibility}
                     header={'Usuwanie trasy'}
-                    name={'trasę'}
+                    name={'usunąć trasę'}
                     notificationModalExit={() => setModalDeleteRewardVisibility(false)}
                     delete={() => props.deleteRoute()}
             />

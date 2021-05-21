@@ -35,7 +35,7 @@ function TimetableItem(props) {
             <NotificationModal 
                 visible={props.modalDeleteVisibility}
                 header={'Usuwanie dyspozycyjności'}
-                name={'dyspozycyjność'}
+                name={'usunąć dyspozycyjność'}
                 notificationModalExit={props.setModalDeleteVisibility}
                 delete={() => props.deleteAvailability()}
             />

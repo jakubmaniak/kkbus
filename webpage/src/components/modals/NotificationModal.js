@@ -11,12 +11,12 @@ function NotificationModal(props) {
             <Modal visible={props.visible}>
                 <header>{props.header}</header>
                 <section className="content">
-                    <p>Czy na pewno chcesz usunąć {props.name}?</p>
+                    <p>Czy na pewno chcesz {props.name}?</p>
                 </section>
                 <section className="footer">
                     <div>
                         <button onClick={props.notificationModalExit}>Anuluj</button>
-                        <button className="delete" onClick={props.delete}>Tak, usuń</button>
+                        <button className="delete" onClick={props.delete}>Tak, {props.buttonText ?? 'usuń'}</button>
                     </div>
                 </section>
             </Modal>

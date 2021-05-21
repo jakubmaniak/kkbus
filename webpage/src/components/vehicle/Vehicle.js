@@ -228,7 +228,7 @@ function Vehicle(props) {
             <NotificationModal 
                 visible={modalDeleteVehicleVisibility}
                 header="Usuwanie pojazdu"
-                name="pojazd"
+                name="usunąć pojazd"
                 notificationModalExit={() => setModalDeleteVehicleVisibility(false)}
                 delete={() => props.deleteVehicle()}
             />
