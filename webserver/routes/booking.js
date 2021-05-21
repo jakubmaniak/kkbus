@@ -300,7 +300,7 @@ router.delete('/booking/:bookingId', [onlyRoles('client', 'office', 'owner')], a
     try {
         let booking = await bookingController.findBooking(wantedId);
     
-        if (booking.userId != user.id && req.user.role != roles.office && req.user.role != roles.owner) {
+        if (booking.userId != req.user.id && req.user.role != roles.office && req.user.role != roles.owner) {
             return next(unauthorized());
         }
 
