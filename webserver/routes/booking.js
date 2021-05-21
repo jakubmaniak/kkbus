@@ -307,7 +307,7 @@ router.delete('/booking/:bookingId', [onlyRoles('client', 'office', 'owner')], a
         if (req.user.role == roles.client) {
             let bookingDate = parseDateTime(booking.date + ' ' + booking.hour);
 
-            if (bookingDate.toObject().getTime() + 24 * 3600 * 1000 > Date.now()) {
+            if (bookingDate.toObject().getTime() + 24 * 3600 * 1000 < Date.now()) {
                 throw tooLate();
             }
 
