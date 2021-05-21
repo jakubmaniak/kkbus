@@ -56,8 +56,8 @@ function RouteReport() {
     useEffect(() => {
         let date = new Date();      
 
-        if(selectedRoute && selectedStop && selectedHour) { //(date.getDate()).toString().padStart(2, '0') + '.' + (date.getMonth() + 1).toString().padStart(2, '0') + '.' + date.getFullYear()
-            api.getRouteBookings(selectedRoute.id, '2021-05-13', selectedHour.padStart(5, '0'))
+        if(selectedRoute && selectedStop && selectedHour) { 
+            api.getRouteBookings(selectedRoute.id, (date.getDate()).toString().padStart(2, '0') + '.' + (date.getMonth() + 1).toString().padStart(2, '0') + '.' + date.getFullYear(), selectedHour.padStart(5, '0'))
             .then((results) => setBookingList(results.filter(result => result.firstStop === selectedStop)))
             .catch(api.toastifyError);
         }
@@ -84,6 +84,7 @@ function RouteReport() {
             .then(() => {
                 setAmount('');
                 toast.success('Dodano raport');
+                console.log(selectedRoute.id, selectedStop, selectedVehicle.id, currentAmount, selectedDriver?.id)
             })
             .catch(api.toastifyError);
     }
@@ -152,7 +153,8 @@ function RouteReport() {
                     </div>
                     {bookinglist.map((booking) => {
                         return (
-                            <BookingCheck 
+                            <BookingCheck
+                                key={booking.id} 
                                 id={booking.id}
                                 firstName={booking.firstName}
                                 lastName={booking.lastName}
