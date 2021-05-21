@@ -135,7 +135,7 @@ function Header() {
             <nav>
                 <div className="nav-action">
                     <HeaderItem path="/">Grafik kursów</HeaderItem>
-                    <HeaderItem path="/rezerwacje">Rezerwacje</HeaderItem>
+                    {role === 'client' ? <HeaderItem path="/rezerwacje">Rezerwacje</HeaderItem> : null}
                     <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
                     <HeaderItem path="/kontakt">Kontakt</HeaderItem>
                 </div>
