@@ -1,7 +1,8 @@
 interface Env {
     server: {
         host: string,
-        port: number
+        port: number,
+        externalAddress: string
     };
     jwtSecret: string;
     mysql: {

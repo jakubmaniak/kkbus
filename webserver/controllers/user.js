@@ -1,15 +1,76 @@
+/*CREATE TABLE `inactive_users` (
+    `id` INT(10) NOT NULL AUTO_INCREMENT , 
+    `email` VARCHAR(150) NOT NULL ,
+    `login` VARCHAR(120) NOT NULL,
+    `password` VARCHAR(12) NOT NULL,
+    `role` TINYINT UNSIGNED NOT NULL DEFAULT '1' , 
+    `firstName` VARCHAR(100) NOT NULL , 
+    `lastName` VARCHAR(100) NOT NULL , 
+    `birthDate` DATE NOT NULL , 
+    `phoneNumber` VARCHAR(24) NULL , 
+    PRIMARY KEY (`id`)
+);*/
+
+const env = require('../helpers/env');
+let mailer = require('../configs/mail');
 let db = require('../configs/db');
 let { getFirst, deleteProps, pullProp } = require('../helpers/query-utils');
 
-module.exports.addUser = (user) => {
-    return db.query('INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?)', [
+
+module.exports.sendActivationCode = (email, activationCode) => {
+    return mailer.sendMail(
+        email,
+        'KKBus - Aktywacja konta',
+        `<p><a href="${env.server.externalAddress}/api/user/activate/${activationCode}">Aktywuj konto</a></p>`
+    );
+};
+
+module.exports.sendUserCredentials = (email, login, password) => {
+    return mailer.sendMail(
+        email,
+        'KKBus - Dane logowania',
+        `<p>Login: <b>${login}</b><br>Hasło: <b>${password}</b></p>`
+    );
+};
+
+module.exports.addInactiveUser = (user) => {
+    return db.query('INSERT INTO inactive_users VALUES (?,?,?,?,?,?,?,?,?)', [
         null,
         user.email,
-        user.login, user.password,
+        user.login,
+        user.password,
         user.role,
-        user.firstName, user.lastName,
-        user.birthDate,
+        user.firstName,
+        user.lastName,
+        user.birthDate.toString(),
         user.phoneNumber
+    ]);
+};
+
+module.exports.findInactiveUser = (email) => {
+    return db.query('SELECT * FROM inactive_users WHERE email=? LIMIT 1', [email])
+        .then(getFirst);
+};
+
+module.exports.deleteInactiveUser = (email) => {
+    return db.query('DELETE FROM inactive_users WHERE email=?', [email]);
+};
+
+module.exports.addUser = (user) => {
+    return db.query('INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)', [
+        null,
+        user.email,
+        user.login,
+        user.password,
+        user.role,
+        user.firstName,
+        user.lastName,
+        user.birthDate,
+        user.phoneNumber,
+        user.points ?? 0,
+        user.canBook ?? true,
+        0,
+        null
     ]);
 };
 

@@ -7,7 +7,7 @@ module.exports = {
     server: {
         host: env.server.host || 'localhost',
         port: env.server.port || 3200,
-        externalAddress: env.server.externalAddress || 'http://localhost:3200'
+        externalAddress: env.server.externalAddress || 'http://localhost:3000'
     },
     jwtSecret: env.jwtSecret || 'kkbus_jwt_secret',
     mysql: {

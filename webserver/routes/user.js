@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const env = require('../helpers/env');
-const { invalidRequest, emailAlreadyTaken, badCredentials, serverError } = require('../errors');
+const { invalidRequest, emailAlreadyTaken, badCredentials, serverError, invalidValue } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const { roles, minimumRole } = require('../middlewares/roles');
 const { cache: usersCache } = require('../middlewares/session');
@@ -11,6 +11,46 @@ const { parseDate } = require('../helpers/date');
 
 const userController = require('../controllers/user');
 
+async function generateLogin(firstName, lastName, phoneNumber) {
+    let offset = 0;
+    let phoneNumberPart = parseInt(phoneNumber.slice(-4), 10);
+    let login = firstName.toLowerCase() + lastName.toLowerCase();
+    
+    while (true) {
+        try {
+            await userController.findUserByLogin(login + (phoneNumberPart + offset));
+            offset++;
+        }
+        catch (err) {
+            if (err.message == 'not_found') {
+                break;
+            }
+            else {
+                throw serverError();
+            }
+        }
+    }
+
+    return login + (phoneNumberPart + offset);
+}
+
+function generatePassword(passwordLength) {
+    return new Array(passwordLength).fill().map(() => {
+        let n = Math.floor(Math.random() * 62);
+        
+        if (n < 10) return n;
+        if (n < 10 + 26) return String.fromCharCode(0x41 + n - 10);
+        return String.fromCharCode(0x61 + n - (10 + 26));
+    }).join('');
+}
+
+function generateActivationCode(email) {
+    return jwt.sign({ email }, env.jwtSecret, { algorithm: 'HS512', expiresIn: '7d' });
+}
+
+function generateSessionToken(login) {
+    return jwt.sign({ login }, env.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
+}
 
 router.post('/user/login', [
     bodySchema('{login: string, password: string}')
@@ -29,12 +69,10 @@ router.post('/user/login', [
         return next(serverError());
     }
 
+    //?
     if (!user) return next(badCredentials());
     
-    //NOTE: true login
-    login = user.login;
-
-    let sessionToken = jwt.sign({ login }, env.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
+    let sessionToken = generateSessionToken(user.login);
 
     res.cookie('session', sessionToken);
     res.ok({
@@ -45,21 +83,27 @@ router.post('/user/login', [
     });
 });
 
-
 router.post('/user/register', [
     bodySchema('{email: string, firstName: string, lastName: string, birthDate: string, phoneNumber: string}')
 ], async (req, res, next) => {
     let { email, firstName, lastName, birthDate, phoneNumber } = req.body;
     
-    if (/\d{1,2}-\d{1,2}-\d{4}/.test(birthDate)) {
-        let dateString = birthDate.split('-').reverse().join('-');
-        let date = new Date(dateString);
+    birthDate = parseDate(birthDate);
+    let birthDateObject = birthDate?.toObject();
+    let birthDateString = birthDate?.toString();
 
-        if (isNaN(date) || date.getFullYear() < 1900 || new Date() - date < 0)
-            return next(invalidRequest());
+    if (birthDateObject == null) {
+        return next(invalidRequest());
     }
-    else if (/^[ -+\/0-9]+$/.test(phoneNumber)) { }
-    else return next(invalidRequest());
+
+    if (birthDateObject.getFullYear() < 1900 || new Date() - birthDateObject < 0) {
+        return next(invalidValue());
+    }
+
+    let validPhoneNumber = /^[ -+\/0-9]+$/.test(phoneNumber);
+    if (!validPhoneNumber) {
+        return next(invalidValue());
+    }
 
     try {
         if (await userController.findUserByEmail(email)) {
@@ -72,55 +116,69 @@ router.post('/user/register', [
         }
     }
 
-    let offset = 0;
-    let phoneNumberPart = parseInt(phoneNumber.slice(-4), 10);
-    let login = firstName.toLowerCase() + lastName.toLowerCase();
+    try {
+        let login = await generateLogin(firstName, lastName, phoneNumber);
+        let password = generatePassword(12);
+        let activationCode = generateActivationCode(email);
     
-    while (true) {
-        try {
-            await userController.findUserByLogin(login + (phoneNumberPart + offset));
-            offset++;
-        }
-        catch (err) {
-            if (err.message == 'not_found') {
-                break;
-            }
-            else {
-                return next(serverError());
-            }
-        }
+        let user = {
+            email,
+            login,
+            password,
+            firstName,
+            lastName,
+            birthDate: birthDateString,
+            phoneNumber,
+            role: roles.client.priority
+        };
+
+        await Promise.all([
+            userController.addInactiveUser(user),
+            userController.sendActivationCode(email, activationCode)
+        ]);
+    
+        res.ok();
     }
-
-    login += (phoneNumberPart + offset);
-
-    let user = {
-        email, login,
-        password: 'haslo',
-        firstName, lastName,
-        birthDate,
-        phoneNumber,
-        role: roles.client.priority
-    };
-    await userController.addUser(user);
-
-    if (user.role == roles.office || user.role == roles.owner) {
-        return res.ok({
-            login
-        });
+    catch (err) {
+        next(err);
     }
-
-    let sessionToken = jwt.sign({ login }, env.jwtSecret, { algorithm: 'HS512', expiresIn: '31d' });
-
-    res.cookie('session', sessionToken);
-    res.ok({
-        sessionToken,
-        login,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        role: user.role.name
-    });
 });
 
+router.get('/user/activate/:activationCode', async (req, res, next) => {
+    let activationCode = req.params.activationCode;
+
+    let payload;
+    try {
+        payload = jwt.verify(activationCode, env.jwtSecret, { algorithms: ['HS512'] });
+    }
+    catch (err) {
+        if (err.name === 'JsonWebTokenError') {
+            return next(invalidRequest());
+        }
+        
+        return next(serverError());
+    }
+
+    if (!payload || !payload.email) {
+        return next(invalidRequest());
+    }
+
+    try {
+        let user = await userController.findInactiveUser(payload.email);
+
+        await Promise.all([
+            userController.addUser(user),
+            userController.deleteInactiveUser(payload.email),
+            userController.sendUserCredentials(payload.email, user.login, user.password)
+        ]);
+
+        res.cookie('session', generateSessionToken(user.login));
+        res.ok();
+    }
+    catch (err) {
+        next(err);
+    }
+});
 
 router.get('/user/logout', [minimumRole('client')], (req, res) => {
     res.header('Cache-Control', 'no-cache');
