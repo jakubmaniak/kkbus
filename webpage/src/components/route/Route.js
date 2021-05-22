@@ -29,6 +29,7 @@ function Route(props) {
     let [dates, setDates] = useState([]);
     let [hours, setHours] = useState([]);
     let [prices, setPrices] = useState([]);
+    let [distances, setDistances] = useState([]);
     let [stops, setStops] = useState([]);
     let [normalTickets, setNormalTickets] = useState(0);
     let [reducedTickets, setReducedTickets] = useState(0);
@@ -43,12 +44,15 @@ function Route(props) {
     let history = useHistory();
 
     useEffect(() => { 
+        setDistances(props.stopsDistances);
         setPrices(props.stopsPrices.split(',').map((e) => e.trim()).filter((e, i) => i % 2 === 1).map(parseFloat));
         setStops(props.stopsPrices.split(',').map((e) => e.trim()).filter((e, i) => i % 2 === 0));
     }, []);
 
     useEffect(() => { 
         setHours([...props.allHours]);
+
+        if (props.allHours.length === 0) return;
 
         let dates = new Array(8).fill(null).map((d, i) => {
             let date = dayjs().tz('Europe/Warsaw').startOf('minute').add(i, 'day');
@@ -94,7 +98,7 @@ function Route(props) {
     function updateRoute() {
         setModalVisibility(false);
 
-        api.updateRoute(props.routeId, departureLocation, arrivalLocation, stops, hours, prices, null)
+        api.updateRoute(props.routeId, departureLocation, arrivalLocation, stops, hours, prices, distances, null)
             .then(() => {
                 props.refreshRoutes();
                 toast.success('Zmieniono dane trasy');
@@ -112,6 +116,10 @@ function Route(props) {
         let parts = ev.target.value.split(',').map((e) => e.trim());
         setStops(parts.filter((e, i) => i % 2 === 0));
         setPrices(parts.filter((e, i) => i % 2 === 1).map(parseFloat));   
+    }
+
+    function convertStopsDistances(ev) {
+        setDistances(ev.target.value.split(',').map((e) => parseFloat(e.trim())));
     }
 
     function calculatePrice(route, firstStop, lastStop) {
@@ -232,6 +240,10 @@ function Route(props) {
                         <textarea placeholder="Przystanki (cena, przystanek, cena, przystanek...)"
                             defaultValue={props.stopsPrices}
                             onChange={convertStopsPrices}
+                        />
+                        <textarea placeholder="Odległości między przystankami (oddzielone przecinkami)"
+                            defaultValue={props.stopsDistances}
+                            onChange={convertStopsDistances}
                         />
                     </form>
                 </section>

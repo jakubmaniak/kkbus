@@ -98,12 +98,38 @@ export async function getRoute(routeId) {
     return sendGet('/route/' + routeId);
 }
 
-export async function addRoute(departureLocation, arrivalLocation, stops = null, hours = null, prices = null, oppositeId = null) {
-    return sendPost('/route', { departureLocation, arrivalLocation, stops, hours, prices, oppositeId });
+/**
+ * `POST /api/route Add route
+ * @async
+ * @param {number} routeId 
+ * @param {string} departureLocation 
+ * @param {string} arrivalLocation 
+ * @param {string[]} [stops] 
+ * @param {string[]} [hours] 
+ * @param {number[]} [prices] 
+ * @param {number[]} [distances] 
+ * @param {number} [oppositeId]
+ * @returns Promise that returns an added route object.
+ */
+export async function addRoute(departureLocation, arrivalLocation, stops = null, hours = null, prices = null, distances = null, oppositeId = null) {
+    return sendPost('/route', { departureLocation, arrivalLocation, stops, hours, prices, distances, oppositeId });
 }
 
-export async function updateRoute(routeId, departureLocation, arrivalLocation, stops = null, hours = null, prices = null, oppositeId = null) {
-    return sendPut('/route/' + routeId, { departureLocation, arrivalLocation, stops, hours, prices, oppositeId });
+/**
+ * `PUT /api/route/:routeId` Update route
+ * @async
+ * @param {number} routeId 
+ * @param {string} departureLocation 
+ * @param {string} arrivalLocation 
+ * @param {string[]} [stops] 
+ * @param {string[]} [hours] 
+ * @param {number[]} [prices] 
+ * @param {number[]} [distances] 
+ * @param {number} [oppositeId]
+ * @returns Promise that returns an updated route object.
+ */
+export async function updateRoute(routeId, departureLocation, arrivalLocation, stops = null, hours = null, prices = null, distances = null, oppositeId = null) {
+    return sendPut('/route/' + routeId, { departureLocation, arrivalLocation, stops, hours, prices, distances, oppositeId });
 }
 
 export async function deleteRoute(routeId) {

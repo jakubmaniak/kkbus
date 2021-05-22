@@ -13,8 +13,8 @@ router.get('/routes', async (req, res, next) => {
 
 });
 
-router.get('/route/:id', async (req, res, next) => {
-    let routeId = parseInt(req.params.id, 10);
+router.get('/route/:routeId', async (req, res, next) => {
+    let routeId = parseInt(req.params.routeId, 10);
 
     if (isNaN(routeId)) return next(invalidRequest());
 
@@ -34,31 +34,34 @@ router.post('/route', [
         arrivalLocation: string,
         hours?: string[],
         stops?: string[],
-        prices?: number[]
+        prices?: number[],
+        distances?: number[]
     }`)
-], async (req, res) => {
-    let { oppositeId, departureLocation, arrivalLocation, hours, stops, prices } = req.body;
+], async (req, res, next) => {
+    let { oppositeId, departureLocation, arrivalLocation, hours, stops, prices, distances } = req.body;
 
-    if (hours == null) hours = [];
-    if (stops == null) stops = [];
-    if (prices == null) prices = [];
+    hours ??= [];
+    stops ??= [];
+    prices ??= [];
+    distances ??= [];
 
     hours = hours.map((hour) => hour.trim());
     stops = stops.map((stop) => stop.trim());
 
-    let route = { oppositeId, departureLocation, arrivalLocation, hours, stops, prices };
+    let route = { oppositeId, departureLocation, arrivalLocation, hours, stops, prices, distances };
 
     try {
         let result = await routeController.addRoute(route);
         res.ok({ id: result.insertId, ...route });
     }
-    catch {
+    catch (err) {
+        console.log(err);
         next(serverError());
     }
 });
 
-router.delete('/route/:id', [minimumRole('office')], async (req, res, next) => {
-    let routeId = parseInt(req.params.id, 10);
+router.delete('/route/:routeId', [minimumRole('office')], async (req, res, next) => {
+    let routeId = parseInt(req.params.routeId, 10);
 
     if (isNaN(routeId)) return next(invalidRequest());
 
@@ -71,7 +74,7 @@ router.delete('/route/:id', [minimumRole('office')], async (req, res, next) => {
     }
 });
 
-router.put('/route/:id', [
+router.put('/route/:routeId', [
     minimumRole('office'),
     bodySchema(`{
         oppositeId?: number,
@@ -79,23 +82,25 @@ router.put('/route/:id', [
         arrivalLocation: string,
         hours?: string[],
         stops?: string[],
-        prices?: number[]
+        prices?: number[],
+        distances?: number[]
     }`)
 ], async (req, res, next) => {
-    let routeId = parseInt(req.params.id, 10);
+    let routeId = parseInt(req.params.routeId, 10);
 
     if (isNaN(routeId)) return next(invalidRequest());
 
-    let { oppositeId, departureLocation, arrivalLocation, hours, stops, prices } = req.body;
+    let { oppositeId, departureLocation, arrivalLocation, hours, stops, prices, distances } = req.body;
 
-    if (hours == null) hours = [];
-    if (stops == null) stops = [];
-    if (prices == null) prices = [];
+    hours ??= [];
+    stops ??= [];
+    prices ??= [];
+    distances ??= [];
 
     hours = hours.map((hour) => hour.trim());
     stops = stops.map((stop) => stop.trim());
 
-    let updatedRoute = { id: routeId, oppositeId, departureLocation, arrivalLocation, hours, stops, prices };
+    let updatedRoute = { id: routeId, oppositeId, departureLocation, arrivalLocation, hours, stops, prices, distances };
 
     try {
         await routeController.updateRoute(routeId, updatedRoute);

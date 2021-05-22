@@ -14,18 +14,17 @@ import Route from './Route';
 
 function RoutesPage() {
     let [loading, setLoading] = useState(true);
-
-    let [routes, setRoutes] = useState([]);
-
     let [modalVisibility, setModalVisibility] = useState(false);
 
-    let { role } = useContext(UserContext).user;
-
+    let [routes, setRoutes] = useState([]);
     let [departureLocation, setDepartureLocation] = useState('');
     let [arrivalLocation, setArrivalLocation] = useState('');
-    let [hours, setHours] = useState('');
+    let [hours, setHours] = useState([]);
     let [prices, setPrices] = useState([]);
     let [stops, setStops] = useState([]);
+    let [distances, setDistances] = useState([]);
+
+    let { role } = useContext(UserContext).user;
     
     useEffect(() => {
         api.getAllRoutes()
@@ -52,10 +51,10 @@ function RoutesPage() {
     }
 
     function addRoute() {
-        if(departureLocation !== '' && arrivalLocation !== '' && stops !== '' && hours !== '' && prices !== '') {
+        if(departureLocation !== '' && arrivalLocation !== '') {
             setModalVisibility(false);
 
-            api.addRoute(departureLocation, arrivalLocation, stops, hours, prices, null)
+            api.addRoute(departureLocation, arrivalLocation, stops, hours, prices, distances, null)
                 .then(() => {
                     toast.success('Dodano trasę');
                     refreshRoutes();
@@ -63,15 +62,18 @@ function RoutesPage() {
                 .catch(api.toastifyError);
         }
         else {
-            toast.error('Wypełnij wszystkie pola!');
+            toast.error('Wybierz punkt początkowy i końcowy!');
         }
     }
 
     function convertHoursIntoArray(ev) {
-        let string = ev.target.value;
-        let array = string.split(',').map((element) => element.trim());
+        let text = ev.target.value;
 
-        setHours(array);
+        if (text.trim() === '') {
+            return setHours([]);
+        }
+
+        setHours(text.split(',').map((e) => e.trim()));
     }
 
     function convertStopsPrices(ev) {
@@ -79,6 +81,16 @@ function RoutesPage() {
 
         setStops(parts.filter((e, i) => i % 2 === 0));
         setPrices(parts.filter((e, i) => i % 2 === 1).map(parseFloat));   
+    }
+
+    function convertStopsDistances(ev) {
+        let text = ev.target.value;
+
+        if (text.trim() === '') {
+            return setDistances([]);
+        }
+
+        setDistances(text.split(',').map((e) => parseFloat(e.trim())));
     }
 
     return (
@@ -102,7 +114,7 @@ function RoutesPage() {
                                     {i < route.stops.length - 1 ? <span> - </span> : null}
                                 </span>
                             ))}
-                            hours={route.hours.map((hour, i) => (
+                            hours={console.log(route.hours) || route.hours.map((hour, i) => (
                                 <div key={i}>{hour}</div>
                             ))}
                             prices={[...route.stops.keys()].map((v, i, a) => a.slice(i + 1, a.length).map(w => [v, w]))
@@ -117,6 +129,7 @@ function RoutesPage() {
                             routeId={route.id}
                             allHours={route.hours}
                             stopsPrices={route.stops.reduce((a, b, i) => a.concat([route.prices[i - 1], b]), []).slice(1).join(', ')}
+                            stopsDistances={route.distances}
                             refreshRoutes={refreshRoutes}
                             deleteRoute={() => deleteRoute(route.id)}
                         />
@@ -132,7 +145,14 @@ function RoutesPage() {
                             <input placeholder="Punkt startowy" value={departureLocation} onChange={fromValue(setDepartureLocation)}/>
                             <input placeholder="Punkt docelowy" value={arrivalLocation} onChange={fromValue(setArrivalLocation)}/>
                             <textarea placeholder="Godziny odjazdu (odzielone przecinkami)" onChange={convertHoursIntoArray}/>
-                            <textarea placeholder="Przystanki (cena, przystanek, cena, przystanek...)" onChange={(ev) => convertStopsPrices(ev)}/>
+                            <textarea
+                                placeholder="Przystanki (cena, przystanek, cena, przystanek...)"
+                                onChange={convertStopsPrices}
+                            />
+                            <textarea
+                                placeholder="Odległości między przystankami (oddzielone przecinkami)"
+                                onChange={convertStopsDistances}
+                            />
                         </form>
                     </section>
                     <section className="footer">

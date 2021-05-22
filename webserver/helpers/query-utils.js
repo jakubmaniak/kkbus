@@ -42,7 +42,12 @@ module.exports = {
     splitProps: (...props) => (results) => {
         for (let result of results) {
             for (let prop of props) {
-                result[prop] = result[prop].split(',');
+                if (result[prop].trim() === '') {
+                    result[prop] = [];
+                }
+                else {
+                    result[prop] = result[prop].split(',');
+                }
             }
         }
         return results;
