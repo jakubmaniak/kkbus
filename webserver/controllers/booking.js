@@ -40,6 +40,10 @@ module.exports.findAllBookings = () => {
         JOIN users ON bookings.userId = users.id`);
 };
 
+module.exports.findManyBookings = (bookingIds) => {
+    return db.query(`SELECT * FROM bookings WHERE id IN ?`, [[bookingIds]]);
+}
+
 module.exports.findUserBookingsByRoute = (routeId, date, hour) => {
     return db.query(`SELECT bookings.*, firstName, lastName
         FROM bookings
@@ -103,13 +107,3 @@ module.exports.deleteBooking = (bookingId, userId = null) => {
         return db.query('DELETE FROM bookings WHERE id=? AND userId=?', [bookingId, userId]);
     }
 };
-
-module.exports.getTicketsUsingBookingIds = (bookingIds) => {
-    return db.query(`SELECT SUM(normalTickets + reducedTickets + childTickets) AS sum
-        FROM bookings
-        WHERE id IN ?`,
-        [[bookingIds]]
-    )
-        .then(getFirst)
-        .then((row) => row.sum ?? 0);
-}

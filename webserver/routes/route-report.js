@@ -71,11 +71,21 @@ router.post('/reports/route/:routeId', [
             let promises = [];
 
             if (realizedIds.length > 0) {
-                console.log(realizedIds);
-                let addTickets = bookingController.getTicketsUsingBookingIds(realizedIds)
-                    .then((tickets) => persons += tickets);
+                let bookings = await bookingController.findManyBookings(realizedIds);
 
-                promises.push(addTickets);
+                for (let booking of bookings) {
+                    persons += booking.normalTickets + booking.reducedTickets + booking.childTickets;
+
+                    let startIndex = route.stops.findIndex((stop) => stop === booking.firstStop);
+                    let endIndex = route.stops.findIndex((stop) => stop === booking.lastStop);
+
+                    if (startIndex == -1 || endIndex == -1) continue;
+
+                    let points = route.distances.slice(startIndex, endIndex).reduce((a, b) => a + b, 0);
+                    let updatePoints = userController.increaseUserPoints(booking.userId, Math.round(points));
+
+                    promises.push(updatePoints);
+                }
             }
 
             if (unrealizedIds.length > 0) {

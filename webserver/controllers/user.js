@@ -156,6 +156,10 @@ module.exports.updateUserPoints = (userId, points) => {
     return db.query('UPDATE users SET points=? WHERE id=?', [points, userId]);
 };
 
+module.exports.increaseUserPoints = (userId, points) => {
+    return db.query('UPDATE users SET points=points+? WHERE id=?', [points, userId]);
+};
+
 module.exports.updateUserPassword = (userId, password) => {
     return db.query('UPDATE users SET password=? WHERE id=?', [password, userId]);
 };
