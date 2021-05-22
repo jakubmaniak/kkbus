@@ -95,7 +95,7 @@ function Profile() {
                         client={role === 'client' ? true : false}
                         role={role}
                         unrealizedBookings={person.unrealizedBookings}
-                        bookLockExpirationDate={person.bookLockExpirationDate === null ? '-' : person.bookLockExpirationDate}
+                        bookLockExpirationDate={person.bookLockExpirationDate}
                     />
                     <div className="data-change">
                         <button onClick={() => setModalChangePasswordVisibility(true)}>Zmień hasło</button>

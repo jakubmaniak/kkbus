@@ -1,15 +1,24 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+
+function textifyRole(role) {
+    return {
+        guest: 'Niezalogowany',
+        client: 'Klient',
+        driver: 'Kierowca',
+        office: 'Pracownik sekretariatu',
+        owner: 'Właściciel'
+    }[role] ?? '-';
+}
 
 function Person(props) {
-    function textifyRole(role) {
-        return {
-            guest: 'Niezalogowany',
-            client: 'Klient',
-            driver: 'Kierowca',
-            office: 'Pracownik sekretariatu',
-            owner: 'Właściciel'
-        }[role] ?? '-';
-    }
+    let [bookLockExpirationDate, setBookLockExpirationDate] = useState();
+    
+    useEffect(() => {
+        let expirationDate = props.bookLockExpirationDate;
+        let formattedDate = dayjs(expirationDate).tz('Europe/Warsaw').format('DD.MM.YYYY');
+        setBookLockExpirationDate(formattedDate);
+    }, [props.bookLockExpirationDate]);
 
     return (
         <>
@@ -39,14 +48,16 @@ function Person(props) {
             </div>
             {props.client ?
                 <>
-                <div className="client-data">
-                    <span>Rezerwacje niezrealizowane/max. dopuszczlna liczba</span>
-                    <span>{props.unrealizedBookings} /3</span>
-                </div>
-                <div className="client-data">
-                    <span>Data zakończenia blokady rezerwacji</span>
-                    <span>{props.bookLockExpirationDate}</span>
-                </div>
+                    <div className="client-data">
+                        <span>Rezerwacje niezrealizowane/max. dopuszczlna liczba</span>
+                        <span>{props.unrealizedBookings}/3</span>
+                    </div>
+                    {bookLockExpirationDate && <>
+                        <div className="client-data">
+                            <span>Data zakończenia blokady rezerwacji</span>
+                            <span>{bookLockExpirationDate}</span>
+                        </div>
+                    </>}
                 </>
                 :
                 <div className="person-data">
