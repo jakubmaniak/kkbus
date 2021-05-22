@@ -20,7 +20,7 @@
     justify-content: space-between;
 }
 
-.button-container {
+.booking-list .button-container {
     display: flex;
     justify-content: flex-end;
     width: 100%;

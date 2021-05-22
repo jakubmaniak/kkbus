@@ -104,19 +104,19 @@
     margin-left: 6px;
 }
 
-.button-container .login,
-.button-container .signup {
+.loyalty-program .button-container .login,
+.loyalty-program .button-container .signup {
     width: 265px;
     margin-top: 14px;
     border-radius: 2px;
 }
 
-.button-container .signup {
+.loyalty-program .button-container .signup {
     background-color: #47BE61;
     color: white;
 }
 
-.button-container .login {
+.loyalty-program .button-container .login {
     color: black;
 }
 
@@ -124,8 +124,9 @@
     margin-top: 8px;
 }
 
-.button-container {
+.loyalty-program  .button-container {
     display: flex;
+    width: 100%;
     justify-content: space-between;
 }
 
