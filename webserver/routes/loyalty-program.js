@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { invalidRequest, notFound, invalidValue, notEnough } = require('../errors');
+const { invalidRequest, notFound, invalidValue, notEnough, outOfStock, limitReached } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const { minimumRole, roles, onlyRoles } = require('../middlewares/roles');
 const { parseDateTime } = require('../helpers/date');
@@ -56,7 +56,21 @@ router.post('/loyalty-program/order/:rewardId', [onlyRoles('client')], async (re
             userController.findUserPoints(userId)
         ]);
 
-        if (userPoints < reward.requiredPoints) return next(notEnough());
+        if (reward.amount == 0) throw outOfStock();
+        if (userPoints < reward.requiredPoints) throw notEnough();
+
+        if (reward.limit !== null) {
+            let orderCount = await rewardOrderController.countUserOrders(userId, rewardId);
+            if (orderCount > reward.limit) throw limitReached();
+        }
+
+        let updateReward = null;
+        if (reward.amount !== null) {
+            updateReward = rewardController.updateReward(rewardId, {
+                ...reward,
+                amount: reward.amount - 1
+            });
+        }
 
         await Promise.all([
             rewardOrderController.addOrder({
@@ -65,7 +79,8 @@ router.post('/loyalty-program/order/:rewardId', [onlyRoles('client')], async (re
                 points: reward.requiredPoints,
                 orderDate: parseDateTime(new Date()).toString()
             }),
-            userController.updateUserPoints(userId, userPoints - reward.requiredPoints)
+            userController.updateUserPoints(userId, userPoints - reward.requiredPoints),
+            updateReward
         ]);
 
         res.ok({ points: userPoints });

@@ -1,4 +1,5 @@
 let db = require('../configs/db');
+const { getFirst } = require('../helpers/query-utils');
 
 /*
 CREATE TABLE `reward_orders` ( 
@@ -64,6 +65,12 @@ module.exports.findUserOrders = (userId, { shipped = null, realized = null, op =
 
     return db.query('SELECT * FROM reward_orders WHERE userId=?', [userId]);
 };
+
+module.exports.countUserOrders = (userId, rewardId) => {
+    return db.query('SELECT COUNT(*) as count FROM reward_orders WHERE userId=? AND rewardId=?', [userId, rewardId])
+        .then(getFirst)
+        .then((row) => row.count);
+}
 
 module.exports.updateOrder = (orderId, order) => {
     return db.query(`UPDATE reward_orders

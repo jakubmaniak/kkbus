@@ -10,6 +10,8 @@ const errorMessages = new Map(Object.entries({
     bad_session_token:      'Niepoprawny lub nieważny identyfikator sesji',
     invalid_value:          'Wprowadzona wartość jest niedozwolona lub niepoprawna',
     not_enough:             'Niewystarczająca ilość',
+    out_of_stock:           'W magazynie nie ma już nagród',
+    limit_reached:          'Osiągnięto limit zakupionych nagród',
     too_late:               'Za późno',
     bad_credentials:        'Niepoprawny login lub hasło',
     email_already_taken:    'Konto o tym adresie e-mail już istnieje',
