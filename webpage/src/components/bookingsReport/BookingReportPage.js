@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import PrintBookingMonthReport from './BookingReportMonth/PrintBookingMonthReport';
-import BookingReportYear from './BookingReportYear';
+import PrintBookingMonthReport from './bookingMonthReport/PrintBookingMonthReport';
+import BookingReportYear from './bookingYearReport/BookingYearReport';
 import Dropdown from '../dropdowns/Dropdown';
 
 function BookingReportPage() {

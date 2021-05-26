@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 
-import BookingReportMonthToPrint  from './BookingReportMonthToPrint';
+import BookingMonthReportToPrint  from './BookingMonthReportToPrint';
 
 function PrintBookingList(props) {
   const componentRef = useRef();
@@ -10,7 +10,7 @@ function PrintBookingList(props) {
   });
 
   return (
-        <BookingReportMonthToPrint 
+        <BookingMonthReportToPrint 
             ref={componentRef} 
             selectedMonth={props.selectedMonth}
             selectedYear={props.selectedYear} 

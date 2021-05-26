@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../styles/BookingReport.css';
+import '../../../styles/BookingReport.css';
 
 function BookingReportYear() {
     return (
