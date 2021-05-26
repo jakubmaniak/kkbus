@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import '../../styles/BookingReport.css';
-import BookingPieChart from './BookingPieChart';
+import '../../../styles/BookingReport.css';
+import BookingPieChart from '../BookingPieChart';
 
 const BookingReportMonthToPrint = React.forwardRef((props, ref) => {
     let [data, setData] = useState([]);

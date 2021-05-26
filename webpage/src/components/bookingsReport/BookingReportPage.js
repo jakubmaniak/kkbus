@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import PrintBookingMonthReport from './PrintBookingMonthReport';
+import PrintBookingMonthReport from './BookingReportMonth/PrintBookingMonthReport';
 import BookingReportYear from './BookingReportYear';
 import Dropdown from '../dropdowns/Dropdown';
 
