@@ -57,3 +57,9 @@
 .booking-report .dropdown {
     width: 400px;
 }
+
+@media print {
+    .tile {
+      box-shadow: none;
+    }
+}
