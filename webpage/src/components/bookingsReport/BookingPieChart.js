@@ -15,9 +15,9 @@ function BookingPieChart(props) {
                 data={props.data}
             />
             <div className="legend">
-                {props.data.map((element) => {
+                {props.data.map((element, i) => {
                     return (
-                        <div className="legend-element">
+                        <div className="legend-element" key={i}>
                             <span className="label-color" style={{ backgroundColor: element.color }}></span>
                             <span className="label">{element.title}</span>
                         </div>
