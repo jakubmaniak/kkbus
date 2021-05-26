@@ -5,6 +5,11 @@
     margin-top: 20px;
 }
 
+.booking-month-info {    
+    display: flex;
+    justify-content: space-between;
+}
+
 .pie-charts-container {
     display: flex;
     width: 100%;
@@ -47,4 +52,8 @@
     margin-top: 16px;
     width: 180px;
     height: 48px;
+}
+
+.booking-report .dropdown {
+    width: 400px;
 }
