@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../../styles/BookingReport.css';
 import BookingPieChart from './BookingPieChart';
 
-function BookingReportMonth(props) {
+const BookingReportMonthToPrint = React.forwardRef((props, ref) => {
     let [data, setData] = useState([]);
 
     useEffect(() => {
@@ -21,7 +21,7 @@ function BookingReportMonth(props) {
     }, []);
 
     return (
-        <div className="tile booking-month">
+        <div className="tile booking-month" ref={ref}>
             <div className="booking-month-info">
                 <h2>Raport miesięczny z rezerwacji</h2>
                 <p>{props.selectedMonth} {props.selectedYear}</p>
@@ -37,10 +37,10 @@ function BookingReportMonth(props) {
                 />
             </div>
             <div className="button-container">
-                <button>Drukuj</button>
+                <button className="print" onClick={props.handlePrint} >Drukuj</button>
             </div>
         </div>
     );
-}
+});
 
-export default BookingReportMonth;
+export default BookingReportMonthToPrint;

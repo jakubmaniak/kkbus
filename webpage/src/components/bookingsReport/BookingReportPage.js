@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import BookingReportMonth from './BookingReportMonth';
+import PrintBookingMonthReport from './PrintBookingMonthReport';
 import BookingReportYear from './BookingReportYear';
 import Dropdown from '../dropdowns/Dropdown';
 
@@ -45,7 +45,7 @@ function BookingReportPage() {
                         </div>
                     </div>
                 </div>
-                <BookingReportMonth 
+                <PrintBookingMonthReport 
                     selectedMonth={selectedMonth}
                     selectedYear={selectedYear}
                 />
