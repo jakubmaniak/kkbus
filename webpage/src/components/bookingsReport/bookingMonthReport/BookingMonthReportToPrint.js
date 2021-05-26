@@ -37,7 +37,7 @@ const BookingReportMonthToPrint = React.forwardRef((props, ref) => {
                 />
             </div>
             <div className="button-container">
-                <button className="print" onClick={props.handlePrint} >Drukuj</button>
+                <button className="print" onClick={props.handlePrint}>Drukuj</button>
             </div>
         </div>
     );
