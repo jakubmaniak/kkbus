@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/BookingReport.css';
-import Dropdown from '../dropdowns/Dropdown';
 import BookingPieChart from './BookingPieChart';
 
-function BookingReportMonth() {
+function BookingReportMonth(props) {
     let [data, setData] = useState([]);
 
     useEffect(() => {
@@ -23,12 +22,14 @@ function BookingReportMonth() {
 
     return (
         <div className="tile booking-month">
-            <h2>Raport miesięczny z rezerwacji</h2>
-            <Dropdown />
+            <div className="booking-month-info">
+                <h2>Raport miesięczny z rezerwacji</h2>
+                <p>{props.selectedMonth} {props.selectedYear}</p>
+            </div>
             <div className="pie-charts-container">
                 <BookingPieChart 
-                        data={data}
-                        label={(props) => { return props.dataEntry.value; }}
+                    data={data}
+                    label={(props) => { return props.dataEntry.value; }}
                 />
                 <BookingPieChart 
                     data={data}
