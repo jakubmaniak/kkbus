@@ -10,8 +10,8 @@ function BookingReportPage() {
     let [selectedMonth, setSelectedMonth] = useState(months[date.getMonth()]);
 
     let years = [];
-    years[0] = date.getFullYear();
-    for(let i = 1; i < 10; i++) {
+    years[0] = 2021;
+    for(let i = 1; i <= date.getFullYear; i++) {
         years[i] = years[0] + i;
     }
     let [selectedYear, setSelectedYear] = useState(date.getFullYear());
