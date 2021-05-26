@@ -16,10 +16,6 @@ function BookingReportPage() {
     }
     let [selectedYear, setSelectedYear] = useState(date.getFullYear());
 
-    useEffect(() => {
-        console.log(selectedMonth, selectedYear);
-    }, [selectedYear, selectedMonth]);
-
     return (
         <div className="booking-report page">
             <div className="main">
