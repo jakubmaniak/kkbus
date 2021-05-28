@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import '../../../styles/BookingReport.css';
 import ReactApexChart from 'react-apexcharts';
+import * as api from '../../../api';
 
-const BookingReportYearToPrint = React.forwardRef((props, ref) => {
-    // let [data, setData] = useState([]);
-    //[{month: 2, id: 1, realized: 1, unrealized: 2}, {month: 2, id: 1, realized: 1, undrealized: 2}]
+const BookingReportYearToPrint = React.forwardRef((props, ref) => {  
+    let [noReports, setNoReports] = useState(true);
+    let [realizedCount, setRealizedCount] = useState([]);
+    let [unrealizedCount, setUnRealizedCount] = useState([]);
 
     let data = {
         series: [
             {
                 name: 'zrealizowane',
-                data: [13, 23, 20, 8, 13, 27, 44, 55, 41, 67, 22, 43]
+                data: realizedCount
             },
             {
                 name: 'niezrealizowane',
-                data: [160, 17, 15, 15, 21, 14, 44, 55, 41, 67, 22, 43]
+                data: unrealizedCount
             }],
         options: {
             chart: {
@@ -74,8 +76,31 @@ const BookingReportYearToPrint = React.forwardRef((props, ref) => {
     }
 
     useEffect(() => {
+        api.getManyBookingReportsByYear(props.selectedYear)
+            .then((results) => {
+                setNoReports(false);
 
-    }, []);
+                let realized = new Array(12).fill(0);
+                let unrealized = new Array(12).fill(0);
+
+                for(let report of results) {
+                    realized[report.month] = report.realizedCount;
+                    unrealized[report.month] = report.unrealizedCount;
+                }
+
+                setRealizedCount(realized);
+                setUnRealizedCount(unrealized);
+            })
+            .catch((err) => {
+                if(err.message === 'not_found') {
+                    setNoReports(true);
+                }
+                else
+                    api.toastifyError(err);
+            });
+
+            
+    }, [props.selectedYear]);
 
     return (
         <div className="tile booking-year" ref={ref}>
@@ -83,9 +108,13 @@ const BookingReportYearToPrint = React.forwardRef((props, ref) => {
                 <h2>Raport roczny z rezerwacji</h2>
                 <p>{props.selectedYear}</p>
             </div>
-            <div className="pie-charts-container">
-                <ReactApexChart options={data.options} series={data.series} type="bar" height={350} width={800} />
-            </div>
+            {noReports ? 
+                    <p>Nie znaleziono raportów</p>
+                : 
+                    <div className="pie-charts-container">
+                        <ReactApexChart options={data.options} series={data.series} type="bar" height={350} width={800} />
+                    </div>
+            }
             <div className="button-container">
                 <button className="print" onClick={props.handlePrint}>Drukuj</button>
             </div>
