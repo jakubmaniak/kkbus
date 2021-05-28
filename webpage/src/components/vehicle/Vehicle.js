@@ -214,7 +214,7 @@ function Vehicle(props) {
                     </div>
                     <div className="vehicle-info">
                         <span>Średnie spalanie:</span>
-                        <span>{props.combustion} L/100KM</span>
+                        <span>{props.combustion} L/100 KM</span>
                     </div>
                     <div className="vehicle-info">
                         <span>Aktualny kierowca:</span>
