@@ -108,7 +108,7 @@ function RouteReport() {
             <div className="main">
                 <div className="tile">
                     <h2>
-                        Raport z kursu
+                        Złóż raport z kursu
                         {role === 'owner' ? <span style={{fontSize:"20px", color: "rgb(217 180 48)"}}> (dla kierowców)</span> : null}
                     </h2>
                     <form className="report">
