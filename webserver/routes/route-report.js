@@ -11,6 +11,7 @@ const bookingController = require('../controllers/booking');
 const vehicleController = require('../controllers/vehicle');
 const routeController = require('../controllers/route');
 const userController = require('../controllers/user');
+const bookingReportController = require('../controllers/booking-report');
 
 
 router.post('/reports/route/:routeId', [
@@ -69,6 +70,28 @@ router.post('/reports/route/:routeId', [
             let unrealizedIds = bookings.filter((booking) => !booking.realized).map((booking) => booking.id);
 
             let promises = [];
+
+            let year = new Date().getFullYear();
+            let month = new Date().getMonth() + 1;
+            try {
+                let bookingReport = await bookingReportController.findBookingReportByMonth(year, month);
+                bookingReport.realizedCount += realizedIds.length;
+                bookingReport.unrealizedCount += unrealizedIds.length;
+                promises.push(bookingReportController.updateBookingReport(bookingReport.id, bookingReport));
+            }
+            catch (err) {
+                if (err.message == 'not_found') {
+                    promises.push(bookingReportController.addBookingReport({
+                        year,
+                        month,
+                        realizedCount: realizedIds.length,
+                        unrealizedCount: unrealizedIds.length
+                    }));
+                }
+                else {
+                    return next(err);
+                }
+            }
 
             if (realizedIds.length > 0) {
                 let bookings = await bookingController.findManyBookings(realizedIds);
