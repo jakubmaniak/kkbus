@@ -58,8 +58,15 @@
     width: 400px;
 }
 
+.booking-year .pie-charts-container {
+    justify-content: center;
+}
+
 @media print {
     .tile {
       box-shadow: none;
+    }
+    .booking-year .pie-charts-container {
+        justify-content: flex-start;
     }
 }
