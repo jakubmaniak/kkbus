@@ -224,7 +224,7 @@
 }
 
 .book-route input {
-    width: 400px;
+    width: 420px;
 }
 
 .edit-route input {
@@ -254,6 +254,10 @@
 
 .footer.reserve > div button:last-child {
     margin-right: 0;
+}
+
+.routes-page .modal input {
+    width: 420px;
 }
 
 
