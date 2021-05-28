@@ -29,6 +29,7 @@ import Profile from './components/profile/Profile';
 import BookingList from './components/bookingList/BookingList';
 import BookingPage from './components/bookingClient/BookingPage';
 import PostActivation from './components/userAuth/PostActivation';
+import RouteReport from './components/routeReport/RouteReport';
 
 
 dayjs.extend(utc);
@@ -106,6 +107,9 @@ function App() {
                         </Route>
                         <Route exact path="/raporty-z-rezerwacji">
                             <BookingReportPage />
+                        </Route>
+                        <Route exact path="/raporty-z-kursów">
+                            <RouteReport />
                         </Route>
                     </Switch>
                 </Router>
