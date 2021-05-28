@@ -45,8 +45,7 @@ function BookingReportPage() {
                     selectedMonth={selectedMonth}
                     selectedYear={selectedYear}
                 />
-                <PrintBookingYearReport 
-                    selectedMonth={selectedMonth}
+                <PrintBookingYearReport
                     selectedYear={selectedYear}
                 />
             </div>

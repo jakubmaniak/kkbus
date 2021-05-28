@@ -24,7 +24,7 @@ const BookingReportYearToPrint = React.forwardRef((props, ref) => {
         <div className="tile booking-year" ref={ref}>
             <div className="booking-month-info">
                 <h2>Raport roczny z rezerwacji</h2>
-                <p>{props.selectedMonth} {props.selectedYear}</p>
+                <p>{props.selectedYear}</p>
             </div>
             <div className="pie-charts-container">
                 <BookingPieChart 

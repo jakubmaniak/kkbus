@@ -12,7 +12,6 @@ function PrintBookingYearReport(props) {
   return (
         <BookingYearReportToPrint 
             ref={componentRef} 
-            selectedMonth={props.selectedMonth}
             selectedYear={props.selectedYear} 
             handlePrint={handlePrint}
         />
