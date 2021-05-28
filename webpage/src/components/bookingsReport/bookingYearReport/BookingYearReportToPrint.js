@@ -1,23 +1,80 @@
 import React, { useEffect, useState } from 'react';
 import '../../../styles/BookingReport.css';
-import BookingPieChart from '../BookingPieChart';
+import ReactApexChart from 'react-apexcharts';
 
 const BookingReportYearToPrint = React.forwardRef((props, ref) => {
-    let [data, setData] = useState([]);
+    // let [data, setData] = useState([]);
+    //[{month: 2, id: 1, realized: 1, unrealized: 2}, {month: 2, id: 1, realized: 1, undrealized: 2}]
 
-    useEffect(() => {
-        setData([
+    let data = {
+        series: [
             {
-                title: 'zrealizowane',
-                value: 548,
-                color: '#47BE61'
+                name: 'zrealizowane',
+                data: [13, 23, 20, 8, 13, 27, 44, 55, 41, 67, 22, 43]
             },
             {
-                title: 'niezrealizowane',
-                value: 90,
-                color: '#C73535'
+                name: 'niezrealizowane',
+                data: [160, 17, 15, 15, 21, 14, 44, 55, 41, 67, 22, 43]
+            }],
+        options: {
+            chart: {
+                type: 'bar',
+                height: 350,
+                stacked: true,
+                toolbar: {
+                    show: false
+                },
+                zoom: {
+                    enabled: false
+                }
+            },
+            colors: ['#47BE61', '#C73535'],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    legend: {
+                        position: 'bottom',
+                        offsetX: -10,
+                        offsetY: 0
+                    }
+                }
+            }],
+            plotOptions: {
+                bar: {
+                    borderRadius: 8,
+                    horizontal: false,
+                    columnWidth: '60%',
+                },
+            },
+            xaxis: {
+                categories:
+                    [
+                        'STY', 
+                        'LUT', 
+                        'MAR', 
+                        'KWI',
+                        'MAJ', 
+                        'CZE',
+                        'LIP',
+                        'SIE',
+                        'WRZ',
+                        'PAŹ',
+                        'LIS',
+                        'GRU'
+                    ],
+            },
+            legend: {
+                position: 'right',
+                offsetY: 40
+            },
+            fill: {
+                opacity: 1
             }
-        ])
+        },
+    }
+
+    useEffect(() => {
+
     }, []);
 
     return (
@@ -27,14 +84,7 @@ const BookingReportYearToPrint = React.forwardRef((props, ref) => {
                 <p>{props.selectedYear}</p>
             </div>
             <div className="pie-charts-container">
-                <BookingPieChart 
-                    data={data}
-                    label={(props) => { return props.dataEntry.value; }}
-                />
-                <BookingPieChart 
-                    data={data}
-                    label={({ dataEntry }) => { return Math.round(dataEntry.percentage) + '%'; }}
-                />
+                <ReactApexChart options={data.options} series={data.series} type="bar" height={350} width={800} />
             </div>
             <div className="button-container">
                 <button className="print" onClick={props.handlePrint}>Drukuj</button>
