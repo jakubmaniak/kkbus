@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import '../../styles/RouteReport.css';
+import '../../styles/SubmitRouteReport.css';
 
 import * as api from '../../api';
 import { routeFormatter } from '../../helpers/text-formatters';
