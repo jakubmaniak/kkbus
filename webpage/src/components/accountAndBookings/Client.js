@@ -190,9 +190,10 @@ function Client(props) {
                 phoneNumber={props.phoneNumber}
                 reservation={props.reservation}
                 client={true}
+                unrealizedBookings={props.unrealizedBookings}
             />
             <div className="client-new-reservation">
-                <button onClick={() => setModalVisibility(true)}>Nowa rezerwację</button>
+                <button onClick={() => setModalVisibility(true)}>Nowa rezerwacja</button>
             </div>
             {bookingModal()}
         </div>

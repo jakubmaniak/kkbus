@@ -38,7 +38,8 @@ function Clients() {
 
         api.getClients(selectedSearchParam[0], searchQuery)
             .then((results) => {
-                setClients(results)
+                setClients(results);
+                console.log(results);
             })
             .catch(api.toastifyError);
     }
@@ -87,6 +88,7 @@ function Clients() {
                                 birthday={(new Date(client.birthDate)).toLocaleDateString()}
                                 phoneNumber={client.phoneNumber}
                                 userId={client.id}
+                                unrealizedBookings={client.unrealizedBookings}
                                 // reservation={client.reservation}
                             />
                         );
