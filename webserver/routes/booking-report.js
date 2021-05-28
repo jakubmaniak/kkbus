@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { invalidRequest, unauthorized, serverError, tooLate, bookingLocked, notFound, invalidValue } = require('../errors');
-const { minimumRole, onlyRoles, roles, roleDictionary } = require('../middlewares/roles');
+const { invalidValue } = require('../errors');
+const { minimumRole } = require('../middlewares/roles');
 const bodySchema = require('../middlewares/body-schema');
 
 const bookingReportController = require('../controllers/booking-report');
