@@ -18,6 +18,10 @@
     font-size: 17px;;
 }
 
+.booking-list-item + .booking-list-item {
+    margin-top: 20px;
+}
+
 .booking-list-container {
     display: flex;
     flex-wrap: wrap;
