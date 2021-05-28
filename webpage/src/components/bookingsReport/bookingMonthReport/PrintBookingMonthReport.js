@@ -14,6 +14,7 @@ function PrintBookingList(props) {
             ref={componentRef} 
             selectedMonth={props.selectedMonth}
             selectedYear={props.selectedYear} 
+            selectedMonthIndex={props.selectedMonthIndex}
             handlePrint={handlePrint}
         />
   );

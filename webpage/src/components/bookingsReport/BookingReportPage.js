@@ -8,6 +8,7 @@ function BookingReportPage() {
 
     let months = ['styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec', 'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień'];
     let [selectedMonth, setSelectedMonth] = useState(months[date.getMonth()]);
+    let [selectedMonthIndex, setSelectedMonthIndex] = useState(months.indexOf(selectedMonth) + 1);
 
     let years = [];
     years[0] = 2021;
@@ -15,6 +16,10 @@ function BookingReportPage() {
         years[i] = years[0] + i;
     }
     let [selectedYear, setSelectedYear] = useState(date.getFullYear());
+
+    useEffect(() => {
+        setSelectedMonthIndex(months.indexOf(selectedMonth) + 1);
+    }, [selectedMonth]);
 
     return (
         <div className="booking-report page">
@@ -44,6 +49,7 @@ function BookingReportPage() {
                 <PrintBookingMonthReport 
                     selectedMonth={selectedMonth}
                     selectedYear={selectedYear}
+                    selectedMonthIndex={selectedMonthIndex}
                 />
                 <PrintBookingYearReport
                     selectedYear={selectedYear}
