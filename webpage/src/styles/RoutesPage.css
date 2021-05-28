@@ -214,6 +214,9 @@
 }
 
 .note {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     margin-bottom: 40px;
     margin-left: auto;
     font-size: 13px;
