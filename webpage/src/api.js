@@ -188,6 +188,38 @@ export async function getRouteBookings(routeId, date, hour) {
 }
 
 
+/**
+ * `GET /api/booking-reports/:year` Get many booking reports in the given year
+ * @async
+ * @param {number} year 
+ * @returns Promise that returns array of monthly booking reports.
+ */
+export async function getManyBookingReportsByYear(year) {
+    return sendGet('/booking-reports/' + year);
+}
+
+/**
+ * `GET /api/booking-report/:year` Get annual booking report
+ * @async
+ * @param {number} year 
+ * @returns Promise that returns annual booking reports.
+ */
+export async function getBookingReportByYear(year) {
+    return sendGet('/booking-report/' + year);
+}
+
+/**
+ * `GET /api/booking-report/:year/:month` Get monthly booking report
+ * @async
+ * @param {number} year 
+ * @param {number} month
+ * @returns Promise that returns monthly booking report.
+ */
+export async function getBookingReportByMonth(year, month) {
+    return sendGet(`/booking-report/${year}/${month}`);
+}
+
+
 export async function getAllVehicles() {
     return sendGet('/vehicles');
 }
