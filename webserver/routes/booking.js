@@ -135,7 +135,7 @@ router.post('/booking', [
         today.setMinutes(0);
         today.setHours(0);
 
-        if (expirationDate.toObject() <= new Date()) {
+        if (expirationDate?.toObject() <= new Date()) {
             await userController.removeBookLock(userId);
         }
         else {
