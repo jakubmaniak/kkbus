@@ -52,8 +52,14 @@
     overflow-y: auto;
 }
 
+.fuel-form {
+    display: flex;
+    align-items: flex-end;
+}
+
 .fuel-form .submit {
     width: 180px;
+    height: 48px;
 }
 
 .fuel-usage-chart {
