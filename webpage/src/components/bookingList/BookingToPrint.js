@@ -27,6 +27,8 @@ const BookingToPrint = React.forwardRef((props, ref) => {
                                     childTickets={bookingItem.childTickets}
                                     normalTickets={bookingItem.normalTickets}
                                     reducedTickets={bookingItem.reducedTickets}
+                                    firstStop={bookingItem.firstStop}
+                                    lastStop={bookingItem.lastStop}
                                 />
                             )
                         })

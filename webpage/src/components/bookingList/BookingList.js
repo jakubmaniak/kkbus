@@ -41,6 +41,8 @@ function BookingList() {
             setHours(selectedRoute.hours);
             setSelectedHour();
         }
+
+        console.log(bookinglist);
     }, [selectedRoute]);
 
     function setDays() {
@@ -66,6 +68,14 @@ function BookingList() {
                                 handleChange={setSelectedRoute}    
                             />
                         </div>
+                        <div className="filter-container">
+                            <span>Godzina</span>
+                            <Dropdown 
+                                items={hours} 
+                                placeholder="Wybierz godzinę"
+                                handleChange={setSelectedHour}
+                            />
+                        </div>
                     </div>
                     <div className="row-filter-container">
                         <div className="filter-container">
@@ -75,14 +85,6 @@ function BookingList() {
                                 placeholder="Wybierz datę"
                                 handleChange={setSelectedDate}
                                 alwaysSelected
-                            />
-                        </div>
-                        <div className="filter-container">
-                            <span>Godzina</span>
-                            <Dropdown 
-                                items={hours} 
-                                placeholder="Wybierz godzinę"
-                                handleChange={setSelectedHour}
                             />
                         </div>
                     </div>

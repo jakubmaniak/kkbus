@@ -28,7 +28,10 @@ function BookingListItem(props) {
 
     return (
         <div className="booking-list-item">
-            <div className="booking-item-row">
+            <div className="booking-item-row bold">
+                <span>{props.firstStop} - {props.lastStop}</span>
+            </div>
+            <div className="booking-item-row bold">
                 <span>{props.id} </span>
                 <span>{props.firstName} {props.lastName}</span>
             </div>

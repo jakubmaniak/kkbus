@@ -6,12 +6,16 @@
     height: 60px;
 }
 
-.booking-item-row:first-child span:first-child {
+.booking-item-row:nth-child(2) span:first-child {
     color: #D9B430;
 }
 
-.booking-item-row:first-child span {
+.booking-item-row.bold {
     font-weight: 500;
+}
+
+.booking-item-row.bold:first-child {
+    font-size: 17px;;
 }
 
 .booking-list-container {
