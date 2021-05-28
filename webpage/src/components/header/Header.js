@@ -83,7 +83,7 @@ function Header() {
                     <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
                     <HeaderItem path="/raporty-z-rezerwacji">Raporty z rezerwacji</HeaderItem>
                     <HeaderItem path="/konta-i-rezerwacje-klientow">Konta i rezerwacje klientów</HeaderItem>
-                    <HeaderItem path="/raport-z-kursu">Raport z kursu</HeaderItem>
+                    <HeaderItem path="/zloz-raport-z-kursu">Złóż raport z kursu</HeaderItem>
                     <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
                     <HeaderItem path="/paliwo">Paliwo</HeaderItem>
                     <HeaderItem path="/lista-rezerwacji">Lista rezerwacji</HeaderItem>
@@ -121,7 +121,7 @@ function Header() {
                     <HeaderItem path="#">Lista pasażerów</HeaderItem>
                     <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
                     <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
-                    <HeaderItem path="/raport-z-kursu">Raport z kursu</HeaderItem>
+                    <HeaderItem path="/zloz-raport-z-kursu">Złóż raport z kursu</HeaderItem>
                     <HeaderItem path="/paliwo">Paliwo</HeaderItem>
                     <HeaderItem path="/lista-rezerwacji">Lista rezerwacji</HeaderItem>
                     <HeaderItem path="/kontakt">Kontakt</HeaderItem>

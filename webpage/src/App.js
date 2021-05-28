@@ -16,7 +16,7 @@ import Timetable from './components/timetable/Timetable';
 import LoyaltyProgram from './components/loyaltyProgram/LoyaltyProgram';
 import BookingReportPage from './components/bookingsReport/BookingReportPage';
 import Clients from './components/accountAndBookings/Clients';
-import RouteReport from './components/routeReport/RouteReport';
+import SubmitReport from './components/submitRouteReport/SubmitRouteReport';
 import VehicleInfo from './components/vehicle/VehicleInfo';
 import FuelPage from './components/fuel/FuelPage';
 import ContactPage from './components/contact/ContactPage';
@@ -86,8 +86,8 @@ function App() {
                         <Route exact path="/grafik-pracy">
                             <WorkSchedule />
                         </Route>
-                        <Route exact path="/raport-z-kursu">
-                            <RouteReport />
+                        <Route exact path="/zloz-raport-z-kursu">
+                            <SubmitReport />
                         </Route>
                         <Route exact path="/konta-i-rezerwacje-klientow">
                             <Clients />
