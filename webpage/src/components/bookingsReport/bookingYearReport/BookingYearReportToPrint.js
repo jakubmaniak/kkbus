@@ -25,7 +25,6 @@ const BookingReportYearToPrint = React.forwardRef((props, ref) => {
 
                 for(let i = 0; i < 12; i++) {
                     reportData[i] = {'month': months[i], 'zrealizowane': realized[i + 1], 'niezrealizowane': unrealized[i + 1]}
-                    console.log(realized.length, realized);
                 }
 
                 setData(reportData);
