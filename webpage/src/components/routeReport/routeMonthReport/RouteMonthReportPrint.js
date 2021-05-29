@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import RouteMonthReport from './RouteMonthReport';
 
-function RouteWeekReportPrint() {
+function RouteMonthReportPrint() {
     const componentRef = useRef();
     const handlePrint = useReactToPrint({
         content: () => componentRef.current
@@ -15,4 +15,4 @@ function RouteWeekReportPrint() {
     );
 };
 
-export default RouteWeekReportPrint;
+export default RouteMonthReportPrint;
