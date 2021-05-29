@@ -6,3 +6,36 @@
 .route-report .row-filter-container .dropdown-container {
     width: 534px;
 }
+
+.tile.route-report-tile .tile-info{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.tile.route-report-tile .tile-info h2 {
+    margin-bottom: 0;
+}
+
+.tile.route-report-tile .tile-info > * {
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.route-chart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.route-chart h3 {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.route-chart h4 {
+    font-weight: 500;
+}
