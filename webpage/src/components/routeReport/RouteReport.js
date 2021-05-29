@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../../styles/RouteReport.css';
 import Dropdown from '../dropdowns/Dropdown';
 import * as api from '../../api';
-import RouteTypeReport from './RouteTypeReport';
+import RouteTypeReportPrint from './RouteTypeReportPrint';
 
 
 function RouteReport() {
@@ -20,6 +20,8 @@ function RouteReport() {
     let [selectedReportType, setSelectedReportType] = useState();
     let [selectedDate, setSelectedDate] = useState();
 
+    let[selectedAllOptions, setSelectedAllOptions] = useState(false);
+
     useEffect(() => {
         api.getAllRoutes()
             .then(setRoutes)
@@ -33,8 +35,11 @@ function RouteReport() {
     }, []);
 
     useEffect(() => {
-        if(selectedRoute, selectedDriver, selectedVehicle, selectedReportType, selectedDate) {
-            console.log('wszystko');
+        if(selectedRoute && selectedDriver && selectedVehicle && selectedReportType && selectedDate) {
+            setSelectedAllOptions(true);
+        }
+        else {
+            setSelectedAllOptions(false);
         }
     }, [selectedRoute, selectedDriver, selectedVehicle, selectedReportType, selectedDate]);
 
@@ -79,7 +84,16 @@ function RouteReport() {
                         />
                     </div>
                 </div>
-                <RouteTypeReport />
+                {selectedAllOptions === true ? 
+                    <RouteTypeReportPrint 
+                        type={selectedReportType}
+                        route={selectedRoute}
+                        driver={selectedDriver}
+                        vehicle={selectedVehicle}
+                        data={selectedVehicle}
+                    />    
+                : null}
+                
             </div>
         </div>                          
     );
