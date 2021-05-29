@@ -1,79 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import '../../../styles/BookingReport.css';
-import ReactApexChart from 'react-apexcharts';
 import * as api from '../../../api';
+import { ResponsiveBar } from '@nivo/bar';
 
 const BookingReportYearToPrint = React.forwardRef((props, ref) => {  
     let [noReports, setNoReports] = useState(true);
-    let [realizedCount, setRealizedCount] = useState([]);
-    let [unrealizedCount, setUnRealizedCount] = useState([]);
-
-    let data = {
-        series: [
-            {
-                name: 'zrealizowane',
-                data: realizedCount
-            },
-            {
-                name: 'niezrealizowane',
-                data: unrealizedCount
-            }],
-        options: {
-            chart: {
-                type: 'bar',
-                height: 350,
-                stacked: true,
-                toolbar: {
-                    show: false
-                },
-                zoom: {
-                    enabled: false
-                }
-            },
-            colors: ['#47BE61', '#C73535'],
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    legend: {
-                        position: 'bottom',
-                        offsetX: -10,
-                        offsetY: 0
-                    }
-                }
-            }],
-            plotOptions: {
-                bar: {
-                    borderRadius: 8,
-                    horizontal: false,
-                    columnWidth: '60%',
-                },
-            },
-            xaxis: {
-                categories:
-                    [
-                        'STY', 
-                        'LUT', 
-                        'MAR', 
-                        'KWI',
-                        'MAJ', 
-                        'CZE',
-                        'LIP',
-                        'SIE',
-                        'WRZ',
-                        'PAŹ',
-                        'LIS',
-                        'GRU'
-                    ],
-            },
-            legend: {
-                position: 'right',
-                offsetY: 40
-            },
-            fill: {
-                opacity: 1
-            }
-        },
-    }
+    let months = ['STY', 'LUT', 'MAR', 'KWI', 'MAJ', 'CZE', 'LIP', 'SIE', 'WRZ', 'PAŹ', 'LIS', 'GRU'];
+    let [data, setData] = useState([]);
 
     useEffect(() => {
         api.getManyBookingReportsByYear(props.selectedYear)
@@ -88,8 +21,14 @@ const BookingReportYearToPrint = React.forwardRef((props, ref) => {
                     unrealized[report.month] = report.unrealizedCount;
                 }
 
-                setRealizedCount(realized);
-                setUnRealizedCount(unrealized);
+                let reportData = [];
+
+                for(let i = 0; i < 12; i++) {
+                    reportData[i] = {'month': months[i], 'zrealizowane': realized[i + 1], 'niezrealizowane': unrealized[i + 1]}
+                    console.log(realized.length, realized);
+                }
+
+                setData(reportData);
             })
             .catch((err) => {
                 if(err.message === 'not_found') {
@@ -111,8 +50,82 @@ const BookingReportYearToPrint = React.forwardRef((props, ref) => {
             {noReports ? 
                     <p>Nie znaleziono raportów</p>
                 : 
-                    <div className="pie-charts-container">
-                        <ReactApexChart options={data.options} series={data.series} type="bar" height={350} width={800} />
+                    <div className="pie-charts-container" style={{ height: 600 }}>
+                        <ResponsiveBar
+                            data={data}
+                            keys={[ 'zrealizowane', 'niezrealizowane']}
+                            indexBy="month"
+                            margin={{ top: 50, right: 130, bottom: 100, left: 60 }}
+                            padding={0.2}
+                            valueScale={{ type: "symlog" }}
+                            groupMode="grouped"
+                            labelTextColor="#FFFFFF"
+                            colors={[ '#47BE61', '#C73535' ]}
+                            axisTop={null}
+                            axisRight={null}
+                            axisBottom={{
+                                tickSize: 5,
+                                tickPadding: 5,
+                                tickRotation: 0
+                            }}
+                            theme={{
+                                fontFamily: 'Poppins',
+                                axis: {
+                                    ticks: {
+                                        text: {
+                                            fontSize: 12
+                                        }
+                                    },
+                                    legend: {
+                                        text: {
+                                            fontSize: 15
+                                        }
+                                    }
+                                },
+                                labels: {
+                                   text: {
+                                       fontSize: 14
+                                   } 
+                                },
+                                legends: {
+                                    text: {
+                                        fontSize: 14,
+                                        fontFamily: 'Poppins',
+                                        letterSpacing: 0
+                                    }
+                                }
+                            }}
+                            labelSkipWidth={12}
+                            labelSkipHeight={12}
+                            legends={[
+                                {
+                                    dataFrom: 'keys',
+                                    anchor: 'bottom',
+                                    direction: 'row',
+                                    justify: false,
+                                    translateX: 0,
+                                    translateY: 70,
+                                    itemsSpacing: 50,
+                                    itemWidth: 100,
+                                    itemHeight: 20,
+                                    itemDirection: 'left-to-right',
+                                    itemOpacity: 1,
+                                    symbolSize: 20,
+                                    effects: [
+                                        {
+                                            on: 'hover',
+                                            style: {
+                                                itemOpacity: 1
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]}
+                            isInteractive={false}
+                            animate={false}
+                            motionStiffness={90}
+                            motionDamping={15}
+                        />
                     </div>
             }
             <div className="button-container">

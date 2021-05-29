@@ -6,7 +6,7 @@ import BookingMonthReportToPrint  from './BookingMonthReportToPrint';
 function PrintBookingList(props) {
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
+    content: () => componentRef.current
   });
 
   return (

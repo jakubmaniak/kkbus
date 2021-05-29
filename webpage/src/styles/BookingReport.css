@@ -60,6 +60,8 @@
 
 .booking-year .pie-charts-container {
     justify-content: center;
+    height: 1000px;
+    width: 100%;
 }
 
 @media print {
