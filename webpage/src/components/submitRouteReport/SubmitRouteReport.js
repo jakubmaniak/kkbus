@@ -104,7 +104,7 @@ function RouteReport() {
     }
 
     return (
-        <div className="route-report page">
+        <div className="submit-route-report page">
             <div className="main">
                 <div className="tile">
                     <h2>
