@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../../styles/RouteReport.css';
 import Dropdown from '../dropdowns/Dropdown';
 import * as api from '../../api';
+import RouteTypeReport from './RouteTypeReport';
 
 
 function RouteReport() {
@@ -9,9 +10,15 @@ function RouteReport() {
     let [drivers, setDrivers] = useState([]);
     let [vehicles, setVehicles] = useState([]);
 
+    let [reportTypes, setReportType] = useState(['dniowy', 'tygodniowy', 'miesięczny', 'roczny']);
+    let [date, setData] = useState(['a', 'b']);
+
     let [selectedRoute, setSelectedRoute] = useState();
     let [selectedDriver, setSelectedDriver] = useState();
     let [selectedVehicle, setSelectedVehicle] = useState();
+
+    let [selectedReportType, setSelectedReportType] = useState();
+    let [selectedDate, setSelectedDate] = useState();
 
     useEffect(() => {
         api.getAllRoutes()
@@ -24,6 +31,12 @@ function RouteReport() {
             .then(setVehicles)
             .catch(api.toastifyError);
     }, []);
+
+    useEffect(() => {
+        if(selectedRoute, selectedDriver, selectedVehicle, selectedReportType, selectedDate) {
+            console.log('wszystko');
+        }
+    }, [selectedRoute, selectedDriver, selectedVehicle, selectedReportType, selectedDate]);
 
 
     return (
@@ -39,10 +52,9 @@ function RouteReport() {
                             handleChange={setSelectedRoute}
                         />
                         <Dropdown 
-                            placeholder="Wybierz pojazd"
-                            items={vehicles}
-                            textFormatter={({ brand, model, year }) => brand + ' ' + model + ' ' + year}
-                            handleChange={setSelectedVehicle}
+                            placeholder="Wybierz typ raportu"
+                            items={reportTypes}
+                            handleChange={setSelectedReportType}
                         />
                     </div>
                     <div className="row-filter-container">
@@ -52,10 +64,24 @@ function RouteReport() {
                             textFormatter={({ firstName, lastName }) => firstName + ' ' + lastName}
                             handleChange={setSelectedDriver}
                         />
+                         <Dropdown 
+                            placeholder="Wybierz datę"
+                            items={date}
+                            handleChange={setSelectedDate}
+                        />
+                    </div>
+                    <div className="row-filter-container">
+                        <Dropdown 
+                            placeholder="Wybierz pojazd"
+                            items={vehicles}
+                            textFormatter={({ brand, model, year }) => brand + ' ' + model + ' ' + year}
+                            handleChange={setSelectedVehicle}
+                        />
                     </div>
                 </div>
+                <RouteTypeReport />
             </div>
-        </div>
+        </div>                          
     );
 }
 
