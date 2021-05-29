@@ -1,0 +1,8 @@
+.route-report .row-filter-container {
+    width: 100%;
+    display: flex;
+}
+
+.route-report .row-filter-container .dropdown-container {
+    width: 534px;
+}
