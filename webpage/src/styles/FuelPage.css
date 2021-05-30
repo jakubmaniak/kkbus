@@ -73,26 +73,26 @@
     white-space: nowrap;
 }
 
-svg {
+.chart.fuel-usage-chart svg {
     margin-left: 44px;
 }
 
-svg stop[offset="0%"] {
+.chart.fuel-usage-chart svg stop[offset="0%"] {
     stop-color: #D9B430;
     stop-opacity: 0.5;
 }
 
-svg stop[offset="100%"] {
+.chart.fuel-usage-chart svg stop[offset="100%"] {
     stop-color: #D9B430;
     stop-opacity: 0;
 }
 
-svg polyline.fill {
+.chart.fuel-usage-chart svg polyline.fill {
     stroke-width: 0;
     fill: url(#bg)
 }
 
-svg polyline.stroke {
+.chart.fuel-usage-chart svg polyline.stroke {
     stroke: #D9B430;
     stroke-width: 2px;
     fill: transparent;
