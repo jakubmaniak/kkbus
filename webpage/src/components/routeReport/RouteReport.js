@@ -11,14 +11,24 @@ function RouteReport() {
     let [vehicles, setVehicles] = useState([]);
 
     let [reportTypes, setReportType] = useState(['dniowy', 'tygodniowy', 'miesięczny', 'roczny']);
-    let [date, setData] = useState(['a', 'b']);
+    
+    let d = new Date();
+    let years = [];
+    years[0] = 2021;
+    
+    for(let i = 1; years[0] > d.getFullYear(); i++) {
+        years[i] = years[0] + i;
+    }
+
+    let [date, setDate] = useState(years);
+
 
     let [selectedRoute, setSelectedRoute] = useState();
     let [selectedDriver, setSelectedDriver] = useState();
     let [selectedVehicle, setSelectedVehicle] = useState();
 
     let [selectedReportType, setSelectedReportType] = useState();
-    let [selectedDate, setSelectedDate] = useState();
+    let [selectedDate, setSelectedDate] = useState(' ');
 
     let[selectedAllOptions, setSelectedAllOptions] = useState(false);
 
@@ -43,6 +53,45 @@ function RouteReport() {
         }
     }, [selectedRoute, selectedDriver, selectedVehicle, selectedReportType, selectedDate]);
 
+    useEffect(() => {
+        switch(selectedReportType) {
+            case 'miesięczny':
+                setSelectedDate(getCurrentMonthAndYear());
+                break;
+            case 'tygodniowy':
+                setSelectedDate(getNumberOfWeek());
+                break;
+            case 'dniowy':
+                setSelectedDate(getCurrentData());
+                break;
+        }
+    }, [selectedReportType]);
+
+
+    function getNumberOfWeek() {
+        let today = new Date();
+        let firstDayOfYear = new Date(today.getFullYear(), 0, 1);
+        let pastDaysOfYear = (today - firstDayOfYear) / 86400000;
+        return "2021-W" + Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7 - 2);
+    }
+
+    function getCurrentMonthAndYear() {
+        let today = new Date();
+        let currentMonth = today.getMonth();
+        let currentYear = today.getFullYear();
+        return `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}`;
+    }
+
+    function getCurrentData(data) {
+        let today = new Date();
+        let currentMonth = today.getMonth();
+        let currentYear = today.getFullYear();
+        let currentDay = today.getDate();
+        
+        console.log(`${(currentDay).toString().padStart(2, '0')}.${(currentMonth + 1).toString().padStart(2, '0')}.${currentYear}`);
+ 
+        return `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${(currentDay).toString().padStart(2, '0')}`;
+    }
 
     return (
         <div className="route-report page">
@@ -69,11 +118,22 @@ function RouteReport() {
                             textFormatter={({ firstName, lastName }) => firstName + ' ' + lastName}
                             handleChange={setSelectedDriver}
                         />
-                         <Dropdown 
-                            placeholder="Wybierz datę"
-                            items={date}
-                            handleChange={setSelectedDate}
-                        />
+                        {
+                            selectedReportType === 'roczny' ?
+                                <Dropdown 
+                                    placeholder="Wybierz datę"
+                                    items={date}
+                                    handleChange={setSelectedDate}
+                                    selectedIndex={0}
+                                />
+                            : selectedReportType === 'miesięczny' ?
+                                <input type="month" min="2021-01" max={getCurrentMonthAndYear()} value={selectedDate} onChange={(ev) => setSelectedDate(ev.target.value)}/>
+                            : selectedReportType === 'tygodniowy' ?
+                                <input type="week" min="2021-W1" max={getNumberOfWeek()} value={selectedDate} onChange={(ev) => setSelectedDate(ev.target.value)}/>
+                            : selectedReportType === 'dniowy' ?
+                                <input type="date" min="2021-01-01" max={getCurrentData()} value={selectedDate} onChange={(ev) => setSelectedDate(ev.target.value)}/>
+                            : null
+                        }
                     </div>
                     <div className="row-filter-container">
                         <Dropdown 
