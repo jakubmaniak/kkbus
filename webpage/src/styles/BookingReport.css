@@ -24,10 +24,6 @@
     width: 50%;
 }
 
-.booking-month svg {
-    margin: 0;
-}
-
 .booking-month .button-container button,
 .booking-year .button-container button {
     margin-top: 16px;
