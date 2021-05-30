@@ -39,3 +39,11 @@
 .route-chart h4 {
     font-weight: 500;
 }
+
+.route-report input[type=week],
+.route-report input[type=month],
+.route-report input[type=date] {
+    width: 534px;
+    height: 50px;
+    margin-bottom: 0;
+}
