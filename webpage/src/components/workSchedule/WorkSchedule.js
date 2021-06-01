@@ -35,6 +35,8 @@ class WorkSchedule extends Component{
                 schedulerWidth: '60%',
                 nonAgendaDayCellHeaderFormat: 'HH:mm',
                 nonAgendaOtherCellHeaderFormat: 'ddd DD.MM',
+                groupOnlySlotColor: '#E3E3E3',
+                defaultEventBgColor: '#D9B430',
             // defaultEventBgColor: '##d9b430',
             // minuteStep: 30,
             },
@@ -80,7 +82,6 @@ class WorkSchedule extends Component{
                 end: '2021-05-31 11:30:00',
                 resourceId: 'r2',
                 title: 'Kraków - Katowice Parking nr 1 Merceder Benz 2019',
-                bgColor: '#D9B430'
             }, 
             {
                 id: 2,
@@ -89,7 +90,6 @@ class WorkSchedule extends Component{
                 resourceId: 'r4',
                 title: 'Roboty biurowe',
                 resizable: false,
-                bgColor: '#D9B430'
             }, 
             {
                id: 3,
@@ -98,7 +98,6 @@ class WorkSchedule extends Component{
                resourceId: 'r4',
                title: 'Papier',
                moveale: false,
-               bgColor: '#D9B430'
            }, 
             {
                 id: 4,
@@ -107,7 +106,6 @@ class WorkSchedule extends Component{
                 resourceId: 'r2',
                 title: 'Jazda',
                 startResizable: false,
-                bgColor: '#D9B430'
             }, 
             {
                id: 5,
@@ -116,7 +114,6 @@ class WorkSchedule extends Component{
                resourceId: 'r4',
                title: 'Ale beka',
                startResizable: false,
-               bgColor: '#D9B430'
            }
         ];
 
