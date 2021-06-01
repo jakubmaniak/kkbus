@@ -6,6 +6,8 @@ import moment from 'moment';
 import 'moment/locale/pl';
 import Scheduler, { SchedulerData, ViewTypes } from 'react-big-scheduler';
 import withDragDropContext from './withDnDContext';
+import NotificationModal from '../modals/NotificationModal';
+import Modal from '../modals/Modal';
 import '../../styles/WorkSchedule.css';
 import 'react-big-scheduler/lib/css/style.css';
 
@@ -32,7 +34,7 @@ class WorkSchedule extends Component{
                 // eventItemLineHeight: 24,
                 nonWorkingTimeHeadBgColor: '#FFF',
                 nonWorkingTimeBodyBgColor: '#FFF',
-                schedulerWidth: '60%',
+                schedulerWidth: '1220',
                 nonAgendaDayCellHeaderFormat: 'HH:mm',
                 nonAgendaOtherCellHeaderFormat: 'ddd DD.MM',
                 groupOnlySlotColor: '#E3E3E3',
@@ -131,21 +133,23 @@ class WorkSchedule extends Component{
         return (
             <div className="work-schedule page">
                 <div className="main">
-                    <Scheduler schedulerData={viewModel}
-                        prevClick={this.prevClick}
-                        nextClick={this.nextClick}
-                        onSelectDate={this.onSelectDate}
-                        onViewChange={this.onViewChange}
-                        eventItemClick={this.eventClicked}
-                        viewEventClick={this.ops1}
-                        viewEventText="Edytuj"
-                        viewEvent2Text="Usuń"
-                        viewEvent2Click={this.deleteEvent}
-                        updateEventStart={this.updateEventStart}
-                        updateEventEnd={this.updateEventEnd}
-                        moveEvent={this.moveEvent}
-                        newEvent={this.newEvent}
-                    />
+                    <div className="wrapper">
+                        <Scheduler schedulerData={viewModel}
+                            prevClick={this.prevClick}
+                            nextClick={this.nextClick}
+                            onSelectDate={this.onSelectDate}
+                            onViewChange={this.onViewChange}
+                            eventItemClick={this.eventClicked}
+                            viewEventClick={this.ops1}
+                            viewEventText="Edytuj"
+                            viewEvent2Text="Usuń"
+                            viewEvent2Click={this.deleteEvent}
+                            updateEventStart={this.updateEventStart}
+                            updateEventEnd={this.updateEventEnd}
+                            moveEvent={this.moveEvent}
+                            newEvent={this.newEvent}
+                        />
+                    </div>
                 </div>
             </div>
         )

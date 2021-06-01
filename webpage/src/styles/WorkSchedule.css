@@ -2,6 +2,12 @@
    /* min-width: 1120px !important; */
 }
 
+.wrapper {
+    display: flex;
+    width: 1220px;
+    overflow: hidden;
+}
+
 table.scheduler-bg-table tr th.header3-text,
 table.resource-table thead tr {
     color: #FFF !important;
