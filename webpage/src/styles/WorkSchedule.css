@@ -1,3 +1,7 @@
+.tile.scheduler {
+    padding: 0;
+}
+
 .wrapper {
     display: flex;
     width: 1220px;

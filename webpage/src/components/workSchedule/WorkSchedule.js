@@ -25,9 +25,7 @@ class WorkSchedule extends Component {
         let month = (date.getMonth() + 1).toString().padStart('0', 2);
         let year = date.getFullYear();
 
-        //dodać obsługę grafiku z uwzględnieniem roli użytkownika
-
-        let schedulerData = new SchedulerData( `${year}-${month}-${day}`, ViewTypes.Day, false, false, {
+        let schedulerData = new SchedulerData(`${year}-${month}-${day}`, ViewTypes.Day, false, false, {
                 views: [
                     { viewName: 'Tydzień', viewType: ViewTypes.Week, showAgenda: false, isEventPerspective: false },
                     { viewName: 'Dzień', viewType: ViewTypes.Day, showAgenda: false, isEventPerspective: false }
@@ -36,17 +34,12 @@ class WorkSchedule extends Component {
                 dayCellWidth: 100,
                 eventItemHeight: 54,
                 eventItemLineHeight: 58,
-                // eventItemHeight: 22,
-                // eventItemLineHeight: 24,
-                nonWorkingTimeHeadBgColor: '#FFF',
-                nonWorkingTimeBodyBgColor: '#FFF',
-                schedulerWidth: '1220',
+                schedulerWidth: '1164',
                 nonAgendaDayCellHeaderFormat: 'HH:mm',
                 nonAgendaOtherCellHeaderFormat: 'ddd DD.MM',
-                groupOnlySlotColor: '#E3E3E3',
+                // groupOnlySlotColor: '#E3E3E3',
                 defaultEventBgColor: '#D9B430',
-            // defaultEventBgColor: '##d9b430',
-            // minuteStep: 30,
+                // minuteStep: 30,
             },
             {
                 getDateLabelFunc: this.getDateLabel,
@@ -58,19 +51,18 @@ class WorkSchedule extends Component {
         let resources = [
             {
                 id: 'owner',
-                name: 'Jan Kowalski',
+                name: 'Jan Kowalski'
              //    groupOnly: true
              },
              {
                 id: 'drivers',
                 name: 'Kierowcy',
-                groupOnly: true,
-                creatable: false
+                groupOnly: true
              },
              {
                 id: 'driver-1',
                 name: 'Tomasz Rajdowiec',
-                parentId: 'drivers',
+                parentId: 'drivers'
              },
              {
                 id: 'office',
@@ -90,39 +82,35 @@ class WorkSchedule extends Component {
                 start: '2021-05-31 09:30:00',
                 end: '2021-05-31 10:30:00',
                 resourceId: 'driver-1',
-                title: 'Kraków - Katowice Parking nr 1 Merceder Benz 2019',
+                title: 'Kraków - Katowice Parking nr 1 Merceder Benz 2019'
             }, 
             {
                 id: 2,
                 start: '2021-05-31 10:30:00',
                 end: '2021-05-31 11:30:00',
                 resourceId: 'office-1',
-                title: 'Roboty biurowe',
-                resizable: false,
+                title: 'Roboty biurowe'
             }, 
             {
                id: 3,
                start: '2021-05-31 14:30:00',
                end: '2021-05-31 15:30:00',
                resourceId: 'office-1',
-               title: 'Raporty',
-               moveale: false,
+               title: 'Raporty'
             }, 
             {
                 id: 4,
                 start: '2021-06-01 14:30:00',
                 end: '2021-06-01 15:30:00',
                 resourceId: 'driver-1',
-                title: 'Jazda',
-                startResizable: false,
+                title: 'Jazda'
             }, 
             {
                id: 5,
                start: '2021-06-01 14:30:00',
                end: '2021-06-01 16:30:00',
                resourceId: 'driver-1',
-               title: 'Brak',
-               startResizable: false,
+               title: 'Brak'
            }
         ];
 
@@ -148,6 +136,7 @@ class WorkSchedule extends Component {
         return (
             <div className="work-schedule page">
                 <div className="main">
+                    <div className="tile scheduler">
                     <div className="wrapper">
                         <Scheduler schedulerData={this.state.viewModel}
                             prevClick={this.prevClick}
@@ -162,7 +151,9 @@ class WorkSchedule extends Component {
                             // updateEventEnd={this.updateEventEnd}
                             moveEvent={this.moveEvent}
                             newEvent={this.newEvent}
+                            toggleExpandFunc={this.toggleExpandFunc}
                         />
+                    </div>
                     </div>
                 </div>
                 <NotificationModal 
@@ -181,7 +172,7 @@ class WorkSchedule extends Component {
                         </form>
                     </section>
                     <section className="footer">
-                        <button onClick={this.exitModalVisibility}>Anuluj</button>
+                        <button onClick={this.exitModalAddVisibility}>Anuluj</button>
                         <button onClick={this.confirmAddingEvent}>Zapisz</button>
                     </section>  
                 </Modal>
@@ -216,22 +207,6 @@ class WorkSchedule extends Component {
 
         return dateLabel;
     }
-
-    isNonWorkingTime = (schedulerData, time) => {
-		const { localeMoment } = schedulerData;
-        if(schedulerData.viewType === ViewTypes.Day){
-            let hour = localeMoment(time).hour();
-            if(hour < 9 || hour > 18)
-                return true;
-        }
-        else {
-            let dayOfWeek = localeMoment(time).weekday();
-            if (dayOfWeek === 5 || dayOfWeek === 6)
-                return true;
-        }
-    
-        return false;
-	};
 
     prevClick = (schedulerData)=> {
         schedulerData.prev();
@@ -303,7 +278,8 @@ class WorkSchedule extends Component {
 
     exitModalEditVisibility =() => {
         this.setState({
-            modalEditVisibility: false
+            modalEditVisibility: false,
+            editEventTitle: ''
         });
     }
 
@@ -334,9 +310,10 @@ class WorkSchedule extends Component {
         });
     }
 
-    exitModalVisibility = () => {
+    exitModalAddVisibility = () => {
         this.setState({ 
-            modalAddEventVisibility: false
+            modalAddEventVisibility: false,
+            newEventTitle: ''
         });
     }
 
@@ -413,6 +390,17 @@ class WorkSchedule extends Component {
         this.setState({
             viewModel: schedulerData
         });
+    }
+
+    toggleExpandFunc = (schedulerData, slotId) => {
+        schedulerData.toggleExpandStatus(slotId);
+        this.setState({
+            viewModel: schedulerData
+        });
+    }
+
+    isNonWorkingTime = (schedulerData, time) => {    
+        return false;
     }
 }
 
