@@ -79,36 +79,36 @@ class WorkSchedule extends Component {
         let events = [
             {
                 id: 1,
-                start: '2021-05-31 09:30:00',
-                end: '2021-05-31 10:30:00',
+                start: `${year}-${month}-${day} 09:30:00`,
+                end:  `${year}-${month}-${day} 10:30:00`,
                 resourceId: 'driver-1',
                 title: 'Kraków - Katowice Parking nr 1 Merceder Benz 2019'
             }, 
             {
                 id: 2,
-                start: '2021-05-31 10:30:00',
-                end: '2021-05-31 11:30:00',
+                start: `${year}-${month}-${day} 10:30:00`,
+                end:  `${year}-${month}-${day} 11:30:00`,
                 resourceId: 'office-1',
                 title: 'Roboty biurowe'
             }, 
             {
                id: 3,
-               start: '2021-05-31 14:30:00',
-               end: '2021-05-31 15:30:00',
+               start: `${year}-${month}-${day} 14:30:00`,
+               end: `${year}-${month}-${day} 15:30:00`,
                resourceId: 'office-1',
                title: 'Raporty'
             }, 
             {
                 id: 4,
-                start: '2021-06-01 14:30:00',
-                end: '2021-06-01 15:30:00',
+                start: `${year}-${month}-${day - 1} 14:30:00`,
+                end: `${year}-${month}-${day - 1} 15:30:00`,
                 resourceId: 'driver-1',
                 title: 'Jazda'
             }, 
             {
                id: 5,
-               start: '2021-06-01 14:30:00',
-               end: '2021-06-01 16:30:00',
+               start: `${year}-${month}-${day - 1} 15:30:00`,
+               end:  `${year}-${month}-${day - 1} 17:30:00`,
                resourceId: 'driver-1',
                title: 'Brak'
            }
@@ -148,8 +148,8 @@ class WorkSchedule extends Component {
                                 viewEvent2Text="Usuń"
                                 viewEventClick={this.editEvent}
                                 viewEvent2Click={this.deleteEvent}
-                                // updateEventStart={this.updateEventStart}
-                                // updateEventEnd={this.updateEventEnd}
+                                updateEventStart={this.updateEventStart}
+                                updateEventEnd={this.updateEventEnd}
                                 moveEvent={this.moveEvent}
                                 newEvent={this.newEvent}
                                 toggleExpandFunc={this.toggleExpandFunc}
@@ -373,17 +373,47 @@ class WorkSchedule extends Component {
     }
 
     updateEventStart = (schedulerData, event, newStart) => {
+        let startTimeBeforeMove =  event.start;
         schedulerData.updateEventStart(event, newStart);
-        this.setState({
-            viewModel: schedulerData
-        });
+
+        if(this.context.user.role === 'owner') {
+            this.setState({
+                viewModel: schedulerData
+            });
+        }
+        else if(this.context.user.role === 'office' && event.resourceId.startsWith('driver-')) {
+            this.setState({
+                viewModel: schedulerData
+            });
+        }
+        else {
+            schedulerData.updateEventStart(event, startTimeBeforeMove);
+            this.setState({
+                viewModel: schedulerData
+            });
+        }
     }
 
     updateEventEnd = (schedulerData, event, newEnd) => {
+        let endTimeBeforeMove =  event.end;
         schedulerData.updateEventEnd(event, newEnd);
-        this.setState({
-            viewModel: schedulerData
-        });
+
+        if(this.context.user.role === 'owner') {
+            this.setState({
+                viewModel: schedulerData
+            });
+        }
+        else if(this.context.user.role === 'office' && event.resourceId.startsWith('driver-')) {
+            this.setState({
+                viewModel: schedulerData
+            });
+        }
+        else {
+            schedulerData.updateEventEnd(event, endTimeBeforeMove);
+            this.setState({
+                viewModel: schedulerData
+            });
+        }
     }
 
     moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
