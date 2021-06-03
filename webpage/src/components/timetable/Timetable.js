@@ -6,6 +6,7 @@ import Scheduler, { SchedulerData, ViewTypes } from 'react-big-scheduler';
 import withDragDropContext from '../workSchedule/withDnDContext';
 import NotificationModal from '../modals/NotificationModal';
 import Modal from '../modals/Modal';
+import Dropdown from '../dropdowns/Dropdown';
 import UserContext from '../../contexts/User';
 import '../../styles/WorkSchedule.css';
 import 'react-big-scheduler/lib/css/style.css';
@@ -55,7 +56,7 @@ class Timetable extends Component {
 
         let resources = [
             {
-                id: 'owner',
+                id: 'owner-1',
                 name: 'Jan Kowalski'
              //    groupOnly: true
              },
@@ -65,7 +66,7 @@ class Timetable extends Component {
                 groupOnly: true
              },
              {
-                id: 'driver-1',
+                id: 'driver-4',
                 name: 'Tomasz Rajdowiec',
                 parentId: 'drivers'
              },
@@ -75,7 +76,7 @@ class Timetable extends Component {
                 groupOnly: true
              },
              {
-                id: 'office-1',
+                id: 'office-2',
                 name: 'Anna Miła',
                 parentId: 'office'
              }
@@ -86,7 +87,7 @@ class Timetable extends Component {
                 id: 1,
                 start: `${year}-${month}-${day} 09:00:00`,
                 end:  `${year}-${month}-${day} 10:00:00`,
-                resourceId: 'driver-1',
+                resourceId: 'driver-4',
                 title: 'Dostępność',
                 bgColor: colors[1]
             }, 
@@ -94,7 +95,7 @@ class Timetable extends Component {
                 id: 2,
                 start: `${year}-${month}-${day} 10:00:00`,
                 end:  `${year}-${month}-${day} 11:00:00`,
-                resourceId: 'office-1',
+                resourceId: 'office-2',
                 title: 'Zajętość',
                 bgColor: colors[0]
             }, 
@@ -102,7 +103,7 @@ class Timetable extends Component {
                id: 3,
                start: `${year}-${month}-${day} 14:00:00`,
                end: `${year}-${month}-${day} 15:00:00`,
-               resourceId: 'office-1',
+               resourceId: 'office-2',
                title: 'Zajętość',
                bgColor: colors[0]
             }, 
@@ -110,7 +111,7 @@ class Timetable extends Component {
                 id: 4,
                 start: `${year}-${month}-${day - 1} 14:00:00`,
                 end: `${year}-${month}-${day - 1} 15:00:00`,
-                resourceId: 'driver-1',
+                resourceId: 'driver-4',
                 title: 'Zajętość',
                 bgColor: colors[0]
             }, 
@@ -118,7 +119,7 @@ class Timetable extends Component {
                id: 5,
                start: `${year}-${month}-${day - 1} 15:00:00`,
                end:  `${year}-${month}-${day - 1} 17:00:00`,
-               resourceId: 'driver-1',
+               resourceId: 'driver-4',
                title: 'Dostępność',
                bgColor: colors[1]
            }
@@ -135,10 +136,11 @@ class Timetable extends Component {
             resources,
             modalAddEventVisibility: false,
             newEvent: null,
-            newEventTitle: '',
+            newEventType: null,
+            items: ['Dostępność', 'Zajętość'],
             modalEditVisibility: false,
             editEventTitle: '',
-            eventToEdit: null
+            eventToEdit: null,     
         }
     }
 
@@ -176,10 +178,15 @@ class Timetable extends Component {
                     delete={this.confirmDeletingEvent}
                 />
                 <Modal visible={this.state.modalAddEventVisibility}>
-                    <header>Dodawanie nowego zadania</header>
+                    <header>Dodawanie statusu dyspozycyjności</header>
                     <section className="content">
                         <form className="new-event" onSubmit={(ev) => {ev.preventDefault(); this.confirmAddingEvent();}}>
-                            <input placeholder="Dane zadania" value={this.state.newEventTitle} onChange={this.handleChangeNewTitle}/>
+                            <Dropdown 
+                                items={this.state.items}
+                                alwaysSelected
+                                placeholder="Wybierz status dyspozycyjności"
+                                handleChange={(item) => this.setState({newEventType: item})}
+                            />
                         </form>
                     </section>
                     <section className="footer">
@@ -333,46 +340,18 @@ class Timetable extends Component {
         });
     }
 
-    handleChangeNewTitle = (ev) => {
-        this.setState({
-            newEventTitle: ev.target.value
-        });
-    }
-
     confirmAddingEvent = () => {
-        if(this.state.newEventTitle === '') {
-            alert('Wprowadź nazwę zadania');
-            return;
-        }
-
-        let event = { ...this.state.newEvent, title: this.state.newEventTitle };
+        let event = { ...this.state.newEvent, title: this.state.newEventType, bgColor: this.state.newEventType === 'Dostępność' ?  '#47BE61' : '#C73535'};
         this.state.viewModel.addEvent(event);
         
         this.setState({
             modalAddEventVisibility: false,
-            newEventTitle: ''
+            newEventType: ''
         });
     }
 
     newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
-        if(this.context.user.role === 'owner') {
-            let newFreshId = 0;
-            schedulerData.events.forEach((item) => {
-                if(item.id >= newFreshId)
-                    newFreshId = item.id + 1;
-            });
-            
-            this.setState({
-                modalAddEventVisibility: true,
-                newEvent: {
-                    id: newFreshId,
-                    start: start,
-                    end: end,
-                    resourceId: slotId
-                }
-            }); 
-        }
-        else if(this.context.user.role === 'office' && slotId.startsWith('driver-')) {
+        if(this.context.user.role + '-' + this.context.user.id === slotId) {
             let newFreshId = 0;
             schedulerData.events.forEach((item) => {
                 if(item.id >= newFreshId)
