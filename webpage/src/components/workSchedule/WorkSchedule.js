@@ -127,7 +127,10 @@ class WorkSchedule extends Component{
             modalDeleteEventVisibility: false,
             eventToDelete: null,
             events,
-            resources
+            resources,
+            modalAddEventVisibility: false,
+            newEvent: null,
+            newEventTitle: ''
         }
     }
 
@@ -163,6 +166,18 @@ class WorkSchedule extends Component{
                     notificationModalExit={this.exitNotificationModalVisibility}
                     delete={this.confirmDeletingEvent}
                 />
+                 <Modal visible={this.state.modalAddEventVisibility}>
+                    <header>Dodawanie nowego zadania</header>
+                    <section className="content">
+                        <form className="new-event">
+                            <input placeholder="Dane zadania" value={this.state.newEventTitle} onChange={this.handleChange}/>
+                        </form>
+                    </section>
+                    <section className="footer">
+                        <button onClick={this.exitModalVisibility}>Anuluj</button>
+                        <button onClick={this.confirmAddingEvent}>Zapisz</button>
+                    </section>  
+                </Modal>
             </div>
         )
     }
@@ -268,25 +283,58 @@ class WorkSchedule extends Component{
         });
     }
 
+    exitModalVisibility = () => {
+        this.setState({ 
+            modalAddEventVisibility: false
+        });
+    }
+
+    handleChange = (ev) => {
+        this.setState({
+            newEventTitle: ev.target.value
+        });
+    }
+
+    confirmAddingEvent = () => {
+        let event = { ...this.state.newEvent, title: this.state.newEventTitle };
+        this.state.viewModel.addEvent(event);
+       
+        this.setState({
+            modalAddEventVisibility: false,
+            newEventTitle: ''
+        });
+    }
+
     newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
         let newFreshId = 0;
         schedulerData.events.forEach((item) => {
             if(item.id >= newFreshId)
                 newFreshId = item.id + 1;
         });
-
-        let newEvent = {
-            id: newFreshId,
-            title: 'New event you just created',
-            start: start,
-            end: end,
-            resourceId: slotId,
-            bgColor: 'purple'
-        }
-        schedulerData.addEvent(newEvent);
+        
         this.setState({
-            viewModel: schedulerData
-        });
+            modalAddEventVisibility: true,
+            newEvent: {
+                id: newFreshId,
+                start: start,
+                end: end,
+                resourceId: slotId
+            }
+        });        
+
+        // let newEvent = {
+        //     id: newFreshId,
+        //     title: 'New event you just created',
+        //     start: start,
+        //     end: end,
+        //     resourceId: slotId,
+        //     bgColor: 'purple'
+        // }
+
+        // schedulerData.addEvent(newEvent);
+        // this.setState({
+        //     viewModel: schedulerData
+        // });
     }
 
     updateEventStart = (schedulerData, event, newStart) => {
