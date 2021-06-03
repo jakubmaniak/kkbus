@@ -9,6 +9,10 @@ table.resource-table thead tr {
     background-color: #000000 !important;
 }
 
+.scheduler-view {
+    width: 972px !important;
+}
+
 .round-all {
     border-radius: 8px !important;
 }
