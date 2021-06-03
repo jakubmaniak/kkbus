@@ -89,8 +89,6 @@ function Route(props) {
         setPrice((isNaN(currentPrice) || currentPrice === null) ? 0 : currentPrice.toFixed(2));
     }, [normalTickets, reducedTickets, selectedFirstStop, selectedLastStop]);
 
-
-
     function showModal() {
         setModalVisibility(true);
     }
@@ -185,7 +183,7 @@ function Route(props) {
             <Modal visible={modalVisibility}>
                 <header>Rezerwacja</header>
                 <section className="content">
-                    <form className="book-route">
+                    <form className="book-route" onSubmit={(ev) => {ev.preventDefault(); addBooking();}}>
                         <Dropdown 
                             placeholder="Data"
                             items={dates}
@@ -230,7 +228,7 @@ function Route(props) {
             <Modal visible={modalVisibility}>
                 <header>Edycja informacji o trasie</header>
                 <section className="content">
-                    <form className="edit-route">
+                    <form className="edit-route" onSubmit={(ev) => {ev.preventDefault(); updateRoute()}}>
                         <input placeholder="Punkt startowy" defaultValue={props.departureLocation} onChange={fromValue(setDepartureLocation)}/>
                         <input placeholder="Punkt docelowy" defaultValue={props.arrivalLocation} onChange={fromValue(setArrivalLocation)}/>
                         <textarea placeholder="Godziny odjazdu (odzielone przecinkami)" 
@@ -303,11 +301,11 @@ function Route(props) {
                 </div>
             </div>
             <NotificationModal 
-                    visible={modalDeleteRewardVisibility}
-                    header={'Usuwanie trasy'}
-                    name={'usunąć trasę'}
-                    notificationModalExit={() => setModalDeleteRewardVisibility(false)}
-                    delete={() => props.deleteRoute()}
+                visible={modalDeleteRewardVisibility}
+                header={'Usuwanie trasy'}
+                name={'usunąć trasę'}
+                notificationModalExit={() => setModalDeleteRewardVisibility(false)}
+                delete={() => props.deleteRoute()}
             />
         </>
     );

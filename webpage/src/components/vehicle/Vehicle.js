@@ -103,7 +103,7 @@ function Vehicle(props) {
             <Modal visible={modalEditVehicleVisibility}>
                 <header>Edycja danych pojazdu</header>
                 <section className="content">
-                    <form className="vehicle-edit">
+                    <form className="vehicle-edit" onSubmit={(ev) => {ev.preventDefault(); editVehicle(props.vehicleId);}}>
                         <div className="input-container"> 
                             <input placeholder="Marka" defaultValue={props.brand} onChange={fromValue(setBrand)}/>
                             <input placeholder="Model" defaultValue={props.model} onChange={fromValue(setModel)}/>

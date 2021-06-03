@@ -112,7 +112,7 @@ function ContactPage() {
                <Modal visible={modalVisibility}>
                     <header>Edycja danych kontaktowych</header>
                     <section className="content">
-                        <form className="edit-contact">
+                        <form className="edit-contact" onSubmit={(ev) => {ev.preventDefault(); updateContact()}}>
                             <input placeholder="Adres" defaultValue={address} onChange={fromValue(setAddress)}/>
                             <input placeholder="Kod pocztowy" defaultValue={zipCode} onChange={fromValue(setZipCode)}/>
                             <input placeholder="Telefon/fax" defaultValue={phoneNumber} onChange={fromValue(setPhoneNumber)}/>

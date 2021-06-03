@@ -151,10 +151,9 @@ class WorkSchedule extends Component {
                             nextClick={this.nextClick}
                             onSelectDate={this.onSelectDate}
                             onViewChange={this.onViewChange}
-                            // eventItemClick={this.eventClicked}
-                            viewEventClick={this.ops1}
                             viewEventText="Edytuj"
                             viewEvent2Text="Usuń"
+                            viewEventClick={this.editEvent}
                             viewEvent2Click={this.deleteEvent}
                             // updateEventStart={this.updateEventStart}
                             // updateEventEnd={this.updateEventEnd}
@@ -171,7 +170,19 @@ class WorkSchedule extends Component {
                     notificationModalExit={this.exitNotificationModalVisibility}
                     delete={this.confirmDeletingEvent}
                 />
-                 <Modal visible={this.state.modalAddEventVisibility}>
+                <Modal visible={this.state.modalAddEventVisibility}>
+                    <header>Dodawanie nowego zadania</header>
+                    <section className="content">
+                        <form className="new-event" onSubmit={(ev) => {ev.preventDefault(); this.confirmAddingEvent();}}>
+                            <input placeholder="Dane zadania" value={this.state.newEventTitle} onChange={this.handleChange}/>
+                        </form>
+                    </section>
+                    <section className="footer">
+                        <button onClick={this.exitModalVisibility}>Anuluj</button>
+                        <button onClick={this.confirmAddingEvent}>Zapisz</button>
+                    </section>  
+                </Modal>
+                <Modal visible={this.state.modalAddEventVisibility}>
                     <header>Dodawanie nowego zadania</header>
                     <section className="content">
                         <form className="new-event" onSubmit={(ev) => {ev.preventDefault(); this.confirmAddingEvent();}}>
@@ -251,11 +262,7 @@ class WorkSchedule extends Component {
         });
     }
 
-    eventClicked = (schedulerData, event) => {
-        alert(`You just clicked an event: {id: ${event.id}, title: ${event.title}}`);
-    };
-
-    ops1 = (schedulerData, event) => {
+    editEvent = (schedulerData, event) => {
         alert(`You just executed ops2 to event: {id: ${event.id}, title: ${event.title}}`);
     };
 

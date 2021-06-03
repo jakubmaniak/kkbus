@@ -8,7 +8,6 @@ function BookingCheck(props) {
         props.toggleBooking(ev);
     }
 
-
     return (
         <div className="booking-check">
             <span>{props.id}</span>

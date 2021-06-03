@@ -141,7 +141,7 @@ function RoutesPage() {
                 <Modal visible={modalVisibility}>
                     <header>Dodawanie trasy</header>
                     <section className="content">
-                        <form className="edit-route">
+                        <form className="edit-route" onSubmit={(ev) => {ev.preventDefault(); addRoute()}}>
                             <input placeholder="Punkt startowy" value={departureLocation} onChange={fromValue(setDepartureLocation)}/>
                             <input placeholder="Punkt docelowy" value={arrivalLocation} onChange={fromValue(setArrivalLocation)}/>
                             <textarea placeholder="Godziny odjazdu (odzielone przecinkami)" onChange={convertHoursIntoArray}/>

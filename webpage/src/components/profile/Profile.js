@@ -106,7 +106,7 @@ function Profile() {
             <Modal visible={modalChangeDataVisibility}>
                     <header>Dane użytkownika</header>
                     <section className="content">
-                        <form>
+                        <form onSubmit={(ev) => {ev.preventDefault(); saveData();}}>
                             <input placeholder="Adres email" value={email} onChange={fromValue(setEmail)}/>
                             <input placeholder="Login" value={login} onChange={fromValue(setLogin)}/>
                             <input placeholder="Imię" value={firstName} onChange={fromValue(setFirstName)}/>
@@ -122,11 +122,10 @@ function Profile() {
                         </div>
                     </section>
             </Modal>
-
             <Modal visible={modalChangePasswordVisibility}>
                     <header>Zmiana hasła</header>
                     <section className="content">
-                        <form>
+                        <form onSubmit={(ev) => {ev.preventDefault(); savePassword();}}>
                             <input placeholder="Aktualne hasło" type="password" value={currentPassword} onChange={fromValue(setCurrentPassword)}/>
                             <input placeholder="Nowe hasło" type="password" value={newPassword} onChange={fromValue(setNewPassword)}/>
                         </form>

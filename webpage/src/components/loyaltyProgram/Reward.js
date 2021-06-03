@@ -83,7 +83,7 @@ function Reward(props) {
             <Modal visible={modalEditRewardVisibility}>
                 <header>Edycja nagrody</header>
                 <section className="content">
-                    <form>
+                    <form onSubmit={(ev) => {ev.preventDefault(); editReward(props.rewardId);}}>
                         <input placeholder="Nazwa" value={name} onChange={fromValue(setName)}/>
                         <input placeholder="Wymagane punkty" value={requiredPoints} onChange={fromValue(setRequiredPoints)}/>
                         <input placeholder="Stan magazynu (puste = nieograniczony)"

@@ -150,7 +150,7 @@ function VehicleInfo() {
             <Modal visible={modalAddVehicleVisibility}>
                 <header>Dodawanie pojazdu</header>
                 <section className="content">
-                    <form className="vehicle-edit">
+                    <form className="vehicle-edit" onSubmit={(ev) => {ev.preventDefault(); addVehicle()}}>
                         <div className="input-container"> 
                             <input placeholder="Marka" value={brand} onChange={fromValue(setBrand)}/>
                             <input placeholder="Model" value={model} onChange={fromValue(setModel)}/>

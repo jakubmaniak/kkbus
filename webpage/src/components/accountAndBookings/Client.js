@@ -102,7 +102,7 @@ function Client(props) {
             <Modal visible={modalVisibility}>
                 <header>Rezerwacja</header>
                 <section className="content">
-                    <form className="book-route">
+                    <form className="book-route" onSubmit={(ev) => {ev.preventDefault(); addBookingToUser()}}>
                         <Dropdown 
                             placeholder="Wybierz trasę"
                             textFormatter={routeFormatter}

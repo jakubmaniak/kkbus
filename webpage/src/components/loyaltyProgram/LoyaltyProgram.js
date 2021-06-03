@@ -224,7 +224,7 @@ function LoyaltyProgram() {
                 <Modal visible={modalAddRewardVisibility}>
                     <header>Dodawanie nagrody</header>
                     <section className="content">
-                        <form>
+                        <form onSubmit={(ev) => {ev.preventDefault(); addReward();}}>
                             <input placeholder="Nazwa" onChange={fromValue(setName)}/>
                             <input placeholder="Wymagane punkty" onChange={fromValue(setRequiredPoints)}/>
                             <input placeholder="Stan magazynu (puste = nieograniczony)" onChange={fromValue(setAmount)}/>
