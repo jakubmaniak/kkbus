@@ -266,10 +266,18 @@ class WorkSchedule extends Component {
     }
 
     editEvent = (schedulerData, event) => {       
-        this.setState({
-            modalEditVisibility: true,
-            eventToEdit: event,
-        });
+        if(this.context.user.role === 'owner') {
+            this.setState({
+                modalEditVisibility: true,
+                eventToEdit: event,
+            });
+        }
+        else if(this.context.user.role === 'office' && event.resourceId.startsWith('driver-')) {
+            this.setState({
+                modalEditVisibility: true,
+                eventToEdit: event,
+            });
+        }
     };
 
     handelChangeEditTitle = (ev) => {
@@ -349,8 +357,6 @@ class WorkSchedule extends Component {
     }
 
     newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
-        console.log({schedulerData, slotId, slotName, start, end, type, item});
-
         if(this.context.user.role === 'owner') {
             let newFreshId = 0;
             schedulerData.events.forEach((item) => {
