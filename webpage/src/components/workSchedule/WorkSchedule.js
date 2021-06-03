@@ -35,6 +35,8 @@ class WorkSchedule extends Component {
                 eventItemHeight: 54,
                 eventItemLineHeight: 58,
                 schedulerWidth: '1164',
+                dayResourceTableWidth: 200,
+                weekResourceTableWidth: 200,
                 nonAgendaDayCellHeaderFormat: 'HH:mm',
                 nonAgendaOtherCellHeaderFormat: 'ddd DD.MM',
                 // groupOnlySlotColor: '#E3E3E3',
