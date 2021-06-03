@@ -115,7 +115,7 @@ function Header() {
 
     function driverNav() {
         return (
-            <nav>
+            <nav className={ menuExpanded ? 'side' : 'side collapsed' }>
                 <div className="nav-action">
                     <HeaderItem path="/">Grafik kursów</HeaderItem>
                     <HeaderItem path="/grafik-pracy">Grafik pracy</HeaderItem>
@@ -149,7 +149,7 @@ function Header() {
         <div className="header-bar">
             <header>
                 {
-                    (role === 'owner' || role === 'office') &&
+                    (role === 'owner' || role === 'office' || role === 'driver') &&
                     <button className={'menu-button' + (menuExpanded ? ' active' : '')}
                         style={{backgroundImage: `url(${menuExpanded ? menuActiveIcon : menuIcon})` }}
                         onClick={toggleMenu}></button>
