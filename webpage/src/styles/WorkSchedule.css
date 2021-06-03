@@ -5,7 +5,6 @@
 .wrapper {
     display: flex;
     width: 1220px;
-    overflow: hidden;
 }
 
 table.scheduler-bg-table tr th.header3-text,
