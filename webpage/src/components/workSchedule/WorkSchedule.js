@@ -100,7 +100,7 @@ class WorkSchedule extends Component{
                resourceId: 'r4',
                title: 'Papier',
                moveale: false,
-           }, 
+            }, 
             {
                 id: 4,
                 start: '2021-06-01 14:30:00',
@@ -123,7 +123,11 @@ class WorkSchedule extends Component{
         schedulerData.setEvents(events);
 
         this.state = {
-            viewModel: schedulerData
+            viewModel: schedulerData,
+            modalDeleteEventVisibility: false,
+            eventToDelete: null,
+            events,
+            resources
         }
     }
 
@@ -151,6 +155,14 @@ class WorkSchedule extends Component{
                         />
                     </div>
                 </div>
+                <NotificationModal 
+                    visible={this.state.modalDeleteEventVisibility}
+                    header={'Usunięcie zdarzenia'}
+                    name={'usunąć zdażenie'}
+                    buttonText={'usuń'}
+                    notificationModalExit={this.exitNotificationModalVisibility}
+                    delete={this.confirmDeletingEvent}
+                />
             </div>
         )
     }
@@ -191,7 +203,7 @@ class WorkSchedule extends Component{
 
     prevClick = (schedulerData)=> {
         schedulerData.prev();
-        schedulerData.setEvents(this.events);
+        schedulerData.setEvents(this.state.events);
         this.setState({
             viewModel: schedulerData
         })
@@ -199,7 +211,7 @@ class WorkSchedule extends Component{
 
     nextClick = (schedulerData)=> {
         schedulerData.next();
-        schedulerData.setEvents(this.events);
+        schedulerData.setEvents(this.state.events);
         this.setState({
             viewModel: schedulerData
         })
@@ -207,7 +219,7 @@ class WorkSchedule extends Component{
 
     onViewChange = (schedulerData, view) => {
         schedulerData.setViewType(view.viewType, view.showAgenda, view.isEventPerspective);
-        schedulerData.setEvents(this.events);
+        schedulerData.setEvents(this.state.events);
         this.setState({
             viewModel: schedulerData
         })
@@ -215,7 +227,7 @@ class WorkSchedule extends Component{
 
     onSelectDate = (schedulerData, date) => {
         schedulerData.setDate(date);
-        schedulerData.setEvents(this.events);
+        schedulerData.setEvents(this.state.events);
         this.setState({
             viewModel: schedulerData
         })
@@ -229,18 +241,35 @@ class WorkSchedule extends Component{
         alert(`You just executed ops2 to event: {id: ${event.id}, title: ${event.title}}`);
     };
 
+    setNotificationModalVisibility = () => {
+        this.setState({ 
+            modalDeleteEventVisibility: true
+        });
+    }
+
+    exitNotificationModalVisibility = () => {
+        this.setState({ 
+            modalDeleteEventVisibility: false
+        });
+    }
+
+    confirmDeletingEvent = () => {
+        this.state.viewModel.removeEvent(this.state.eventToDelete);
+      
+        this.setState({
+            modalDeleteEventVisibility: false
+        });
+    }
+
+
     deleteEvent = (schedulerData, event) => {
-        const r = window.confirm("Czy chcesz usunąć?")
-        if(r === true) {             
-            schedulerData.removeEvent(event)
+        this.setState({ 
+            modalDeleteEventVisibility: true,
+            eventToDelete: event
+        });
 
-             this.setState({
-                viewModel: schedulerData
-            });
-        }
-
-        // alert(`You just executed ops1 to event: {id: ${event.id}, title: ${event.title}}`);
-    };
+        console.log(this.state.deleteEvent);
+    }
 
     newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
         let newFreshId = 0;
