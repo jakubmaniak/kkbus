@@ -19,7 +19,7 @@ table.resource-table thead tr {
 
 .round-all.event-item {
     width: 100%;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .timeline-event .round-all.event-item {
@@ -30,9 +30,9 @@ table.resource-table thead tr {
 .timeline-event .round-all.event-item > span {
     display: flex;
     align-items: center;
-    line-height: normal !important;
+    line-height: 14px !important;
     width: 100%;
-    height: 60px;
+    height: 58px;
     overflow-wrap: break-word;
     word-wrap: break-word;
     hyphens: auto;
