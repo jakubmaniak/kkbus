@@ -387,10 +387,21 @@ class WorkSchedule extends Component {
     }
 
     moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
+        let groupBeforeMove = event.resourceId;
         schedulerData.moveEvent(event, slotId, slotName, start, end);
-        this.setState({
-            viewModel: schedulerData
-        });
+        let gruopAfterMove = event.resourceId;
+
+        if(this.context.user.role === 'owner') {
+            this.setState({
+                viewModel: schedulerData
+            });
+        }
+        else if(this.context.user.role === 'office' && slotId.startsWith('driver-')
+        && (groupBeforeMove.startsWith('driver-') && gruopAfterMove.startsWith('driver-'))) {
+            this.setState({
+                viewModel: schedulerData
+            });
+        }
     }
 
     toggleExpandFunc = (schedulerData, slotId) => {
