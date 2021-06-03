@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-// import dayjs from 'dayjs';
-// import { useTable, useExpanded } from 'react-table';
 
 import moment from 'moment';
 import 'moment/locale/pl';
@@ -8,6 +6,7 @@ import Scheduler, { SchedulerData, ViewTypes } from 'react-big-scheduler';
 import withDragDropContext from './withDnDContext';
 import NotificationModal from '../modals/NotificationModal';
 import Modal from '../modals/Modal';
+import UserContext from '../../contexts/User';
 import '../../styles/WorkSchedule.css';
 import 'react-big-scheduler/lib/css/style.css';
 
@@ -15,15 +14,22 @@ import * as api from '../../api';
 
 import Loader from '../Loader';
 
-class WorkSchedule extends Component{
+class WorkSchedule extends Component {    
     constructor(props) {
         super(props);
-   
+
         moment.locale('pl');
-       ////new moment().format(DATE_FORMAT)
-        let schedulerData = new SchedulerData( '2021-06-01', ViewTypes.Day, false, false, {
+    
+        let date = new Date();
+        let day = (date.getDay() - 1).toString().padStart('0', 2);;
+        let month = (date.getMonth() + 1).toString().padStart('0', 2);
+        let year = date.getFullYear();
+
+        //dodać obsługę grafiku z uwzględnieniem roli użytkownika
+
+        let schedulerData = new SchedulerData( `${year}-${month}-${day}`, ViewTypes.Day, false, false, {
                 views: [
-                    { viewName: "Tydzień", viewType: ViewTypes.Week, showAgenda: false, isEventPerspective: false },
+                    { viewName: 'Tydzień', viewType: ViewTypes.Week, showAgenda: false, isEventPerspective: false },
                     { viewName: 'Dzień', viewType: ViewTypes.Day, showAgenda: false, isEventPerspective: false }
                 ],
                 resourceName: '',
@@ -51,29 +57,30 @@ class WorkSchedule extends Component{
 
         let resources = [
             {
-                id: 'r0',
+                id: 'owner',
                 name: 'Jan Kowalski',
              //    groupOnly: true
              },
              {
-                id: 'r1',
+                id: 'drivers',
                 name: 'Kierowcy',
-                groupOnly: true
+                groupOnly: true,
+                creatable: false
              },
              {
-                id: 'r2',
+                id: 'driver-1',
                 name: 'Tomasz Rajdowiec',
-                parentId: 'r1'
+                parentId: 'drivers',
              },
              {
-                id: 'r3',
+                id: 'office',
                 name: 'Sekretariat',
                 groupOnly: true
              },
              {
-                id: 'r4',
+                id: 'office-1',
                 name: 'Anna Miła',
-                parentId: 'r3'
+                parentId: 'office'
              }
         ];
 
@@ -82,14 +89,14 @@ class WorkSchedule extends Component{
                 id: 1,
                 start: '2021-05-31 09:30:00',
                 end: '2021-05-31 11:30:00',
-                resourceId: 'r2',
+                resourceId: 'driver-1',
                 title: 'Kraków - Katowice Parking nr 1 Merceder Benz 2019',
             }, 
             {
                 id: 2,
                 start: '2021-05-31 10:30:00',
                 end: '2021-05-31 12:30:00',
-                resourceId: 'r4',
+                resourceId: 'office-1',
                 title: 'Roboty biurowe',
                 resizable: false,
             }, 
@@ -97,15 +104,15 @@ class WorkSchedule extends Component{
                id: 3,
                start: '2021-05-31 14:30:00',
                end: '2021-05-31 17:30:00',
-               resourceId: 'r4',
-               title: 'Papier',
+               resourceId: 'office-1',
+               title: 'Raporty',
                moveale: false,
             }, 
             {
                 id: 4,
                 start: '2021-06-01 14:30:00',
                 end: '2021-06-01 23:30:00',
-                resourceId: 'r2',
+                resourceId: 'driver-1',
                 title: 'Jazda',
                 startResizable: false,
             }, 
@@ -113,8 +120,8 @@ class WorkSchedule extends Component{
                id: 5,
                start: '2021-06-01 14:30:00',
                end: '2021-06-01 23:30:00',
-               resourceId: 'r4',
-               title: 'Ale beka',
+               resourceId: 'driver-1',
+               title: 'Brak',
                startResizable: false,
            }
         ];
@@ -135,13 +142,11 @@ class WorkSchedule extends Component{
     }
 
     render() {
-        const {viewModel} = this.state;
-
         return (
             <div className="work-schedule page">
                 <div className="main">
                     <div className="wrapper">
-                        <Scheduler schedulerData={viewModel}
+                        <Scheduler schedulerData={this.state.viewModel}
                             prevClick={this.prevClick}
                             nextClick={this.nextClick}
                             onSelectDate={this.onSelectDate}
@@ -169,7 +174,7 @@ class WorkSchedule extends Component{
                  <Modal visible={this.state.modalAddEventVisibility}>
                     <header>Dodawanie nowego zadania</header>
                     <section className="content">
-                        <form className="new-event">
+                        <form className="new-event" onSubmit={(ev) => {ev.preventDefault(); this.confirmAddingEvent();}}>
                             <input placeholder="Dane zadania" value={this.state.newEventTitle} onChange={this.handleChange}/>
                         </form>
                     </section>
@@ -181,7 +186,6 @@ class WorkSchedule extends Component{
             </div>
         )
     }
-
 
     getDateLabel = (schedulerData, viewType, startDate, endDate) => {
         let start = schedulerData.localeMoment(startDate);
@@ -198,7 +202,6 @@ class WorkSchedule extends Component{
 
         return dateLabel;
     }
-
 
     isNonWorkingTime = (schedulerData, time) => {
 		const { localeMoment } = schedulerData;
@@ -306,35 +309,43 @@ class WorkSchedule extends Component{
     }
 
     newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
-        let newFreshId = 0;
-        schedulerData.events.forEach((item) => {
-            if(item.id >= newFreshId)
-                newFreshId = item.id + 1;
-        });
-        
-        this.setState({
-            modalAddEventVisibility: true,
-            newEvent: {
-                id: newFreshId,
-                start: start,
-                end: end,
-                resourceId: slotId
-            }
-        });        
+        console.log({schedulerData, slotId, slotName, start, end, type, item});
 
-        // let newEvent = {
-        //     id: newFreshId,
-        //     title: 'New event you just created',
-        //     start: start,
-        //     end: end,
-        //     resourceId: slotId,
-        //     bgColor: 'purple'
-        // }
-
-        // schedulerData.addEvent(newEvent);
-        // this.setState({
-        //     viewModel: schedulerData
-        // });
+        if(this.context.user.role === 'owner') {
+            let newFreshId = 0;
+            schedulerData.events.forEach((item) => {
+                if(item.id >= newFreshId)
+                    newFreshId = item.id + 1;
+            });
+            
+            this.setState({
+                modalAddEventVisibility: true,
+                newEvent: {
+                    id: newFreshId,
+                    start: start,
+                    end: end,
+                    resourceId: slotId
+                }
+            }); 
+        }
+        else if(this.context.user.role === 'office' && slotId.startsWith('driver-')) {
+            let newFreshId = 0;
+            schedulerData.events.forEach((item) => {
+                if(item.id >= newFreshId)
+                    newFreshId = item.id + 1;
+            });
+            
+            this.setState({
+                modalAddEventVisibility: true,
+                newEvent: {
+                    id: newFreshId,
+                    start: start,
+                    end: end,
+                    resourceId: slotId
+                }
+            }); 
+        }
+        else return;
     }
 
     updateEventStart = (schedulerData, event, newStart) => {
@@ -359,118 +370,6 @@ class WorkSchedule extends Component{
     }
 }
 
+WorkSchedule.contextType = UserContext;
+
 export default withDragDropContext(WorkSchedule);
-
-
-
-// function Table({ columns, data }) {
-//     const {
-//         getTableProps,
-//         prepareRow,
-//         headerGroups,
-//         rows,
-//         state: { expanded },
-//         toggleAllRowsExpanded,
-//     } = useTable({ columns, data }, useExpanded);
-
-//     useEffect(() => {
-//         toggleAllRowsExpanded?.(true);
-//     }, [toggleAllRowsExpanded, data]);
-
-//     return (
-//         <table {...getTableProps()}>
-//             <thead>
-//                 {headerGroups.map((headerGroup) => (
-//                     <tr>
-//                         {headerGroup.headers.map((column) => (
-//                             <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-//                         ))}
-//                     </tr>
-//                 ))}
-//             </thead>
-//             <tbody>
-//                 {rows.map((row) => {
-//                     prepareRow(row);
-//                     return (
-//                         <tr>
-//                             {row.cells.map((cell) => {
-//                                 return <td>{cell.render('Cell')}</td>;
-//                             })}
-//                         </tr>
-//                     );
-//                 })}
-//             </tbody>
-//         </table>
-//     )
-// }
-
-// function WorkSchedule() {
-//     let [loading, setLoading] = useState(false);
-//     let [day, setDay] = useState(dayjs());
-
-//     let hourHeaders = [...new Array(24).keys()].map((i) => {
-//         return {
-//             Header: i.toString().padStart(2, '0') + ':00',
-//             accessor: 'h' + i
-//         };
-//     });
-    
-//     useEffect(() => {
-//         api.getDriverNames()
-//             .then((results) => setLoading(false))
-//             .catch(api.toastifyError);
-//     }, []);    
-
-//     let nameCellRenderer = ({row}) => {
-//         if (row.canExpand) {
-//             return (
-//                 <span
-//                     className="role-parent"
-//                     onClick={() => row.toggleRowExpanded()}
-//                 >
-//                     <span className="role-parent__arrow">{row.isExpanded ? '▼' : '►'}</span>
-//                     {row.values.name}
-//                 </span>
-//             );
-//         }
-        
-//         return <span>{row.values.name}</span>;
-//     };
-
-//     let data = useMemo(() =>
-//         [
-//             {
-//                 name: 'Jan Kowalski',
-//                 h0: ['12:30', <strong>A</strong>],
-//                 h6: 'X'
-//             },
-//             {
-//                 name: 'Kierowcy',
-//                 subRows: [
-//                     { name: 'Tomasz Rajdowiec', h4: 'B', h6: 'Y' },
-//                     { name: 'Kazimierz Rajdowiec', h2: 'CCC', h8: 'Z' }
-//                 ]
-//             }
-//         ]
-//     );
-
-//     return (
-//         <div className="work-schedule page">
-//             <div className="main">
-//                 <Table
-//                     columns={[
-//                         {
-//                             Header: '',
-//                             accessor: 'name',
-//                             Cell: nameCellRenderer
-//                         },
-//                         { Header: day.format('DD.MM.YYYY'), columns: hourHeaders }
-//                     ]}
-//                     data={data}
-//                 />
-//             </div>
-//         </div>
-//     );
-// }
-//
-// export default WorkSchedule;
