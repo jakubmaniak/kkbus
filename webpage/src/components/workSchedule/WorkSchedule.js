@@ -137,23 +137,24 @@ class WorkSchedule extends Component {
             <div className="work-schedule page">
                 <div className="main">
                     <div className="tile scheduler">
-                    <div className="wrapper">
-                        <Scheduler schedulerData={this.state.viewModel}
-                            prevClick={this.prevClick}
-                            nextClick={this.nextClick}
-                            onSelectDate={this.onSelectDate}
-                            onViewChange={this.onViewChange}
-                            viewEventText="Edytuj"
-                            viewEvent2Text="Usuń"
-                            viewEventClick={this.editEvent}
-                            viewEvent2Click={this.deleteEvent}
-                            // updateEventStart={this.updateEventStart}
-                            // updateEventEnd={this.updateEventEnd}
-                            moveEvent={this.moveEvent}
-                            newEvent={this.newEvent}
-                            toggleExpandFunc={this.toggleExpandFunc}
-                        />
-                    </div>
+                        <h2>Grafik pracy</h2>
+                        <div className="wrapper">
+                            <Scheduler schedulerData={this.state.viewModel}
+                                prevClick={this.prevClick}
+                                nextClick={this.nextClick}
+                                onSelectDate={this.onSelectDate}
+                                onViewChange={this.onViewChange}
+                                viewEventText="Edytuj"
+                                viewEvent2Text="Usuń"
+                                viewEventClick={this.editEvent}
+                                viewEvent2Click={this.deleteEvent}
+                                // updateEventStart={this.updateEventStart}
+                                // updateEventEnd={this.updateEventEnd}
+                                moveEvent={this.moveEvent}
+                                newEvent={this.newEvent}
+                                toggleExpandFunc={this.toggleExpandFunc}
+                            />
+                        </div>
                     </div>
                 </div>
                 <NotificationModal 

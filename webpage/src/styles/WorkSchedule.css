@@ -1,10 +1,6 @@
-.tile.scheduler {
-    padding: 0;
-}
-
 .wrapper {
     display: flex;
-    width: 1220px;
+    /* width: 1220px; */
 }
 
 table.scheduler-bg-table tr th.header3-text,
