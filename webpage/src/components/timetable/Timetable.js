@@ -1,343 +1,471 @@
-import React, { useEffect, useState } from 'react';
-import '../../styles/Timetable.css';
+import React, { Component } from 'react';
 
-import Dropdown from '../dropdowns/Dropdown';
-import TimetableFilterDays from './TimetableFilterDays';
-import TimetableItem from './TimetableItem';
-import { ModalLoader } from '../Loader';
+import moment from 'moment';
+import 'moment/locale/pl';
+import Scheduler, { SchedulerData, ViewTypes } from 'react-big-scheduler';
+import withDragDropContext from '../workSchedule/withDnDContext';
+import NotificationModal from '../modals/NotificationModal';
 import Modal from '../modals/Modal';
-import { fromValue } from '../../helpers/from-value';
-import toast from '../../helpers/toast';
+import UserContext from '../../contexts/User';
+import '../../styles/WorkSchedule.css';
+import 'react-big-scheduler/lib/css/style.css';
 
 import * as api from '../../api';
 
+import Loader from '../Loader';
 
-function Timetable() {
-    let [loading, setLoading] = useState(true);
-    let loadingInitTime = Date.now();
+class Timetable extends Component {    
+    constructor(props) {
+        super(props);
 
-    let [timetable, setTimetable] = useState([]); 
-    let [user, setUser] = useState({});
-
-    let [availableTypes] = useState([
-        [false, 'niedyspozycja'],
-        [true, 'dostępność']
-    ]);
-
-    let [selectedAvailableType, setSelectedAvailableType] = useState();
-
-    let [dates, setDates] = useState(
-        new Array(7)
-        .fill(null)
-        .map((date, i) => new Date(new Date().getTime() + i * 24 * 3600 * 1000))
-    );
-
-    let [selectedDate, setSelectedDate] = useState();
-
-    let [modalAddAvailabilityVisibility, setModalAddAvailabilityVisibility] = useState(false);
-    let [modalEditAvailabilityVisibility, setModalEditAvailabilityVisibility] = useState(false);
-    let [modalDeleteVisibility, setModalDeleteVisibility] = useState(false);
-
-    let [days, setDays] = useState(''); 
-    let [ranges, setRanges] = useState(''); 
-    let [label, setLabel] = useState('');
-
-    let [currentEditAvailabilityId, setCurrentEditAvailabityId] = useState(-1);
-    let [currentUserId, setCurrentUserId] = useState(-1);
-
-    let [selectedAvailableTypeEdit, setSelectedAvailableTypeEdit] = useState();
-    let [selectedDateEdit, setSelectedDateEdit] = useState();
-    let [daysEdit, setDaysEdit] = useState(''); 
-    let [rangesEdit, setRangesEdit] = useState([]); 
-    let [labelEdit, setLabelEdit] = useState('');
-    let [availableIndex, setAvailableIndex] = useState(-1);
-    let [dateIndex, setDateIndex] = useState('');
-
-    let [selectedItem, setSelectedItem] = useState(-1);
-
-    let [itemToDelete, setItemToDelete] = useState(-1);
-
-    useEffect(() => {
-        api.getTimetable()
-            .then((results) => {
-                setTimetable(results);
-                setTimeout(() => {
-                    setLoading(false);
-                }, Math.max(0, 250 - (Date.now() - loadingInitTime)));
-            })    
-            .catch(api.toastifyError);
-
-        api.getUserInfo()
-            .then((result) => {
-                setUser(result);
-            })
-            .catch(api.toastifyError);
-    }, []);
-
-    let d = new Date(); //data pozyskana z filtru
-    let filterDays = [];
-    let availableTileWidth = 115;
-    let availableTileMargin = 15;
-    let formatterFilterDays = [];
-
-    function setFilterDays() {
-        for(let i = 0; i < 7; i++) {
-            let weekDay = (['nd', 'pn', 'wt', 'śr', 'cz', 'pt', 'sb'])[(d.getDay() + i) % 7];   
-            let monthDay = (d.getDate() + i).toString().padStart(2, '0');
-            let month = (d.getMonth() + 1).toString().padStart(2, '0');
-            let displayText = `${weekDay}, ${monthDay}.${month}`; 
-
-            filterDays[i] = displayText;
-            formatterFilterDays[i] = filterDays[i].slice(4).split('-').reverse().join('.');
-        }
-
-        return filterDays;
-    }
-
-   function compareDate(filterResult) {
-    let weekAvailable = [null, null, null, null, null, null, null]; 
+        moment.locale('pl');
     
-    filterResult.items.forEach((item) => {
-        let comparer = item.startDate.slice(5).split('-').reverse().join('.');
-        let days = item.days;
-        let range = item.ranges;
-        let available = item.available;
-        let label = item.label;
-        let id = item.id;
+        let date = new Date();
+        let day = (date.getDay() - 1).toString().padStart('0', 2);;
+        let month = (date.getMonth() + 1).toString().padStart('0', 2);
+        let year = date.getFullYear();
 
-        filterDays.forEach((filterDay, i) => {
-            if(filterDay.includes(comparer)) {
-                weekAvailable[i] = {
-                    range, 
-                    width: availableTileWidth * days + availableTileMargin * (days - 1),
-                    available,
-                    label,
-                    id
-                };
+        let colors = ['#C73535', '#47BE61'];
 
-                if(days > 1) {
-                    for(let j = 1; j < days; j++) {
-                        weekAvailable[i + j] = 'occupied';
-                    }
-                }
-            }
-        });
-    }); 
-    return weekAvailable;
-   }
+        let schedulerData = new SchedulerData(`${year}-${month}-${day}`, ViewTypes.Day, false, false, {
+                views: [
+                    { viewName: 'Tydzień', viewType: ViewTypes.Week, showAgenda: false, isEventPerspective: false },
+                    { viewName: 'Dzień', viewType: ViewTypes.Day, showAgenda: false, isEventPerspective: false }
+                ],
+                resourceName: '',
+                dayCellWidth: 100,
+                eventItemHeight: 54,
+                eventItemLineHeight: 58,
+                schedulerWidth: '1164',
+                dayResourceTableWidth: 200,
+                weekResourceTableWidth: 200,
+                nonAgendaDayCellHeaderFormat: 'HH:mm',
+                nonAgendaOtherCellHeaderFormat: 'ddd DD.MM',
+                // groupOnlySlotColor: '#E3E3E3',
+                defaultEventBgColor: '#D9B430',
+                selectedAreaColor: '#D9B430',
+                minuteStep: 60,
+            },
+            {
+                getDateLabelFunc: this.getDateLabel,
+                isNonWorkingTimeFunc: this.isNonWorkingTime
+            }, moment);
 
-   function addAvailability() {
-        setModalAddAvailabilityVisibility(true);
-   }
+        schedulerData.localeMoment.locale('pl');
 
-   function saveAvailability() {
-        setModalAddAvailabilityVisibility(false);
+        let resources = [
+            {
+                id: 'owner',
+                name: 'Jan Kowalski'
+             //    groupOnly: true
+             },
+             {
+                id: 'drivers',
+                name: 'Kierowcy',
+                groupOnly: true
+             },
+             {
+                id: 'driver-1',
+                name: 'Tomasz Rajdowiec',
+                parentId: 'drivers'
+             },
+             {
+                id: 'office',
+                name: 'Sekretariat',
+                groupOnly: true
+             },
+             {
+                id: 'office-1',
+                name: 'Anna Miła',
+                parentId: 'office'
+             }
+        ];
 
-        api.addTimetableItem(selectedDate.toJSON().slice(0, 10), parseInt(days), ranges.split(','), selectedAvailableType[0], label)
-            .then(refreshTimeTable)
-            .catch(api.toastifyError);
-   }
+        let events = [
+            {
+                id: 1,
+                start: `${year}-${month}-${day} 09:00:00`,
+                end:  `${year}-${month}-${day} 10:00:00`,
+                resourceId: 'driver-1',
+                title: 'Dostępność',
+                bgColor: colors[1]
+            }, 
+            {
+                id: 2,
+                start: `${year}-${month}-${day} 10:00:00`,
+                end:  `${year}-${month}-${day} 11:00:00`,
+                resourceId: 'office-1',
+                title: 'Zajętość',
+                bgColor: colors[0]
+            }, 
+            {
+               id: 3,
+               start: `${year}-${month}-${day} 14:00:00`,
+               end: `${year}-${month}-${day} 15:00:00`,
+               resourceId: 'office-1',
+               title: 'Zajętość',
+               bgColor: colors[0]
+            }, 
+            {
+                id: 4,
+                start: `${year}-${month}-${day - 1} 14:00:00`,
+                end: `${year}-${month}-${day - 1} 15:00:00`,
+                resourceId: 'driver-1',
+                title: 'Zajętość',
+                bgColor: colors[0]
+            }, 
+            {
+               id: 5,
+               start: `${year}-${month}-${day - 1} 15:00:00`,
+               end:  `${year}-${month}-${day - 1} 17:00:00`,
+               resourceId: 'driver-1',
+               title: 'Dostępność',
+               bgColor: colors[1]
+           }
+        ];
 
-   function saveAvailabilityToUser() {
-    setModalAddAvailabilityVisibility(false);
-    api.addTimetableItemToUser(selectedItem.userId, selectedDate.toJSON().slice(0, 10), parseInt(days), ranges.split(','), selectedAvailableType[0], label)
-        .then(refreshTimeTable)
-        .catch(api.toastifyError);
-   }
+        schedulerData.setResources(resources);
+        schedulerData.setEvents(events);
 
-   function refreshTimeTable() {
-        api.getTimetable()
-            .then((results) => {
-                setTimetable(results);
-            })    
-            .catch(api.toastifyError);
-   }
-
-   function translateRole(role) {
-    return ({
-            client: 'klient',
-            driver: 'kierowca',
-            office: 'pracownik sekretariatu',
-            owner: 'właściciel'
-        })[role];
-    }
-
-    function editAvailable(itemId, userId) {
-        setModalEditAvailabilityVisibility(true);
-        setCurrentEditAvailabityId(itemId);
-        setCurrentUserId(userId);
-
-        let user = timetable.find(v => v.userId === userId);
-        let item = user.items.find(v => v.id === itemId);
-
-        setLabelEdit(item.label);
-        setDaysEdit(item.days);
-        setRangesEdit(item.ranges.join(','));
-        setAvailableIndex(item.available ? 1 : 0);
-        
-        let index = formatterFilterDays.indexOf(item.startDate.slice(5).split('-').reverse().join('.'));
-        setDateIndex(index);
-    }
-
-    function saveEditAvailability() {
-        setModalEditAvailabilityVisibility(false);
-
-        if(typeof(parseInt(daysEdit)) !== 'number') {
-            toast.error('Nieprawidłowy typ danych!');
+        this.state = {
+            viewModel: schedulerData,
+            modalDeleteEventVisibility: false,
+            eventToDelete: null,
+            events,
+            resources,
+            modalAddEventVisibility: false,
+            newEvent: null,
+            newEventTitle: '',
+            modalEditVisibility: false,
+            editEventTitle: '',
+            eventToEdit: null
         }
-        else {
-            api.updateTimetableItem(
-                currentEditAvailabilityId, 
-                selectedDateEdit.toJSON().slice(0, 10), 
-                parseInt(daysEdit), 
-                rangesEdit.split(','), 
-                selectedAvailableTypeEdit[0], 
-                labelEdit
-            )
-                .then(refreshTimeTable)
-                .catch(api.toastifyError);
-        }
     }
 
-    function deleteAvailability(itemId) {
-        api.deleteTimetableItem(itemId)
-            .then(refreshTimeTable)
-            .catch(api.toastifyError);
-    }
-
-
-    return (
-        <div className="timetable page">
-            <ModalLoader loading={loading} />
-            <div className="main">
-                <div className="tile">
-                    <h2>Filtry</h2>
-                    <div className="filters">
-                        <div className="filter-container">
-                            <span>Profesja:</span>
-                            <Dropdown placeholder="kierowca, sekretariat"/>
-                        </div>
-                        <div className="filter-container">
-                            <span>Zakres:</span>
-                            <Dropdown placeholder="3.04-9.04"/>
+    render() {
+        return (
+            <div className="work-schedule page">
+                <div className="main">
+                    <div className="tile scheduler">
+                        <h2>Dyspozycyjność</h2>
+                        <div className="wrapper">
+                            <Scheduler schedulerData={this.state.viewModel}
+                                prevClick={this.prevClick}
+                                nextClick={this.nextClick}
+                                onSelectDate={this.onSelectDate}
+                                onViewChange={this.onViewChange}
+                                viewEventText="Edytuj"
+                                viewEvent2Text="Usuń"
+                                viewEventClick={this.editEvent}
+                                viewEvent2Click={this.deleteEvent}
+                                updateEventStart={this.updateEventStart}
+                                updateEventEnd={this.updateEventEnd}
+                                moveEvent={this.moveEvent}
+                                newEvent={this.newEvent}
+                                toggleExpandFunc={this.toggleExpandFunc}
+                            />
                         </div>
                     </div>
                 </div>
-               <TimetableFilterDays 
-                    children={setFilterDays().map((filterDay, i) => {
-                        return (
-                            <span key={i}>{filterDay}</span>
-                        )
-                    })}
-               />
-               <div className="timetable-item-container">
-                {timetable.map((filterResult) => {
-                    return (
-                            <TimetableItem key={filterResult.userId}
-                                id={filterResult.userId}
-                                addAvailability={addAvailability}
-                                name={filterResult.name}
-                                role={translateRole(filterResult.role)}
-                                onSelected={() => setSelectedItem(filterResult)}
-                                modalDeleteVisibility={modalDeleteVisibility}
-                                setModalDeleteVisibility={() => setModalDeleteVisibility(false)}
-                                deleteAvailability={() => deleteAvailability(itemToDelete)}
-                                children={compareDate(filterResult).map((item, i) => {
-                                    if(item !== null && item !== 'occupied') {
-                                        return (
-                                            <div className={item.available ? 'available' : 'unavailable'} key={i} style={{width: item.width + "px"}}>
-                                                <span>{(item.label ? item.label : (item.available ? 'Dostępność' : 'Niedostępność'))}</span>
-                                                    {item.range.map((range, j) => {
-                                                        return (
-                                                            <span key={j}>{range}</span>
-                                                        );
-                                                    })}
-                                                    {
-                                                        (filterResult.userId === user.id || user.role === 'owner')
-                                                        ? <div className="menu">
-                                                            <button className="menu-item edit" onClick={() => editAvailable(item.id, user.id)} title="Edytuj"></button>
-                                                            <button className="menu-item delete" onClick={() => {
-                                                                setModalDeleteVisibility(true);
-                                                                setItemToDelete(item.id);
-                                                            }} 
-                                                                title="Usuń"></button>
-                                                        </div>
-                                                        : null   
-                                                    }
-                                            </div>                                            
-                                        );
-                                    }
-                                    else if(item === null) {
-                                        return (
-                                            <span style={{width: availableTileWidth + 'px'}}></span>
-                                        );
-                                    }
-                                })}
-                            />
-                    );
-                })}
-               </div>
+                <NotificationModal 
+                    visible={this.state.modalDeleteEventVisibility}
+                    header={'Usunięcie zdarzenia'}
+                    name={'usunąć zdażenie'}
+                    buttonText={'usuń'}
+                    notificationModalExit={this.exitNotificationModalVisibility}
+                    delete={this.confirmDeletingEvent}
+                />
+                <Modal visible={this.state.modalAddEventVisibility}>
+                    <header>Dodawanie nowego zadania</header>
+                    <section className="content">
+                        <form className="new-event" onSubmit={(ev) => {ev.preventDefault(); this.confirmAddingEvent();}}>
+                            <input placeholder="Dane zadania" value={this.state.newEventTitle} onChange={this.handleChangeNewTitle}/>
+                        </form>
+                    </section>
+                    <section className="footer">
+                        <button onClick={this.exitModalAddVisibility}>Anuluj</button>
+                        <button onClick={this.confirmAddingEvent}>Zapisz</button>
+                    </section>  
+                </Modal>
+                <Modal visible={this.state.modalEditVisibility}>
+                    <header>Edytowanie zadania</header>
+                    <section className="content">
+                        <form className="edit-event" onSubmit={(ev) => {ev.preventDefault()}}>
+                            <input placeholder="Dane zadania" value={this.state.editEventTitle} onChange={this.handelChangeEditTitle}/>
+                        </form>
+                    </section>
+                    <section className="footer">
+                        <button onClick={this.exitModalEditVisibility}>Anuluj</button>
+                        <button onClick={this.confirmEditingEvent}>Zapisz</button>
+                    </section>  
+                </Modal>
             </div>
-            <Modal visible={modalAddAvailabilityVisibility}>
-                <header>Dodawanie dyspozycji</header>
-                <section className="content">
-                    <form className="add-availability">
-                        <Dropdown
-                                placeholder="Typ"
-                                alwaysSelected
-                                items={availableTypes}
-                                textProperty="1"
-                                handleChange={setSelectedAvailableType}
-                        />
-                        <input placeholder="Etykieta (opcjonalnie)" onChange={fromValue(setLabel)} />
-                        <Dropdown 
-                            placeholder="Data rozpoczęcia"
-                            alwaysSelected
-                            items={dates}
-                            textFormatter={(item) => item && item.toLocaleDateString()}
-                            handleChange={setSelectedDate}
-                        />
-                        <input placeholder="Liczba dni" value={days} onChange={fromValue(setDays)} />
-                        <input placeholder="Godziny" value={ranges} onChange={fromValue(setRanges)} />
-                    </form>
-                </section>
-                <section className="footer">
-                    <button onClick={() => setModalAddAvailabilityVisibility(false)}>Anuluj</button>
-                    <button onClick={user.role !== 'owner' ? saveAvailability : saveAvailabilityToUser}>Zapisz</button>
-                </section>  
-            </Modal>
-            <Modal visible={modalEditAvailabilityVisibility}>
-                <header>Edycja dyspozycji</header>
-                <section className="content">
-                    <form className="add-availability">
-                        <Dropdown
-                            placeholder="Typ"
-                            alwaysSelected
-                            selectedIndex={availableIndex.toString()}
-                            items={availableTypes}
-                            textProperty="1"
-                            handleChange={setSelectedAvailableTypeEdit}
-                        />
-                        <input placeholder="Etykieta (opcjonalnie)" defaultValue={labelEdit} onChange={fromValue(setLabelEdit)}/>
-                        <Dropdown 
-                            placeholder="Data rozpoczęcia"
-                            alwaysSelected
-                            selectedIndex={dateIndex}
-                            items={dates}
-                            textFormatter={(item) => item && item.toLocaleDateString()}
-                            handleChange={setSelectedDateEdit}
-                        />
-                        <input placeholder="Liczba dni" defaultValue={daysEdit} onChange={fromValue(setDaysEdit)} />
-                        <input placeholder="Godziny" defaultValue={rangesEdit} onChange={fromValue(setRangesEdit)}/>
-                    </form>
-                </section>
-                <section className="footer">
-                    <button onClick={() => setModalEditAvailabilityVisibility(false)}>Anuluj</button>
-                    <button onClick={saveEditAvailability}>Zapisz</button>
-                </section>  
-            </Modal>
-        </div>
-    );
+        )
+    }
+
+    getDateLabel = (schedulerData, viewType, startDate, endDate) => {
+        let start = schedulerData.localeMoment(startDate);
+        let end = schedulerData.localeMoment(endDate);
+        let dateLabel = start.format('DD.MM.YYYY');
+
+        if(viewType === ViewTypes.Week) {
+            dateLabel = `${start.format('DD.MM')}-${end.format('DD.MM.YYYY')}`;
+            if(start.month() !== end.month())
+                dateLabel = `${start.format('DD.MM')}-${end.format('DD.MM.YYYY')}`;
+            if(start.year() !== end.year())
+                dateLabel = `${start.format('DD.MM.YYYY')}-${end.format('DD.MM.YYYY')}`;
+        }
+
+        return dateLabel;
+    }
+
+    prevClick = (schedulerData)=> {
+        schedulerData.prev();
+        schedulerData.setEvents(this.state.events);
+        this.setState({
+            viewModel: schedulerData
+        });
+    }
+
+    nextClick = (schedulerData)=> {
+        schedulerData.next();
+        schedulerData.setEvents(this.state.events);
+        this.setState({
+            viewModel: schedulerData
+        });
+    }
+
+    onViewChange = (schedulerData, view) => {
+        schedulerData.setViewType(view.viewType, view.showAgenda, view.isEventPerspective);
+        schedulerData.setEvents(this.state.events);
+        this.setState({
+            viewModel: schedulerData
+        });
+    }
+
+    onSelectDate = (schedulerData, date) => {
+        schedulerData.setDate(date);
+        schedulerData.setEvents(this.state.events);
+        this.setState({
+            viewModel: schedulerData
+        });
+    }
+
+    editEvent = (schedulerData, event) => {       
+        if(this.context.user.role === 'owner') {
+            this.setState({
+                modalEditVisibility: true,
+                eventToEdit: event,
+            });
+        }
+        else if(this.context.user.role === 'office' && event.resourceId.startsWith('driver-')) {
+            this.setState({
+                modalEditVisibility: true,
+                eventToEdit: event,
+            });
+        }
+    };
+
+    handelChangeEditTitle = (ev) => {
+        this.setState({
+            editEventTitle: ev.target.value
+        });
+    }
+
+    confirmEditingEvent = () => {
+        if(this.state.editEventTitle === '') {
+            alert('Wprowadź nazwę zadania');
+            return;
+        }
+
+        let scheduler = [ ...this.state.events ];
+        let targetEvent = scheduler.find(event => event.id === this.state.eventToEdit.id);
+        let targetIndex = scheduler.indexOf(targetEvent);
+
+        scheduler[targetIndex].title = this.state.editEventTitle;
+
+        this.state.viewModel.setEvents(scheduler);
+        this.setState({
+            events: scheduler,
+            modalEditVisibility: false,
+            editEventTitle: ''
+        });
+    }
+
+    exitModalEditVisibility =() => {
+        this.setState({
+            modalEditVisibility: false,
+            editEventTitle: ''
+        });
+    }
+
+    setNotificationModalVisibility = () => {
+        this.setState({ 
+            modalDeleteEventVisibility: true
+        });
+    }
+
+    exitNotificationModalVisibility = () => {
+        this.setState({ 
+            modalDeleteEventVisibility: false
+        });
+    }
+
+    confirmDeletingEvent = () => {
+        this.state.viewModel.removeEvent(this.state.eventToDelete);
+      
+        this.setState({
+            modalDeleteEventVisibility: false
+        });
+    }
+
+    deleteEvent = (schedulerData, event) => {
+        this.setState({ 
+            modalDeleteEventVisibility: true,
+            eventToDelete: event
+        });
+    }
+
+    exitModalAddVisibility = () => {
+        this.setState({ 
+            modalAddEventVisibility: false,
+            newEventTitle: ''
+        });
+    }
+
+    handleChangeNewTitle = (ev) => {
+        this.setState({
+            newEventTitle: ev.target.value
+        });
+    }
+
+    confirmAddingEvent = () => {
+        if(this.state.newEventTitle === '') {
+            alert('Wprowadź nazwę zadania');
+            return;
+        }
+
+        let event = { ...this.state.newEvent, title: this.state.newEventTitle };
+        this.state.viewModel.addEvent(event);
+        
+        this.setState({
+            modalAddEventVisibility: false,
+            newEventTitle: ''
+        });
+    }
+
+    newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
+        if(this.context.user.role === 'owner') {
+            let newFreshId = 0;
+            schedulerData.events.forEach((item) => {
+                if(item.id >= newFreshId)
+                    newFreshId = item.id + 1;
+            });
+            
+            this.setState({
+                modalAddEventVisibility: true,
+                newEvent: {
+                    id: newFreshId,
+                    start: start,
+                    end: end,
+                    resourceId: slotId
+                }
+            }); 
+        }
+        else if(this.context.user.role === 'office' && slotId.startsWith('driver-')) {
+            let newFreshId = 0;
+            schedulerData.events.forEach((item) => {
+                if(item.id >= newFreshId)
+                    newFreshId = item.id + 1;
+            });
+            
+            this.setState({
+                modalAddEventVisibility: true,
+                newEvent: {
+                    id: newFreshId,
+                    start: start,
+                    end: end,
+                    resourceId: slotId
+                }
+            }); 
+        }
+        else return;
+    }
+
+    updateEventStart = (schedulerData, event, newStart) => {
+        let startTimeBeforeMove =  event.start;
+        schedulerData.updateEventStart(event, newStart);
+
+        if(this.context.user.role === 'owner') {
+            this.setState({
+                viewModel: schedulerData
+            });
+        }
+        else if(this.context.user.role === 'office' && event.resourceId.startsWith('driver-')) {
+            this.setState({
+                viewModel: schedulerData
+            });
+        }
+        else {
+            schedulerData.updateEventStart(event, startTimeBeforeMove);
+            this.setState({
+                viewModel: schedulerData
+            });
+        }
+    }
+
+    updateEventEnd = (schedulerData, event, newEnd) => {
+        let endTimeBeforeMove =  event.end;
+        schedulerData.updateEventEnd(event, newEnd);
+
+        if(this.context.user.role === 'owner') {
+            this.setState({
+                viewModel: schedulerData
+            });
+        }
+        else if(this.context.user.role === 'office' && event.resourceId.startsWith('driver-')) {
+            this.setState({
+                viewModel: schedulerData
+            });
+        }
+        else {
+            schedulerData.updateEventEnd(event, endTimeBeforeMove);
+            this.setState({
+                viewModel: schedulerData
+            });
+        }
+    }
+
+    moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
+        let groupBeforeMove = event.resourceId;
+        schedulerData.moveEvent(event, slotId, slotName, start, end);
+        let gruopAfterMove = event.resourceId;
+
+        if(this.context.user.role === 'owner') {
+            this.setState({
+                viewModel: schedulerData
+            });
+        }
+        else if(this.context.user.role === 'office' && slotId.startsWith('driver-')
+        && (groupBeforeMove.startsWith('driver-') && gruopAfterMove.startsWith('driver-'))) {
+            this.setState({
+                viewModel: schedulerData
+            });
+        }
+    }
+
+    toggleExpandFunc = (schedulerData, slotId) => {
+        schedulerData.toggleExpandStatus(slotId);
+        this.setState({
+            viewModel: schedulerData
+        });
+    }
+
+    isNonWorkingTime = (schedulerData, time) => {    
+        return false;
+    }
 }
 
-export default Timetable;
+Timetable.contextType = UserContext;
+
+export default withDragDropContext(Timetable);
