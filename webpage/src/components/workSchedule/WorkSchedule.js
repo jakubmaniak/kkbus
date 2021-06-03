@@ -39,6 +39,7 @@ class WorkSchedule extends Component {
                 nonAgendaOtherCellHeaderFormat: 'ddd DD.MM',
                 // groupOnlySlotColor: '#E3E3E3',
                 defaultEventBgColor: '#D9B430',
+                selectedAreaColor: '#D9B430'
                 // minuteStep: 30,
             },
             {
@@ -263,6 +264,11 @@ class WorkSchedule extends Component {
     }
 
     confirmEditingEvent = () => {
+        if(this.state.editEventTitle === '') {
+            alert('Wprowadź nazwę zadania');
+            return;
+        }
+
         let scheduler = [ ...this.state.events ];
         let targetEvent = scheduler.find(event => event.id === this.state.eventToEdit.id);
         let targetIndex = scheduler.indexOf(targetEvent);
@@ -325,9 +331,14 @@ class WorkSchedule extends Component {
     }
 
     confirmAddingEvent = () => {
+        if(this.state.newEventTitle === '') {
+            alert('Wprowadź nazwę zadania');
+            return;
+        }
+
         let event = { ...this.state.newEvent, title: this.state.newEventTitle };
         this.state.viewModel.addEvent(event);
-       
+        
         this.setState({
             modalAddEventVisibility: false,
             newEventTitle: ''
