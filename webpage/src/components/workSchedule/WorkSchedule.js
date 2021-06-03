@@ -88,14 +88,14 @@ class WorkSchedule extends Component {
             {
                 id: 1,
                 start: '2021-05-31 09:30:00',
-                end: '2021-05-31 11:30:00',
+                end: '2021-05-31 10:30:00',
                 resourceId: 'driver-1',
                 title: 'Kraków - Katowice Parking nr 1 Merceder Benz 2019',
             }, 
             {
                 id: 2,
                 start: '2021-05-31 10:30:00',
-                end: '2021-05-31 12:30:00',
+                end: '2021-05-31 11:30:00',
                 resourceId: 'office-1',
                 title: 'Roboty biurowe',
                 resizable: false,
@@ -103,7 +103,7 @@ class WorkSchedule extends Component {
             {
                id: 3,
                start: '2021-05-31 14:30:00',
-               end: '2021-05-31 17:30:00',
+               end: '2021-05-31 15:30:00',
                resourceId: 'office-1',
                title: 'Raporty',
                moveale: false,
@@ -111,7 +111,7 @@ class WorkSchedule extends Component {
             {
                 id: 4,
                 start: '2021-06-01 14:30:00',
-                end: '2021-06-01 23:30:00',
+                end: '2021-06-01 15:30:00',
                 resourceId: 'driver-1',
                 title: 'Jazda',
                 startResizable: false,
@@ -119,7 +119,7 @@ class WorkSchedule extends Component {
             {
                id: 5,
                start: '2021-06-01 14:30:00',
-               end: '2021-06-01 23:30:00',
+               end: '2021-06-01 16:30:00',
                resourceId: 'driver-1',
                title: 'Brak',
                startResizable: false,
@@ -137,7 +137,10 @@ class WorkSchedule extends Component {
             resources,
             modalAddEventVisibility: false,
             newEvent: null,
-            newEventTitle: ''
+            newEventTitle: '',
+            modalEditVisibility: false,
+            editEventTitle: '',
+            eventToEdit: null
         }
     }
 
@@ -174,7 +177,7 @@ class WorkSchedule extends Component {
                     <header>Dodawanie nowego zadania</header>
                     <section className="content">
                         <form className="new-event" onSubmit={(ev) => {ev.preventDefault(); this.confirmAddingEvent();}}>
-                            <input placeholder="Dane zadania" value={this.state.newEventTitle} onChange={this.handleChange}/>
+                            <input placeholder="Dane zadania" value={this.state.newEventTitle} onChange={this.handleChangeNewTitle}/>
                         </form>
                     </section>
                     <section className="footer">
@@ -182,16 +185,16 @@ class WorkSchedule extends Component {
                         <button onClick={this.confirmAddingEvent}>Zapisz</button>
                     </section>  
                 </Modal>
-                <Modal visible={this.state.modalAddEventVisibility}>
-                    <header>Dodawanie nowego zadania</header>
+                <Modal visible={this.state.modalEditVisibility}>
+                    <header>Edytowanie zadania</header>
                     <section className="content">
-                        <form className="new-event" onSubmit={(ev) => {ev.preventDefault(); this.confirmAddingEvent();}}>
-                            <input placeholder="Dane zadania" value={this.state.newEventTitle} onChange={this.handleChange}/>
+                        <form className="edit-event" onSubmit={(ev) => {ev.preventDefault()}}>
+                            <input placeholder="Dane zadania" value={this.state.editEventTitle} onChange={this.handelChangeEditTitle}/>
                         </form>
                     </section>
                     <section className="footer">
-                        <button onClick={this.exitModalVisibility}>Anuluj</button>
-                        <button onClick={this.confirmAddingEvent}>Zapisz</button>
+                        <button onClick={this.exitModalEditVisibility}>Anuluj</button>
+                        <button onClick={this.confirmEditingEvent}>Zapisz</button>
                     </section>  
                 </Modal>
             </div>
@@ -262,9 +265,39 @@ class WorkSchedule extends Component {
         });
     }
 
-    editEvent = (schedulerData, event) => {
-        alert(`You just executed ops2 to event: {id: ${event.id}, title: ${event.title}}`);
+    editEvent = (schedulerData, event) => {       
+        this.setState({
+            modalEditVisibility: true,
+            eventToEdit: event,
+        });
     };
+
+    handelChangeEditTitle = (ev) => {
+        this.setState({
+            editEventTitle: ev.target.value
+        });
+    }
+
+    confirmEditingEvent = () => {
+        let scheduler = [ ...this.state.events ];
+        let targetEvent = scheduler.find(event => event.id === this.state.eventToEdit.id);
+        let targetIndex = scheduler.indexOf(targetEvent);
+
+        scheduler[targetIndex].title = this.state.editEventTitle;
+
+        this.state.viewModel.setEvents(scheduler);
+        this.setState({
+            events: scheduler,
+            modalEditVisibility: false,
+            editEventTitle: ''
+        });
+    }
+
+    exitModalEditVisibility =() => {
+        this.setState({
+            modalEditVisibility: false
+        });
+    }
 
     setNotificationModalVisibility = () => {
         this.setState({ 
@@ -299,7 +332,7 @@ class WorkSchedule extends Component {
         });
     }
 
-    handleChange = (ev) => {
+    handleChangeNewTitle = (ev) => {
         this.setState({
             newEventTitle: ev.target.value
         });
