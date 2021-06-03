@@ -143,13 +143,13 @@ class WorkSchedule extends Component{
                             nextClick={this.nextClick}
                             onSelectDate={this.onSelectDate}
                             onViewChange={this.onViewChange}
-                            eventItemClick={this.eventClicked}
+                            // eventItemClick={this.eventClicked}
                             viewEventClick={this.ops1}
                             viewEventText="Edytuj"
                             viewEvent2Text="Usuń"
                             viewEvent2Click={this.deleteEvent}
-                            updateEventStart={this.updateEventStart}
-                            updateEventEnd={this.updateEventEnd}
+                            // updateEventStart={this.updateEventStart}
+                            // updateEventEnd={this.updateEventEnd}
                             moveEvent={this.moveEvent}
                             newEvent={this.newEvent}
                         />
@@ -206,7 +206,7 @@ class WorkSchedule extends Component{
         schedulerData.setEvents(this.state.events);
         this.setState({
             viewModel: schedulerData
-        })
+        });
     }
 
     nextClick = (schedulerData)=> {
@@ -214,7 +214,7 @@ class WorkSchedule extends Component{
         schedulerData.setEvents(this.state.events);
         this.setState({
             viewModel: schedulerData
-        })
+        });
     }
 
     onViewChange = (schedulerData, view) => {
@@ -222,7 +222,7 @@ class WorkSchedule extends Component{
         schedulerData.setEvents(this.state.events);
         this.setState({
             viewModel: schedulerData
-        })
+        });
     }
 
     onSelectDate = (schedulerData, date) => {
@@ -230,7 +230,7 @@ class WorkSchedule extends Component{
         schedulerData.setEvents(this.state.events);
         this.setState({
             viewModel: schedulerData
-        })
+        });
     }
 
     eventClicked = (schedulerData, event) => {
@@ -261,14 +261,11 @@ class WorkSchedule extends Component{
         });
     }
 
-
     deleteEvent = (schedulerData, event) => {
         this.setState({ 
             modalDeleteEventVisibility: true,
             eventToDelete: event
         });
-
-        console.log(this.state.deleteEvent);
     }
 
     newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
@@ -289,28 +286,28 @@ class WorkSchedule extends Component{
         schedulerData.addEvent(newEvent);
         this.setState({
             viewModel: schedulerData
-        })
+        });
     }
 
     updateEventStart = (schedulerData, event, newStart) => {
         schedulerData.updateEventStart(event, newStart);
         this.setState({
             viewModel: schedulerData
-        })
+        });
     }
 
     updateEventEnd = (schedulerData, event, newEnd) => {
         schedulerData.updateEventEnd(event, newEnd);
         this.setState({
             viewModel: schedulerData
-        })
+        });
     }
 
     moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
         schedulerData.moveEvent(event, slotId, slotName, start, end);
         this.setState({
             viewModel: schedulerData
-        })
+        });
     }
 }
 
