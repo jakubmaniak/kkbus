@@ -313,10 +313,19 @@ class WorkSchedule extends Component {
     }
 
     deleteEvent = (schedulerData, event) => {
-        this.setState({ 
-            modalDeleteEventVisibility: true,
-            eventToDelete: event
-        });
+        if (this.context.user.role === 'owner') {
+            this.setState({ 
+                modalDeleteEventVisibility: true,
+                eventToDelete: event
+            });
+        }
+        else if (this.context.user.role === 'office' && event.resourceId.startsWith('driver-')) {
+            this.setState({ 
+                modalDeleteEventVisibility: true,
+                eventToDelete: event
+            });
+        }
+       
     }
 
     exitModalAddVisibility = () => {
