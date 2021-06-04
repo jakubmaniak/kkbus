@@ -258,14 +258,8 @@ class Timetable extends Component {
         });
     }
 
-    editEvent = (schedulerData, event) => {       
-        if(this.context.user.role === 'owner') {
-            this.setState({
-                modalEditVisibility: true,
-                eventToEdit: event,
-            });
-        }
-        else if(this.context.user.role === 'office' && event.resourceId.startsWith('driver-')) {
+    editEvent = (schedulerData, event) => {
+        if(this.context.user.role + '-' + this.context.user.id === event.resourceId) {
             this.setState({
                 modalEditVisibility: true,
                 eventToEdit: event,
@@ -327,10 +321,12 @@ class Timetable extends Component {
     }
 
     deleteEvent = (schedulerData, event) => {
-        this.setState({ 
-            modalDeleteEventVisibility: true,
-            eventToDelete: event
-        });
+        if(this.context.user.role + '-' + this.context.user.id === event.resourceId) {
+            this.setState({ 
+                modalDeleteEventVisibility: true,
+                eventToDelete: event
+            });
+        }
     }
 
     exitModalAddVisibility = () => {
