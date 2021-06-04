@@ -376,11 +376,6 @@ class Timetable extends Component {
                 viewModel: schedulerData
             });
         }
-        // else if(this.context.user.role === 'office' && event.resourceId.startsWith('driver-')) {
-        //     this.setState({
-        //         viewModel: schedulerData
-        //     });
-        // }
         else {
             schedulerData.updateEventStart(event, startTimeBeforeMove);
             this.setState({
@@ -398,11 +393,6 @@ class Timetable extends Component {
                 viewModel: schedulerData
             });
         }
-        // else if(this.context.user.role === 'office' && event.resourceId.startsWith('driver-')) {
-        //     this.setState({
-        //         viewModel: schedulerData
-        //     });
-        // }
         else {
             schedulerData.updateEventEnd(event, endTimeBeforeMove);
             this.setState({
@@ -413,11 +403,12 @@ class Timetable extends Component {
 
     moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
         let groupBeforeMove = event.resourceId;
-        schedulerData.moveEvent(event, slotId, slotName, start, end);
-        let gruopAfterMove = event.resourceId;
+        let startBefore = event.start;
+        let endBefore = event.end;
 
-        console.log(groupBeforeMove === this.context.user.role + '-' + this.context.user.id);
-        console.log(gruopAfterMove === this.context.user.role + '-' + this.context.user.id);
+        schedulerData.moveEvent(event, slotId, slotName, start, end);
+
+        let gruopAfterMove = event.resourceId;
 
         if(groupBeforeMove === this.context.user.role + '-' + this.context.user.id && gruopAfterMove === this.context.user.role + '-' + this.context.user.id) {
             this.setState({
@@ -425,7 +416,7 @@ class Timetable extends Component {
             });
         }
         else {
-            schedulerData.moveEvent(event, groupBeforeMove, slotName, start, end);
+            schedulerData.moveEvent(event, groupBeforeMove, slotName, startBefore, endBefore);
         }
     }
 
