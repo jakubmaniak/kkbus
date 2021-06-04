@@ -371,16 +371,16 @@ class Timetable extends Component {
         let startTimeBeforeMove =  event.start;
         schedulerData.updateEventStart(event, newStart);
 
-        if(this.context.user.role === 'owner') {
+        if(this.context.user.role + '-' + this.context.user.id === event.resourceId) {
             this.setState({
                 viewModel: schedulerData
             });
         }
-        else if(this.context.user.role === 'office' && event.resourceId.startsWith('driver-')) {
-            this.setState({
-                viewModel: schedulerData
-            });
-        }
+        // else if(this.context.user.role === 'office' && event.resourceId.startsWith('driver-')) {
+        //     this.setState({
+        //         viewModel: schedulerData
+        //     });
+        // }
         else {
             schedulerData.updateEventStart(event, startTimeBeforeMove);
             this.setState({
@@ -393,16 +393,16 @@ class Timetable extends Component {
         let endTimeBeforeMove =  event.end;
         schedulerData.updateEventEnd(event, newEnd);
 
-        if(this.context.user.role === 'owner') {
+        if(this.context.user.role + '-' + this.context.user.id === event.resourceId) {
             this.setState({
                 viewModel: schedulerData
             });
         }
-        else if(this.context.user.role === 'office' && event.resourceId.startsWith('driver-')) {
-            this.setState({
-                viewModel: schedulerData
-            });
-        }
+        // else if(this.context.user.role === 'office' && event.resourceId.startsWith('driver-')) {
+        //     this.setState({
+        //         viewModel: schedulerData
+        //     });
+        // }
         else {
             schedulerData.updateEventEnd(event, endTimeBeforeMove);
             this.setState({
@@ -416,16 +416,16 @@ class Timetable extends Component {
         schedulerData.moveEvent(event, slotId, slotName, start, end);
         let gruopAfterMove = event.resourceId;
 
-        if(this.context.user.role === 'owner') {
+        console.log(groupBeforeMove === this.context.user.role + '-' + this.context.user.id);
+        console.log(gruopAfterMove === this.context.user.role + '-' + this.context.user.id);
+
+        if(groupBeforeMove === this.context.user.role + '-' + this.context.user.id && gruopAfterMove === this.context.user.role + '-' + this.context.user.id) {
             this.setState({
                 viewModel: schedulerData
             });
         }
-        else if(this.context.user.role === 'office' && slotId.startsWith('driver-')
-        && (groupBeforeMove.startsWith('driver-') && gruopAfterMove.startsWith('driver-'))) {
-            this.setState({
-                viewModel: schedulerData
-            });
+        else {
+            schedulerData.moveEvent(event, groupBeforeMove, slotName, start, end);
         }
     }
 
