@@ -82,6 +82,7 @@ router.post('/work-schedule', [
 router.patch('/work-schedule/:entityId', [
     minimumRole('office'),
     bodySchema(`{
+        employeeId?: number,
         startHour?: string,
         endHour?: string,
         label?: string
@@ -93,10 +94,14 @@ router.patch('/work-schedule/:entityId', [
         return next(invalidValue());
     }
 
-    let { startHour, endHour, label } = req.body;
+    let { employeeId, startHour, endHour, label } = req.body;
 
     try {
+        startHour = parseTime(startHour);
+        endHour = parseTime(endHour);
+
         await workScheduleController.updateEntity(entityId, {
+            employeeId,
             startHour,
             endHour,
             label
