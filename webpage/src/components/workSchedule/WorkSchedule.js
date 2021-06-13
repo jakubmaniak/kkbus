@@ -8,8 +8,10 @@ import NotificationModal from '../modals/NotificationModal';
 import Modal from '../modals/Modal';
 import { ModalLoader } from '../Loader';
 import UserContext from '../../contexts/User';
+import Dropdown from '../dropdowns/Dropdown';
 import '../../styles/WorkSchedule.css';
 import 'react-big-scheduler/lib/css/style.css';
+import { routeFormatter } from '../../helpers/text-formatters';
 
 import * as api from '../../api';
 
@@ -80,17 +82,22 @@ class WorkSchedule extends Component {
             newEventTitle: '',
             modalEditVisibility: false,
             editEventTitle: '',
-            eventToEdit: null
+            eventToEdit: null,
+            routes: null,
+            parkings: ['Parking nr 1', 'Parking nr 2'],
+            vehicles: null
         };
     }
 
     componentDidMount() {
-        Promise.all([
-            this.updateScheduleResources(),
-            this.updateScheduleEvents()
-        ]).then(() => {
-            this.setState({ loading: false });
-        });
+        this.getRoutes().then(() => {
+            Promise.all([
+                this.updateScheduleResources(),
+                this.updateScheduleEvents()
+            ]).then(() => {
+                this.setState({ loading: false });
+            });
+        })
     }
 
     updateScheduleResources() {
@@ -145,12 +152,22 @@ class WorkSchedule extends Component {
                 start: event.date + ' ' + event.startHour + ':00',
                 end: event.date + ' ' + event.endHour + ':00',
                 resourceId: event.role + '-' + event.employeeId,
-                title: event.label
+                title: event.role === 'driver' ? 
+                    routeFormatter(this.state.routes.find(route => route.id == event.routeId)) + ', ' +  event.parking 
+                    : event.label
             }));
             this.setState({ events });
 
             this.schedulerData.setEvents(events);
         });
+    }
+
+    getRoutes() {
+        return api.getAllRoutes()
+            .then((results) => {
+                this.setState({ routes: results});
+            })
+            .catch(api.toastifyError);
     }
 
     render() {
@@ -191,7 +208,23 @@ class WorkSchedule extends Component {
                     <header>Dodawanie nowego zadania</header>
                     <section className="content">
                         <form className="new-event" onSubmit={(ev) => {ev.preventDefault(); this.confirmAddingEvent();}}>
-                            <input placeholder="Dane zadania" value={this.state.newEventTitle} onChange={this.handleChangeNewTitle}/>
+                        {this.state.newEvent?.resourceId.startsWith('driver-') ? 
+                                <>
+                                <Dropdown 
+                                    items={this.state.routes}
+                                    textFormatter={routeFormatter}
+                                    selectedIndex={0}
+                                    handleChange={(selectedRoute) => this.setState({ selectedRoute })}
+                                />
+                                <Dropdown 
+                                    items={this.state.parkings}
+                                    selectedIndex={0}
+                                    handleChange={(selectedParking) => this.setState({ selectedParking })}
+                                />
+                                </>        
+                            : 
+                                <input placeholder="Dane zadania" value={this.state.newEventTitle} onChange={this.handleChangeNewTitle}/>
+                            }
                         </form>
                     </section>
                     <section className="footer">
@@ -385,7 +418,7 @@ class WorkSchedule extends Component {
     }
 
     confirmAddingEvent = () => {
-        if(this.state.newEventTitle === '') {
+        if(this.state.newEventTitle === '' && this.state.newEvent.resourceId.startsWith('office-')) {
             alert('Wprowadź nazwę zadania');
             return;
         }
@@ -394,11 +427,38 @@ class WorkSchedule extends Component {
         let date = moment(this.state.newEvent.start).format('YYYY-MM-DD');
         let startHour = moment(this.state.newEvent.start).format('HH:mm');
         let endHour = moment(this.state.newEvent.end).format('HH:mm');
-        let label = this.state.newEventTitle;
+        let label;
+        let routeId;
+        let parking;
+        if(this.state.newEvent.resourceId.startsWith('driver-')) {
+            label = this.state.selectedRoute.departureLocation + ' - ' + this.state.selectedRoute.arrivalLocation + ', ' + this.state.selectedParking;
+            routeId = this.state.selectedRoute.id;
+            parking = this.state.selectedParking;
+        }
+        else {
+            label= this.state.newEventTitle;
+        }
 
-        api.addWorkScheduleEvent(employeeId, date, startHour, endHour, label)
+        if(this.state.newEvent.resourceId.startsWith('driver-')) {
+            api.addWorkScheduleEvent(employeeId, date, startHour, endHour, '', null, routeId, parking)
             .then((eventId) => {
-                let event = { ...this.state.newEvent, id: eventId, title: this.state.newEventTitle };
+                let event = { ...this.state.newEvent, id: eventId, title: label };
+
+                this.state.viewModel.addEvent(event);
+                
+                this.setState({
+                    modalAddEventVisibility: false,
+                    newEventTitle: '',
+                    selectedParking: null,
+                    selectedRoute: null
+                });
+            });
+        }
+
+        else {
+            api.addWorkScheduleEvent(employeeId, date, startHour, endHour, label, null, 0, null)
+            .then((eventId) => {
+                let event = { ...this.state.newEvent, id: eventId, title: label };
 
                 this.state.viewModel.addEvent(event);
                 
@@ -407,6 +467,7 @@ class WorkSchedule extends Component {
                     newEventTitle: ''
                 });
             });
+        }
     }
 
     newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
