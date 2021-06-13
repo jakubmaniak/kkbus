@@ -18,7 +18,6 @@ function Vehicle(props) {
     let [modalDetailsVisibility, setModalDetailsVisibility] = useState(false);
     let [modalEditVehicleVisibility, setModalEditVehicleVisibility] = useState(false);
     let [modalDeleteVehicleVisibility, setModalDeleteVehicleVisibility] = useState(false);
-    let [modalChangeDriverVisibility, setModalChangeDriverVisibility] = useState(false);
     
     let [brand, setBrand] = useState(props.brand);
     let [model, setModel] = useState(props.model);
@@ -145,21 +144,6 @@ function Vehicle(props) {
         );
     }
 
-    function changeDriverModal() {
-        return (
-            <Modal visible={modalChangeDriverVisibility}>
-                <header>Zmiana kierowcy</header>
-                <section className="content">
-                        <Dropdown placeholder="Aktualny kierowca"/>
-                </section>
-                <section className="footer">
-                    <button onClick={() => setModalChangeDriverVisibility(false)}>Anuluj</button>
-                    <button onClick={() => setModalChangeDriverVisibility(false)}>Zapisz</button>
-                </section>
-            </Modal>
-        );
-    }
-
     return (
         <div className="vehicle-item">
             <div className="tile half">
@@ -187,13 +171,8 @@ function Vehicle(props) {
                     {role === 'owner' ? 
                         <div className="vehicle-edit-button">
                             <button onClick={() => {setModalEditVehicleVisibility(true)}}>Edytuj dane</button>
-                            <button onClick={() => {setModalChangeDriverVisibility(true)}}>Zmień kierowcę</button>
                             <button className="delete" onClick={() => setModalDeleteVehicleVisibility(true)}>Usuń</button>
-                        </div>   
-                    : role === 'office' ?
-                    <div className="vehicle-edit-button">
-                        <button onClick={() => {setModalChangeDriverVisibility(true)}}>Zmień kierowcę</button>
-                    </div>
+                        </div>
                     : null}
                 </div>
             </div>
@@ -216,10 +195,6 @@ function Vehicle(props) {
                         <span>Średnie spalanie:</span>
                         <span>{props.combustion} L/100 KM</span>
                     </div>
-                    <div className="vehicle-info">
-                        <span>Aktualny kierowca:</span>
-                        <span>{props.currentDriver}</span>
-                    </div>
                 </section>
                 <section className="footer">
                     <button onClick={() => setModalDetailsVisibility(false)}>Zamknij</button>
@@ -233,7 +208,6 @@ function Vehicle(props) {
                 delete={() => props.deleteVehicle()}
             />
             {role === 'owner' ? editDataModal() : null}
-            {role === 'owner' || role === 'office' ? changeDriverModal() : null} 
         </div>
     );
 }
