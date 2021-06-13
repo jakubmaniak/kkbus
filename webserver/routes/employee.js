@@ -12,13 +12,13 @@ const userController = require('../controllers/user');
 router.get('/employees', [minimumRole('owner')], async (req, res, next) => {
     try {
         let employeeRoles = [roles.driver.priority, roles.office.priority, roles.owner.priority];
-        let employees = userController.findManyUsersByRole(employeeRoles)
+        let employees = userController.findManyUsersByRole(...employeeRoles)
             .then(resolveRoles('role'));
 
         res.ok(await employees);
     }
-    catch {
-        next(serverError());
+    catch (err) {
+        next(err);
     }
 });
 

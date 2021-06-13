@@ -6,26 +6,25 @@ import Scheduler, { SchedulerData, ViewTypes } from 'react-big-scheduler';
 import withDragDropContext from './withDnDContext';
 import NotificationModal from '../modals/NotificationModal';
 import Modal from '../modals/Modal';
+import { ModalLoader } from '../Loader';
 import UserContext from '../../contexts/User';
 import '../../styles/WorkSchedule.css';
 import 'react-big-scheduler/lib/css/style.css';
 
 import * as api from '../../api';
 
-import Loader from '../Loader';
-
 class WorkSchedule extends Component {    
     constructor(props) {
         super(props);
 
         moment.locale('pl');
-    
-        let date = new Date();
-        let day = (date.getDay() - 1).toString().padStart('0', 2);;
-        let month = (date.getMonth() + 1).toString().padStart('0', 2);
-        let year = date.getFullYear();
 
-        let schedulerData = new SchedulerData(`${year}-${month}-${day}`, ViewTypes.Day, false, false, {
+        let schedulerData = new SchedulerData(
+            moment().format('YYYY-MM-DD'),
+            ViewTypes.Day,
+            false,
+            false,
+            {
                 views: [
                     { viewName: 'Tydzień', viewType: ViewTypes.Week, showAgenda: false, isEventPerspective: false },
                     { viewName: 'Dzień', viewType: ViewTypes.Day, showAgenda: false, isEventPerspective: false }
@@ -47,84 +46,34 @@ class WorkSchedule extends Component {
             {
                 getDateLabelFunc: this.getDateLabel,
                 isNonWorkingTimeFunc: this.isNonWorkingTime
-            }, moment);
-
+            },
+            moment
+        );
         schedulerData.localeMoment.locale('pl');
+
+        this.schedulerData = schedulerData;
 
         let resources = [
             {
-                id: 'owner',
-                name: 'Jan Kowalski'
-             //    groupOnly: true
-             },
-             {
                 id: 'drivers',
                 name: 'Kierowcy',
                 groupOnly: true
-             },
-             {
-                id: 'driver-1',
-                name: 'Tomasz Rajdowiec',
-                parentId: 'drivers'
-             },
-             {
+            },
+            {
                 id: 'office',
                 name: 'Sekretariat',
                 groupOnly: true
-             },
-             {
-                id: 'office-1',
-                name: 'Anna Miła',
-                parentId: 'office'
-             }
-        ];
-
-        let events = [
-            {
-                id: 1,
-                start: `${year}-${month}-${day} 09:30:00`,
-                end:  `${year}-${month}-${day} 10:30:00`,
-                resourceId: 'driver-1',
-                title: 'Kraków - Katowice Parking nr 1 Merceder Benz 2019'
-            }, 
-            {
-                id: 2,
-                start: `${year}-${month}-${day} 10:30:00`,
-                end:  `${year}-${month}-${day} 11:30:00`,
-                resourceId: 'office-1',
-                title: 'Roboty biurowe'
-            }, 
-            {
-               id: 3,
-               start: `${year}-${month}-${day} 14:30:00`,
-               end: `${year}-${month}-${day} 15:30:00`,
-               resourceId: 'office-1',
-               title: 'Raporty'
-            }, 
-            {
-                id: 4,
-                start: `${year}-${month}-${day - 1} 14:30:00`,
-                end: `${year}-${month}-${day - 1} 15:30:00`,
-                resourceId: 'driver-1',
-                title: 'Jazda'
-            }, 
-            {
-               id: 5,
-               start: `${year}-${month}-${day - 1} 15:30:00`,
-               end:  `${year}-${month}-${day - 1} 17:30:00`,
-               resourceId: 'driver-1',
-               title: 'Brak'
-           }
+            }
         ];
 
         schedulerData.setResources(resources);
-        schedulerData.setEvents(events);
 
         this.state = {
+            loading: true,
             viewModel: schedulerData,
             modalDeleteEventVisibility: false,
             eventToDelete: null,
-            events,
+            events: [],
             resources,
             modalAddEventVisibility: false,
             newEvent: null,
@@ -132,13 +81,83 @@ class WorkSchedule extends Component {
             modalEditVisibility: false,
             editEventTitle: '',
             eventToEdit: null
-        }
+        };
+    }
+
+    componentDidMount() {
+        Promise.all([
+            this.updateScheduleResources(),
+            this.updateScheduleEvents()
+        ]).then(() => {
+            this.setState({ loading: false });
+        });
+    }
+
+    updateScheduleResources() {
+        return api.getEmployees().then((employees) => {
+            let owners = employees.filter((employee) => employee.role === 'owner');
+            let office = employees.filter((employee) => employee.role === 'office');
+            let drivers = employees.filter((employee) => employee.role === 'driver');
+            
+            owners = owners.map((owner) => ({
+                id: 'owner-' + owner.id,
+                name: owner.firstName + ' ' + owner.lastName
+            }));
+
+            office = office.map((office) => ({
+                id: 'office-' + office.id,
+                name: office.firstName + ' ' + office.lastName,
+                parentId: 'office'
+            }));
+
+            drivers = drivers.map((driver) => ({
+                id: 'driver-' + driver.id,
+                name: driver.firstName + ' ' + driver.lastName,
+                parentId: 'drivers'
+            }));
+
+            let resources = [
+                ...owners,
+                {
+                    id: 'office',
+                    name: 'Sekretariat',
+                    groupOnly: true
+                },
+                ...office,
+                {
+                    id: 'drivers',
+                    name: 'Kierowcy',
+                    groupOnly: true
+                },
+                ...drivers
+            ];
+
+            this.setState({ resources });
+
+            this.schedulerData.setResources(resources);
+        });
+    }
+
+    updateScheduleEvents(startDate = null, endDate = null) {
+        return api.getWorkSchedule(startDate, endDate).then((events) => {
+            events = events.map((event) => ({
+                id: event.id,
+                start: event.date + ' ' + event.startHour + ':00',
+                end: event.date + ' ' + event.endHour + ':00',
+                resourceId: event.role + '-' + event.employeeId,
+                title: event.label
+            }));
+            this.setState({ events });
+
+            this.schedulerData.setEvents(events);
+        });
     }
 
     render() {
         return (
             <div className="work-schedule page">
                 <div className="main">
+                    {this.state.loading ? <ModalLoader/> : null}
                     <div className="tile scheduler">
                         <h2>Grafik pracy</h2>
                         <div className="wrapper">
@@ -212,36 +231,58 @@ class WorkSchedule extends Component {
         return dateLabel;
     }
 
-    prevClick = (schedulerData)=> {
+    prevClick = (schedulerData) => {
+        this.setState({ loading: true });
         schedulerData.prev();
-        schedulerData.setEvents(this.state.events);
-        this.setState({
-            viewModel: schedulerData
-        });
+
+        let promise;
+        if (schedulerData.viewType === ViewTypes.Week) {
+            promise = this.updateScheduleEvents(schedulerData.startDate, schedulerData.endDate);
+        }
+        else {
+            promise = this.updateScheduleEvents(schedulerData.startDate);
+        }
+
+        promise.then(() => this.setState({ loading: false }));
     }
 
-    nextClick = (schedulerData)=> {
+    nextClick = (schedulerData) => {
+        this.setState({ loading: true });
         schedulerData.next();
-        schedulerData.setEvents(this.state.events);
-        this.setState({
-            viewModel: schedulerData
-        });
+
+        let promise;
+        if (schedulerData.viewType === ViewTypes.Week) {
+            promise = this.updateScheduleEvents(schedulerData.startDate, schedulerData.endDate);
+        }
+        else {
+            promise = this.updateScheduleEvents(schedulerData.startDate);
+        }
+
+        promise.then(() => this.setState({ loading: false }));
     }
 
     onViewChange = (schedulerData, view) => {
         schedulerData.setViewType(view.viewType, view.showAgenda, view.isEventPerspective);
         schedulerData.setEvents(this.state.events);
-        this.setState({
-            viewModel: schedulerData
-        });
+        
+        let promise;
+        if (view.viewType === ViewTypes.Week) {
+            promise = this.updateScheduleEvents(schedulerData.startDate, schedulerData.endDate);
+        }
+        else {
+            promise = this.updateScheduleEvents(schedulerData.startDate);
+        }
+
+        promise.then(() => this.setState({ loading: false }));
     }
 
     onSelectDate = (schedulerData, date) => {
         schedulerData.setDate(date);
-        schedulerData.setEvents(this.state.events);
-        this.setState({
-            viewModel: schedulerData
-        });
+        this.setState({ loading: true });
+
+        let dateString = date.format('YYYY-MM-DD');
+        this.updateScheduleEvents(dateString)
+            .then(() => this.setState({ loading: false }));
     }
 
     editEvent = (schedulerData, event) => {       
@@ -347,44 +388,40 @@ class WorkSchedule extends Component {
             return;
         }
 
-        let event = { ...this.state.newEvent, title: this.state.newEventTitle };
-        this.state.viewModel.addEvent(event);
-        
-        this.setState({
-            modalAddEventVisibility: false,
-            newEventTitle: ''
-        });
+        let employeeId = parseInt(this.state.newEvent.resourceId.split('-')[1], 10);
+        let date = moment(this.state.newEvent.start).format('YYYY-MM-DD');
+        let startHour = moment(this.state.newEvent.start).format('HH:mm');
+        let endHour = moment(this.state.newEvent.end).format('HH:mm');
+        let label = this.state.newEventTitle;
+
+        api.addWorkScheduleEvent(employeeId, date, startHour, endHour, label)
+            .then((eventId) => {
+                let event = { ...this.state.newEvent, id: eventId, title: this.state.newEventTitle };
+
+                this.state.viewModel.addEvent(event);
+                
+                this.setState({
+                    modalAddEventVisibility: false,
+                    newEventTitle: ''
+                });
+            });
     }
 
     newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
-        if(this.context.user.role === 'owner') {
-            let newFreshId = 0;
-            schedulerData.events.forEach((item) => {
-                if(item.id >= newFreshId)
-                    newFreshId = item.id + 1;
-            });
-            
+        if(this.context.user.role === 'owner') {            
             this.setState({
                 modalAddEventVisibility: true,
                 newEvent: {
-                    id: newFreshId,
                     start: start,
                     end: end,
                     resourceId: slotId
                 }
             }); 
         }
-        else if(this.context.user.role === 'office' && slotId.startsWith('driver-')) {
-            let newFreshId = 0;
-            schedulerData.events.forEach((item) => {
-                if(item.id >= newFreshId)
-                    newFreshId = item.id + 1;
-            });
-            
+        else if(this.context.user.role === 'office' && slotId.startsWith('driver-')) {            
             this.setState({
                 modalAddEventVisibility: true,
                 newEvent: {
-                    id: newFreshId,
                     start: start,
                     end: end,
                     resourceId: slotId

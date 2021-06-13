@@ -263,8 +263,37 @@ export async function getDriverNames() {
 }
 
 
-export async function getWorkSchedule(driverId, range = 0, routeId = null) {
-    return sendPost('/work-schedule', { driverId, range, routeId } );
+/**
+ * `GET /api/work-schedule` Get today events \
+ * `GET /api/work-schedule/:date` Get events in given day \
+ * `GET /api/work-schedule/:startDate/:endDate` Get events between given days
+ * @async
+ * @param {string} [startDate]
+ * @param {string} [endDate] 
+ * @returns Promise that returns array of events
+ */
+export async function getWorkSchedule(startDate = null, endDate = null) {
+    if (startDate === null) {
+        return sendGet('/work-schedule');
+    }
+    else if (endDate === null) {
+        return sendGet('/work-schedule/' + startDate);
+    }
+    return sendGet(`/work-schedule/${startDate}/${endDate}`);
+}
+
+/**
+ * 
+ * @param {number} employeeId 
+ * @param {string} date 
+ * @param {string} startHour 
+ * @param {string} endHour 
+ * @param {string} label 
+ * @param {number} [vehicleId]
+ * @returns 
+ */
+export async function addWorkScheduleEvent(employeeId, date, startHour, endHour, label, vehicleId = null) {
+    return sendPost('/work-schedule', { employeeId, date, startHour, endHour, label, vehicleId });
 }
 
 

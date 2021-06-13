@@ -37,6 +37,16 @@ module.exports.findManyEntitiesByDate = (date) => {
         WHERE work_schedule.date=?`, [date?.toString()]);
 };
 
+module.exports.findManyEntitiesByDateRange = (startDate, endDate) => {
+    return db.query(`SELECT work_schedule.*, users.role, users.firstName, users.lastName
+        FROM work_schedule
+        LEFT JOIN users ON work_schedule.employeeId = users.id
+        WHERE work_schedule.date >= ? AND work_schedule.date <= ?`, [
+            startDate?.toString(),
+            endDate?.toString()
+        ]);
+};
+
 module.exports.updateEntity = (entityId, entity) => {
     return db.query(`UPDATE work_schedule
         SET startHour=?, endHour=?, label=?
