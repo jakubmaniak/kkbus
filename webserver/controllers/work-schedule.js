@@ -9,18 +9,22 @@ let { getFirst, splitProps } = require('../helpers/query-utils');
     `endHour` VARCHAR(5) NOT NULL, 
     `label` TEXT NOT NULL, 
     `vehicleId` INT NULL DEFAULT NULL, 
+    `routeId` INT NULL DEFAULT NULL,
+    `parking` TEXT NULL DEFAULT NULL
     PRIMARY KEY (`id`)
 );*/
 
 module.exports.addEntity = (entity) => {
-    return db.query('INSERT INTO work_schedule VALUES (?,?,?,?,?,?,?)', [
+    return db.query('INSERT INTO work_schedule VALUES (?,?,?,?,?,?,?,?,?)', [
         null,
         entity.employeeId,
         entity.date?.toString(),
         entity.startHour?.toString(),
         entity.endHour?.toString(),
         entity.label,
-        entity.vehicleId || null
+        entity.vehicleId || null,
+        entity.routeId || null,
+        entity.parking || null
     ]);
 };
 

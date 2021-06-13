@@ -290,10 +290,12 @@ export async function getWorkSchedule(startDate = null, endDate = null) {
  * @param {string} endHour 
  * @param {string} label 
  * @param {number} [vehicleId]
+ * @param {number} [routeId]
+ * @param {string} [parking]
  * @returns Promise that returns id of the added event
  */
-export async function addWorkScheduleEvent(employeeId, date, startHour, endHour, label, vehicleId = null) {
-    return sendPost('/work-schedule', { employeeId, date, startHour, endHour, label, vehicleId });
+export async function addWorkScheduleEvent(employeeId, date, startHour, endHour, label, vehicleId = null, routeId = null, parking = null) {
+    return sendPost('/work-schedule', { employeeId, date, startHour, endHour, label, vehicleId, routeId, parking });
 }
 
 /**
@@ -305,6 +307,15 @@ export async function deleteWorkScheduleEvent(eventId) {
     return sendDelete('/work-schedule/' + eventId);
 }
 
+/**
+ * `PATCH /api/work-schedule/:eventId` Update a work schedule event
+ * @param {number} eventId 
+ * @param {{startHour?: string, endHour?: string, label?: string}} properties 
+ * @returns Promise
+ */
+export async function updateWorkScheduleEvent(eventId, properties) {
+    return sendPatch('/work-schedule/' + eventId, properties);
+}
 
 export async function getTimetable(date = null) {
     if (date) {

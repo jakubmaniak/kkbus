@@ -54,10 +54,12 @@ router.post('/work-schedule', [
         startHour: string,
         endHour: string,
         label: string,
-        vehicleId?: number
+        vehicleId?: number,
+        routeId?: number,
+        parking?: string
     }`)
 ], async (req, res, next) => {
-    let { employeeId, date, startHour, endHour, label, vehicleId } = req.body;
+    let { employeeId, date, startHour, endHour, label, vehicleId, routeId, parking } = req.body;
 
     try {
         let result = await workScheduleController.addEntity({
@@ -66,7 +68,9 @@ router.post('/work-schedule', [
             startHour,
             endHour,
             label,
-            vehicleId
+            vehicleId,
+            routeId,
+            parking
         });
         res.ok({ id: result.insertId });
     }
