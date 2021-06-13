@@ -2,152 +2,106 @@ const express = require('express');
 const router = express.Router();
 const bodySchema = require('../middlewares/body-schema');
 const { minimumRole } = require('../middlewares/roles');
+const { parseDate, parseTime, parseDateTime } = require('../helpers/date');
+const { invalidValue } = require('../errors');
+
+const workScheduleController = require('../controllers/work-schedule');
 
 
-router.post('/work-schedule', [
-    minimumRole('client'),
-    bodySchema('{driverId: number, range: number, routeId?: number}')
-], (req, res) => {
-    let { driverId, range, routeId } = req.body;
-
-    let ab = [];
-    let ba = [];
-
-    if ((routeId == null || routeId == 1) && (range == 0 || range > 1)) {
-        let end = 'Kraków';
-
-        ab = ab.concat([
-            {
-                start: 'Kraków',
-                end,
-                day: 'dzisiaj',
-                hour: '13:30',
-                vehicle: 'Mercedes Sprinter (KR 193PK)',
-                parking: 'Kraków, parking Czyżyny, ',
-                parkingInfo: 'początkowy'
-            },
-            {
-                start: 'Kraków',
-                end,
-                day: 'dzisiaj',
-                hour: '17:00',
-                vehicle: 'Mercedes Sprinter (KR 193PK)',
-                parking: '-',
-                parkingInfo: ''
-            },
-            {
-                start: 'Kraków',
-                end: end,
-                day: 'dzisiaj',
-                hour: '20:30',
-                vehicle: 'Mercedes Sprinter (KR 193PK)',
-                parking: '-',
-                parkingInfo: ''
-            },
-        ]);
-    
-        ba = ba.concat([
-            {
-                start: end,
-                end: 'Kraków',
-                day: 'dzisiaj',
-                hour: '15:15',
-                vehicle: 'Mercedes Sprinter (KR 193PK)',
-                parking: '-',
-                parkingInfo: ''
-            },
-            {
-                start: end,
-                end: 'Kraków',
-                day: 'dzisiaj',
-                hour: '18:45',
-                vehicle: 'Mercedes Sprinter (KR 193PK)',
-                parking: '-',
-                parkingInfo: ''
-            },
-            {
-                start: end,
-                end: 'Kraków',
-                day: 'dzisiaj',
-                hour: '22:15',
-                vehicle: 'Mercedes Sprinter (KR 193PK)',
-                parking: 'Kraków, parking Czyżyny, ',
-                parkingInfo: 'końcowy'
-            }
-        ]);
+router.get('/work-schedule', [minimumRole('driver')], async (req, res, next) => {
+    try {
+        let today = parseDate(new Date());
+        let entities = await workScheduleController.findManyEntitiesByDate(today);
+        res.ok(entities);
     }
-    if ((routeId == null || routeId == 2) && range >= 1) {
-        let end = 'Warszawa';
-
-        ab = ab.concat([
-            {
-                start: 'Kraków',
-                end,
-                day: 'jutro',
-                hour: '13:30',
-                vehicle: 'Mercedes Sprinter (KR 193PK)',
-                parking: 'Kraków, parking Czyżyny, ',
-                parkingInfo: 'początkowy'
-            },
-            {
-                start: 'Kraków',
-                end,
-                day: 'jutro',
-                hour: '17:00',
-                vehicle: 'Mercedes Sprinter (KR 193PK)',
-                parking: '-',
-                parkingInfo: ''
-            },
-            {
-                start: 'Kraków',
-                end: end,
-                day: 'jutro',
-                hour: '20:30',
-                vehicle: 'Mercedes Sprinter (KR 193PK)',
-                parking: '-',
-                parkingInfo: ''
-            },
-        ]);
-    
-        ba = ba.concat([
-            {
-                start: end,
-                end: 'Kraków',
-                day: 'jutro',
-                hour: '15:15',
-                vehicle: 'Mercedes Sprinter (KR 193PK)',
-                parking: '-',
-                parkingInfo: ''
-            },
-            {
-                start: end,
-                end: 'Kraków',
-                day: 'jutro',
-                hour: '18:45',
-                vehicle: 'Mercedes Sprinter (KR 193PK)',
-                parking: '-',
-                parkingInfo: ''
-            },
-            {
-                start: end,
-                end: 'Kraków',
-                day: 'jutro',
-                hour: '22:15',
-                vehicle: 'Mercedes Sprinter (KR 193PK)',
-                parking: 'Kraków, parking Czyżyny, ',
-                parkingInfo: 'końcowy'
-            }
-        ]);
+    catch (err) {
+        next(err);
     }
-
-    let results = [...ab, ...ba];
-
-    res.ok(results.sort((a, b) =>
-        (a.day == b.day)
-        ? ((a.hour == b.hour) ? 0 : (a.hour > b.hour) ? 1 : -1)
-        : ((a.day > b.day) ? 1 : -1)
-    ));
 });
 
+router.get('/work-schedule/:date', [minimumRole('driver')], async (req, res, next) => {
+    try {
+        let date = parseDate(req.params.date);
+        let entities = await workScheduleController.findManyEntitiesByDate(date);
+        res.ok(entities);
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+router.post('/work-schedule', [
+    minimumRole('office'),
+    bodySchema(`{
+        employeeId: number,
+        date: string,
+        startHour: string,
+        endHour: string,
+        label: string,
+        vehicleId?: number
+    }`)
+], async (req, res, next) => {
+    let { employeeId, date, startHour, endHour, label, vehicleId } = req.body;
+
+    try {
+        let result = await workScheduleController.addEntity({
+            employeeId,
+            date,
+            startHour,
+            endHour,
+            label,
+            vehicleId
+        });
+        res.ok({ id: result.insertId });
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+router.patch('/work-schedule/:entityId', [
+    minimumRole('office'),
+    bodySchema(`{
+        startHour?: string,
+        endHour?: string,
+        label?: string
+    }`)
+], async (req, res, next) => {
+    let entityId = parseInt(req.params.entityId, 10);
+    
+    if (isNaN(entityId)) {
+        return next(invalidValue());
+    }
+
+    let { startHour, endHour, label } = req.body;
+
+    try {
+        await workScheduleController.updateEntity(entityId, {
+            startHour,
+            endHour,
+            label
+        });
+        res.ok();
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+router.delete('/work-schedule/:entityId', [minimumRole('office')], async (req, res, next) => {
+    let entityId = parseInt(req.params.entityId, 10);
+    
+    if (isNaN(entityId)) {
+        return next(invalidValue());
+    }
+
+    try {
+        await workScheduleController.deleteEntity(entityId);
+        res.ok();
+    }
+    catch (err) {
+        next(err);
+    }
+});
 
 module.exports = router;
