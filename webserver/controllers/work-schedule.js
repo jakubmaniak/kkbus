@@ -52,12 +52,28 @@ module.exports.findManyEntitiesByDateRange = (startDate, endDate) => {
 };
 
 module.exports.updateEntity = (entityId, entity) => {
+    entity = { ...entity };
+
+    if ('startHour' in entity) {
+        entity.startHour = entity.startHour?.toString();
+    }
+
+    if ('endHour' in entity) {
+        entity.endHour = entity.endHour?.toString();
+    }
+
+    for (let key in entity) {
+        if (entity[key] == null) {
+            delete entity[key];
+        }
+    }
+
+    let columns = Object.entries(entity).flat();
+
     return db.query(`UPDATE work_schedule
-        SET startHour=?, endHour=?, label=?
+        SET ${Object.entries(entity).map(() => '??=?').join(', ')}
         WHERE id=?`, [
-            entity.startHour?.toString(),
-            entity.endHour?.toString(),
-            entity.label,
+            ...columns,
             entityId
         ]);
 };
