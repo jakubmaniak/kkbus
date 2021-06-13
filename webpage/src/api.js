@@ -264,7 +264,7 @@ export async function getDriverNames() {
 
 
 /**
- * `GET /api/work-schedule` Get today events \
+ * `GET /api/work-schedule` Get today work schedule events \
  * `GET /api/work-schedule/:date` Get events in given day \
  * `GET /api/work-schedule/:startDate/:endDate` Get events between given days
  * @async
@@ -283,17 +283,26 @@ export async function getWorkSchedule(startDate = null, endDate = null) {
 }
 
 /**
- * 
+ * `POST /api/work-schedule` Add a work schedule event
  * @param {number} employeeId 
  * @param {string} date 
  * @param {string} startHour 
  * @param {string} endHour 
  * @param {string} label 
  * @param {number} [vehicleId]
- * @returns 
+ * @returns Promise that returns id of the added event
  */
 export async function addWorkScheduleEvent(employeeId, date, startHour, endHour, label, vehicleId = null) {
     return sendPost('/work-schedule', { employeeId, date, startHour, endHour, label, vehicleId });
+}
+
+/**
+ * `DELETE /api/work-schedule/:eventId` Delete a work schedule event
+ * @param {number} eventId 
+ * @returns Promise
+ */
+export async function deleteWorkScheduleEvent(eventId) {
+    return sendDelete('/work-schedule/' + eventId);
 }
 
 

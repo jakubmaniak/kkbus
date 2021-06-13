@@ -326,7 +326,7 @@ class WorkSchedule extends Component {
         });
     }
 
-    exitModalEditVisibility =() => {
+    exitModalEditVisibility = () => {
         this.setState({
             modalEditVisibility: false,
             editEventTitle: ''
@@ -348,8 +348,11 @@ class WorkSchedule extends Component {
     confirmDeletingEvent = () => {
         this.state.viewModel.removeEvent(this.state.eventToDelete);
       
+        api.deleteWorkScheduleEvent(this.state.eventToDelete.id);
+
         this.setState({
-            modalDeleteEventVisibility: false
+            modalDeleteEventVisibility: false,
+            eventToDelete: null
         });
     }
 
@@ -366,7 +369,6 @@ class WorkSchedule extends Component {
                 eventToDelete: event
             });
         }
-       
     }
 
     exitModalAddVisibility = () => {
