@@ -20,7 +20,41 @@ class WorkSchedule extends Component {
         super(props);
 
         moment.locale('pl');
+        let schedulerData = this.setupSchedulerData();
 
+        this.state = {
+            loading: true,
+            viewModel: schedulerData,
+            modalDeleteEventVisibility: false,
+            eventToDelete: null,
+            events: [],
+            resources: schedulerData.resources,
+            modalAddEventVisibility: false,
+            newEvent: null,
+            newEventTitle: '',
+            modalEditVisibility: false,
+            editEventTitle: '',
+            eventToEdit: null,
+            routes: null,
+            parkings: ['Parking nr 1', 'Parking nr 2'],
+            vehicles: null,
+            selectedVehicle: null
+        };
+    }
+
+    componentDidMount() {
+        Promise.all([
+            this.getRoutes(),
+            this.getVehicles(),
+            this.updateScheduleResources()
+        ])
+        .then(() => this.updateScheduleEvents())
+        .then(() => {
+            this.setState({ loading: false });
+        });
+    }
+
+    setupSchedulerData() {
         let schedulerData = new SchedulerData(
             moment().format('YYYY-MM-DD'),
             ViewTypes.Day,
@@ -49,11 +83,8 @@ class WorkSchedule extends Component {
             },
             moment
         );
-        schedulerData.localeMoment.locale('pl');
 
-        this.schedulerData = schedulerData;
-
-        let resources = [
+        schedulerData.setResources([
             {
                 id: 'drivers',
                 name: 'Kierowcy',
@@ -64,40 +95,11 @@ class WorkSchedule extends Component {
                 name: 'Sekretariat',
                 groupOnly: true
             }
-        ];
+        ]);
 
-        schedulerData.setResources(resources);
+        schedulerData.localeMoment.locale('pl');
 
-        this.state = {
-            loading: true,
-            viewModel: schedulerData,
-            modalDeleteEventVisibility: false,
-            eventToDelete: null,
-            events: [],
-            resources,
-            modalAddEventVisibility: false,
-            newEvent: null,
-            newEventTitle: '',
-            modalEditVisibility: false,
-            editEventTitle: '',
-            eventToEdit: null,
-            routes: null,
-            parkings: ['Parking nr 1', 'Parking nr 2'],
-            vehicles: null,
-            selectedVehicle: null
-        };
-    }
-
-    componentDidMount() {
-        Promise.all([
-            this.getRoutes(),
-            this.getVehicles(),
-            this.updateScheduleResources()
-        ])
-        .then(() => this.updateScheduleEvents())
-        .then(() => {
-            this.setState({ loading: false });
-        });
+        return schedulerData;
     }
 
     updateScheduleResources() {
@@ -141,7 +143,7 @@ class WorkSchedule extends Component {
 
             this.setState({ resources });
 
-            this.schedulerData.setResources(resources);
+            this.state.viewModel.setResources(resources);
         });
     }
 
@@ -165,7 +167,7 @@ class WorkSchedule extends Component {
             this.setState({ events });
             
 
-            this.schedulerData.setEvents(events);
+            this.state.viewModel.setEvents(events);
         });
     }
 
@@ -380,12 +382,7 @@ class WorkSchedule extends Component {
     }
 
     editEvent = (schedulerData, event) => {
-        let isOwner = (this.context.user.role === 'owner');
-        let isOffice = (this.context.user.role === 'office');
-        let isDriverEvent = (event.resourceId.startsWith('driver-'));
-        let hasPermission = (isOwner || (isOffice && isDriverEvent));
-
-        if (hasPermission) {
+        if (this.canUserEditEvent(event)) {
             this.setState({
                 modalEditVisibility: true,
                 eventToEdit: event,
@@ -583,12 +580,7 @@ class WorkSchedule extends Component {
     }
 
     updateEventStart = (schedulerData, event, newStart) => {
-        let isOwner = (this.context.user.role === 'owner');
-        let isOffice = (this.context.user.role === 'office');
-        let isDriverEvent = (event.resourceId.startsWith('driver-'));
-        let hasPermission = (isOwner || (isOffice && isDriverEvent));
-        
-        if (hasPermission) {
+        if (this.canUserEditEvent(event)) {
             schedulerData.updateEventStart(event, newStart);
             
             let startHour = moment(newStart).format('HH:mm');
@@ -599,12 +591,7 @@ class WorkSchedule extends Component {
     }
 
     updateEventEnd = (schedulerData, event, newEnd) => {
-        let isOwner = (this.context.user.role === 'owner');
-        let isOffice = (this.context.user.role === 'office');
-        let isDriverEvent = (event.resourceId.startsWith('driver-'));
-        let hasPermission = (isOwner || (isOffice && isDriverEvent));
-        
-        if (hasPermission) {
+        if (this.canUserEditEvent(event)) {
             schedulerData.updateEventEnd(event, newEnd);
             
             let endHour = moment(newEnd).format('HH:mm');
@@ -615,15 +602,11 @@ class WorkSchedule extends Component {
     }
 
     moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
-        let isOwner = (this.context.user.role === 'owner');
-        let isOffice = (this.context.user.role === 'office');
-        let isDriverEvent = (event.resourceId.startsWith('driver-'));
-        let hasPermission = (isOwner || (isOffice && isDriverEvent));
-
         let currentRole = event.resourceId.split('-')[0];
         let newRole = slotId.split('-')[0];
+        let canEdit = this.canUserEditEvent(event);
 
-        if (!hasPermission || currentRole !== newRole) return;
+        if (!canEdit || currentRole !== newRole) return;
 
         let employeeId = parseInt(slotId.split('-')[1], 10);
         let startHour = moment(start).format('HH:mm');
@@ -643,6 +626,15 @@ class WorkSchedule extends Component {
 
     isNonWorkingTime = (schedulerData, time) => {    
         return false;
+    }
+
+    canUserEditEvent(event) {
+        let isOwner = (this.context.user.role === 'owner');
+        let isOffice = (this.context.user.role === 'office');
+        let isDriverEvent = (event.resourceId.startsWith('driver-'));
+        let hasPermission = (isOwner || (isOffice && isDriverEvent));
+
+        return hasPermission;
     }
 }
 
