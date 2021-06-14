@@ -327,29 +327,59 @@ export async function updateWorkScheduleEvent(eventId, properties) {
     return sendPatch('/work-schedule/' + eventId, properties);
 }
 
-export async function getTimetable(date = null) {
-    if (date) {
-        return sendGet('/timetable/' + date);
+
+/**
+ * `GET /api/availability` Get today availability entities \
+ * `GET /api/availability/:date` Get availability entities in given day \
+ * `GET /api/availability/:startDate/:endDate` Get availability entities between given days
+ * @async
+ * @param {string} [startDate]
+ * @param {string} [endDate] 
+ * @returns Promise that returns array of entities
+ */
+ export async function getAvailabilityEntities(startDate = null, endDate = null) {
+    if (startDate === null) {
+        return sendGet('/availability');
     }
-    else {
-        return sendGet('/timetable');
+    else if (endDate === null) {
+        return sendGet('/availability/' + startDate);
     }
+    return sendGet(`/availability/${startDate}/${endDate}`);
 }
 
-export async function addTimetableItem(startDate, days, ranges, available, label = null) {
-    return sendPost('/timetable', { startDate, days, ranges, available, label });
+/**
+ * `POST /api/availability` Add an availability entity
+ * @param {number} employeeId 
+ * @param {string} date 
+ * @param {string} startHour 
+ * @param {string} endHour 
+ * @param {string} label
+ * @returns Promise that returns id of the added entity
+ */
+export async function addAvailabilityEntity(employeeId, date, startHour, endHour, label) {
+    return sendPost('/availability', { employeeId, date, startHour, endHour, label });
 }
 
-export async function addTimetableItemToUser(userId, startDate, days, ranges, available, label = null) {
-    return sendPost('/timetable/' + userId, { startDate, days, ranges, available, label });
+/**
+ * `DELETE /api/availability/:eventId` Delete an availability entity
+ * @param {number} entityId 
+ * @returns Promise
+ */
+export async function deleteAvailabilityEntity(entityId) {
+    return sendDelete('/availability/' + entityId);
 }
 
-export async function updateTimetableItem(itemId, startDate, days, ranges, available, label = null) {
-    return sendPut('/timetable/' + itemId, { startDate, days, ranges, available, label });
-}
-
-export async function deleteTimetableItem(itemId) {
-    return sendDelete('/timetable/' + itemId);
+/**
+ * `PATCH /api/availability/:entityId` Update an availability entity
+ * @param {number} entityId 
+ * @param {object} properties 
+ * @param {string} [properties.startHour]
+ * @param {string} [properties.endHour]
+ * @param {string} [properties.label]
+ * @returns Promise
+ */
+export async function updateAvailabilityEntity(entityId, properties) {
+    return sendPatch('/availability/' + entityId, properties);
 }
 
 

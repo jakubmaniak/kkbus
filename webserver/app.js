@@ -28,7 +28,7 @@ app.use('/api', require('./routes/route-report'));
 app.use('/api', require('./routes/booking-report'));
 app.use('/api', require('./routes/vehicle'));
 app.use('/api', require('./routes/work-schedule'));
-app.use('/api', require('./routes/timetable'));
+app.use('/api', require('./routes/availability'));
 app.use('/api', require('./routes/loyalty-program'));
 app.use('/api', require('./routes/employee'));
 app.use('/api', require('./routes/contact'));
