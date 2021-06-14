@@ -24,7 +24,7 @@ table.resource-table thead tr {
 
 .timeline-event .round-all.event-item {
     display: flex;
-    white-space: normal;
+    white-space: pre-wrap;
 }
 
 .timeline-event .round-all.event-item > span {

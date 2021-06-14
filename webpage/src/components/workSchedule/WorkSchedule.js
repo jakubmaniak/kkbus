@@ -40,10 +40,8 @@ class WorkSchedule extends Component {
                 weekResourceTableWidth: 200,
                 nonAgendaDayCellHeaderFormat: 'HH:mm',
                 nonAgendaOtherCellHeaderFormat: 'ddd DD.MM',
-                // groupOnlySlotColor: '#E3E3E3',
                 defaultEventBgColor: '#D9B430',
                 selectedAreaColor: 'rgba(217, 180, 48, 0.5)'
-                // minuteStep: 30,
             },
             {
                 getDateLabelFunc: this.getDateLabel,
@@ -155,11 +153,13 @@ class WorkSchedule extends Component {
                 end: event.date + ' ' + event.endHour + ':00',
                 resourceId: event.role + '-' + event.employeeId,
                 title: event.role === 'driver' ? 
-                    routeFormatter(this.state.routes.find(route => route.id == event.routeId)) 
-                    + ', ' +  event.parking 
-                    + ', ' + (this.state.vehicles.find(vehicle => vehicle.id === event.vehicleId)).brand
-                    + ' ' + (this.state.vehicles.find(vehicle => vehicle.id === event.vehicleId)).model
-                    + ' ' + (this.state.vehicles.find(vehicle => vehicle.id === event.vehicleId)).year
+                this.state.routes.find(route => route.id == event.routeId) ?
+                        routeFormatter(this.state.routes.find(route => route.id == event.routeId)) 
+                        + '\n' +  event.parking 
+                        + '\n' + (this.state.vehicles.find(vehicle => vehicle.id === event.vehicleId)).brand
+                        + ' ' + (this.state.vehicles.find(vehicle => vehicle.id === event.vehicleId)).model
+                        + ' ' + (this.state.vehicles.find(vehicle => vehicle.id === event.vehicleId)).year
+                        : null
                     : event.label
             }));
             this.setState({ events });
@@ -412,8 +412,8 @@ class WorkSchedule extends Component {
         let label;
 
         if(this.state.eventToEdit.resourceId.startsWith('driver-')) {
-            label = this.state.selectedRoute.departureLocation + ' - ' + this.state.selectedRoute.arrivalLocation + ', ' 
-                + this.state.selectedParking + ' ' + this.state.selectedVehicle.brand + ' ' + this.state.selectedVehicle.model 
+            label = this.state.selectedRoute.departureLocation + ' - ' + this.state.selectedRoute.arrivalLocation + '\n' 
+                + this.state.selectedParking + '\n' + this.state.selectedVehicle.brand + ' ' + this.state.selectedVehicle.model 
                 + ' ' + this.state.selectedVehicle.year;
         }
         else {
@@ -506,8 +506,8 @@ class WorkSchedule extends Component {
         let parking;
         let vehicleId;
         if(this.state.newEvent.resourceId.startsWith('driver-')) {
-            label = this.state.selectedRoute.departureLocation + ' - ' + this.state.selectedRoute.arrivalLocation + ', ' 
-                + this.state.selectedParking + ' ' + this.state.selectedVehicle.brand + ' ' + this.state.selectedVehicle.model 
+            label = this.state.selectedRoute.departureLocation + ' - ' + this.state.selectedRoute.arrivalLocation + '\n' 
+                + this.state.selectedParking + '\n' + this.state.selectedVehicle.brand + ' ' + this.state.selectedVehicle.model 
                 + ' ' + this.state.selectedVehicle.year;
             routeId = this.state.selectedRoute.id;
             parking = this.state.selectedParking;
