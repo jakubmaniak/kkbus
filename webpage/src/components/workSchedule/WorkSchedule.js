@@ -28,7 +28,6 @@ class WorkSchedule extends Component {
             modalDeleteEventVisibility: false,
             eventToDelete: null,
             events: [],
-            resources: schedulerData.resources,
             modalAddEventVisibility: false,
             newEvent: null,
             newEventTitle: '',
@@ -140,8 +139,6 @@ class WorkSchedule extends Component {
                 },
                 ...drivers
             ];
-
-            this.setState({ resources });
 
             this.state.viewModel.setResources(resources);
         });
