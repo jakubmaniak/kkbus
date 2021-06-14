@@ -28,14 +28,16 @@ module.exports.addEntity = (entity) => {
 module.exports.findAllEntities = () => {
     return db.query(`SELECT availability.*, users.role, users.firstName, users.lastName
         FROM availability
-        LEFT JOIN users ON availability.employeeId = users.id`);
+        LEFT JOIN users ON availability.employeeId = users.id`)
+    .then(resolveBooleans('available'));
 };
 
 module.exports.findManyEntitiesByDate = (date) => {
     return db.query(`SELECT availability.*, users.role, users.firstName, users.lastName
         FROM availability
         LEFT JOIN users ON availability.employeeId = users.id
-        WHERE availability.date=?`, [date?.toString()]);
+        WHERE availability.date=?`, [date?.toString()])
+    .then(resolveBooleans('available'));
 };
 
 module.exports.findManyEntitiesByDateRange = (startDate, endDate) => {
@@ -45,7 +47,8 @@ module.exports.findManyEntitiesByDateRange = (startDate, endDate) => {
         WHERE availability.date >= ? AND availability.date <= ?`, [
             startDate?.toString(),
             endDate?.toString()
-        ]);
+        ])
+    .then(resolveBooleans('available'));
 };
 
 module.exports.updateEntity = (entityId, entity) => {
