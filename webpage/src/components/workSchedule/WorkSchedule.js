@@ -85,13 +85,15 @@ class WorkSchedule extends Component {
             eventToEdit: null,
             routes: null,
             parkings: ['Parking nr 1', 'Parking nr 2'],
-            vehicles: null
+            vehicles: null,
+            selectedVehicle: null
         };
     }
 
     componentDidMount() {
         this.getRoutes().then(() => {
             Promise.all([
+                this.getVehicles(),
                 this.updateScheduleResources(),
                 this.updateScheduleEvents()
             ]).then(() => {
@@ -153,10 +155,15 @@ class WorkSchedule extends Component {
                 end: event.date + ' ' + event.endHour + ':00',
                 resourceId: event.role + '-' + event.employeeId,
                 title: event.role === 'driver' ? 
-                    routeFormatter(this.state.routes.find(route => route.id == event.routeId)) + ', ' +  event.parking 
+                    routeFormatter(this.state.routes.find(route => route.id == event.routeId)) 
+                    + ', ' +  event.parking 
+                    + ', ' + (this.state.vehicles.find(vehicle => vehicle.id === event.vehicleId)).brand
+                    + ' ' + (this.state.vehicles.find(vehicle => vehicle.id === event.vehicleId)).model
+                    + ' ' + (this.state.vehicles.find(vehicle => vehicle.id === event.vehicleId)).year
                     : event.label
             }));
             this.setState({ events });
+            
 
             this.schedulerData.setEvents(events);
         });
@@ -166,6 +173,14 @@ class WorkSchedule extends Component {
         return api.getAllRoutes()
             .then((results) => {
                 this.setState({ routes: results});
+            })
+            .catch(api.toastifyError);
+    }
+
+    getVehicles() {
+        return api.getAllVehicles()
+            .then((results) => {
+                this.setState({ vehicles: results});
             })
             .catch(api.toastifyError);
     }
@@ -216,6 +231,12 @@ class WorkSchedule extends Component {
                                     selectedIndex={0}
                                     handleChange={(selectedRoute) => this.setState({ selectedRoute })}
                                 />
+                                 <Dropdown 
+                                    items={this.state.vehicles}
+                                    selectedIndex={0}
+                                    textFormatter={({ brand, model, year }) => brand + ' ' + model + ' ' + year}
+                                    handleChange={(selectedVehicle) => this.setState({ selectedVehicle })}
+                                />
                                 <Dropdown 
                                     items={this.state.parkings}
                                     selectedIndex={0}
@@ -236,7 +257,29 @@ class WorkSchedule extends Component {
                     <header>Edytowanie zadania</header>
                     <section className="content">
                         <form className="edit-event" onSubmit={(ev) => {ev.preventDefault()}}>
-                            <input placeholder="Dane zadania" value={this.state.editEventTitle} onChange={this.handelChangeEditTitle}/>
+                        {this.state.eventToEdit?.resourceId.startsWith('driver-') ? 
+                                <>
+                                <Dropdown 
+                                    items={this.state.routes}
+                                    textFormatter={routeFormatter}
+                                    selectedIndex={this.getRouteIndexToEdit()}
+                                    handleChange={(selectedRoute) => this.setState({ selectedRoute })}
+                                />
+                                 <Dropdown 
+                                    items={this.state.vehicles}
+                                    selectedIndex={this.getVehicleIndexToEdit()}
+                                    textFormatter={({ brand, model, year }) => brand + ' ' + model + ' ' + year}
+                                    handleChange={(selectedVehicle) => this.setState({ selectedVehicle })}
+                                />
+                                <Dropdown 
+                                    items={this.state.parkings}
+                                    selectedIndex={this.getParkingIndexToEdit()}
+                                    handleChange={(selectedParking) => this.setState({ selectedParking })}
+                                />
+                                </>        
+                            : 
+                                <input placeholder="Dane zadania" value={this.state.editEventTitle} onChange={this.handelChangeEditTitle}/>
+                            }
                         </form>
                     </section>
                     <section className="footer">
@@ -246,6 +289,24 @@ class WorkSchedule extends Component {
                 </Modal>
             </div>
         )
+    }
+
+    getRouteIndexToEdit() {
+        let findRoute = this.state.routes.find(route => this.state.eventToEdit?.title.startsWith(route.departureLocation + ' - ' + route.arrivalLocation));
+        let index = this.state.routes.indexOf(findRoute);
+        return index;
+    }
+
+    getVehicleIndexToEdit() {
+        let findVehicle = this.state.vehicles.find(vehicle => this.state.eventToEdit?.title.includes(vehicle.brand + ' ' + vehicle.model + ' ' + vehicle.year));
+        let index = this.state.vehicles.indexOf(findVehicle);
+        return index;
+    }
+
+    getParkingIndexToEdit() {
+        let findParking = this.state.parkings.find(parking => this.state.eventToEdit?.title.includes(parking));
+        let index = this.state.parkings.indexOf(findParking);
+        return index;
     }
 
     getDateLabel = (schedulerData, viewType, startDate, endDate) => {
@@ -340,7 +401,7 @@ class WorkSchedule extends Component {
     }
 
     confirmEditingEvent = () => {
-        if(this.state.editEventTitle === '') {
+        if(this.state.editEventTitle === '' && this.state.eventToEdit.resourceId.startsWith('office-')) {
             alert('Wprowadź nazwę zadania');
             return;
         }
@@ -348,14 +409,27 @@ class WorkSchedule extends Component {
         let scheduler = [ ...this.state.events ];
         let targetEvent = scheduler.find(event => event.id === this.state.eventToEdit.id);
         let targetIndex = scheduler.indexOf(targetEvent);
+        let label;
 
-        scheduler[targetIndex].title = this.state.editEventTitle;
+        if(this.state.eventToEdit.resourceId.startsWith('driver-')) {
+            label = this.state.selectedRoute.departureLocation + ' - ' + this.state.selectedRoute.arrivalLocation + ', ' 
+                + this.state.selectedParking + ' ' + this.state.selectedVehicle.brand + ' ' + this.state.selectedVehicle.model 
+                + ' ' + this.state.selectedVehicle.year;
+        }
+        else {
+            label = this.state.editEventTitle;
+        }
+
+        scheduler[targetIndex].title = label;
 
         this.state.viewModel.setEvents(scheduler);
         this.setState({
             events: scheduler,
             modalEditVisibility: false,
-            editEventTitle: ''
+            editEventTitle: '',
+            selectedParking: null,
+            selectedRoute: null,
+            selectedVehicle: null
         });
     }
 
@@ -430,17 +504,21 @@ class WorkSchedule extends Component {
         let label;
         let routeId;
         let parking;
+        let vehicleId;
         if(this.state.newEvent.resourceId.startsWith('driver-')) {
-            label = this.state.selectedRoute.departureLocation + ' - ' + this.state.selectedRoute.arrivalLocation + ', ' + this.state.selectedParking;
+            label = this.state.selectedRoute.departureLocation + ' - ' + this.state.selectedRoute.arrivalLocation + ', ' 
+                + this.state.selectedParking + ' ' + this.state.selectedVehicle.brand + ' ' + this.state.selectedVehicle.model 
+                + ' ' + this.state.selectedVehicle.year;
             routeId = this.state.selectedRoute.id;
             parking = this.state.selectedParking;
+            vehicleId = this.state.selectedVehicle.id;
         }
         else {
-            label= this.state.newEventTitle;
+            label = this.state.newEventTitle;
         }
 
         if(this.state.newEvent.resourceId.startsWith('driver-')) {
-            api.addWorkScheduleEvent(employeeId, date, startHour, endHour, '', null, routeId, parking)
+            api.addWorkScheduleEvent(employeeId, date, startHour, endHour, '', vehicleId, routeId, parking)
             .then((eventId) => {
                 let event = { ...this.state.newEvent, id: eventId, title: label };
 
@@ -450,7 +528,8 @@ class WorkSchedule extends Component {
                     modalAddEventVisibility: false,
                     newEventTitle: '',
                     selectedParking: null,
-                    selectedRoute: null
+                    selectedRoute: null,
+                    selectedVehicle: null
                 });
             });
         }
