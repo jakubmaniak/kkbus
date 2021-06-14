@@ -89,15 +89,17 @@ class WorkSchedule extends Component {
     }
 
     componentDidMount() {
-        this.getRoutes().then(() => {
+        Promise.all([
+            this.getRoutes(),
+            this.getVehicles()
+        ]).then(() => {
             Promise.all([
-                this.getVehicles(),
                 this.updateScheduleResources(),
                 this.updateScheduleEvents()
             ]).then(() => {
                 this.setState({ loading: false });
             });
-        })
+        });
     }
 
     updateScheduleResources() {
