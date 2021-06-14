@@ -22,13 +22,13 @@ class Timetable extends Component {
         moment.locale('pl');
     
         let date = new Date();
-        let day = (date.getDay() - 1).toString().padStart('0', 2);;
-        let month = (date.getMonth() + 1).toString().padStart('0', 2);
+        let day = (date.getDate()).toString().padStart(2, '0');
+        let month = (date.getMonth() + 1).toString().padStart(2, '0');
         let year = date.getFullYear();
 
         let colors = ['#C73535', '#47BE61'];
 
-        let schedulerData = new SchedulerData(`${year}-${month}-${day}`, ViewTypes.Day, false, false, {
+        let schedulerData = new SchedulerData(moment().format('YYYY-MM-DD'), ViewTypes.Day, false, false, {
                 views: [
                     { viewName: 'Tydzień', viewType: ViewTypes.Week, showAgenda: false, isEventPerspective: false },
                     { viewName: 'Dzień', viewType: ViewTypes.Day, showAgenda: false, isEventPerspective: false }
