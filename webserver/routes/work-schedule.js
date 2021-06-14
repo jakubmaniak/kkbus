@@ -85,7 +85,10 @@ router.patch('/work-schedule/:entityId', [
         employeeId?: number,
         startHour?: string,
         endHour?: string,
-        label?: string
+        label?: string,
+        routeId?: number,
+        vehicleId?: number,
+        parking?: string
     }`)
 ], async (req, res, next) => {
     let entityId = parseInt(req.params.entityId, 10);
@@ -94,7 +97,7 @@ router.patch('/work-schedule/:entityId', [
         return next(invalidValue());
     }
 
-    let { employeeId, startHour, endHour, label } = req.body;
+    let { employeeId, startHour, endHour, label, routeId, vehicleId, parking } = req.body;
 
     try {
         startHour = parseTime(startHour);
@@ -104,7 +107,10 @@ router.patch('/work-schedule/:entityId', [
             employeeId,
             startHour,
             endHour,
-            label
+            label,
+            routeId,
+            vehicleId,
+            parking
         });
         res.ok();
     }
