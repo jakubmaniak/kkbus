@@ -464,6 +464,7 @@ class WorkSchedule extends Component {
     }
 
     deleteEvent = (schedulerData, event) => {
+        console.log({...event});
         if (this.context.user.role === 'owner') {
             this.setState({ 
                 modalDeleteEventVisibility: true,
@@ -519,8 +520,8 @@ class WorkSchedule extends Component {
 
         if(this.state.newEvent.resourceId.startsWith('driver-')) {
             api.addWorkScheduleEvent(employeeId, date, startHour, endHour, '', vehicleId, routeId, parking)
-            .then((eventId) => {
-                let event = { ...this.state.newEvent, id: eventId, title: label };
+            .then((result) => {
+                let event = { ...this.state.newEvent, id: result.id, title: label };
 
                 this.state.viewModel.addEvent(event);
                 
@@ -536,8 +537,8 @@ class WorkSchedule extends Component {
 
         else {
             api.addWorkScheduleEvent(employeeId, date, startHour, endHour, label, null, 0, null)
-            .then((eventId) => {
-                let event = { ...this.state.newEvent, id: eventId, title: label };
+            .then((result) => {
+                let event = { ...this.state.newEvent, id: result.id, title: label };
 
                 this.state.viewModel.addEvent(event);
                 
