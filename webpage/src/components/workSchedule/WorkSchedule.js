@@ -101,7 +101,7 @@ class WorkSchedule extends Component {
     }
 
     updateScheduleResources() {
-        return api.getEmployees().then((employees) => {
+        return api.getEmployeeNames().then((employees) => {
             let owners = employees.filter((employee) => employee.role === 'owner');
             let office = employees.filter((employee) => employee.role === 'office');
             let drivers = employees.filter((employee) => employee.role === 'driver');
@@ -574,54 +574,47 @@ class WorkSchedule extends Component {
     }
 
     updateEventStart = (schedulerData, event, newStart) => {
-        let startTimeBeforeMove =  event.start;
-        schedulerData.updateEventStart(event, newStart);
+        let isOwner = (this.context.user.role === 'owner');
+        let isOffice = (this.context.user.role === 'office');
+        let isDriverEvent = (event.resourceId.startsWith('driver-'));
+        let hasPermission = (isOwner || (isOffice && isDriverEvent));
+        
+        if (hasPermission) {
+            schedulerData.updateEventStart(event, newStart);
+            
+            let startHour = moment(newStart).format('HH:mm');
+            api.updateWorkScheduleEvent(event.id, { startHour });
+        }
 
-        if(this.context.user.role === 'owner') {
-            this.setState({
-                viewModel: schedulerData
-            });
-        }
-        else if(this.context.user.role === 'office' && event.resourceId.startsWith('driver-')) {
-            this.setState({
-                viewModel: schedulerData
-            });
-        }
-        else {
-            schedulerData.updateEventStart(event, startTimeBeforeMove);
-            this.setState({
-                viewModel: schedulerData
-            });
-        }
+        this.setState({ viewModel: schedulerData });
     }
 
     updateEventEnd = (schedulerData, event, newEnd) => {
-        let endTimeBeforeMove =  event.end;
-        schedulerData.updateEventEnd(event, newEnd);
+        let isOwner = (this.context.user.role === 'owner');
+        let isOffice = (this.context.user.role === 'office');
+        let isDriverEvent = (event.resourceId.startsWith('driver-'));
+        let hasPermission = (isOwner || (isOffice && isDriverEvent));
+        
+        if (hasPermission) {
+            schedulerData.updateEventEnd(event, newEnd);
+            
+            let endHour = moment(newEnd).format('HH:mm');
+            api.updateWorkScheduleEvent(event.id, { endHour });
+        }
 
-        if(this.context.user.role === 'owner') {
-            this.setState({
-                viewModel: schedulerData
-            });
-        }
-        else if(this.context.user.role === 'office' && event.resourceId.startsWith('driver-')) {
-            this.setState({
-                viewModel: schedulerData
-            });
-        }
-        else {
-            schedulerData.updateEventEnd(event, endTimeBeforeMove);
-            this.setState({
-                viewModel: schedulerData
-            });
-        }
+        this.setState({ viewModel: schedulerData });
     }
 
     moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
-        let roleBefore = event.resourceId.split('-')[0];
-        let roleAfter = slotId.split('-')[0];
+        let isOwner = (this.context.user.role === 'owner');
+        let isOffice = (this.context.user.role === 'office');
+        let isDriverEvent = (event.resourceId.startsWith('driver-'));
+        let hasPermission = (isOwner || (isOffice && isDriverEvent));
 
-        if (roleBefore !== roleAfter) return;
+        let currentRole = event.resourceId.split('-')[0];
+        let newRole = slotId.split('-')[0];
+
+        if (!hasPermission || currentRole !== newRole) return;
 
         let employeeId = parseInt(slotId.split('-')[1], 10);
         let startHour = moment(start).format('HH:mm');
