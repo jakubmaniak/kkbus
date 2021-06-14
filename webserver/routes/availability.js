@@ -53,10 +53,11 @@ router.post('/availability', [
         date: string,
         startHour: string,
         endHour: string,
-        label: string
+        label: string,
+        available: boolean
     }`)
 ], async (req, res, next) => {
-    let { employeeId, date, startHour, endHour, label } = req.body;
+    let { employeeId, date, startHour, endHour, label, available } = req.body;
 
     try {
         let result = await availabilityController.addEntity({
@@ -64,7 +65,8 @@ router.post('/availability', [
             date,
             startHour,
             endHour,
-            label
+            label,
+            available
         });
         res.ok({ id: result.insertId });
     }
@@ -79,7 +81,8 @@ router.patch('/availability/:entityId', [
         employeeId?: number,
         startHour?: string,
         endHour?: string,
-        label?: string
+        label?: string,
+        available?: boolean
     }`)
 ], async (req, res, next) => {
     let entityId = parseInt(req.params.entityId, 10);
@@ -88,7 +91,7 @@ router.patch('/availability/:entityId', [
         return next(invalidValue());
     }
 
-    let { employeeId, startHour, endHour, label } = req.body;
+    let { employeeId, startHour, endHour, label, available } = req.body;
 
     try {
         startHour = parseTime(startHour);
@@ -98,7 +101,8 @@ router.patch('/availability/:entityId', [
             employeeId,
             startHour,
             endHour,
-            label
+            label,
+            available
         });
         res.ok();
     }

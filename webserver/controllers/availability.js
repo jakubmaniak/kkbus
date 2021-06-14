@@ -9,17 +9,19 @@ let { getFirst, splitProps, resolveRoles, resolveBooleans } = require('../helper
     `startHour` VARCHAR(5) NOT NULL ,
     `endHour` VARCHAR(5) NOT NULL ,
     `label` TEXT NOT NULL ,
+    `available` BOOLEAN NOT NULL DEFAULT TRUE
     PRIMARY KEY (`id`)
 );*/
 
 module.exports.addEntity = (entity) => {
-    return db.query('INSERT INTO availability VALUES (?,?,?,?,?,?)', [
+    return db.query('INSERT INTO availability VALUES (?,?,?,?,?,?,?)', [
         null,
         entity.employeeId,
         entity.date?.toString(),
         entity.startHour?.toString(),
         entity.endHour?.toString(),
-        entity.label
+        entity.label,
+        entity.available
     ]);
 };
 

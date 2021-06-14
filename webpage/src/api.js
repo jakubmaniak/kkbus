@@ -354,10 +354,11 @@ export async function updateWorkScheduleEvent(eventId, properties) {
  * @param {string} startHour 
  * @param {string} endHour 
  * @param {string} label
+ * @param {boolean} available
  * @returns Promise that returns id of the added entity
  */
-export async function addAvailabilityEntity(employeeId, date, startHour, endHour, label) {
-    return sendPost('/availability', { employeeId, date, startHour, endHour, label });
+export async function addAvailabilityEntity(employeeId, date, startHour, endHour, label, available) {
+    return sendPost('/availability', { employeeId, date, startHour, endHour, label, available });
 }
 
 /**
@@ -376,6 +377,7 @@ export async function deleteAvailabilityEntity(entityId) {
  * @param {string} [properties.startHour]
  * @param {string} [properties.endHour]
  * @param {string} [properties.label]
+ * @param {boolean} [properties.available]
  * @returns Promise
  */
 export async function updateAvailabilityEntity(entityId, properties) {
