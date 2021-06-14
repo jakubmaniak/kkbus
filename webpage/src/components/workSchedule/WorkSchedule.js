@@ -259,23 +259,23 @@ class WorkSchedule extends Component {
                         <form className="edit-event" onSubmit={(ev) => {ev.preventDefault()}}>
                         {this.state.eventToEdit?.resourceId.startsWith('driver-') ? 
                                 <>
-                                <Dropdown 
-                                    items={this.state.routes}
-                                    textFormatter={routeFormatter}
-                                    selectedIndex={this.getRouteIndexToEdit()}
-                                    handleChange={(selectedRoute) => this.setState({ selectedRoute })}
-                                />
-                                 <Dropdown 
-                                    items={this.state.vehicles}
-                                    selectedIndex={this.getVehicleIndexToEdit()}
-                                    textFormatter={({ brand, model, year }) => brand + ' ' + model + ' ' + year}
-                                    handleChange={(selectedVehicle) => this.setState({ selectedVehicle })}
-                                />
-                                <Dropdown 
-                                    items={this.state.parkings}
-                                    selectedIndex={this.getParkingIndexToEdit()}
-                                    handleChange={(selectedParking) => this.setState({ selectedParking })}
-                                />
+                                    <Dropdown 
+                                        items={this.state.routes}
+                                        textFormatter={routeFormatter}
+                                        selectedIndex={this.getRouteIndexToEdit()}
+                                        handleChange={(selectedRoute) => this.setState({ selectedRoute })}
+                                    />
+                                    <Dropdown 
+                                        items={this.state.vehicles}
+                                        selectedIndex={this.getVehicleIndexToEdit()}
+                                        textFormatter={({ brand, model, year }) => brand + ' ' + model + ' ' + year}
+                                        handleChange={(selectedVehicle) => this.setState({ selectedVehicle })}
+                                    />
+                                    <Dropdown 
+                                        items={this.state.parkings}
+                                        selectedIndex={this.getParkingIndexToEdit()}
+                                        handleChange={(selectedParking) => this.setState({ selectedParking })}
+                                    />
                                 </>        
                             : 
                                 <input placeholder="Dane zadania" value={this.state.editEventTitle} onChange={this.handelChangeEditTitle}/>
@@ -379,17 +379,17 @@ class WorkSchedule extends Component {
             .then(() => this.setState({ loading: false }));
     }
 
-    editEvent = (schedulerData, event) => {       
-        if(this.context.user.role === 'owner') {
+    editEvent = (schedulerData, event) => {
+        let isOwner = (this.context.user.role === 'owner');
+        let isOffice = (this.context.user.role === 'office');
+        let isDriverEvent = (event.resourceId.startsWith('driver-'));
+        let hasPermission = (isOwner || (isOffice && isDriverEvent));
+
+        if (hasPermission) {
             this.setState({
                 modalEditVisibility: true,
                 eventToEdit: event,
-            });
-        }
-        else if(this.context.user.role === 'office' && event.resourceId.startsWith('driver-')) {
-            this.setState({
-                modalEditVisibility: true,
-                eventToEdit: event,
+                editEventTitle: event.title
             });
         }
     };
@@ -409,18 +409,26 @@ class WorkSchedule extends Component {
         let scheduler = [ ...this.state.events ];
         let targetEvent = scheduler.find(event => event.id === this.state.eventToEdit.id);
         let targetIndex = scheduler.indexOf(targetEvent);
-        let label;
+        let title;
 
         if(this.state.eventToEdit.resourceId.startsWith('driver-')) {
-            label = this.state.selectedRoute.departureLocation + ' - ' + this.state.selectedRoute.arrivalLocation + '\n' 
+            title = this.state.selectedRoute.departureLocation + ' - ' + this.state.selectedRoute.arrivalLocation + '\n' 
                 + this.state.selectedParking + '\n' + this.state.selectedVehicle.brand + ' ' + this.state.selectedVehicle.model 
                 + ' ' + this.state.selectedVehicle.year;
+
+            api.updateWorkScheduleEvent(this.state.eventToEdit.id, {
+                vehicleId: this.state.selectedVehicle.id,
+                routeId: this.state.selectedRoute.id,
+                parking: this.state.selectedParking
+            });
         }
         else {
-            label = this.state.editEventTitle;
+            title = this.state.editEventTitle;
+
+            api.updateWorkScheduleEvent(this.state.eventToEdit.id, { label: title });
         }
 
-        scheduler[targetIndex].title = label;
+        scheduler[targetIndex].title = title;
 
         this.state.viewModel.setEvents(scheduler);
         this.setState({
