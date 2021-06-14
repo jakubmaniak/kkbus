@@ -314,7 +314,13 @@ export async function deleteWorkScheduleEvent(eventId) {
 /**
  * `PATCH /api/work-schedule/:eventId` Update a work schedule event
  * @param {number} eventId 
- * @param {{startHour?: string, endHour?: string, label?: string, vehicleId?: number, routeId?: number, parking?: string}} properties 
+ * @param {object} properties 
+ * @param {string} [properties.startHour]
+ * @param {string} [properties.endHour]
+ * @param {string} [properties.label]
+ * @param {number} [properties.vehicleId]
+ * @param {number} [properties.routeId]
+ * @param {string} [properties.parking]
  * @returns Promise
  */
 export async function updateWorkScheduleEvent(eventId, properties) {
