@@ -103,7 +103,7 @@ class WorkSchedule extends Component {
     }
 
     updateScheduleResources() {
-        return api.getEmployees().then((employees) => {
+        return api.getEmployeeNames().then((employees) => {
             let owners = employees.filter((employee) => employee.role === 'owner');
             let office = employees.filter((employee) => employee.role === 'office');
             let drivers = employees.filter((employee) => employee.role === 'driver');

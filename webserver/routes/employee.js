@@ -22,6 +22,20 @@ router.get('/employees', [minimumRole('owner')], async (req, res, next) => {
     }
 });
 
+router.get('/employees/names', [minimumRole('driver')], async (req, res, next) => {
+    try {
+        let employeeRoles = [roles.driver.priority, roles.office.priority, roles.owner.priority];
+        let employees = userController.findManyUsersByRole(...employeeRoles)
+            .then(selectProps('id', 'role', 'firstName', 'lastName'))
+            .then(resolveRoles('role'));
+
+        res.ok(await employees);
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
 router.get('/employees/drivers/names', [minimumRole('driver')], async (req, res, next) => {
     try {
         let drivers = userController.findManyUsersByRole(roles.driver.priority)
@@ -29,8 +43,8 @@ router.get('/employees/drivers/names', [minimumRole('driver')], async (req, res,
 
         res.ok(await drivers);
     }
-    catch {
-        next(serverError());
+    catch (err) {
+        next(err);
     }
 });
 

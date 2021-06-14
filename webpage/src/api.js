@@ -258,6 +258,10 @@ export async function getEmployees() {
     return sendGet('/employees');
 }
 
+export async function getEmployeeNames() {
+    return sendGet('/employees/names');
+}
+
 export async function getDriverNames() {
     return sendGet('/employees/drivers/names');
 }
