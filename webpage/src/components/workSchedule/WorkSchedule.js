@@ -93,10 +93,10 @@ class WorkSchedule extends Component {
             this.getRoutes(),
             this.getVehicles(),
             this.updateScheduleResources()
-        ]).then(() => {
-            this.updateScheduleEvents().then(() => {
-                this.setState({ loading: false });
-            });
+        ])
+        .then(() => this.updateScheduleEvents())
+        .then(() => {
+            this.setState({ loading: false });
         });
     }
 
