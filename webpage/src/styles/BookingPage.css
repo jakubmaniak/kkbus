@@ -1,58 +1,60 @@
-table.currentBookings th {
+
+table.bookings-table {
+    width: 100%;
+}
+
+table.bookings-table th {
     color: black;
     text-align: left;
     padding: 0;
     font-weight: 500;
 }
 
-table.currentBookings tr {
+table.bookings-table tr {
     height: 40px;
 }
 
-table.currentBookings tr:nth-child(2n + 1) {
+table.bookings-table tbody tr:nth-child(2n + 1) {
     background-color: rgb(240, 240, 240);
 }
 
-table.currentBookings th:first-child,
-table.currentBookings td:first-child {
+table.bookings-table th:first-child,
+table.bookings-table td:first-child {
     padding-left: 8px;
 }
 
-table.currentBookings {
-    width: 100%;
-}
-
-table.currentBookings tbody td:nth-child(n + 3) {
+table.bookings-table tbody td:nth-child(n + 4) {
     padding: 0;
     text-align: left;
 }
 
-table.currentBookings th:nth-child(4),
-table.currentBookings th:nth-child(5),
-table.currentBookings th:nth-child(6),
-table.currentBookings td:nth-child(4),
-table.currentBookings td:nth-child(5),
-table.currentBookings td:nth-child(6) {
+table.bookings-table tbody td:nth-child(1) {
+    background-color: transparent;
+}
+
+table.bookings-table td:nth-child(2),
+table.bookings-table td:nth-child(3),
+table.bookings-table th:nth-child(2),
+table.bookings-table th:nth-child(3) {
+    padding-left: 8px;
+}
+
+table.bookings-table th:nth-child(4),
+table.bookings-table th:nth-child(5),
+table.bookings-table th:nth-child(6),
+table.bookings-table tbody td:nth-child(4),
+table.bookings-table tbody td:nth-child(5),
+table.bookings-table tbody td:nth-child(6) {
     text-align: center;
     width: 120px;
 }
 
-table.currentBookings td:nth-child(6) {
-    width: 120px;
-}
-
-.currentBookings th:last-child,
-.currentBookings td:last-child {
+.bookings-table th:last-child,
+.bookings-table td:last-child {
     width: 100px;
 }
 
-table.currentBookings td button {
+table.bookings-table td button {
     width: 100px;
     background-color: #C73535;
 }
-
-table.currentBookings tbody td:nth-child(1) {
-    background-color: transparent;
-}
-
-

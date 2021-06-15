@@ -49,15 +49,17 @@ function BookingPage() {
             <div className="main">
                 <div className="tile">
                     <h2>Aktualne rezerwacje</h2>
-                    <table className="currentBookings">
+                    <table className="bookings-table">
                         <thead>
-                            <th>Data</th>
-                            <th>Godzina</th>
-                            <th>Kierunek</th>
-                            <th>Normalne</th>
-                            <th>Ulgowe</th>
-                            <th>Dzieci do lat 5</th>
-                            <th></th>
+                            <tr>
+                                <th>Data</th>
+                                <th>Godzina</th>
+                                <th>Kierunek</th>
+                                <th>Normalne</th>
+                                <th>Ulgowe</th>
+                                <th>Dzieci do lat 5</th>
+                                <th></th>
+                            </tr>
                         </thead>
                         <tbody>
                             {futureBookings.map((booking) => {
@@ -82,8 +84,8 @@ function BookingPage() {
                 </div>
                 <div className="tile">
                     <h2>Historia</h2>
-                    <table className="pastBookings">
-                        <tbody>
+                    <table className="bookings-table">
+                        <thead>
                             <tr>
                                 <th>Data</th>
                                 <th>Godzina</th>
@@ -92,6 +94,8 @@ function BookingPage() {
                                 <th>Ulgowe</th>
                                 <th>Dzieci do lat 5</th>
                             </tr>
+                        </thead>
+                        <tbody>
                             {pastBookings.map((booking, i) => {
                                 return (
                                     <BookingItem 

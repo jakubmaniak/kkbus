@@ -20,7 +20,7 @@ function BookingItem(props) {
                 <td>{props.normalTickets}</td>
                 <td>{props.reducedTickets}</td>
                 <td>{props.childTickets}</td>
-                <td>{checkCancelPosibility() ? <button onClick={props.deleteBooking}>Odwołaj</button> : null}</td>
+                {checkCancelPosibility() ? <td><button onClick={props.deleteBooking}>Odwołaj</button></td> : null}
             </tr>
             
     );
