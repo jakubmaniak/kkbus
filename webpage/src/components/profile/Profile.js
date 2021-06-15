@@ -48,7 +48,6 @@ function Profile() {
                 setLastName(results.lastName);
                 setBirthDate(results.birthDate);
                 setPhoneNumber(results.phoneNumber);
-                console.log(results);
             })
             .catch(api.toastifyError);
             
@@ -65,7 +64,7 @@ function Profile() {
 
     function saveData() {
         if(firstName  && lastName  && birthDate  && login  && email  && phoneNumber) {
-            api.updateUserProfile({firstName, birthDate: dayjs(birthDate).format('YYYY-MM-DD HH:mm:ss'), lastName, login, mail: email, phoneNumber})
+            api.updateUserProfile({firstName, birthDate: dayjs(birthDate).format('YYYY-MM-DD HH:mm:ss'), lastName, login, email, phoneNumber})
                 .then(() => {
                     toast.success('Zmieniono dane');
                     setPerson({firstName,  lastName, login, email, phoneNumber, birthDate});
