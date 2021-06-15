@@ -16,8 +16,13 @@ function Person(props) {
     
     useEffect(() => {
         let expirationDate = props.bookLockExpirationDate;
-        let formattedDate = dayjs(expirationDate).tz('Europe/Warsaw').format('DD.MM.YYYY');
-        setBookLockExpirationDate(formattedDate);
+
+        if (expirationDate !== null) {
+            let formattedDate = dayjs(expirationDate).tz('Europe/Warsaw').format('DD.MM.YYYY');
+            setBookLockExpirationDate(formattedDate);
+        }
+        
+        setBookLockExpirationDate(null);
     }, [props.bookLockExpirationDate]);
 
     return (

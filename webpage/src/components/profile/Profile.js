@@ -24,7 +24,7 @@ function Profile() {
     let [modalChangePasswordVisibility, setModalChangePasswordVisibility] = useState(false);
     let [modalChangeDataVisibility, setModalChangeDataVisibility] = useState(false);
 
-    let [email, setEmail] = useState();
+    let [email, setEmail] = useState('');
     let [login, setLogin] = useState('');
     let [firstName, setFirstName] = useState('');
     let [lastName, setLastName] = useState('');
@@ -106,7 +106,7 @@ function Profile() {
             <Modal visible={modalChangeDataVisibility}>
                     <header>Dane użytkownika</header>
                     <section className="content">
-                        <form onSubmit={(ev) => {ev.preventDefault(); saveData();}}>
+                        <form onSubmit={(ev) => { ev.preventDefault(); saveData(); }}>
                             <input placeholder="Adres email" value={email} onChange={fromValue(setEmail)}/>
                             <input placeholder="Login" value={login} onChange={fromValue(setLogin)}/>
                             <input placeholder="Imię" value={firstName} onChange={fromValue(setFirstName)}/>
@@ -125,7 +125,7 @@ function Profile() {
             <Modal visible={modalChangePasswordVisibility}>
                     <header>Zmiana hasła</header>
                     <section className="content">
-                        <form onSubmit={(ev) => {ev.preventDefault(); savePassword();}}>
+                        <form onSubmit={(ev) => { ev.preventDefault(); savePassword(); }}>
                             <input placeholder="Aktualne hasło" type="password" value={currentPassword} onChange={fromValue(setCurrentPassword)}/>
                             <input placeholder="Nowe hasło" type="password" value={newPassword} onChange={fromValue(setNewPassword)}/>
                         </form>
