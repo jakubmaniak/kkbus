@@ -224,15 +224,15 @@
 }
 
 .book-route input {
-    width: 420px;
+    width: 400px;
 }
 
 .edit-route input {
-    width: 420px;
+    width: 400px;
 }
 
 .edit-route textarea {
-    width: 420px;
+    width: 400px;
     height: 96px;
 }
 
@@ -257,7 +257,7 @@
 }
 
 .routes-page .modal input {
-    width: 420px;
+    width: 400px;
 }
 
 
