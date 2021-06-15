@@ -57,5 +57,6 @@ table.bookings-table tbody td:nth-child(6) {
 
 table.bookings-table td button {
     width: 100px;
+    height: 38px;
     background-color: #C73535;
 }
