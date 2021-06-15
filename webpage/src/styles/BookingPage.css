@@ -1,6 +1,7 @@
 
 table.bookings-table {
     width: 100%;
+    border-spacing: 0;
 }
 
 table.bookings-table th {
