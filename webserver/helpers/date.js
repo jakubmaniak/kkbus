@@ -1,11 +1,11 @@
 module.exports.parseDate = (date) => {
     try {
+        if (typeof date == 'number') {
+            date = new Date(date);
+        }
+
         if (date instanceof Date) {
             date = date.toJSON();
-        }
-    
-        if (typeof date == 'number') {
-            date = new Date(date).toJSON()
         }
     
         date = date.slice(0, 10);
@@ -45,6 +45,11 @@ module.exports.parseDate = (date) => {
 module.exports.parseTime = (time) => {
     try {
         let t;
+
+        if (typeof time == 'number') {
+            time = new Date(time);
+        }
+
         if (time instanceof Date) {
             t = new Date(time)
                 .toJSON()
@@ -83,6 +88,10 @@ module.exports.parseDateTime = (datetime) => {
     let date, time;
 
     if (datetime instanceof Date) {
+        date = this.parseDate(datetime);
+        time = this.parseTime(datetime);
+    }
+    else if (typeof datetime == 'number') {
         date = this.parseDate(datetime);
         time = this.parseTime(datetime);
     }
