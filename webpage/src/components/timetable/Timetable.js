@@ -39,7 +39,7 @@ class Timetable extends Component {
             modalAddEventVisibility: false,
             newEvent: null,
             newEventType: null,
-            items: ['Dostępność', 'Zajętość'],
+            items: ['Zajętość', 'Dostępność'],
             modalEditVisibility: false,
             editEventTitle: '',
             eventToEdit: null,
@@ -208,7 +208,7 @@ class Timetable extends Component {
                                 items={this.state.items}
                                 alwaysSelected
                                 placeholder="Wybierz status dyspozycyjności"
-                                handleChange={(item) => this.setState({newEventType: item})}
+                                handleChange={(item) => this.setState({ newEventType: item })}
                             />
                         </form>
                     </section>
@@ -360,8 +360,11 @@ class Timetable extends Component {
     confirmDeletingEvent = () => {
         this.state.viewModel.removeEvent(this.state.eventToDelete);
       
+        api.deleteAvailabilityEntity(this.state.eventToDelete.id);
+
         this.setState({
-            modalDeleteEventVisibility: false
+            modalDeleteEventVisibility: false,
+            eventToDelete: null
         });
     }
 
@@ -382,32 +385,55 @@ class Timetable extends Component {
     }
 
     confirmAddingEvent = () => {
-        let event = { ...this.state.newEvent, title: this.state.newEventType, bgColor: this.state.newEventType === 'Dostępność' ?  '#47BE61' : '#C73535'};
-        this.state.viewModel.addEvent(event);
-        
-        this.setState({
-            modalAddEventVisibility: false,
-            newEventType: ''
-        });
+        let employeeId = parseInt(this.state.newEvent.resourceId.split('-')[1], 10);
+        let date = moment(this.state.newEvent.start).format('YYYY-MM-DD');
+        let startHour = moment(this.state.newEvent.start).format('HH:mm');
+        let endHour = moment(this.state.newEvent.end).format('HH:mm');
+        let label = 'ok';
+        let available = this.state.items.indexOf(this.state.newEventType);
+        console.log(employeeId, date, startHour, endHour, label, available);
+
+         api.addAvailabilityEntity(employeeId, date, startHour, endHour, label, available)
+             .then((result) => {
+                 let event = { ...this.state.newEvent, id: result.id, title: this.state.newEventType, bgColor: this.state.newEventType === 'Dostępność' ?  '#47BE61' : '#C73535' };
+                 this.state.viewModel.addEvent(event);
+
+                console.log(event, this.state.newEvent);
+
+                this.setState({
+                    modalAddEventVisibility: false,
+                    newEventType: ''
+                });
+            })
+            .catch((err) => console.log(err));
     }
 
     newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
         if(this.context.user.role + '-' + this.context.user.id === slotId) {
-            let newFreshId = 0;
-            schedulerData.events.forEach((item) => {
-                if(item.id >= newFreshId)
-                    newFreshId = item.id + 1;
-            });
-            
             this.setState({
                 modalAddEventVisibility: true,
                 newEvent: {
-                    id: newFreshId,
                     start: start,
                     end: end,
                     resourceId: slotId
                 }
             }); 
+
+            // let newFreshId = 0;
+            // schedulerData.events.forEach((item) => {
+            //     if(item.id >= newFreshId)
+            //         newFreshId = item.id + 1;
+            // });
+            
+            // this.setState({
+            //     modalAddEventVisibility: true,
+            //     newEvent: {
+            //         id: newFreshId,
+            //         start: start,
+            //         end: end,
+            //         resourceId: slotId
+            //     }
+            // }); 
         }
         else return;
     }
