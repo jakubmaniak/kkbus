@@ -50,16 +50,16 @@ function BookingPage() {
                 <div className="tile">
                     <h2>Aktualne rezerwacje</h2>
                     <table className="currentBookings">
+                        <thead>
+                            <th>Data</th>
+                            <th>Godzina</th>
+                            <th>Kierunek</th>
+                            <th>Normalne</th>
+                            <th>Ulgowe</th>
+                            <th>Dzieci do lat 5</th>
+                            <th></th>
+                        </thead>
                         <tbody>
-                            <tr>
-                                <th>Data</th>
-                                <th>Godzina</th>
-                                <th>Kierunek</th>
-                                <th>Normalne</th>
-                                <th>Ulgowe</th>
-                                <th>Dzieci do lat 5</th>
-                                <th></th>
-                            </tr>
                             {futureBookings.map((booking) => {
                                 return (
                                     <BookingItem 
