@@ -6,6 +6,7 @@ import Scheduler, { SchedulerData, ViewTypes } from 'react-big-scheduler';
 import withDragDropContext from '../workSchedule/withDnDContext';
 import NotificationModal from '../modals/NotificationModal';
 import Modal from '../modals/Modal';
+import { ModalLoader } from '../Loader';
 import Dropdown from '../dropdowns/Dropdown';
 import UserContext from '../../contexts/User';
 import '../../styles/WorkSchedule.css';
@@ -13,22 +14,56 @@ import 'react-big-scheduler/lib/css/style.css';
 
 import * as api from '../../api';
 
-import Loader from '../Loader';
 
-class Timetable extends Component {    
+class Timetable extends Component {  
+    
     constructor(props) {
         super(props);
 
         moment.locale('pl');
+        let schedulerData = this.setupSchedulerData();
     
         let date = new Date();
         let day = (date.getDate()).toString().padStart(2, '0');
         let month = (date.getMonth() + 1).toString().padStart(2, '0');
         let year = date.getFullYear();
 
-        let colors = ['#C73535', '#47BE61'];
+       
 
-        let schedulerData = new SchedulerData(moment().format('YYYY-MM-DD'), ViewTypes.Day, false, false, {
+        this.state = {
+            loading: true,
+            viewModel: schedulerData,
+            modalDeleteEventVisibility: false,
+            eventToDelete: null,
+            events: [],
+            modalAddEventVisibility: false,
+            newEvent: null,
+            newEventType: null,
+            items: ['Dostępność', 'Zajętość'],
+            modalEditVisibility: false,
+            editEventTitle: '',
+            eventToEdit: null,
+            colors: ['#C73535', '#47BE61']
+        }
+    }
+
+    componentDidMount() {
+        Promise.all([
+            this.updateAvailabilityEntitiesResources()
+        ])
+        .then(() => this.updateAvailabilityEntitiesEvents())
+        .then(() => {
+            this.setState({ loading: false });
+        });
+    }
+
+    setupSchedulerData() {
+        let schedulerData = new SchedulerData(
+            moment().format('YYYY-MM-DD'), 
+            ViewTypes.Day, 
+            false, 
+            false, 
+            {
                 views: [
                     { viewName: 'Tydzień', viewType: ViewTypes.Week, showAgenda: false, isEventPerspective: false },
                     { viewName: 'Dzień', viewType: ViewTypes.Day, showAgenda: false, isEventPerspective: false }
@@ -50,104 +85,92 @@ class Timetable extends Component {
             {
                 getDateLabelFunc: this.getDateLabel,
                 isNonWorkingTimeFunc: this.isNonWorkingTime
-            }, moment);
+            }, 
+            moment
+        );
 
-        schedulerData.localeMoment.locale('pl');
-
-        let resources = [
+        schedulerData.setResources([
             {
-                id: 'owner-1',
-                name: 'Jan Kowalski'
-             //    groupOnly: true
-             },
-             {
                 id: 'drivers',
                 name: 'Kierowcy',
                 groupOnly: true
-             },
-             {
-                id: 'driver-4',
-                name: 'Tomasz Rajdowiec',
-                parentId: 'drivers'
-             },
-             {
+            },
+            {
                 id: 'office',
                 name: 'Sekretariat',
                 groupOnly: true
-             },
-             {
-                id: 'office-2',
-                name: 'Anna Miła',
+            }
+        ]);
+
+        schedulerData.localeMoment.locale('pl');
+
+        return schedulerData;
+    }
+        
+    updateAvailabilityEntitiesResources() {
+        return api.getEmployeeNames().then((employees) => {
+            let owners = employees.filter((employee) => employee.role === 'owner');
+            let office = employees.filter((employee) => employee.role === 'office');
+            let drivers = employees.filter((employee) => employee.role === 'driver');
+            
+            owners = owners.map((owner) => ({
+                id: 'owner-' + owner.id,
+                name: owner.firstName + ' ' + owner.lastName
+            }));
+
+            office = office.map((office) => ({
+                id: 'office-' + office.id,
+                name: office.firstName + ' ' + office.lastName,
                 parentId: 'office'
-             }
-        ];
+            }));
 
-        let events = [
-            {
-                id: 1,
-                start: `${year}-${month}-${day} 09:00:00`,
-                end:  `${year}-${month}-${day} 10:00:00`,
-                resourceId: 'driver-4',
-                title: 'Dostępność',
-                bgColor: colors[1]
-            }, 
-            {
-                id: 2,
-                start: `${year}-${month}-${day} 10:00:00`,
-                end:  `${year}-${month}-${day} 11:00:00`,
-                resourceId: 'office-2',
-                title: 'Zajętość',
-                bgColor: colors[0]
-            }, 
-            {
-               id: 3,
-               start: `${year}-${month}-${day} 14:00:00`,
-               end: `${year}-${month}-${day} 15:00:00`,
-               resourceId: 'office-2',
-               title: 'Zajętość',
-               bgColor: colors[0]
-            }, 
-            {
-                id: 4,
-                start: `${year}-${month}-${day - 1} 14:00:00`,
-                end: `${year}-${month}-${day - 1} 15:00:00`,
-                resourceId: 'driver-4',
-                title: 'Zajętość',
-                bgColor: colors[0]
-            }, 
-            {
-               id: 5,
-               start: `${year}-${month}-${day - 1} 15:00:00`,
-               end:  `${year}-${month}-${day - 1} 17:00:00`,
-               resourceId: 'driver-4',
-               title: 'Dostępność',
-               bgColor: colors[1]
-           }
-        ];
+            drivers = drivers.map((driver) => ({
+                id: 'driver-' + driver.id,
+                name: driver.firstName + ' ' + driver.lastName,
+                parentId: 'drivers'
+            }));
 
-        schedulerData.setResources(resources);
-        schedulerData.setEvents(events);
+            let resources = [
+                ...owners,
+                {
+                    id: 'office',
+                    name: 'Sekretariat',
+                    groupOnly: true
+                },
+                ...office,
+                {
+                    id: 'drivers',
+                    name: 'Kierowcy',
+                    groupOnly: true
+                },
+                ...drivers
+            ];
 
-        this.state = {
-            viewModel: schedulerData,
-            modalDeleteEventVisibility: false,
-            eventToDelete: null,
-            events,
-            resources,
-            modalAddEventVisibility: false,
-            newEvent: null,
-            newEventType: null,
-            items: ['Dostępność', 'Zajętość'],
-            modalEditVisibility: false,
-            editEventTitle: '',
-            eventToEdit: null,     
-        }
+            this.state.viewModel.setResources(resources);
+        });
+    }
+
+    updateAvailabilityEntitiesEvents(startDate = null, endDate = null) {
+        return api.getAvailabilityEntities(startDate, endDate).then((events) => {
+            events = events.map((event) => ({
+                id: event.id,
+                start: event.date + ' ' + event.startHour + ':00',
+                end: event.date + ' ' + event.endHour + ':00',
+                resourceId: event.role + '-' + event.employeeId,
+                title: event.available ? 'Dostępność' : 'Zajętość',
+                bgColor: event.available ? this.state.colors[1] : this.state.colors[0]
+            }));
+            this.setState({ events });
+
+            this.state.viewModel.setEvents(events);
+        });
     }
 
     render() {
         return (
             <div className="work-schedule page">
                 <div className="main">
+                {this.state.loading ? <ModalLoader/> : null}
                     <div className="tile scheduler">
                         <h2>Dyspozycyjność</h2>
                         <div className="wrapper">
@@ -227,35 +250,57 @@ class Timetable extends Component {
     }
 
     prevClick = (schedulerData)=> {
+        this.setState({ loading: true });
         schedulerData.prev();
-        schedulerData.setEvents(this.state.events);
-        this.setState({
-            viewModel: schedulerData
-        });
+
+        let promise;
+        if (schedulerData.viewType === ViewTypes.Week) {
+            promise = this.updateAvailabilityEntitiesEvents(schedulerData.startDate, schedulerData.endDate);
+        }
+        else {
+            promise = this.updateAvailabilityEntitiesEvents(schedulerData.startDate);
+        }
+
+        promise.then(() => this.setState({ loading: false }));
     }
 
     nextClick = (schedulerData)=> {
+        this.setState({ loading: true });
         schedulerData.next();
-        schedulerData.setEvents(this.state.events);
-        this.setState({
-            viewModel: schedulerData
-        });
+
+        let promise;
+        if (schedulerData.viewType === ViewTypes.Week) {
+            promise = this.updateAvailabilityEntitiesEvents(schedulerData.startDate, schedulerData.endDate);
+        }
+        else {
+            promise = this.updateAvailabilityEntitiesEvents(schedulerData.startDate);
+        }
+
+        promise.then(() => this.setState({ loading: false }));
     }
 
     onViewChange = (schedulerData, view) => {
         schedulerData.setViewType(view.viewType, view.showAgenda, view.isEventPerspective);
         schedulerData.setEvents(this.state.events);
-        this.setState({
-            viewModel: schedulerData
-        });
+        
+        let promise;
+        if (view.viewType === ViewTypes.Week) {
+            promise = this.updateAvailabilityEntitiesEvents(schedulerData.startDate, schedulerData.endDate);
+        }
+        else {
+            promise = this.updateAvailabilityEntitiesEvents(schedulerData.startDate);
+        }
+
+        promise.then(() => this.setState({ loading: false }));
     }
 
     onSelectDate = (schedulerData, date) => {
         schedulerData.setDate(date);
-        schedulerData.setEvents(this.state.events);
-        this.setState({
-            viewModel: schedulerData
-        });
+        this.setState({ loading: true });
+
+        let dateString = date.format('YYYY-MM-DD');
+        this.updateAvailabilityEntitiesEvents(dateString)
+            .then(() => this.setState({ loading: false }));
     }
 
     editEvent = (schedulerData, event) => {
