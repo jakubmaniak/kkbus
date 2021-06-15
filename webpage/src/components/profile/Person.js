@@ -21,8 +21,9 @@ function Person(props) {
             let formattedDate = dayjs(expirationDate).tz('Europe/Warsaw').format('DD.MM.YYYY');
             setBookLockExpirationDate(formattedDate);
         }
-        
-        setBookLockExpirationDate(null);
+        else {
+            setBookLockExpirationDate(null);
+        }
     }, [props.bookLockExpirationDate]);
 
     return (
