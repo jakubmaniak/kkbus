@@ -317,9 +317,17 @@ router.delete('/booking/:bookingId', [onlyRoles('client', 'office', 'owner')], a
             }
 
             await bookingController.deleteBooking(wantedId, req.user.id);
+
+            bookingController.sendBookingCancellation(req.user.email, booking);
         }
         else if (req.user.role == roles.office || req.user.role == roles.owner) {
+            let user = await userController.findUserById(booking.userId);
             await bookingController.deleteBooking(wantedId);
+
+            bookingController.sendBookingCancellation(user.email, booking);
+        }
+        else {
+            throw unauthorized();
         }
     }
     catch (err) {
