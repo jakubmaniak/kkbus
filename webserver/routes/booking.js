@@ -126,9 +126,9 @@ router.post('/booking', [
 ], async (req, res, next) => {
     let userId = req.user.id;
 
-    let status = await userController.getBookLockStatus(userId);
-    if (!status.canBook) {
-        let expirationDate = parseDate(status.bookLockExpirationDate);
+    let user = await userController.findUserById(userId);
+    if (!user.canBook) {
+        let expirationDate = parseDate(user.bookLockExpirationDate);
         let today = new Date();
         today.setMilliseconds(0);
         today.setSeconds(0);
@@ -194,9 +194,8 @@ router.post('/booking', [
         return next(invalidRequest());
     }
 
-    let result;
     try {
-        result = await bookingController.addBooking({
+        let result = await bookingController.addBooking({
             userId,
             routeId,
             date,
@@ -208,12 +207,14 @@ router.post('/booking', [
             lastStop,
             price
         });
+
+        res.ok({ id: result.insertId });
+
+        bookingController.sendBookingConfirmation(user.email, { });
     }
     catch (err) {
-        return next(err);
+        next(err);
     }
-
-    res.ok({ id: result.insertId });
 });
 
 
@@ -251,9 +252,12 @@ router.post('/booking/:userId', [
     }
     [normalTickets, reducedTickets, childTickets] = tickets;
 
-    let route;
+    let user, route;
     try {
-        route = await routeController.findRoute(routeId);
+        let getUser = userController.findUserById(userId);
+        let getRoute = routeController.findRoute(routeId);
+        
+        [user, route] = await Promise.all([getUser, getRoute]);
     }
     catch (err) {
         return next(err);
@@ -271,9 +275,8 @@ router.post('/booking/:userId', [
         return next(invalidRequest());
     }
 
-    let result;
     try {
-        result = await bookingController.addBooking({
+        let result = await bookingController.addBooking({
             userId,
             routeId,
             date,
@@ -285,12 +288,14 @@ router.post('/booking/:userId', [
             lastStop,
             price
         });
+
+        res.ok({ id: result.insertId });
+
+        bookingController.sendBookingConfirmation(user.email, { });
     }
     catch (err) {
         return next(err);
     }
-
-    res.ok({ id: result.insertId });
 });
 
 router.delete('/booking/:bookingId', [onlyRoles('client', 'office', 'owner')], async (req, res, next) => {
