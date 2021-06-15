@@ -41,8 +41,7 @@ class Timetable extends Component {
             newEventType: null,
             items: ['Zajętość', 'Dostępność'],
             modalEditVisibility: false,
-            editEventTitle: '',
-            eventToEdit: null,
+            editEventType: '',
             colors: ['#C73535', '#47BE61']
         }
     }
@@ -221,7 +220,12 @@ class Timetable extends Component {
                     <header>Edytowanie zadania</header>
                     <section className="content">
                         <form className="edit-event" onSubmit={(ev) => {ev.preventDefault()}}>
-                            <input placeholder="Dane zadania" value={this.state.editEventTitle} onChange={this.handelChangeEditTitle}/>
+                        <Dropdown 
+                                items={this.state.items}
+                                alwaysSelected
+                                placeholder="Wybierz status dyspozycyjności"
+                                handleChange={(item) => this.setState({ editEventType: item })}
+                        />
                         </form>
                     </section>
                     <section className="footer">
@@ -304,7 +308,7 @@ class Timetable extends Component {
     }
 
     editEvent = (schedulerData, event) => {
-        if(this.context.user.role + '-' + this.context.user.id === event.resourceId) {
+        if(this.context.user.role + '-' + this.context.user.id === event.resourceId) {            
             this.setState({
                 modalEditVisibility: true,
                 eventToEdit: event,
@@ -319,22 +323,24 @@ class Timetable extends Component {
     }
 
     confirmEditingEvent = () => {
-        if(this.state.editEventTitle === '') {
-            alert('Wprowadź nazwę zadania');
-            return;
-        }
-
         let scheduler = [ ...this.state.events ];
         let targetEvent = scheduler.find(event => event.id === this.state.eventToEdit.id);
         let targetIndex = scheduler.indexOf(targetEvent);
 
-        scheduler[targetIndex].title = this.state.editEventTitle;
+        console.log(this.state.eventToEdit);
+
+        api.updateAvailabilityEntity(this.state.eventToEdit.id, {
+            available: this.state.editEventType === 'Dostępność'
+        });
+
+        scheduler[targetIndex].title = this.state.editEventType;
+        scheduler[targetIndex].bgColor = this.state.editEventType === 'Dostępność' ? this.state.colors[1] : this.state.colors[0];
 
         this.state.viewModel.setEvents(scheduler);
         this.setState({
             events: scheduler,
             modalEditVisibility: false,
-            editEventTitle: ''
+            eventToEdit: null
         });
     }
 
@@ -415,22 +421,6 @@ class Timetable extends Component {
                     resourceId: slotId
                 }
             }); 
-
-            // let newFreshId = 0;
-            // schedulerData.events.forEach((item) => {
-            //     if(item.id >= newFreshId)
-            //         newFreshId = item.id + 1;
-            // });
-            
-            // this.setState({
-            //     modalAddEventVisibility: true,
-            //     newEvent: {
-            //         id: newFreshId,
-            //         start: start,
-            //         end: end,
-            //         resourceId: slotId
-            //     }
-            // }); 
         }
         else return;
     }
