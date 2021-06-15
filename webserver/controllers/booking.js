@@ -1,3 +1,4 @@
+let mailer = require('../configs/mail');
 let db = require('../configs/db');
 let { getFirst } = require('../helpers/query-utils');
 
@@ -17,6 +18,30 @@ CREATE TABLE `VdWUtFNeZC`.`bookings` (
     PRIMARY KEY (`id`)
 );
 */
+
+module.exports.sendBookingConfirmation = (email, booking) => {
+    return mailer.sendMail(
+        email,
+        'KKBus - Potwierdzenie rezerwacji',
+        `<p>Zarezerwowano<p>`
+    );
+};
+
+module.exports.sendBookingReminder = (email, booking) => {
+    return mailer.sendMail(
+        email,
+        'KKBus - Przypomnienie o rezerwacji',
+        `<p>Przypomnienie</p>`
+    );
+};
+
+module.exports.sendBookingCancellation = (email, booking) => {
+    return mailer.sendMail(
+        email,
+        'KKBus - Odwołanie rezerwacji',
+        `<p>Odwołano</p>`
+    );
+};
 
 module.exports.addBooking = (booking) => {
     return db.query('INSERT INTO bookings VALUES (?,?,?,?,?,?,?,?,?,?,?)', [
