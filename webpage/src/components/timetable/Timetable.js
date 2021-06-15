@@ -389,16 +389,13 @@ class Timetable extends Component {
         let date = moment(this.state.newEvent.start).format('YYYY-MM-DD');
         let startHour = moment(this.state.newEvent.start).format('HH:mm');
         let endHour = moment(this.state.newEvent.end).format('HH:mm');
-        let label = 'ok';
-        let available = this.state.items.indexOf(this.state.newEventType);
-        console.log(employeeId, date, startHour, endHour, label, available);
+        let available = this.state.newEventType === 'Dostępność';
+        console.log(employeeId, date, startHour, endHour, available);
 
-         api.addAvailabilityEntity(employeeId, date, startHour, endHour, label, available)
+         api.addAvailabilityEntity(employeeId, date, startHour, endHour, available)
              .then((result) => {
-                 let event = { ...this.state.newEvent, id: result.id, title: this.state.newEventType, bgColor: this.state.newEventType === 'Dostępność' ?  '#47BE61' : '#C73535' };
-                 this.state.viewModel.addEvent(event);
-
-                console.log(event, this.state.newEvent);
+                let event = { ...this.state.newEvent, id: result.id, title: this.state.newEventType, bgColor: this.state.newEventType === 'Dostępność' ?  '#47BE61' : '#C73535' };
+                this.state.viewModel.addEvent(event);
 
                 this.setState({
                     modalAddEventVisibility: false,
