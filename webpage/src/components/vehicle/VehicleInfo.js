@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext  } from 'react';
 import '../../styles/VehicleInfo.css';
 
 import * as api from '../../api';
@@ -6,6 +6,7 @@ import * as api from '../../api';
 import { fromValue } from '../../helpers/from-value';
 import { routeFormatter } from '../../helpers/text-formatters';
 import toast from '../../helpers/toast';
+import UserContext from '../../contexts/User';
 
 import Vehicle from './Vehicle';
 import Modal from '../modals/Modal';
@@ -36,6 +37,8 @@ function VehicleInfo() {
     let [selectedState, setSelectedState] = useState('');
     let [selectedParking, setSelectedParking] = useState('');
     let [selectedRoutes, setSelectedRoutes] = useState('');
+
+    let { role } = useContext(UserContext).user;
 
     useEffect(() => {
         updateVehicle();
@@ -122,9 +125,11 @@ function VehicleInfo() {
         <div className="vehicle-info-page page">
             <ModalLoader loading={loading} />
             <div className="main">
-                <div className="button-add-container">
-                    <button onClick={() => setModalAddVehicleVisibility(true)}>Dodaj pojazd</button>
-                </div>
+                {role === 'owner' ? 
+                    <div className="button-add-container">
+                        <button onClick={() => setModalAddVehicleVisibility(true)}>Dodaj pojazd</button>
+                    </div>
+                : null}
                 {vehicles.map((vehicle) => {
                     return (
                         <Vehicle key={vehicle.id}
