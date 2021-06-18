@@ -81,23 +81,19 @@
     margin-right: 196px;
 }
 
-.reward + .reward {
-    margin-top: 8px;
-}
-
 .reward:nth-child(2n - 1) {
     background-color: rgba(0, 0, 0, 0.05);
 }
 
 .reward button {
     width: 95px;
-    height: 100%;
+    height: 38px;
     color: white;
 }
 
 .reward .modify {
     display: flex;
-    height: 100%;
+    height: 38px;
 }
 
 .reward .delete {
