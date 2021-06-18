@@ -212,8 +212,8 @@ class WorkSchedule extends Component {
                 </div>
                 <NotificationModal 
                     visible={this.state.modalDeleteEventVisibility}
-                    header={'Usunięcie zdarzenia'}
-                    name={'usunąć zdażenie'}
+                    header={'Usuwanie zadania'}
+                    name={'usunąć zadanie'}
                     buttonText={'usuń'}
                     notificationModalExit={this.exitNotificationModalVisibility}
                     delete={this.confirmDeletingEvent}
