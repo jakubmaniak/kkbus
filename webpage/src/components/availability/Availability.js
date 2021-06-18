@@ -217,7 +217,7 @@ class Availability extends Component {
                     </section>  
                 </Modal>
                 <Modal visible={this.state.modalEditVisibility}>
-                    <header>Edytowanie dyspozycyjności</header>
+                    <header>Edytowanie statusu dyspozycyjności</header>
                     <section className="content">
                         <form className="edit-event" onSubmit={(ev) => {ev.preventDefault()}}>
                         <Dropdown 
