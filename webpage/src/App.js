@@ -12,7 +12,7 @@ import UserContext, { initialContext } from './contexts/User';
 
 import RoutesPage from './components/route/RoutesPage';
 import WorkSchedule from './components/workSchedule/WorkSchedule';
-import Timetable from './components/timetable/Timetable';
+import Availability from './components/availability/Availability';
 import LoyaltyProgram from './components/loyaltyProgram/LoyaltyProgram';
 import BookingReportPage from './components/bookingsReport/BookingReportPage';
 import Clients from './components/accountAndBookings/Clients';
@@ -97,7 +97,7 @@ function App() {
                             <BookingList />
                         </Route>
                         <Route exact path="/dyspozycyjnosc">
-                            <Timetable />
+                            <Availability />
                         </Route>
                         <Route exact path="/profil">
                             <Profile />

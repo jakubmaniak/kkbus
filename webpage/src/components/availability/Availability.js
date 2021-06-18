@@ -15,7 +15,7 @@ import 'react-big-scheduler/lib/css/style.css';
 import * as api from '../../api';
 
 
-class Timetable extends Component {  
+class Availability extends Component {  
     
     constructor(props) {
         super(props);
@@ -490,6 +490,6 @@ class Timetable extends Component {
     }
 }
 
-Timetable.contextType = UserContext;
+Availability.contextType = UserContext;
 
-export default withDragDropContext(Timetable);
+export default withDragDropContext(Availability);
