@@ -193,8 +193,8 @@ class Availability extends Component {
                 </div>
                 <NotificationModal 
                     visible={this.state.modalDeleteEventVisibility}
-                    header={'Usunięcie zdarzenia'}
-                    name={'usunąć zdażenie'}
+                    header={'Usuwanie statusu dyspozycyjności'}
+                    name={'usunąć dyspozycyjności'}
                     buttonText={'usuń'}
                     notificationModalExit={this.exitNotificationModalVisibility}
                     delete={this.confirmDeletingEvent}
