@@ -217,7 +217,7 @@ class Timetable extends Component {
                     </section>  
                 </Modal>
                 <Modal visible={this.state.modalEditVisibility}>
-                    <header>Edytowanie zadania</header>
+                    <header>Edytowanie dyspozycyjności</header>
                     <section className="content">
                         <form className="edit-event" onSubmit={(ev) => {ev.preventDefault()}}>
                         <Dropdown 
