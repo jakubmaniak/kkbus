@@ -195,7 +195,7 @@ router.post('/booking', [
     }
 
     try {
-        let result = await bookingController.addBooking({
+        let booking = {
             userId,
             routeId,
             date,
@@ -206,11 +206,12 @@ router.post('/booking', [
             firstStop,
             lastStop,
             price
-        });
+        };
+        let result = await bookingController.addBooking(booking);
 
         res.ok({ id: result.insertId });
 
-        bookingController.sendBookingConfirmation(user.email, { });
+        bookingController.sendBookingConfirmation(user.email, booking);
     }
     catch (err) {
         next(err);
@@ -276,7 +277,7 @@ router.post('/booking/:userId', [
     }
 
     try {
-        let result = await bookingController.addBooking({
+        let booking = {
             userId,
             routeId,
             date,
@@ -287,11 +288,12 @@ router.post('/booking/:userId', [
             firstStop,
             lastStop,
             price
-        });
+        };
+        let result = await bookingController.addBooking();
 
         res.ok({ id: result.insertId });
 
-        bookingController.sendBookingConfirmation(user.email, { });
+        bookingController.sendBookingConfirmation(user.email, booking);
     }
     catch (err) {
         return next(err);

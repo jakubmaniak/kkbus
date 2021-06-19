@@ -23,7 +23,7 @@ module.exports.sendBookingConfirmation = (email, booking) => {
     return mailer.sendMail(
         email,
         'KKBus - Potwierdzenie rezerwacji',
-        `<p>Zarezerwowano<p>`
+        `<p>Złożono rezerwację <b>${booking.firstStop} - ${booking.lastStop}</b> w dniu <b>${booking.date}</b> o godzinie <b>${booking.hour}</b></p>`
     );
 };
 
@@ -31,7 +31,7 @@ module.exports.sendBookingReminder = (email, booking) => {
     return mailer.sendMail(
         email,
         'KKBus - Przypomnienie o rezerwacji',
-        `<p>Przypomnienie</p>`
+        `<p>Przypomnienie o Twojej rezerwacji na trasie <b>${booking.firstStop} - ${booking.lastStop}</b> w dniu <b>${booking.date}</b> o godzinie <b>${booking.hour}</b></p>`
     );
 };
 
@@ -39,7 +39,7 @@ module.exports.sendBookingCancellation = (email, booking) => {
     return mailer.sendMail(
         email,
         'KKBus - Odwołanie rezerwacji',
-        `<p>Odwołano</p>`
+        `<p>Odwołano rezerwację <b>${booking.firstStop} - ${booking.lastStop}</b> z dnia <b>${booking.date}</b> o godzinie <b>${booking.hour}</b></p>`
     );
 };
 
