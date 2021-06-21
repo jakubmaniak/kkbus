@@ -151,5 +151,76 @@ router.post('/reports/route/:routeId', [
     }
 });
 
+router.get('/reports/route/:routeId/:vehicleId/:driverId/:type/:range', [
+    onlyRoles('office', 'owner')
+], async (req, res, next) => {
+    let { routeId, vehicleId, driverId, type, range } = req.params;
+    
+    type = type.toLowerCase();
+    routeId = parseInt(routeId, 10);
+    vehicleId = parseInt(vehicleId, 10);
+    driverId = parseInt(driverId, 10);
+
+    if (isNaN(routeId) || isNaN(vehicleId) || isNaN(driverId)) {
+        return next(invalidValue());
+    }
+
+    let route;
+    let reports = [];
+
+    try {
+        route = await routeController.findRoute(routeId);
+
+        if (type == 'daily') {
+            let date = parseDate(range);
+            reports = await routeReportController.findDailyReports(routeId, vehicleId, driverId, date);
+        }
+        else if (type == 'weekly') {
+
+        }
+        else if (type == 'monthly') {
+            let parts = range.split('-');
+
+            if (parts.length != 2) {
+                throw invalidValue();
+            }
+
+            let [year, month] = parts.map((part) => parseInt(part, 10));
+
+            if (isNaN(year) || isNaN(month)) {
+                throw invalidValue();
+            }
+
+            reports = await routeReportController.findMonthlyReports(routeId, vehicleId, driverId, year, month);
+        }
+        else if (type == 'annual') {
+            let year = parseInt(range, 10);
+
+            if (isNaN(year)) {
+                throw invalidValue();
+            }
+
+            reports = await routeReportController.findAnnualReports(routeId, vehicleId, driverId, year);
+        }
+        else {
+            throw invalidValue();
+        }
+    }
+    catch (err) {
+        return next(err);
+    }
+
+    let result = [];
+
+    for (let stop of route.stops) {
+        let stopPersons = reports
+            .filter((report) => report.stop == stop)
+            .reduce((counter, report) => counter += report.persons, 0);
+
+        result.push({ stop, persons: stopPersons });
+    }
+
+    res.ok(result);
+});
 
 module.exports = router;

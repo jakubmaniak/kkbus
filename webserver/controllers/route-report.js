@@ -28,3 +28,43 @@ module.exports.addReport = (report) => {
 module.exports.findAllReports = () => {
     return db.query('SELECT * FROM route_reports');
 };
+
+module.exports.findDailyReports = (routeId, vehicleId, driverId, date) => {
+    return db.query(`
+        SELECT *
+        FROM route_reports
+        WHERE routeId=? AND vehicleId=? AND driverId=? AND CAST(date AS DATE)=?`, [
+            routeId,
+            vehicleId,
+            driverId,
+            date?.toString()
+        ]
+    );
+};
+
+module.exports.findMonthlyReports = (routeId, vehicleId, driverId, year, month) => {
+    return db.query(`
+        SELECT *
+        FROM route_reports
+        WHERE routeId=? AND vehicleId=? AND driverId=? AND YEAR(date)=? AND MONTH(date)=?`, [
+            routeId,
+            vehicleId,
+            driverId,
+            year,
+            month
+        ]
+    );
+};
+
+module.exports.findAnnualReports = (routeId, vehicleId, driverId, year) => {
+    return db.query(`
+        SELECT *
+        FROM route_reports
+        WHERE routeId=? AND vehicleId=? AND driverId=? AND YEAR(date)=?`, [
+            routeId,
+            vehicleId,
+            driverId,
+            year
+        ]
+    );
+};
