@@ -45,8 +45,6 @@ function generatePassword(passwordLength) {
     }).join('');
 }
 
-console.log(hashPassword('h'));
-
 function hashPassword(password) {
     return bcrypt.hashSync(password, env.passwordSalt);
 }
