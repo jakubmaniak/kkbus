@@ -151,6 +151,19 @@ export async function addRouteReport(routeId, stop, vehicleId, noBookingPersons,
     return sendPost('/reports/route/' + routeId, { stop, vehicleId, noBookingPersons, bookings, driverId });
 }
 
+/**
+ * `GET /api/reports/route/:routeId/:vehicleId/:driverId/:type/:range` Get route reports
+ * @param {number} routeId 
+ * @param {number} vehicleId 
+ * @param {number} driverId 
+ * @param {"daily" | "weekly" | "monthly" | "annual"} type 
+ * @param {string} range 
+ * @returns Promise that returns array of stops and number of persons.
+ */
+export async function getRouteReports(routeId, vehicleId, driverId, type, range) {
+    return sendGet(`/reports/route/${routeId}/${vehicleId}/${driverId}/${type}/${range}`);
+}
+
 
 export async function getUserBookings() {
     return sendGet('/bookings');
