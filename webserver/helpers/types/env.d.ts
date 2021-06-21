@@ -5,6 +5,7 @@ interface Env {
         externalAddress: string
     };
     jwtSecret: string;
+    passwordSalt: string;
     mysql: {
         connectionLimit: number,
         host: string,

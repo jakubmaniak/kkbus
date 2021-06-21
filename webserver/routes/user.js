@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const express = require('express');
 const router = express.Router();
 
 const env = require('../helpers/env');
-const { invalidRequest, emailAlreadyTaken, badCredentials, serverError, invalidValue } = require('../errors');
+const { invalidRequest, emailAlreadyTaken, badCredentials, serverError, invalidValue, notFound } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const { roles, minimumRole } = require('../middlewares/roles');
 const { cache: usersCache } = require('../middlewares/session');
@@ -44,6 +45,16 @@ function generatePassword(passwordLength) {
     }).join('');
 }
 
+console.log(hashPassword('h'));
+
+function hashPassword(password) {
+    return bcrypt.hashSync(password, env.passwordSalt);
+}
+
+function comparePasswords(enteredPassword, targetHash) {
+    return bcrypt.compareSync(enteredPassword, targetHash);
+}
+
 function generateActivationCode(email) {
     return jwt.sign({ email }, env.jwtSecret, { algorithm: 'HS512', expiresIn: '7d' });
 }
@@ -55,12 +66,16 @@ function generateSessionToken(login) {
 router.post('/user/login', [
     bodySchema('{login: string, password: string}')
 ], async (req, res, next) => {
-    //NOTE: login = login / e-mail
+    //NOTE: login = username OR e-mail
+
     let { login, password } = req.body;
 
     let user;
     try {
-        user = await userController.findUserByCredentials(login, login, password);
+        user = await userController.findUserByLoginOrEmail(login, login);
+        if (!comparePasswords(password, user.password)) {
+            throw notFound();
+        }
     }
     catch (err) {
         if (err.message == 'not_found') {
@@ -69,8 +84,6 @@ router.post('/user/login', [
         return next(serverError());
     }
 
-    //?
-    if (!user) return next(badCredentials());
     
     let sessionToken = generateSessionToken(user.login);
 
@@ -167,11 +180,13 @@ router.post('/user/activate', [
 
     try {
         let user = await userController.findInactiveUser(payload.email);
+        let plainPassword = user.password;
+        user.password = hashPassword(plainPassword);
 
         await Promise.all([
             userController.addUser(user),
             userController.deleteInactiveUser(payload.email),
-            userController.sendUserCredentials(payload.email, user.login, user.password)
+            userController.sendUserCredentials(payload.email, user.login, plainPassword)
         ]);
 
         res.cookie('session', generateSessionToken(user.login));
@@ -288,7 +303,11 @@ router.patch('/user/password', [
     let { currentPassword, newPassword } = req.body;
 
     try {
-        await userController.findUserByCredentials(login, login, currentPassword);
+        let user = await userController.findUserByLoginOrEmail(login, login);
+
+        if (!comparePasswords(currentPassword, user.password)) {
+            throw badCredentials();
+        }
     }
     catch (err) {
         if (err.message == 'not_found') {
@@ -298,7 +317,7 @@ router.patch('/user/password', [
     }
 
     try {
-        await userController.updateUserPassword(userId, newPassword);
+        await userController.updateUserPassword(userId, hashPassword(newPassword));
 
         res.ok();
     }
