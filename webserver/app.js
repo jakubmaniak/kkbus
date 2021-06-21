@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const env = require('./helpers/env');
 const { serverError } = require('./errors');
 const session = require('./middlewares/session');
+require('./jobs/booking-remainder');
 
 
 const app = express();

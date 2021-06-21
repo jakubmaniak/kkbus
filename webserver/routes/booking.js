@@ -9,6 +9,8 @@ const routeController = require('../controllers/route');
 const userController = require('../controllers/user');
 const { parseDate, parseTime, parseDateTime } = require('../helpers/date');
 
+const bookingRemainderJob = require('../jobs/booking-remainder');
+
 
 function validateTicketNumbers(normalTickets, reducedTickets, childTickets) {
     normalTickets = parseInt(normalTickets, 10);
@@ -212,6 +214,7 @@ router.post('/booking', [
         res.ok({ id: result.insertId });
 
         bookingController.sendBookingConfirmation(user.email, booking);
+        bookingRemainderJob.addBooking(booking);
     }
     catch (err) {
         next(err);
@@ -294,6 +297,7 @@ router.post('/booking/:userId', [
         res.ok({ id: result.insertId });
 
         bookingController.sendBookingConfirmation(user.email, booking);
+        bookingRemainderJob.addBooking(booking);
     }
     catch (err) {
         return next(err);
@@ -327,6 +331,7 @@ router.delete('/booking/:bookingId', [onlyRoles('client', 'office', 'owner')], a
             await bookingController.deleteBooking(wantedId);
 
             bookingController.sendBookingCancellation(user.email, booking);
+            bookingRemainderJob.deleteBooking(booking);
         }
         else {
             throw unauthorized();
