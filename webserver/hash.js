@@ -15,9 +15,11 @@ else {
 }
 
 async function updateUser(user) {
-    if (!(user.password.startsWith('$b2$') && user.password.length == 60)) {
+    if (!(user.password.startsWith('$2b$') && user.password.length == 60)) {
         let hash = await bcrypt.hash(user.password, env.passwordSalt);
         await userController.updateUserPassword(user.id, hash);
+
+        console.log('Changed password of ' + user.login);
     }
 }
 
