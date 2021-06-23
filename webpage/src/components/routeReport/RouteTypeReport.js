@@ -1,36 +1,10 @@
 import React, { useState } from 'react';
 import { ResponsiveBar } from '@nivo/bar';
 import { ResponsiveLine } from '@nivo/line';
+import dayjs from 'dayjs';
 import * as api from '../../api';
 
 const RouteTypeReport = React.forwardRef((props, ref) => {
-    let [barChartData, setBarChartData] = useState([
-        {
-            'przystanek': 'Kraków - Chrzanów',
-            'passengers': 11,
-        },
-        {
-            'przystanek': 'Kraków - Jaworzno',
-            'passengers': 16,
-        },
-        {
-            'przystanek': 'Kraków - Katowice',
-            'passengers': 22,
-        },
-        {
-            'przystanek': 'Chrzanów - Jaworzno',
-            'passengers': 9,
-        },
-        {
-            'przystanek': 'Chrzanów - Katowice',
-            'passengers': 5,
-        },
-        {
-            'przystanek': 'Jaworzno - Katowice',
-            'passengers': 3,
-        }
-    ]);
-
     let [lineChartData, setlineChartData] = useState(
         [
             {
@@ -101,19 +75,28 @@ const RouteTypeReport = React.forwardRef((props, ref) => {
             }
           ]
     );
-    // switch(props.type) {
-    //     case 'dniowy':
-    //         api.getDailyReport(props.routeId, props.vehicleId, props.driverId, props.date)
-    //             .then(setData)
-    //             .catch(api.tostifyError)
-    //     break;  
-    // }
+
+    function renderDate(type, date) {
+        switch (type) {
+            case 'annual':
+                return date;
+            case 'monthly':
+                return dayjs(date).format('MM.YYYY');
+            case 'weekly':
+                let [year, week] = date.split('-');
+                return 'Tydzień ' + week.slice(1) + ', ' + year;
+            case 'daily':
+                return dayjs(date).format('DD.MM.YYYY');
+            default:
+                return null;
+        }
+    }
 
     return (
         <div className="tile route-report-tile" ref={ref}>
             <div className="tile-info">
-                <h2>Raport {props.type} z kursów</h2>
-                <p>21.05.2021</p>
+                <h2>Raport {props.typeText} z kursów</h2>
+                <p>{renderDate(props.type, props.date)}</p>
             </div>
             <div className="route-chart" style={{ height: '600px' }}>
                 <h3>Liczba pasażerów na poszczególnych odcinkach trasy</h3>
@@ -123,9 +106,9 @@ const RouteTypeReport = React.forwardRef((props, ref) => {
                     <span>{props.route.departureLocation} - {props.route.arrivalLocation}</span>
                 </h4>
                 <ResponsiveBar
-                    data={barChartData}
-                    keys={[ 'passengers']}
-                    indexBy="przystanek"
+                    data={props.barChartData}
+                    keys={[ 'persons']}
+                    indexBy="stop"
                     margin={{ top: 50, right: 50, bottom: 50, left: 60 }}
                     padding={0.5}
                     valueScale={{ type: "linear" }}

@@ -10,7 +10,12 @@ function RouteReport() {
     let [drivers, setDrivers] = useState([]);
     let [vehicles, setVehicles] = useState([]);
 
-    let [reportTypes, setReportType] = useState(['dniowy', 'tygodniowy', 'miesięczny', 'roczny']);
+    let [reportTypes] = useState([
+        ['daily', 'dniowy'], 
+        ['weekly', 'tygodniowy'], 
+        ['monthly', 'miesięczny'], 
+        ['annual', 'roczny']
+    ]);
     
 
     let fromYear = 2021;
@@ -25,9 +30,11 @@ function RouteReport() {
     let [selectedVehicle, setSelectedVehicle] = useState();
 
     let [selectedReportType, setSelectedReportType] = useState();
-    let [selectedDate, setSelectedDate] = useState(' ');
+    let [selectedDate, setSelectedDate] = useState('');
 
-    let[selectedAllOptions, setSelectedAllOptions] = useState(false);
+    let [selectedAllOptions, setSelectedAllOptions] = useState(false);
+
+    let [barChartData, setBarChartData] = useState([]);
 
     useEffect(() => {
         api.getAllRoutes()
@@ -42,7 +49,7 @@ function RouteReport() {
     }, []);
 
     useEffect(() => {
-        if(selectedRoute && selectedDriver && selectedVehicle && selectedReportType && selectedDate) {
+        if (selectedRoute && selectedDriver && selectedVehicle && selectedReportType && selectedDate) {
             setSelectedAllOptions(true);
         }
         else {
@@ -51,19 +58,32 @@ function RouteReport() {
     }, [selectedRoute, selectedDriver, selectedVehicle, selectedReportType, selectedDate]);
 
     useEffect(() => {
-        switch(selectedReportType) {
-            case 'miesięczny':
+        if (selectedAllOptions) {
+            loadReports();
+        }
+    }, [selectedAllOptions, selectedRoute, selectedDriver, selectedVehicle, selectedDate]);
+
+    useEffect(() => {
+        switch(selectedReportType?.[0]) {
+            case 'monthly':
                 setSelectedDate(getCurrentMonthAndYear());
                 break;
-            case 'tygodniowy':
+            case 'weekly':
                 setSelectedDate(getNumberOfWeek());
                 break;
-            case 'dniowy':
-                setSelectedDate(getCurrentData());
+            case 'daily':
+                setSelectedDate(getCurrentDate());
                 break;
         }
     }, [selectedReportType]);
 
+    function loadReports() {
+        api.getRouteReports(selectedRoute?.id, selectedVehicle?.id, selectedDriver?.id, selectedReportType?.[0], selectedDate)
+            .then((report) => {
+                setBarChartData(report);
+            })
+            .catch(api.toastifyError);
+    }
 
     function getNumberOfWeek() {
         let today = new Date();
@@ -79,13 +99,11 @@ function RouteReport() {
         return `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}`;
     }
 
-    function getCurrentData(data) {
+    function getCurrentDate() {
         let today = new Date();
         let currentMonth = today.getMonth();
         let currentYear = today.getFullYear();
         let currentDay = today.getDate();
-        
-        console.log(`${(currentDay).toString().padStart(2, '0')}.${(currentMonth + 1).toString().padStart(2, '0')}.${currentYear}`);
  
         return `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${(currentDay).toString().padStart(2, '0')}`;
     }
@@ -105,6 +123,7 @@ function RouteReport() {
                         <Dropdown 
                             placeholder="Wybierz typ raportu"
                             items={reportTypes}
+                            textProperty="1"
                             handleChange={setSelectedReportType}
                         />
                     </div>
@@ -116,19 +135,19 @@ function RouteReport() {
                             handleChange={setSelectedDriver}
                         />
                         {
-                            selectedReportType === 'roczny' ?
+                            selectedReportType?.[0] === 'annual' ?
                                 <Dropdown 
                                     placeholder="Wybierz datę"
                                     items={date}
                                     handleChange={setSelectedDate}
                                     selectedIndex={0}
                                 />
-                            : selectedReportType === 'miesięczny' ?
+                            : selectedReportType?.[0] === 'monthly' ?
                                 <input type="month" min="2021-01" max={getCurrentMonthAndYear()} value={selectedDate} onChange={(ev) => setSelectedDate(ev.target.value)}/>
-                            : selectedReportType === 'tygodniowy' ?
+                            : selectedReportType?.[0] === 'weekly' ?
                                 <input type="week" min="2021-W1" max={getNumberOfWeek()} value={selectedDate} onChange={(ev) => setSelectedDate(ev.target.value)}/>
-                            : selectedReportType === 'dniowy' ?
-                                <input type="date" min="2021-01-01" max={getCurrentData()} value={selectedDate} onChange={(ev) => setSelectedDate(ev.target.value)}/>
+                            : selectedReportType?.[0] === 'daily' ?
+                                <input type="date" min="2021-01-01" max={getCurrentDate()} value={selectedDate} onChange={(ev) => setSelectedDate(ev.target.value)}/>
                             : null
                         }
                     </div>
@@ -143,11 +162,13 @@ function RouteReport() {
                 </div>
                 {selectedAllOptions === true ? 
                     <RouteTypeReportPrint 
-                        type={selectedReportType}
+                        barChartData={barChartData}
+                        type={selectedReportType?.[0]}
+                        typeText={selectedReportType?.[1]}
                         route={selectedRoute}
                         driver={selectedDriver}
                         vehicle={selectedVehicle}
-                        data={selectedVehicle}
+                        date={selectedDate}
                     />    
                 : null}
                 

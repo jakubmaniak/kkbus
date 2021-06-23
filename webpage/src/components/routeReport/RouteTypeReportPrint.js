@@ -13,10 +13,12 @@ function RouteTypeReportPrint(props) {
         <RouteTypeReport 
             ref={componentRef} 
             type={props.type} 
+            typeText={props.typeText}
             route={props.route}
             vehicle={props.vehicle}
             driver={props.driver}
             date={props.date}
+            barChartData={props.barChartData}
             handlePrint={handlePrint}
         />
   );
