@@ -84,7 +84,8 @@ const RouteTypeReport = React.forwardRef((props, ref) => {
                 return dayjs(date).format('MM.YYYY');
             case 'weekly':
                 let [year, week] = date.split('-');
-                return 'Tydzień ' + week.slice(1) + ', ' + year;
+                week = week.substring(1);
+                return dayjs(new Date(year, 0, (week * 7) - 3)).format('DD.MM.YYYY') + ' - ' + dayjs(new Date(year, 0, (week * 7) + 3)).format('DD.MM.YYYY') 
             case 'daily':
                 return dayjs(date).format('DD.MM.YYYY');
             default:
