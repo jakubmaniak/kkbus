@@ -12,16 +12,13 @@ function RouteReport() {
 
     let [reportTypes, setReportType] = useState(['dniowy', 'tygodniowy', 'miesięczny', 'roczny']);
     
-    let d = new Date();
-    let years = [];
-    years[0] = 2021;
-    
-    for(let i = 1; years[0] > d.getFullYear(); i++) {
-        years[i] = years[0] + i;
-    }
+
+    let fromYear = 2021;
+    let years = new Array(new Date().getFullYear() - fromYear + 1)
+        .fill(0)
+        .map((_, i) => fromYear + i);
 
     let [date, setDate] = useState(years);
-
 
     let [selectedRoute, setSelectedRoute] = useState();
     let [selectedDriver, setSelectedDriver] = useState();
