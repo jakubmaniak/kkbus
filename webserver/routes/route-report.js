@@ -176,7 +176,23 @@ router.get('/reports/route/:routeId/:vehicleId/:driverId/:type/:range', [
             reports = await routeReportController.findDailyReports(routeId, vehicleId, driverId, date);
         }
         else if (type == 'weekly') {
+            let parts = range.split('-');
 
+            if (parts.length  != 2) {
+                throw invalidValue();
+            }
+
+            let [year, week] = parts;
+            year = parseInt(year, 10);
+            week = parseInt(week.slice(1), 10);
+
+            if (isNaN(year) || isNaN(week)) {
+                throw invalidValue();
+            }
+
+            week++;
+
+            reports = await routeReportController.findWeeklyReports(routeId, vehicleId, driverId, year, week);
         }
         else if (type == 'monthly') {
             let parts = range.split('-');

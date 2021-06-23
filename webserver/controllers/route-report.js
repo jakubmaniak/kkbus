@@ -42,6 +42,20 @@ module.exports.findDailyReports = (routeId, vehicleId, driverId, date) => {
     );
 };
 
+module.exports.findWeeklyReports = (routeId, vehicleId, driverId, year, week) => {
+    return db.query(`
+        SELECT *
+        FROM route_reports
+        WHERE routeId=? AND vehicleId=? AND driverId=? AND YEAR(date)=? AND WEEK(date)=?`, [
+            routeId,
+            vehicleId,
+            driverId,
+            year,
+            week
+        ]
+    );
+};
+
 module.exports.findMonthlyReports = (routeId, vehicleId, driverId, year, month) => {
     return db.query(`
         SELECT *

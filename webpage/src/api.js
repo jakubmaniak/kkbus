@@ -158,6 +158,11 @@ export async function addRouteReport(routeId, stop, vehicleId, noBookingPersons,
  * @param {number} driverId 
  * @param {"daily" | "weekly" | "monthly" | "annual"} type 
  * @param {string} range 
+ * - Allowed formats:
+ * - date: `2021-12-31`
+ * - month: `2021-12`
+ * - week: `2021-W25`
+ * - year: `2021`
  * @returns Promise that returns array of stops and number of persons.
  */
 export async function getRouteReports(routeId, vehicleId, driverId, type, range) {
