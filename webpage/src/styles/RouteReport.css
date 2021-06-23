@@ -24,10 +24,13 @@
     align-items: center;
 }
 
+.no-reports-placeholder {
+    margin-top: 40px;
+}
+
 .route-chart {
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-direction: column;
 }
 

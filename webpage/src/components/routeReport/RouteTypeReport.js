@@ -105,53 +105,56 @@ const RouteTypeReport = React.forwardRef((props, ref) => {
                     <span>{props.vehicle.brand} {props.vehicle.model} {props.vehicle.year}, </span>
                     <span>{props.route.departureLocation} - {props.route.arrivalLocation}</span>
                 </h4>
-                <ResponsiveBar
-                    data={props.barChartData}
-                    keys={[ 'persons']}
-                    indexBy="stop"
-                    margin={{ top: 50, right: 50, bottom: 50, left: 60 }}
-                    padding={0.5}
-                    valueScale={{ type: "linear" }}
-                    groupMode="grouped"
-                    labelTextColor="#FFFFFF"
-                    colors={['#47BE61']}
-                    axisTop={null}
-                    axisRight={null}
-                    axisLeft={{
-                        legend: 'liczba pasażerów',
-                        legendOffset: -45,
-                        legendPosition: 'end'
-                    }}
-                    axisBottom={{
-                        tickSize: 5,
-                        tickPadding: 5,
-                        tickRotation: 0,
-                        legend: 'przystanek',
-                        legendOffset: 42,
-                        legendPosition: 'end'
-                    }}
-                    theme={{
-                        fontFamily: 'Poppins',
-                        axis: {
-                            ticks: {
-                                text: {
-                                    fontSize: 12
-                                }
+                { props.barChartData.reduce((acc, cur) => acc + cur.persons, 0) ?
+                    <ResponsiveBar
+                        data={props.barChartData}
+                        keys={[ 'persons']}
+                        indexBy="stop"
+                        margin={{ top: 50, right: 50, bottom: 50, left: 60 }}
+                        padding={0.5}
+                        valueScale={{ type: "linear" }}
+                        groupMode="grouped"
+                        labelTextColor="#FFFFFF"
+                        colors={['#47BE61']}
+                        axisTop={null}
+                        axisRight={null}
+                        axisLeft={{
+                            legend: 'liczba pasażerów',
+                            legendOffset: -45,
+                            legendPosition: 'end'
+                        }}
+                        axisBottom={{
+                            tickSize: 5,
+                            tickPadding: 5,
+                            tickRotation: 0,
+                            legend: 'przystanek',
+                            legendOffset: 42,
+                            legendPosition: 'end'
+                        }}
+                        theme={{
+                            fontFamily: 'Poppins',
+                            axis: {
+                                ticks: {
+                                    text: {
+                                        fontSize: 12
+                                    }
+                                },
                             },
-                        },
-                        labels: {
-                            text: {
-                                fontSize: 14
-                            } 
-                        }
-                    }}
-                    labelSkipWidth={12}
-                    labelSkipHeight={12}
-                    isInteractive={false}
-                    animate={false}
-                    motionStiffness={90}
-                    motionDamping={15}
-                />
+                            labels: {
+                                text: {
+                                    fontSize: 14
+                                } 
+                            }
+                        }}
+                        labelSkipWidth={12}
+                        labelSkipHeight={12}
+                        isInteractive={false}
+                        animate={false}
+                        motionStiffness={90}
+                        motionDamping={15}
+                    />
+                    : <div className="no-reports-placeholder">Brak raportów z tego okresu</div>
+                }
             </div>
             <div className="route-chart" style={{ height: '600px' }}>
                     <h3>Przychody względem kosztów paliwa</h3>
