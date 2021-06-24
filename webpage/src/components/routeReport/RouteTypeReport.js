@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ResponsiveBar } from '@nivo/bar';
 import { ResponsiveLine } from '@nivo/line';
 import dayjs from 'dayjs';
