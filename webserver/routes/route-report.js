@@ -193,8 +193,6 @@ router.get('/reports/route/:routeId/:vehicleId/:driverId/:type/:range', [
                 throw invalidValue();
             }
 
-            week++;
-
             reports = await routeReportController.findWeeklyReports(routeId, vehicleId, driverId, year, week);
         }
         else if (type == 'monthly') {
