@@ -64,6 +64,7 @@ router.post('/reports/route/:routeId', [
         }
 
         let persons = noBookingPersons;
+        let income = 0;
 
         if (bookings.length > 0) {
             let realizedIds = bookings.filter((booking) => booking.realized).map((booking) => booking.id);
@@ -97,6 +98,7 @@ router.post('/reports/route/:routeId', [
                 let bookings = await bookingController.findManyBookings(realizedIds);
 
                 for (let booking of bookings) {
+                    income += booking.price * 100;
                     persons += booking.normalTickets + booking.reducedTickets + booking.childTickets;
 
                     let startIndex = route.stops.findIndex((stop) => stop === booking.firstStop);
@@ -141,7 +143,8 @@ router.post('/reports/route/:routeId', [
             vehicleId,
             driverId,
             date: parseDateTime(new Date()).toString(3),
-            persons
+            persons,
+            income
         });
 
         res.ok({ id: result.insertId });
@@ -229,11 +232,11 @@ router.get('/reports/route/:routeId/:vehicleId/:driverId/:type/:range', [
     let result = [];
 
     for (let stop of route.stops) {
-        let stopPersons = reports
-            .filter((report) => report.stop == stop)
-            .reduce((counter, report) => counter += report.persons, 0);
+        let stopReports = reports.filter((report) => report.stop == stop);
+        let stopPersons = stopReports.reduce((counter, report) => counter += report.persons, 0);
+        let stopIncome = stopReports.reduce((counter, report) => counter += report.income, 0);
 
-        result.push({ stop, persons: stopPersons });
+        result.push({ stop, persons: stopPersons, income: stopIncome / 100 });
     }
 
     res.ok(result);

@@ -6,7 +6,8 @@ CREATE TABLE `route_reports` (
     `vehicleId` INT NOT NULL , 
     `driverId` INT NOT NULL,
     `date` DATETIME NOT NULL , 
-    `persons` INT NOT NULL ,
+    `persons` INT UNSIGNED NOT NULL ,
+    `income` INT UNSIGNED NOT NULL DEFAULT 0 ,
      PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 */
@@ -14,14 +15,15 @@ CREATE TABLE `route_reports` (
 let db = require('../configs/db');
 
 module.exports.addReport = (report) => {
-    return db.query('INSERT INTO route_reports VALUES (?,?,?,?,?,?,?)', [
+    return db.query('INSERT INTO route_reports VALUES (?,?,?,?,?,?,?,?)', [
         null,
         report.routeId,
         report.stop,
         report.vehicleId,
         report.driverId,
         report.date.toString(),
-        report.persons
+        report.persons,
+        report.income
     ]);
 };
 
