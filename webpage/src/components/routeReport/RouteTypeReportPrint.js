@@ -19,6 +19,7 @@ function RouteTypeReportPrint(props) {
             driver={props.driver}
             date={props.date}
             barChartData={props.barChartData}
+            lineChartData={props.lineChartData}
             handlePrint={handlePrint}
         />
   );

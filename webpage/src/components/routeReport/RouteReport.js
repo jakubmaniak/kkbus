@@ -35,6 +35,7 @@ function RouteReport() {
     let [selectedAllOptions, setSelectedAllOptions] = useState(false);
 
     let [barChartData, setBarChartData] = useState([]);
+    let [lineChartData, setLineChartData] = useState([]);
 
     useEffect(() => {
         api.getAllRoutes()
@@ -80,7 +81,13 @@ function RouteReport() {
     function loadReports() {
         api.getRouteReports(selectedRoute?.id, selectedVehicle?.id, selectedDriver?.id, selectedReportType?.[0], selectedDate)
             .then((report) => {
-                setBarChartData(report);
+                let persons = report.map((stopReport) => ({ stop: stopReport.stop, persons: stopReport.persons }));
+                let incomes = report.map((stopReport) => ({ x: stopReport.stop, y: stopReport.income }));
+                
+                setBarChartData(persons);
+                setLineChartData([
+                    { id: "przychody", data: incomes }
+                ]);
             })
             .catch(api.toastifyError);
     }
@@ -163,6 +170,7 @@ function RouteReport() {
                 {selectedAllOptions === true ? 
                     <RouteTypeReportPrint 
                         barChartData={barChartData}
+                        lineChartData={lineChartData}
                         type={selectedReportType?.[0]}
                         typeText={selectedReportType?.[1]}
                         route={selectedRoute}

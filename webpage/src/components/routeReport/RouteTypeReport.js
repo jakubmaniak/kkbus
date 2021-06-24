@@ -5,77 +5,6 @@ import dayjs from 'dayjs';
 import * as api from '../../api';
 
 const RouteTypeReport = React.forwardRef((props, ref) => {
-    let [lineChartData, setlineChartData] = useState(
-        [
-            {
-              "id": "przychody",
-              "data": [
-                {
-                  "x": "24.05.2021",
-                  "y": 170
-                },
-                {
-                  "x": "25.05.2021",
-                  "y": 169
-                },
-                {
-                  "x": "26.05.2021",
-                  "y": 156
-                },
-                {
-                  "x": "27.05.2021",
-                  "y": 210
-                },
-                {
-                  "x": "28.05.2021",
-                  "y": 13
-                },
-                {
-                  "x": "29.05.2021",
-                  "y": 85
-                },
-                {
-                  "x": "30.05.2021",
-                  "y": 243
-                },
-              ]
-            },
-            {
-              "id": "koszty paliwa",
-              "data": [
-                {
-                    "x": "24.05.2021",
-                    "y": 70
-                },
-                {
-                    "x": "25.05.2021",
-                    "y": 150
-                },
-                {
-                    "x": "26.05.2021",
-                    "y": 200
-                },
-                {
-                    "x": "27.05.2021",
-                    "y": 210
-                },
-                {
-                    "x": "28.05.2021",
-                    "y": 20
-                },
-                {
-                    "x": "29.05.2021",
-                    "y": 2
-                },
-                {
-                    "x": "30.05.2021",
-                    "y": 1
-                },
-              ]
-            }
-          ]
-    );
-
     function renderDate(type, date) {
         switch (type) {
             case 'annual':
@@ -160,7 +89,7 @@ const RouteTypeReport = React.forwardRef((props, ref) => {
             <div className="route-chart" style={{ height: '600px' }}>
                     <h3>Przychody względem kosztów paliwa</h3>
                     <ResponsiveLine className="chart"
-                        data={lineChartData}
+                        data={props.lineChartData}
                         margin={{ top: 50, right: 50, bottom: 50, left: 60 }}
                         xScale={{ type: 'point' }}
                         yScale={{ type: 'linear', min: '0', max: 'auto', stacked: false, reverse: false }}
