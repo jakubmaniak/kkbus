@@ -106,7 +106,7 @@ const RouteTypeReport = React.forwardRef((props, ref) => {
                             tickPadding: 5,
                             tickRotation: 0,
                             legend: 'przystanek',
-                            legendOffset: 45,
+                            legendOffset: 42,
                             legendPosition: 'end'
                         }}
                         theme={{
