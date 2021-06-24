@@ -12,7 +12,7 @@ const vehicleController = require('../controllers/vehicle');
 const routeController = require('../controllers/route');
 const userController = require('../controllers/user');
 const bookingReportController = require('../controllers/booking-report');
-
+const refuelController = require('../controllers/refuel');
 
 router.post('/reports/route/:routeId', [
     onlyRoles('driver', 'owner'),
@@ -168,11 +168,12 @@ router.get('/reports/route/:routeId/:vehicleId/:driverId/:type/:range', [
         return next(invalidValue());
     }
 
-    let route;
+    let route, vehicle, fuelReports;
     let reports = [];
 
     try {
         route = await routeController.findRoute(routeId);
+        vehicle = await vehicleController.findVehicle(vehicleId);
 
         if (type == 'daily') {
             let date = parseDate(range);
@@ -222,19 +223,50 @@ router.get('/reports/route/:routeId/:vehicleId/:driverId/:type/:range', [
         else {
             throw invalidValue();
         }
+
+        fuelReports = await refuelController.findAllRefuels();
     }
     catch (err) {
         return next(err);
     }
 
+    let findFuelCost = (date) => {
+        let dateTimestamp = new Date(date).getTime();
+        let diffs = fuelReports.map((report) => new Date(report.date) - dateTimestamp);
+        let closestValue = Infinity;
+        let closestIndex = 0;
+
+        for (let i = 0; i < diffs.length; i++) {
+            let absValue = Math.abs(diffs[i]);
+            
+            if (absValue < closestValue) {
+                closestValue = absValue;
+                closestIndex = i;
+            }
+        }
+
+        let closestReport = fuelReports[closestIndex];
+        return closestReport.cost;
+    };
+
     let result = [];
 
-    for (let stop of route.stops) {
-        let stopReports = reports.filter((report) => report.stop == stop);
+    for (let stopName of route.stops) {
+        let stopReports = reports.filter((report) => report.stop == stopName);
         let stopPersons = stopReports.reduce((counter, report) => counter += report.persons, 0);
         let stopIncome = stopReports.reduce((counter, report) => counter += report.income, 0);
 
-        result.push({ stop, persons: stopPersons, income: stopIncome / 100 });
+        let stopIndex = route.stops.findIndex((stop) => stop === stopName);
+        
+        let usedFuelCost = 0;
+
+        if (stopIndex > 0) {
+            let distance = route.distances.slice(0, stopIndex).reduce((a, b) => a + b, 0);
+            let usedFuelAmount = vehicle.combustion * distance;
+            usedFuelCost = usedFuelAmount * findFuelCost(new Date());
+        }
+
+        result.push({ stop: stopName, persons: stopPersons, income: stopIncome / 100, usedFuelCost });
     }
 
     res.ok(result);

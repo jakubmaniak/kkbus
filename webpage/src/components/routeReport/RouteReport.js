@@ -82,11 +82,13 @@ function RouteReport() {
         api.getRouteReports(selectedRoute?.id, selectedVehicle?.id, selectedDriver?.id, selectedReportType?.[0], selectedDate)
             .then((report) => {
                 let persons = report.map((stopReport) => ({ stop: stopReport.stop, persons: stopReport.persons }));
-                let incomes = report.map((stopReport) => ({ x: stopReport.stop, y: stopReport.income }));
+                let incomes = report.map((stopReport) => ({ x: stopReport.stop, y: stopReport.income.toFixed(2) + ' zł' }));
+                let usedFuelCosts = report.map((stopReport) => ({ x: stopReport.stop, y: stopReport.usedFuelCost.toFixed(2) + ' zł' }));
                 
                 setBarChartData(persons);
                 setLineChartData([
-                    { id: "przychody", data: incomes }
+                    { id: "przychody", data: incomes },
+                    { id: "koszt paliwa", data: usedFuelCosts }
                 ]);
             })
             .catch(api.toastifyError);
