@@ -41,8 +41,6 @@ function BookingList() {
             setHours(selectedRoute.hours);
             setSelectedHour();
         }
-
-        console.log(bookinglist);
     }, [selectedRoute]);
 
     function setDays() {

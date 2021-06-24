@@ -98,7 +98,6 @@ function RouteReport() {
             .then(() => {
                 setPersons('');
                 toast.success('Dodano raport');
-                console.log(selectedRoute.id, selectedStop, selectedVehicle.id, currentPersons, realizedBookings, selectedDriver?.id)
             })
             .catch(api.toastifyError);
     }

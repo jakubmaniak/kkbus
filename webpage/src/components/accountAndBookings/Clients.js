@@ -39,7 +39,6 @@ function Clients() {
         api.getClients(selectedSearchParam[0], searchQuery)
             .then((results) => {
                 setClients(results);
-                console.log(results);
             })
             .catch(api.toastifyError);
     }

@@ -466,7 +466,6 @@ class WorkSchedule extends Component {
     }
 
     deleteEvent = (schedulerData, event) => {
-        console.log({...event});
         if (this.context.user.role === 'owner') {
             this.setState({ 
                 modalDeleteEventVisibility: true,

@@ -327,8 +327,6 @@ class Availability extends Component {
         let targetEvent = scheduler.find(event => event.id === this.state.eventToEdit.id);
         let targetIndex = scheduler.indexOf(targetEvent);
 
-        console.log(this.state.eventToEdit);
-
         api.updateAvailabilityEntity(this.state.eventToEdit.id, {
             available: this.state.editEventType === 'Dostępność'
         });
@@ -396,19 +394,17 @@ class Availability extends Component {
         let startHour = moment(this.state.newEvent.start).format('HH:mm');
         let endHour = moment(this.state.newEvent.end).format('HH:mm');
         let available = this.state.newEventType === 'Dostępność';
-        console.log(employeeId, date, startHour, endHour, available);
+        api.addAvailabilityEntity(employeeId, date, startHour, endHour, available)
+            .then((result) => {
+            let event = { ...this.state.newEvent, id: result.id, title: this.state.newEventType, bgColor: this.state.newEventType === 'Dostępność' ?  '#47BE61' : '#C73535' };
+            this.state.viewModel.addEvent(event);
 
-         api.addAvailabilityEntity(employeeId, date, startHour, endHour, available)
-             .then((result) => {
-                let event = { ...this.state.newEvent, id: result.id, title: this.state.newEventType, bgColor: this.state.newEventType === 'Dostępność' ?  '#47BE61' : '#C73535' };
-                this.state.viewModel.addEvent(event);
-
-                this.setState({
-                    modalAddEventVisibility: false,
-                    newEventType: ''
-                });
-            })
-            .catch((err) => console.log(err));
+            this.setState({
+                modalAddEventVisibility: false,
+                newEventType: ''
+            });
+        })
+        .catch((err) => console.log(err));
     }
 
     newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {

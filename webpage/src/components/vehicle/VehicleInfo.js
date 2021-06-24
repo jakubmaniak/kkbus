@@ -76,7 +76,6 @@ function VehicleInfo() {
     }
 
     function deleteVehicle(vehicleId) {
-        console.log(vehicleId);
         api.deleteVehicle(vehicleId)
         .then(() => {
             updateVehicle();
