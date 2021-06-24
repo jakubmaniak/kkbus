@@ -105,7 +105,7 @@ const RouteTypeReport = React.forwardRef((props, ref) => {
                             tickSize: 5,
                             tickPadding: 5,
                             tickRotation: 0,
-                            legend: 'data',
+                            legend: 'przystanek',
                             legendOffset: 45,
                             legendPosition: 'end'
                         }}
