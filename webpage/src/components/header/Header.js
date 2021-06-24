@@ -35,6 +35,9 @@ function Header() {
                 })
                 .catch(api.toastifyError);
         }
+        else {
+            setUser({ ...user, loaded: true });
+        }
         
         handlePageResize();
         window.addEventListener('resize', handlePageResize);

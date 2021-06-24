@@ -9,6 +9,7 @@ import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 import UserContext, { initialContext } from './contexts/User';
+import AuthRoute from './AuthRoute';
 
 import RoutesPage from './components/route/RoutesPage';
 import WorkSchedule from './components/workSchedule/WorkSchedule';
@@ -78,39 +79,39 @@ function App() {
                         <Route exact path="/program-lojalnosciowy">
                             <LoyaltyProgram />
                         </Route>
-                        <Route exact path="/pojazdy">
+                        <AuthRoute exact path="/pojazdy" owner office driver>
                             <VehicleInfo />
-                        </Route>
-                        <Route exact path="/paliwo">
+                        </AuthRoute>
+                        <AuthRoute exact path="/paliwo" owner office driver>
                             <FuelPage />
-                        </Route>
-                        <Route exact path="/grafik-pracy">
+                        </AuthRoute>
+                        <AuthRoute exact path="/grafik-pracy" owner office driver>
                             <WorkSchedule />
-                        </Route>
-                        <Route exact path="/zloz-raport-z-kursu">
+                        </AuthRoute>
+                        <AuthRoute exact path="/zloz-raport-z-kursu" owner driver>
                             <SubmitReport />
-                        </Route>
-                        <Route exact path="/konta-i-rezerwacje-klientow">
+                        </AuthRoute>
+                        <AuthRoute exact path="/konta-i-rezerwacje-klientow" owner office>
                             <Clients />
-                        </Route>
-                        <Route exact path="/lista-rezerwacji">
+                        </AuthRoute>
+                        <AuthRoute exact path="/lista-rezerwacji" owner office>
                             <BookingList />
-                        </Route>
-                        <Route exact path="/dyspozycyjnosc">
+                        </AuthRoute>
+                        <AuthRoute exact path="/dyspozycyjnosc" owner office driver>
                             <Availability />
-                        </Route>
-                        <Route exact path="/profil">
+                        </AuthRoute>
+                        <AuthRoute exact path="/profil" logged>
                             <Profile />
-                        </Route>
-                        <Route exact path="/rezerwacje">
+                        </AuthRoute>
+                        <AuthRoute exact path="/rezerwacje" client>
                             <BookingPage />
-                        </Route>
-                        <Route exact path="/raporty-z-rezerwacji">
+                        </AuthRoute>
+                        <AuthRoute exact path="/raporty-z-rezerwacji" owner office>
                             <BookingReportPage />
-                        </Route>
-                        <Route exact path="/raporty-z-kursów">
+                        </AuthRoute>
+                        <AuthRoute exact path="/raporty-z-kursów" owner office>
                             <RouteReport />
-                        </Route>
+                        </AuthRoute>
                     </Switch>
                 </Router>
             </UserContext.Provider>
