@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
 
 import '../../styles/FuelPage.css';
 
@@ -102,7 +101,7 @@ function FuelPage() {
 
     function display(node) {
         if (dataLoading) return <Loader/>;
-        if (refuels.length == 0) return 'Brak raportów z tankowania w archiwum';
+        if (refuels.length === 0) return 'Brak raportów z tankowania w archiwum';
         return node;
     }
 

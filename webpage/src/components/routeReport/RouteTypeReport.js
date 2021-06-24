@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { ResponsiveBar } from '@nivo/bar';
 import { ResponsiveLine } from '@nivo/line';
 import dayjs from 'dayjs';
-import * as api from '../../api';
 
 const RouteTypeReport = React.forwardRef((props, ref) => {
     function renderDate(type, date) {

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import '../../styles/BookingList.css';
 
 import * as api from '../../api';
-import dayjs from 'dayjs';
 
 import Dropdown from '../dropdowns/Dropdown';
 import PrintBookingList from './PrintBookingList';

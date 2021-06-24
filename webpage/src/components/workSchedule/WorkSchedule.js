@@ -152,8 +152,8 @@ class WorkSchedule extends Component {
                 end: event.date + ' ' + event.endHour + ':00',
                 resourceId: event.role + '-' + event.employeeId,
                 title: event.role === 'driver' ? 
-                this.state.routes.find(route => route.id == event.routeId) ?
-                        routeFormatter(this.state.routes.find(route => route.id == event.routeId)) 
+                this.state.routes.find(route => route.id === event.routeId) ?
+                        routeFormatter(this.state.routes.find(route => route.id === event.routeId)) 
                         + '\n' +  event.parking 
                         + '\n' + (this.state.vehicles.find(vehicle => vehicle.id === event.vehicleId)).brand
                         + ' ' + (this.state.vehicles.find(vehicle => vehicle.id === event.vehicleId)).model

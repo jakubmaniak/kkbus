@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
 
 import '../../styles/RoutesPage.css';
 

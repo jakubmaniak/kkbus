@@ -21,14 +21,7 @@ class Availability extends Component {
         super(props);
 
         moment.locale('pl');
-        let schedulerData = this.setupSchedulerData();
-    
-        let date = new Date();
-        let day = (date.getDate()).toString().padStart(2, '0');
-        let month = (date.getMonth() + 1).toString().padStart(2, '0');
-        let year = date.getFullYear();
-
-       
+        let schedulerData = this.setupSchedulerData();   
 
         this.state = {
             loading: true,
