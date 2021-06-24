@@ -99,6 +99,11 @@ router.post('/user/register', [
 ], async (req, res, next) => {
     let { email, firstName, lastName, birthDate, phoneNumber } = req.body;
     
+    email = email.trim();
+    firstName = firstName.trim();
+    lastName = lastName.trim();
+    phoneNumber = phoneNumber.trim();
+
     birthDate = parseDate(birthDate);
     let birthDateObject = birthDate?.toObject();
     let birthDateString = birthDate?.toString();
@@ -113,6 +118,11 @@ router.post('/user/register', [
 
     let validPhoneNumber = /^[ -+\/0-9]+$/.test(phoneNumber);
     if (!validPhoneNumber) {
+        return next(invalidValue());
+    }
+
+    let validEmailAddress = /^[^\s]+@[^\s]+$/.test(email);
+    if (!validEmailAddress) {
         return next(invalidValue());
     }
 
@@ -132,6 +142,8 @@ router.post('/user/register', [
         let password = generatePassword(12);
         let activationCode = generateActivationCode(email);
     
+        await userController.sendActivationCode(email, activationCode)
+
         let user = {
             email,
             login,
@@ -143,10 +155,7 @@ router.post('/user/register', [
             role: roles.client.priority
         };
 
-        await Promise.all([
-            userController.addInactiveUser(user),
-            userController.sendActivationCode(email, activationCode)
-        ]);
+        await userController.addInactiveUser(user);
     
         res.ok();
     }
