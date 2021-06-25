@@ -85,3 +85,6 @@ typings/
 # Environment files
 env.json
 .env
+
+# Production files
+public/
