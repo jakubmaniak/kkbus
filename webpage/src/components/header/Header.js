@@ -109,7 +109,6 @@ function Header() {
                     <HeaderItem path="/konta-i-rezerwacje-klientow">Konta i rezerwacje klientów</HeaderItem>
                     <HeaderItem path="/program-lojalnosciowy">Program lojalnościowy</HeaderItem>
                     <HeaderItem path="/pojazdy">Pojazdy</HeaderItem>
-                    <HeaderItem path="/paliwo">Paliwo</HeaderItem>
                     <HeaderItem path="/kontakt">Kontakt</HeaderItem>
                 </div>
             </nav>

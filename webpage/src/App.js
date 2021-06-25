@@ -82,7 +82,7 @@ function App() {
                         <AuthRoute exact path="/pojazdy" owner office driver>
                             <VehicleInfo />
                         </AuthRoute>
-                        <AuthRoute exact path="/paliwo" owner office driver>
+                        <AuthRoute exact path="/paliwo" owner driver>
                             <FuelPage />
                         </AuthRoute>
                         <AuthRoute exact path="/grafik-pracy" owner office driver>
@@ -94,7 +94,7 @@ function App() {
                         <AuthRoute exact path="/konta-i-rezerwacje-klientow" owner office>
                             <Clients />
                         </AuthRoute>
-                        <AuthRoute exact path="/lista-rezerwacji" owner office>
+                        <AuthRoute exact path="/lista-rezerwacji" owner driver>
                             <BookingList />
                         </AuthRoute>
                         <AuthRoute exact path="/dyspozycyjnosc" owner office driver>
