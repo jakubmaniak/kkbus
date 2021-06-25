@@ -111,7 +111,7 @@ function FuelPage() {
         refuels = [...refuels].reverse();
 
         for (let i = 1; i < refuels.length; i++) {
-            let combustion = refuels[i - 1].amount / (refuels[i - 1].mileage - refuels[i].mileage) * 100;
+            let combustion = refuels[i - 1].amount / (refuels[i].mileage - refuels[i - 1].mileage) * 100;
             data.push(parseFloat(combustion.toFixed(2)));
         }
 
