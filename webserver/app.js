@@ -10,7 +10,7 @@ require('./jobs/booking-remainder');
 const app = express();
 app.set('etag', false);
 
-app.use(express.static('public'));
+app.use(express.static('../webpage/build'));
 app.use(express.json());
 app.use(cookieParser());
 app.use(session());
