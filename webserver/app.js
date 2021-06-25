@@ -1,5 +1,6 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 
 const env = require('./helpers/env');
 const { serverError } = require('./errors');
@@ -9,7 +10,6 @@ require('./jobs/booking-remainder');
 
 const app = express();
 app.set('etag', false);
-
 app.use(express.static('./public'));
 app.use(express.json());
 app.use(cookieParser());
@@ -34,6 +34,8 @@ app.use('/api', require('./routes/loyalty-program'));
 app.use('/api', require('./routes/employee'));
 app.use('/api', require('./routes/contact'));
 
+
+app.use('*', (req, res) => res.sendFile(path.join(__dirname, './public/index.html')));
 
 app.use((err, req, res, next) => {
     let errorCode = err.message;
