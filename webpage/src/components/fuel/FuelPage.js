@@ -105,6 +105,17 @@ function FuelPage() {
         return node;
     }
 
+    function getUsageChartData(refuels) {
+        let data = [];
+
+        for (let i = 1; i < refuels.length; i++) {
+            let combustion = refuels[i - 1].amount / (refuels[i - 1].mileage - refuels[i].mileage) * 100;
+            data.push(parseFloat(combustion.toFixed(2)));
+        }
+
+        return data;
+    }
+
     return (
         <div className="fuel-usage page">
             <ModalLoader loading={loading} />
@@ -162,9 +173,9 @@ function FuelPage() {
                                 </>)}
                             </div>
                             <div className="tile half">
-                                <h2>Zużycie paliwa</h2>    
+                                <h2>Średnie spalanie</h2>    
                                 {display(
-                                    <FuelUsageChart values={refuels.map((refuel) => refuel.amount)} />
+                                    <FuelUsageChart values={getUsageChartData(refuels)} />
                                 )}
                             </div>
                         </>
