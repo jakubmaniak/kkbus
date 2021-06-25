@@ -146,7 +146,6 @@ function VehicleInfo() {
                             combustion={vehicle.combustion}
                             updateVehicle={updateVehicle}
                             deleteVehicle={() => deleteVehicle(vehicle.id)}
-                            // currentDriver={vehicle.currentDriver}
                         />
                     );
                 })}

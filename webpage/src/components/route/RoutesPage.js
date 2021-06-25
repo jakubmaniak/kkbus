@@ -114,7 +114,7 @@ function RoutesPage() {
                                     {i < route.stops.length - 1 ? <span> - </span> : null}
                                 </span>
                             ))}
-                            hours={console.log(route.hours) || route.hours.map((hour, i) => (
+                            hours={route.hours.map((hour, i) => (
                                 <div key={i}>{hour}</div>
                             ))}
                             prices={[...route.stops.keys()].map((v, i, a) => a.slice(i + 1, a.length).map(w => [v, w]))

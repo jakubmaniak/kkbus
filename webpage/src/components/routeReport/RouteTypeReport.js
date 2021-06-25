@@ -161,7 +161,6 @@ const RouteTypeReport = React.forwardRef((props, ref) => {
                                 ]
                             }
                         ]}
-                        // animate={false}
                     />    
                 </div>
             <div className="button-container">

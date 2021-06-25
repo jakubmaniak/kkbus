@@ -88,7 +88,6 @@ function Clients() {
                                 phoneNumber={client.phoneNumber}
                                 userId={client.id}
                                 unrealizedBookings={client.unrealizedBookings}
-                                // reservation={client.reservation}
                             />
                         );
                     }) }

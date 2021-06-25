@@ -69,7 +69,6 @@ class Availability extends Component {
                 weekResourceTableWidth: 200,
                 nonAgendaDayCellHeaderFormat: 'HH:mm',
                 nonAgendaOtherCellHeaderFormat: 'ddd DD.MM',
-                // groupOnlySlotColor: '#E3E3E3',
                 defaultEventBgColor: '#D9B430',
                 selectedAreaColor: 'rgba(217, 180, 48, 0.5)',
                 minuteStep: 60,

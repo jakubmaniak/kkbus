@@ -264,7 +264,6 @@ router.get('/reports/route/:routeId/:vehicleId/:driverId/:type/:range', [
             let distance = route.distances.slice(0, stopIndex).reduce((a, b) => a + b, 0);
             let usedFuelAmount = vehicle.combustion / 100 * distance;
             usedFuelCost = usedFuelAmount * findFuelCost(new Date());
-            console.log({distance, usedFuelAmount, usedFuelCost, combustion: vehicle.combustion, fuelCost: findFuelCost(new Date())});
         }
 
         result.push({ stop: stopName, persons: stopPersons, income: stopIncome / 100, usedFuelCost });

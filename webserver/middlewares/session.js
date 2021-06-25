@@ -12,10 +12,7 @@ let cache = new Map();
 
 cache.expireDates = new Map();
 cache.refresh = (key) => {
-    if (cache.expireDates.has(key)) {
-        //console.log('Refreshed (' + cache.get(key).login + ') ' + key.substr(0, 16) + '...');
-    }
-    else {
+    if (!cache.expireDates.has(key)) {
         console.log('Added (' + cache.get(key).login + ') ' + key.substr(0, 16) + '... to session cache');
     }
 

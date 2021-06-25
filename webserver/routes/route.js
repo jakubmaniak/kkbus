@@ -55,7 +55,6 @@ router.post('/route', [
         res.ok({ id: result.insertId, ...route });
     }
     catch (err) {
-        console.log(err);
         next(serverError());
     }
 });
