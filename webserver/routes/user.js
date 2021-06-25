@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 const env = require('../helpers/env');
-const { invalidRequest, emailAlreadyTaken, badCredentials, serverError, invalidValue, notFound } = require('../errors');
+const { invalidRequest, emailAlreadyTaken, badCredentials, serverError, invalidValue, notFound, loginAlreadyTaken } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const { roles, minimumRole } = require('../middlewares/roles');
 const { cache: usersCache } = require('../middlewares/session');
@@ -270,6 +270,18 @@ router.patch('/user/profile', [
     };
 
     try {
+        if (login !== req.login) {
+            try {
+                await userController.findUserByLogin(login);
+                throw loginAlreadyTaken();
+            }
+            catch (err) {
+                if (err.message !== 'not_found') {
+                    throw err;
+                }
+            }
+        }
+
         await userController.updateUserPersonalData(req.user.id, updatedUser);
     
         if (login !== null && login !== user.login) {

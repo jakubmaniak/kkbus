@@ -15,6 +15,7 @@ const errorMessages = new Map(Object.entries({
     too_late:               'Za późno',
     bad_credentials:        'Niepoprawny login lub hasło',
     email_already_taken:    'Konto o tym adresie e-mail już istnieje',
+    login_already_taken:    'Wprowadzony login jest już zajęty',
     booking_locked:         'Możliwość rezerwacji została zablokowana na miesiąc'
 }));
 
