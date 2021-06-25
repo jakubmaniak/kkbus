@@ -2,7 +2,7 @@ const path = require('path');
 const { exec } = require('child_process');
 
 
-let webserver = exec('npm start', { cwd: path.join(__dirname, 'webserver') });
+let webserver = exec('npm run dev', { cwd: path.join(__dirname, 'webserver') });
 let webpage = exec('npm start', { cwd: path.join(__dirname, 'webpage') });
 
 let currentIO = null;
