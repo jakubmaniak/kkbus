@@ -455,9 +455,9 @@ class Availability extends Component {
 
         schedulerData.moveEvent(event, slotId, slotName, start, end);
 
-        let gruopAfterMove = event.resourceId;
+        let groupAfterMove = event.resourceId;
 
-        if(groupBeforeMove === this.context.user.role + '-' + this.context.user.id && gruopAfterMove === this.context.user.role + '-' + this.context.user.id) {
+        if(groupBeforeMove === this.context.user.role + '-' + this.context.user.id && groupAfterMove === this.context.user.role + '-' + this.context.user.id) {
             this.setState({
                 viewModel: schedulerData
             });
