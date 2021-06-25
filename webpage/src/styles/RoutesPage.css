@@ -152,7 +152,6 @@
     width: 70px;
     height: 36px;
     margin-bottom: 8px;
-    cursor: pointer;
     color: #D9B430;
     background-color: rgba(217, 180, 48, 0.10);
     border: 1px solid #D9B430;
@@ -161,13 +160,6 @@
 
 .hours div:nth-child(7n) {
     margin-right: 0;
-}
-
-.hours .booked {
-    color: #D0D0D0;
-    background-color: rgb(208, 208, 208, 0.10);
-    border: 1px solid #D0D0D0;
-    cursor: not-allowed;
 }
 
 .price-list {
