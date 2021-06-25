@@ -108,6 +108,8 @@ function FuelPage() {
     function getUsageChartData(refuels) {
         let data = [];
 
+        refuels = [...refuels].reverse();
+
         for (let i = 1; i < refuels.length; i++) {
             let combustion = refuels[i - 1].amount / (refuels[i - 1].mileage - refuels[i].mileage) * 100;
             data.push(parseFloat(combustion.toFixed(2)));
