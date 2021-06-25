@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const { serverError } = require('../errors');
-const bodySchema = require('../middlewares/body-schema');
 const { minimumRole, roles } = require('../middlewares/roles');
 const { selectProps, resolveRoles } = require('../helpers/query-utils');
 

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { invalidRequest, notFound, invalidValue, notEnough, outOfStock, limitReached } = require('../errors');
+const { invalidRequest, invalidValue, notEnough, outOfStock, limitReached } = require('../errors');
 const bodySchema = require('../middlewares/body-schema');
 const { minimumRole, roles, onlyRoles } = require('../middlewares/roles');
 const { parseDateTime } = require('../helpers/date');

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bodySchema = require('../middlewares/body-schema');
 const { minimumRole } = require('../middlewares/roles');
-const { parseDate, parseTime, parseDateTime } = require('../helpers/date');
+const { parseDate, parseTime } = require('../helpers/date');
 const { resolveRoles } = require('../helpers/query-utils');
 const { invalidValue } = require('../errors');
 
