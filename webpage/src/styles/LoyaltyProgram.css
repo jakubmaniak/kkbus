@@ -7,6 +7,10 @@
     justify-content: flex-end;
 }
 
+.loyalty-program .main.guest {
+    align-content: center;
+}
+
 .add-reward {
     width: 150px;
     height: 36px;

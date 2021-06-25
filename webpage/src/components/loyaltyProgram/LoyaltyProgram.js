@@ -137,7 +137,7 @@ function LoyaltyProgram() {
 
     function clientGuestTile() {
         return (
-            <div className="main">
+            <div className="main guest">
                 <div className='tile half'>
                     <div className="title">
                         <h2>Sklep</h2>
