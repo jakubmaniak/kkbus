@@ -23,7 +23,7 @@ module.exports.sendBookingConfirmation = (email, booking) => {
     return mailer.sendMail(
         email,
         'KKBus - Potwierdzenie rezerwacji',
-        `<p>Złożono rezerwację <b>${booking.firstStop} - ${booking.lastStop}</b> w dniu <b>${booking.date}</b> o godzinie <b>${booking.hour}</b></p>`
+        `<p>Złożono rezerwację <b>${booking.firstStop} - ${booking.lastStop}</b> na dzień <b>${booking.date}</b> o godzinie <b>${booking.hour}</b></p>`
     );
 };
 
